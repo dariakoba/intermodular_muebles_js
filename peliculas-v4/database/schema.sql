@@ -1,0 +1,18 @@
+CREATE TABLE directores (
+    id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    pais VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE peliculas (
+  id INTEGER AUTO_INCREMENT PRIMARY KEY,
+  titulo VARCHAR(255) NOT NULL,
+  anyo SMALLINT UNSIGNED NOT NULL,
+  duracion SMALLINT UNSIGNED NOT NULL,
+  sinopsis TEXT NOT NULL,
+  director_id INTEGER NOT NULL,
+
+  CONSTRAINT fk_peliculas_director
+    FOREIGN KEY (director_id)
+    REFERENCES directores(id)
+);
