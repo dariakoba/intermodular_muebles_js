@@ -3,7 +3,7 @@ package com.example.peliculas.repository;
 import java.sql.Connection;
 import java.util.List;
 
-import com.example.peliculas.entity.Pelicula;
+import com.example.peliculas.entity.Categoria;
 import com.example.peliculas.mapper.RowMapper;
 import com.example.peliculas.mapper.PeliculaMapper;
 
@@ -11,13 +11,13 @@ import com.example.peliculas.dto.PeliculaResumen;
 import com.example.peliculas.db.DB;
 import com.example.peliculas.dto.PeliculaDetalle;
 
-public class PeliculaRepository extends BaseRepository<Pelicula> {
+public class PeliculaRepository extends BaseRepository<Categoria> {
 
 	public PeliculaRepository(Connection con) {
 		super(con, new PeliculaMapper());
 	}
 
-	public PeliculaRepository(Connection con, RowMapper<Pelicula> mapper) {
+	public PeliculaRepository(Connection con, RowMapper<Categoria> mapper) {
 		super(con, mapper);
 	}
 
@@ -32,17 +32,17 @@ public class PeliculaRepository extends BaseRepository<Pelicula> {
 	}
 	
 	@Override
-	public void setPrimaryKey(Pelicula p, int id) {
+	public void setPrimaryKey(Categoria p, int id) {
 		p.setId(id);
 	}
 
 	@Override
-	public Object[] getInsertValues(Pelicula p) {
+	public Object[] getInsertValues(Categoria p) {
 		return new Object[] { p.getTitulo(), p.getAnyo(), p.getDuracion(), p.getSinopsis(), p.getDirectorId() };
 	}
 
 	@Override
-	public Object[] getUpdateValues(Pelicula p) {
+	public Object[] getUpdateValues(Categoria p) {
 		return new Object[] { p.getTitulo(), p.getAnyo(), p.getDuracion(), p.getSinopsis(), p.getDirectorId(), p.getId() };
 	}
 

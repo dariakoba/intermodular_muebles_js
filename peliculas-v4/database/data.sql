@@ -1,85 +1,134 @@
--- =============================================
--- Directores
--- =============================================
+-- ===============================
+-- BORRAR TABLAS SI EXISTEN
+-- ===============================
 
-INSERT INTO directores (nombre, pais) VALUES
-('Lana Wachowski', 'Estados Unidos'),
-('Christopher Nolan', 'Reino Unido'),
-('Steven Spielberg', 'Estados Unidos'),
-('Quentin Tarantino', 'Estados Unidos'),
-('Hayao Miyazaki', 'Japón');
+DROP TABLE IF EXISTS linea_pedido;
+DROP TABLE IF EXISTS pedidos;
+DROP TABLE IF EXISTS ejemplar;
+DROP TABLE IF EXISTS productos;
+DROP TABLE IF EXISTS categoria;
+DROP TABLE IF EXISTS empleados;
+DROP TABLE IF EXISTS clientes;
+DROP TABLE IF EXISTS admin;
+DROP TABLE IF EXISTS usuarios;
 
+-- ===============================
+-- TABLA USUARIOS
+-- ===============================
 
--- =============================================
--- Películas con director
--- =============================================
-INSERT INTO peliculas
-(titulo, anyo, duracion, sinopsis, director_id)
-VALUES
-('Matrix', 1999, 136,
- 'Un hacker descubre que la realidad es una simulación.',
- 1),
+CREATE TABLE usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    password_hash VARCHAR(255) NOT NULL,
+    rol VARCHAR(20) NOT NULL,
+    telefono VARCHAR(20),
+    estado VARCHAR(20),
+    nombre VARCHAR(50) NOT NULL,
+    apellidos VARCHAR(50) NOT NULL,
+    direccion VARCHAR(100),
+    email VARCHAR(100) UNIQUE NOT NULL
+) ENGINE=InnoDB;
 
-('Inception', 2010, 148,
- 'Un ladrón roba secretos infiltrándose en sueños.',
- 2),
+-- ===============================
+-- TABLA ADMIN
+-- ===============================
 
-('Jurassic Park', 1993, 127,
- 'Un parque temático de dinosaurios clonados pierde el control.',
- 3),
+CREATE TABLE admin (
+    id INT PRIMARY KEY,
+    nivel_de_acceso INT NOT NULL,
+    FOREIGN KEY (id) REFERENCES usuarios(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
 
-('Pulp Fiction', 1994, 154,
- 'Historias criminales entrelazadas en Los Ángeles.',
- 4),
+-- ===============================
+-- TABLA CLIENTES
+-- ===============================
 
-('El viaje de Chihiro', 2001, 125,
- 'Una niña entra en un mundo mágico gobernado por espíritus.',
- 5),
- 
-('The Matrix Reloaded', 2003, 138,
- 'Neo y los rebeldes continúan la lucha contra las máquinas.',
- 1),
+CREATE TABLE clientes (
+    id INT PRIMARY KEY,
+    fecha_alta DATE NOT NULL,
+    puntos INT DEFAULT 0,
+    FOREIGN KEY (id) REFERENCES usuarios(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
 
-('The Matrix Revolutions', 2003, 129,
- 'La guerra entre humanos y máquinas alcanza su punto final.',
- 1),
+-- ===============================
+-- TABLA EMPLEADOS
+-- ===============================
 
-('Interstellar', 2014, 169,
- 'Un grupo de astronautas viaja a través de un agujero de gusano para salvar a la humanidad.',
- 2),
+CREATE TABLE empleados (
+    id INT PRIMARY KEY,
+    fecha_contratacion DATE NOT NULL,
+    salario DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (id) REFERENCES usuarios(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
 
-('The Dark Knight', 2008, 152,
- 'Batman se enfrenta al Joker en una batalla por el alma de Gotham.',
- 2),
+-- ===============================
+-- TABLA CATEGORIA
+-- ===============================
 
-('Tenet', 2020, 150,
- 'Un agente debe manipular el flujo del tiempo para evitar una guerra mundial.',
- 2),
+CREATE TABLE categoria (
+    id_categoria INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL
+) ENGINE=InnoDB;
 
-('E.T. the Extra-Terrestrial', 1982, 115,
- 'Un niño se hace amigo de un extraterrestre perdido en la Tierra.',
- 3),
+-- ===============================
+-- TABLA PRODUCTOS
+-- ===============================
 
-('Indiana Jones and the Last Crusade', 1989, 127,
- 'Indiana Jones busca el Santo Grial junto a su padre.',
- 3),
+CREATE TABLE productos (
+    id_producto INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    color VARCHAR(30),
+    precio DECIMAL(10,2) NOT NULL,
+    stock INT NOT NULL,
+    descripcion TEXT,
+    id_categoria INT NOT NULL,
+    FOREIGN KEY (id_categoria)
+        REFERENCES categoria(id_categoria)
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
 
-('Django Unchained', 2012, 165,
- 'Un esclavo liberado busca rescatar a su esposa con ayuda de un cazarrecompensas.',
- 4),
+-- ===============================
+-- TABLA EJEMPLAR
+-- ===============================
 
-('Kill Bill: Vol. 1', 2003, 111,
- 'Una asesina busca venganza contra su antiguo escuadrón.',
- 4),
+CREATE TABLE ejemplar (
+    id_ejemplar INT AUTO_INCREMENT PRIMARY KEY,
+    estado VARCHAR(20) NOT NULL,
+    id_producto INT NOT NULL,
+    FOREIGN KEY (id_producto)
+        REFERENCES productos(id_producto)
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
 
-('Kill Bill: Vol. 2', 2004, 137,
- 'La búsqueda de venganza de la Novia llega a su final.',
- 4),
+-- ===============================
+-- TABLA PEDIDOS
+-- ===============================
 
-('My Neighbor Totoro', 1988, 86,
- 'Dos niñas descubren espíritus del bosque en el campo japonés.',
- 5),
+CREATE TABLE pedidos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fecha_pedido DATE NOT NULL,
+    fecha_devolucion DATE,
+    precio DECIMAL(10,2) NOT NULL,
+    metodo_pago VARCHAR(50),
+    factura VARCHAR(50),
+    envio VARCHAR(50),
+    id_cliente INT NOT NULL,
+    FOREIGN KEY (id_cliente)
+        REFERENCES clientes(id)
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
 
-('Princess Mononoke', 1997, 134,
- 'Un príncipe se ve atrapado en el conflicto entre humanos y dioses del bosque.',
- 5);
+-- ===============================
+-- TABLA LINEA_PEDIDO
+-- ===============================
+
+CREATE TABLE linea_pedido (
+    id_pedido INT NOT NULL,
+    id_ejemplar INT NOT NULL UNIQUE,
+    PRIMARY KEY (id_pedido, id_ejemplar),
+    FOREIGN KEY (id_pedido)
+        REFERENCES pedidos(id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (id_ejemplar)
+        REFERENCES ejemplar(id_ejemplar)
+        ON DELETE CASCADE
+) ENGINE=InnoDB;

@@ -8,7 +8,7 @@ import javax.sql.DataSource;
 
 import org.springframework.web.bind.annotation.*;
 
-import com.example.peliculas.entity.Director;
+import com.example.peliculas.entity.Productos;
 import com.example.peliculas.exception.DataAccessException;
 import com.example.peliculas.repository.DirectorRepository;
 
@@ -22,7 +22,7 @@ public class DirectorAdminController {
     }
     
     @GetMapping
-    public List<Director> index() {
+    public List<Productos> index() {
         try (Connection con = ds.getConnection()) {
             DirectorRepository repo = new DirectorRepository(con);
             return repo.findAll();

@@ -3,12 +3,12 @@ package com.example.peliculas.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.example.peliculas.entity.Pelicula;
+import com.example.peliculas.entity.Categoria;
 
-public class PeliculaMapper implements RowMapper<Pelicula> {
+public class PeliculaMapper implements RowMapper<Categoria> {
 	@Override
-    public Pelicula map(ResultSet rs) throws SQLException {
-        return new Pelicula(
+    public Categoria map(ResultSet rs) throws SQLException {
+        return new Categoria(
                 rs.getInt("id"),
                 rs.getString("titulo"),
                 rs.getInt("anyo"),

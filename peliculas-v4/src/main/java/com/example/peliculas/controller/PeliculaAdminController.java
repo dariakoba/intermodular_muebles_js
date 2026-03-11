@@ -8,7 +8,7 @@ import javax.sql.DataSource;
 
 import org.springframework.web.bind.annotation.*;
 
-import com.example.peliculas.entity.Pelicula;
+import com.example.peliculas.entity.Categoria;
 import com.example.peliculas.exception.DataAccessException;
 import com.example.peliculas.repository.PeliculaRepository;
 
@@ -22,7 +22,7 @@ public class PeliculaAdminController {
     }
     
     @GetMapping
-    public List<Pelicula> index() throws SQLException {
+    public List<Categoria> index() throws SQLException {
     	try (Connection con = ds.getConnection()) {
     	    PeliculaRepository repo = new PeliculaRepository(con);
     	    return repo.findAll();
@@ -32,7 +32,7 @@ public class PeliculaAdminController {
     }
     
     @GetMapping("/{id}")
-    public Pelicula show(@PathVariable int id) {
+    public Categoria show(@PathVariable int id) {
         try (Connection con = ds.getConnection()) {
             PeliculaRepository repo = new PeliculaRepository(con);
             return repo.find(id);
@@ -42,24 +42,24 @@ public class PeliculaAdminController {
     }
 
     @PostMapping
-    public Pelicula store(@RequestBody Pelicula pelicula) {
+    public Categoria store(@RequestBody Categoria categoria) {
         try (Connection con = ds.getConnection()) {
             PeliculaRepository repo = new PeliculaRepository(con);
-            repo.insert(pelicula);
-            return pelicula;
+            repo.insert(categoria);
+            return categoria;
         } catch (SQLException e) {
             throw new DataAccessException(e);
         }
     }
 
     @PutMapping("/{id}")
-    public Pelicula update(@PathVariable int id, @RequestBody Pelicula pelicula) {
-    	System.out.println(pelicula);
+    public Categoria update(@PathVariable int id, @RequestBody Categoria categoria) {
+    	System.out.println(categoria);
         try (Connection con = ds.getConnection()) {
             PeliculaRepository repo = new PeliculaRepository(con);
-            pelicula.setId(id);
-            repo.update(pelicula);
-            return pelicula;
+            categoria.setId(id);
+            repo.update(categoria);
+            return categoria;
         } catch (SQLException e) {
             throw new DataAccessException(e);
         }

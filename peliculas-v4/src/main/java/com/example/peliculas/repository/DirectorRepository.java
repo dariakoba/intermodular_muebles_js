@@ -2,17 +2,17 @@ package com.example.peliculas.repository;
 
 import java.sql.Connection;
 
-import com.example.peliculas.entity.Director;
+import com.example.peliculas.entity.Productos;
 import com.example.peliculas.mapper.RowMapper;
 import com.example.peliculas.mapper.DirectorMapper;
 
-public class DirectorRepository extends BaseRepository<Director> {
+public class DirectorRepository extends BaseRepository<Productos> {
 
 	public DirectorRepository(Connection con) {
 		super(con, new DirectorMapper());
 	}
 
-	public DirectorRepository(Connection con, RowMapper<Director> mapper) {
+	public DirectorRepository(Connection con, RowMapper<Productos> mapper) {
 		super(con, mapper);
 	}
 
@@ -27,17 +27,17 @@ public class DirectorRepository extends BaseRepository<Director> {
 	}
 	
 	@Override
-	public void setPrimaryKey(Director p, int id) {
+	public void setPrimaryKey(Productos p, int id) {
 		p.setId(id);
 	}
 
 	@Override
-	public Object[] getInsertValues(Director d) {
+	public Object[] getInsertValues(Productos d) {
 		return new Object[] { d.getNombre(), d.getPais() };
 	}
 
 	@Override
-	public Object[] getUpdateValues(Director d) {
+	public Object[] getUpdateValues(Productos d) {
 		return new Object[] { d.getNombre(), d.getPais(), d.getId() };
 	}
 }
