@@ -83,29 +83,3 @@ CREATE TABLE linea_pedido (
     CONSTRAINT fk_linea_ejemplar FOREIGN KEY (id_ejemplar) REFERENCES ejemplar(id_ejemplar) ON DELETE CASCADE
 );
 
--- =========================
--- TABLAS DE GESTIÓN (M:M)
--- =========================
-CREATE TABLE gestion_productos (
-    id_usuario INT NOT NULL,
-    id_producto INT NOT NULL,
-    PRIMARY KEY (id_usuario, id_producto),
-    CONSTRAINT fk_gestor_prod FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE,
-    CONSTRAINT fk_prod_gestionado FOREIGN KEY (id_producto) REFERENCES productos(id_producto) ON DELETE CASCADE
-);
-
-CREATE TABLE gestion_pedidos (
-    id_usuario INT NOT NULL,
-    id_pedido INT NOT NULL,
-    PRIMARY KEY (id_usuario, id_pedido),
-    CONSTRAINT fk_gestor_ped FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE,
-    CONSTRAINT fk_ped_gestionado FOREIGN KEY (id_pedido) REFERENCES pedidos(id) ON DELETE CASCADE
-);
-
-CREATE TABLE gestion_ejemplar (
-    id_usuario INT NOT NULL,
-    id_ejemplar INT NOT NULL,
-    PRIMARY KEY (id_usuario, id_ejemplar),
-    CONSTRAINT fk_gestor_ejem FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE,
-    CONSTRAINT fk_ejem_gestionado FOREIGN KEY (id_ejemplar) REFERENCES ejemplar(id_ejemplar) ON DELETE CASCADE
-);
