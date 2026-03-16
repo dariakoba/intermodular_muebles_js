@@ -50,7 +50,7 @@ public class ProductoRepository extends BaseRepository<Producto> {
 	public List<ProductoResumen> findResumen(){
 		String sql="select nombre, precio from productos";
 		return DB.queryMany(con, sql, rs -> 
-			new ProductoResumen(rs.getInt("id_producto"), rs.getString("nombre"), rs.getFloat("precio"))
+			new ProductoResumen(rs.getString("nombre"), rs.getFloat("precio"))
 		);
 	}
 }

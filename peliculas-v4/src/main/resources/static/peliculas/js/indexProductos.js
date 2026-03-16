@@ -1,24 +1,34 @@
-async function cargarPeliculas() {
+async function cargarProductos(){
 
-    const response = await fetch("/api/peliculas");
-    const peliculas = await response.json();
+    const response = await fetch("/api/productos");
+    const productos = await response.json();
 
-    const lista = document.getElementById("lista-peliculas");
+    const grid = document.getElementById("productos-grid");
 
-    peliculas.forEach(p => {
+    productos.forEach(p => {
 
-        const li = document.createElement("li");
+        const card = document.createElement("div");
+        card.classList.add("producto-card");
 
-        // clase de Bootstrap
-        li.classList.add("list-group-item");
+        card.innerHTML = `
+            <img class="producto-img" src="/images/producto/default.png">
 
-        li.innerHTML =
-            `<a href="show.html?id=${p.id}">
-                ${p.titulo} (${p.anyo})
-             </a>`;
+            <div class="producto-nombre">
+                ${p.nombre}
+            </div>
 
-        lista.appendChild(li);
+            <div class="producto-precio">
+                ${p.precio} €
+            </div>
+
+            <button class="btn-comprar">
+                Añadir al carrito
+            </button>
+        `;
+
+        grid.appendChild(card);
     });
+
 }
 
-cargarPeliculas();
+cargarProductos();
