@@ -8,23 +8,25 @@ import javax.sql.DataSource;
 
 import org.springframework.web.bind.annotation.*;
 
-import com.example.peliculas.entity.Productos;
+import com.example.peliculas.entity.Categoria;
+import com.example.peliculas.entity.Producto;
 import com.example.peliculas.exception.DataAccessException;
-import com.example.peliculas.repository.DirectorRepository;
+import com.example.peliculas.repository.CategoriaRepository;
+import com.example.peliculas.repository.ProductoRepository;
 
 @RestController
-@RequestMapping("/api/admin/directores")
-public class DirectorAdminController {
+@RequestMapping("/api/admin/categoria")
+public class CategoriaAdminController {
 	private final DataSource ds;
 	
-    public DirectorAdminController(DataSource ds) {
+    public CategoriaAdminController(DataSource ds) {
         this.ds = ds;
     }
     
     @GetMapping
-    public List<Productos> index() {
+    public List<Categoria> index() {
         try (Connection con = ds.getConnection()) {
-            DirectorRepository repo = new DirectorRepository(con);
+        	CategoriaRepository repo = new CategoriaRepository(con);
             return repo.findAll();
         } catch (SQLException e) {
             throw new DataAccessException(e);

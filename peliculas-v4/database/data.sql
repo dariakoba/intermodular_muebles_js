@@ -1,134 +1,89 @@
--- ===============================
--- BORRAR TABLAS SI EXISTEN
--- ===============================
+-- =====================================
+-- INSERT USUARIOS
+-- =====================================
 
-DROP TABLE IF EXISTS linea_pedido;
-DROP TABLE IF EXISTS pedidos;
-DROP TABLE IF EXISTS ejemplar;
-DROP TABLE IF EXISTS productos;
-DROP TABLE IF EXISTS categoria;
-DROP TABLE IF EXISTS empleados;
-DROP TABLE IF EXISTS clientes;
-DROP TABLE IF EXISTS admin;
-DROP TABLE IF EXISTS usuarios;
+INSERT INTO usuarios (password_hash, rol, telefono, estado, nombre, apellidos, direccion, email) VALUES
+('hash1','admin','600111111','activo','Carlos','Gomez','Calle Mayor 10','carlos@tienda.com'),
+('hash2','empleado','600222222','activo','Ana','Lopez','Calle Sol 12','ana@tienda.com'),
+('hash3','empleado','600333333','activo','Luis','Perez','Calle Luna 5','luis@tienda.com'),
+('hash4','cliente','600444444','activo','Maria','Garcia','Av. Valencia 20','maria@gmail.com'),
+('hash5','cliente','600555555','activo','Pedro','Martinez','Calle Norte 8','pedro@gmail.com'),
+('hash6','cliente','600666666','activo','Lucia','Sanchez','Calle Sur 15','lucia@gmail.com');
 
--- ===============================
--- TABLA USUARIOS
--- ===============================
+-- =====================================
+-- INSERT ADMIN
+-- =====================================
 
-CREATE TABLE usuarios (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    password_hash VARCHAR(255) NOT NULL,
-    rol VARCHAR(20) NOT NULL,
-    telefono VARCHAR(20),
-    estado VARCHAR(20),
-    nombre VARCHAR(50) NOT NULL,
-    apellidos VARCHAR(50) NOT NULL,
-    direccion VARCHAR(100),
-    email VARCHAR(100) UNIQUE NOT NULL
-) ENGINE=InnoDB;
+INSERT INTO admin (id, nivel_de_acceso) VALUES
+(1, 10);
 
--- ===============================
--- TABLA ADMIN
--- ===============================
+-- =====================================
+-- INSERT EMPLEADOS
+-- =====================================
 
-CREATE TABLE admin (
-    id INT PRIMARY KEY,
-    nivel_de_acceso INT NOT NULL,
-    FOREIGN KEY (id) REFERENCES usuarios(id) ON DELETE CASCADE
-) ENGINE=InnoDB;
+INSERT INTO empleados (id, fecha_contratacion, salario) VALUES
+(2, '2023-02-10', 1500.00),
+(3, '2024-01-15', 1400.00);
 
--- ===============================
--- TABLA CLIENTES
--- ===============================
+-- =====================================
+-- INSERT CLIENTES
+-- =====================================
 
-CREATE TABLE clientes (
-    id INT PRIMARY KEY,
-    fecha_alta DATE NOT NULL,
-    puntos INT DEFAULT 0,
-    FOREIGN KEY (id) REFERENCES usuarios(id) ON DELETE CASCADE
-) ENGINE=InnoDB;
+INSERT INTO clientes (id, fecha_alta, puntos) VALUES
+(4, '2024-05-01', 100),
+(5, '2024-06-10', 50),
+(6, '2024-07-20', 200);
 
--- ===============================
--- TABLA EMPLEADOS
--- ===============================
+-- =====================================
+-- INSERT CATEGORIAS
+-- =====================================
 
-CREATE TABLE empleados (
-    id INT PRIMARY KEY,
-    fecha_contratacion DATE NOT NULL,
-    salario DECIMAL(10,2) NOT NULL,
-    FOREIGN KEY (id) REFERENCES usuarios(id) ON DELETE CASCADE
-) ENGINE=InnoDB;
+INSERT INTO categoria (nombre) VALUES
+('Sofas'),
+('Mesas'),
+('Sillas'),
+('Camas'),
+('Armarios');
 
--- ===============================
--- TABLA CATEGORIA
--- ===============================
+-- =====================================
+-- INSERT PRODUCTOS
+-- =====================================
 
-CREATE TABLE categoria (
-    id_categoria INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL
-) ENGINE=InnoDB;
+INSERT INTO productos (nombre, color, precio, stock, descripcion, id_categoria) VALUES
+('Sofa Moderno','Gris',450.00,10,'Sofa de tres plazas',1),
+('Mesa Comedor','Madera',300.00,8,'Mesa grande de comedor',2),
+('Silla Oficina','Negro',120.00,20,'Silla ergonomica',3),
+('Cama Matrimonio','Blanco',600.00,5,'Cama 150x200',4),
+('Armario Grande','Roble',800.00,3,'Armario de 3 puertas',5);
 
--- ===============================
--- TABLA PRODUCTOS
--- ===============================
+-- =====================================
+-- INSERT EJEMPLARES
+-- =====================================
 
-CREATE TABLE productos (
-    id_producto INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL,
-    color VARCHAR(30),
-    precio DECIMAL(10,2) NOT NULL,
-    stock INT NOT NULL,
-    descripcion TEXT,
-    id_categoria INT NOT NULL,
-    FOREIGN KEY (id_categoria)
-        REFERENCES categoria(id_categoria)
-        ON DELETE CASCADE
-) ENGINE=InnoDB;
+INSERT INTO ejemplar (estado, id_producto) VALUES
+('nuevo',1),
+('nuevo',1),
+('nuevo',2),
+('nuevo',2),
+('nuevo',3),
+('nuevo',3),
+('nuevo',4),
+('nuevo',5);
 
--- ===============================
--- TABLA EJEMPLAR
--- ===============================
+-- =====================================
+-- INSERT PEDIDOS
+-- =====================================
 
-CREATE TABLE ejemplar (
-    id_ejemplar INT AUTO_INCREMENT PRIMARY KEY,
-    estado VARCHAR(20) NOT NULL,
-    id_producto INT NOT NULL,
-    FOREIGN KEY (id_producto)
-        REFERENCES productos(id_producto)
-        ON DELETE CASCADE
-) ENGINE=InnoDB;
+INSERT INTO pedidos (fecha_pedido, fecha_devolucion, precio, metodo_pago, factura, envio, id_cliente) VALUES
+('2025-01-10', NULL, 450.00, 'tarjeta', 'F001', 'domicilio', 4),
+('2025-01-15', NULL, 300.00, 'paypal', 'F002', 'recogida', 5),
+('2025-02-01', NULL, 120.00, 'tarjeta', 'F003', 'domicilio', 6);
 
--- ===============================
--- TABLA PEDIDOS
--- ===============================
+-- =====================================
+-- INSERT LINEA_PEDIDO
+-- =====================================
 
-CREATE TABLE pedidos (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    fecha_pedido DATE NOT NULL,
-    fecha_devolucion DATE,
-    precio DECIMAL(10,2) NOT NULL,
-    metodo_pago VARCHAR(50),
-    factura VARCHAR(50),
-    envio VARCHAR(50),
-    id_cliente INT NOT NULL,
-    FOREIGN KEY (id_cliente)
-        REFERENCES clientes(id)
-        ON DELETE CASCADE
-) ENGINE=InnoDB;
-
--- ===============================
--- TABLA LINEA_PEDIDO
--- ===============================
-
-CREATE TABLE linea_pedido (
-    id_pedido INT NOT NULL,
-    id_ejemplar INT NOT NULL UNIQUE,
-    PRIMARY KEY (id_pedido, id_ejemplar),
-    FOREIGN KEY (id_pedido)
-        REFERENCES pedidos(id)
-        ON DELETE CASCADE,
-    FOREIGN KEY (id_ejemplar)
-        REFERENCES ejemplar(id_ejemplar)
-        ON DELETE CASCADE
-) ENGINE=InnoDB;
+INSERT INTO linea_pedido (id_pedido, id_ejemplar) VALUES
+(1,1),
+(2,3),
+(3,5);
