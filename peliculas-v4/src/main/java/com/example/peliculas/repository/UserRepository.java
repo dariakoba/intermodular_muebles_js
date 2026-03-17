@@ -1,16 +1,24 @@
 package com.example.peliculas.repository;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.peliculas.db.DB;
 import com.example.peliculas.entity.Producto;
 import com.example.peliculas.entity.User;
+import com.example.peliculas.exception.DataAccessException;
 import com.example.peliculas.mapper.RowMapper;
 import com.example.peliculas.mapper.UserMapper;
 import com.example.peliculas.dto.ProductoResumen;
 import com.example.peliculas.dto.UserResponse;
 import com.example.peliculas.mapper.UserResponseMapper;
+
+import jakarta.servlet.http.HttpSession;
 public class UserRepository extends BaseRepository<User> {
 
 	public UserRepository(Connection con) {
@@ -106,4 +114,19 @@ public class UserRepository extends BaseRepository<User> {
 	    String sql = "select id, rol, telefono, estado, nombre, apellidos, direccion, email, puntos, nivel_acceso, salario from usuarios";
 	    return DB.queryMany(con, sql, new UserResponseMapper());
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
