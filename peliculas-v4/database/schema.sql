@@ -11,15 +11,17 @@ CREATE TABLE usuarios (
     apellidos VARCHAR(50) NOT NULL,
     direccion VARCHAR(100),
     email VARCHAR(100) UNIQUE NOT NULL,
-    -- Campos específicos
-    nivel_acceso INT,
+
+    nivel_acceso INT NULL,
     fecha_alta DATE,
-    puntos INT,
-    salario DECIMAL(10,2),
-    -- Restricciones según rol
-    CONSTRAINT chk_admin CHECK (NOT (rol = 'admin' AND (puntos IS NOT NULL OR salario IS NOT NULL))),
-    CONSTRAINT chk_cliente CHECK (NOT (rol = 'cliente' AND (nivel_acceso IS NOT NULL OR salario IS NOT NULL))),
-    CONSTRAINT chk_empleado CHECK (NOT (rol = 'empleado' AND (nivel_acceso IS NOT NULL OR puntos IS NOT NULL)))
+    puntos INT NULL,
+    salario DECIMAL(10,2) NULL,
+
+    CONSTRAINT chk_admin 
+        CHECK (rol != 'admin' OR (puntos IS NULL AND salario IS NULL)),
+
+    CONSTRAINT chk_cliente 
+        CHECK (rol != 'cliente' OR (nivel_acceso IS NULL AND salario IS NULL))
 );
 
 -- =========================

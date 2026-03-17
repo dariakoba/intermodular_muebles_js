@@ -140,9 +140,9 @@ async function guardarUsuario(){
 
     const id = document.getElementById("userId").value
 
-    const usuario = {
+    const password = document.getElementById("passwordHash").value
 
-        passwordHash: document.getElementById("passwordHash").value,
+    const usuario = {
         rol: document.getElementById("rol").value,
         telefono: document.getElementById("telefono").value,
         estado: "activo",
@@ -150,10 +150,14 @@ async function guardarUsuario(){
         apellidos: document.getElementById("apellidos").value,
         direccion: document.getElementById("direccion").value,
         email: document.getElementById("email").value,
-        puntos: 0,
-        nivelAcceso: 0,
-        salario: 0
+        puntos: null,
+        nivelAcceso: null,
+        salario: null
+    }
 
+    // Solo añadir password si se ha escrito
+    if(password && password.trim() !== ""){
+        usuario.passwordHash = password
     }
 
     if(id){
@@ -165,6 +169,12 @@ async function guardarUsuario(){
         })
 
     }else{
+
+        // En creación la password es obligatoria
+        if(!usuario.passwordHash){
+            alert("La contraseña es obligatoria")
+            return
+        }
 
         await fetch("/api/admin/usuarios",{
             method:"POST",
