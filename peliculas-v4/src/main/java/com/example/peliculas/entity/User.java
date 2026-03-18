@@ -29,6 +29,17 @@ public class User {
 		this.nivelAcceso = nivelAcceso;
 		this.salario = salario;
 	}
+	public User(String passwordHash, String rol, String telefono, String nombre,
+			String apellidos, String email) {
+		super();
+		this.passwordHash = passwordHash;
+		this.rol = rol;
+		this.telefono = telefono;
+		this.nombre = nombre;
+		this.apellidos = apellidos;
+		this.email = email;
+		
+	}
 	public int getId() {
 		return id;
 	}

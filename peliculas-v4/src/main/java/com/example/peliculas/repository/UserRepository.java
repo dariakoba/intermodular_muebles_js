@@ -114,7 +114,10 @@ public class UserRepository extends BaseRepository<User> {
 	    String sql = "select id, rol, telefono, estado, nombre, apellidos, direccion, email, puntos, nivel_acceso, salario from usuarios";
 	    return DB.queryMany(con, sql, new UserResponseMapper());
 	}
-	
+	public List<UserResponse> findAllResponses() {
+		String sql = "SELECT id, nombre, email, rol FROM usuarios";
+		return DB.queryMany(con, sql, new UserResponseMapper());
+	}
 	
 	
 	
