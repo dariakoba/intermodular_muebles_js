@@ -1,0 +1,104 @@
+
+/* Solo afecta a producto.html */
+.producto {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    background: #f5f5dc; /* beige suave */
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+
+
+.producto .container {
+    display: flex;
+    gap: 80px;
+    padding: 60px 80px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.producto .imagen img {
+    width: 450px;
+    border-radius: 20px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+}
+
+.producto .imagen img:hover { transform: scale(1.05); }
+
+.producto .info { max-width: 500px; }
+.producto .info h1 { font-size: 36px; margin-bottom: 10px; color: #333; }
+.producto .info p { margin-bottom: 15px; color: #555; }
+
+/* COLORES */
+.producto .colores {
+    display: flex;
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.producto .color {
+    width: 35px;
+    height: 35px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border 0.2s, transform 0.2s;
+}
+
+.producto .color:hover {
+    border: 2px solid #4b3628;
+    transform: scale(1.1);
+}
+
+/* Colores visibles */
+.producto .gris { background: #bfbfbf; }
+.producto .beige { background: #d6c6a6; }
+.producto .marron { background: #6b5a4c; }
+.producto .oscuro { background: #4b4b4b; }
+
+.producto select {
+    width: 100%;
+    padding: 12px;
+    margin: 15px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    background: white;
+    color: #333;
+}
+
+.producto .precio {
+    font-size: 28px;
+    margin: 20px 0;
+    font-weight: 700;
+    color: #4b3628;
+}
+
+.producto button {
+    background: #4b3628;
+    color: white;
+    padding: 15px 45px;
+    border: none;
+    border-radius: 30px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.producto button:hover {
+    background: #2f2219;
+    transform: scale(1.05);
+}
+
+/* Responsive */
+@media screen and (max-width: 900px) {
+    .producto .container {
+        flex-direction: column;
+        padding: 40px 20px;
+        gap: 40px;
+    }
+    .producto .imagen img { width: 90%; max-width: 400px; }
+    .producto .info { max-width: 100%; }
+}

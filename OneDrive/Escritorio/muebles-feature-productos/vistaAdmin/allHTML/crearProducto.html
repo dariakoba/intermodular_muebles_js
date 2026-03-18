@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crear Producto</title>
+    <link rel="stylesheet" href="../allstyles/estiloCrearProducto.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+    />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="logo">
+        <img src="../../images/logo.png" />
+        <span>DNA</span>
+      </div>
+
+      <nav class="menu">
+        <a href="#">Gestor de Productos</a>
+        <a href="#">Gestor de Categorías</a>
+        <a href="#">Gestor de Usuarios</a>
+        <a href="#">Gestor de Pedidos</a>
+      </nav>
+
+      <div class="icons">
+        <span class="material-symbols-outlined"> shopping_cart </span>
+
+        <div class="person-menu-wrapper">
+          <span id="person-icon" class="material-symbols-outlined">
+            person
+          </span>
+
+          <!-- Minimenu -->
+          <div class="person-menu">
+            <a href="#">Ver cuenta</a>
+            <a href="#">Cerrar sesión</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="form-container">
+      <h1>Crear Nuevo Producto</h1>
+
+      <form action="/productos/crear" method="POST">
+        <div class="form-group">
+          <label for="nombre">Nombre</label>
+          <input type="text" id="nombre" name="nombre" required />
+        </div>
+
+        <div class="form-group">
+          <label for="color">Color</label>
+          <input type="text" id="color" name="color" />
+        </div>
+
+        <div class="form-group">
+          <label for="precio">Precio (€)</label>
+          <input type="number" step="0.01" id="precio" name="precio" required />
+        </div>
+
+        <div class="form-group">
+          <label for="stock">Stock</label>
+          <input type="number" id="stock" name="stock" required />
+        </div>
+
+        <div class="form-group">
+          <label for="descripcion">Descripción</label>
+          <textarea id="descripcion" name="descripcion"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="categoria">Categoría</label>
+          <select id="categoria" name="id_categoria" required>
+            <option value="">-- Selecciona categoría --</option>
+            <option value="1">Salón</option>
+            <option value="2">Comedor</option>
+            <option value="3">Dormitorio</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-submit">Crear Producto</button>
+      </form>
+    </section>
+
+    <script src="../allfuctions/functionMiniMenu.js"></script>
+  </body>
+</html>

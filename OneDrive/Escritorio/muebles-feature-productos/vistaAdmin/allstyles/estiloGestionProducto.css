@@ -1,0 +1,371 @@
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #d9ccbc;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+    "FILL" 0,
+    "wght" 400,
+    "GRAD" 0,
+    "opsz" 24;
+}
+.icons .material-symbols-outlined {
+  font-size: 42px;
+}
+/* container */
+
+.container {
+  padding: 40px 80px;
+}
+
+.title-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+.btn-crear {
+  background: #5c4432;
+  color: white;
+  padding: 12px 22px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  display: inline-block;
+  margin: 20px 0; /* separa el botón del título y la tabla */
+  font-weight: normal;
+  text-decoration: none;
+}
+
+h1 {
+  font-size: 50px;
+  color: #5c4432;
+}
+
+.btn-crear {
+  background: #5c4432;
+  color: white;
+  padding: 12px 22px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* tabla */
+
+.table-container {
+  background: white;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.table-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: #f5f5f5;
+}
+
+.actions-buttons button {
+  margin-left: 10px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-modificar {
+  background: #2a9aa6;
+  color: white;
+}
+
+.btn-eliminar {
+  background: #7b3f00;
+  color: white;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background: #2a9aa6;
+  color: white;
+}
+
+th,
+td {
+  padding: 14px;
+  text-align: left;
+}
+
+tbody tr {
+  border-bottom: 1px solid #eee;
+}
+
+tbody tr:hover {
+  background: #f8f8f8;
+}
+
+/* HEADER */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #e9e6e3;
+  padding: 10px 60px;
+  height: 65px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* LOGO */
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+  font-size: 26px;
+  color: #5c4432;
+}
+
+.logo img {
+  width: 48px;
+}
+
+/* MENU */
+
+.menu a {
+  margin: 0 22px;
+  text-decoration: none;
+  color: #333;
+  font-size: 20px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.menu a:hover {
+  color: #2a9aa6;
+}
+
+/* ICONOS */
+
+.icons {
+  display: flex;
+  gap: 18px;
+  font-size: 36px;
+  color: #5c4432;
+  cursor: pointer;
+}
+
+.icons span {
+  transition: 0.2s;
+}
+
+.icons span:hover {
+  color: #2a9aa6;
+  transform: scale(1.15);
+}
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #d9ccbc;
+}
+
+/* container */
+
+.container {
+  padding: 40px 80px;
+}
+
+.title-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+h1 {
+  font-size: 50px;
+  color: #5c4432;
+}
+
+.btn-crear {
+  background: #5c4432;
+  color: white;
+  padding: 12px 22px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* tabla */
+
+.table-container {
+  background: white;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.table-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: #f5f5f5;
+}
+
+.actions-buttons button {
+  margin-left: 10px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-modificar {
+  background: #2a9aa6;
+  color: white;
+}
+
+.btn-eliminar {
+  background: #7b3f00;
+  color: white;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background: #2a9aa6;
+  color: white;
+}
+
+th,
+td {
+  padding: 14px;
+  text-align: left;
+}
+
+tbody tr {
+  border-bottom: 1px solid #eee;
+}
+
+tbody tr:hover {
+  background: #f8f8f8;
+}
+
+/* HEADER */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #e9e6e3;
+  padding: 10px 60px;
+  height: 65px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* LOGO */
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+  font-size: 26px;
+  color: #5c4432;
+}
+
+.logo img {
+  width: 48px;
+}
+
+/* MENU */
+
+.menu a {
+  margin: 0 22px;
+  text-decoration: none;
+  color: #333;
+  font-size: 20px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.menu a:hover {
+  color: #2a9aa6;
+}
+
+/* ICONOS */
+
+.icons {
+  display: flex;
+  gap: 18px;
+  font-size: 42px;
+  color: #5c4432;
+  cursor: pointer;
+}
+
+.icons span {
+  transition: 0.2s;
+}
+
+.icons span:hover {
+  color: #2a9aa6;
+  transform: scale(1.15);
+}
+
+/* Minimenu del icono de persona */
+.person-menu-wrapper {
+  position: relative;
+}
+
+.person-menu {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: none; /* oculto por defecto */
+  min-width: 150px;
+  z-index: 100;
+  flex-direction: column;
+}
+
+.person-menu a {
+  padding: 8px 12px;
+  text-decoration: none;
+  color: #333;
+  font-weight: normal; /* letra normal */
+  font-size: 12px; /* letra pequeña */
+  display: block;
+  transition: 0.2s;
+}
+
+.person-menu a:hover {
+  background-color: #f5f5f5;
+  color: #2a9aa6;
+  border-radius: 6px;
+}
+
+/* mostrar el menú al pulsar */
+.person-menu.show {
+  display: flex;
+}

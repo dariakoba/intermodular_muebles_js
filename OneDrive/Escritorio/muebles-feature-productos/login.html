@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log In</title>
+    <link rel="stylesheet" href="estiloLogin.css" />
+  </head>
+  <body>
+    <div class="decor-img-top">
+      <img src="../images/login1.jpg" alt="Sofá decorativo" />
+    </div>
+
+    <!-- Imagen decorativa inferior izquierda -->
+    <div class="decor-img-bottom">
+      <img src="../images/login2.jpg" alt="Sofá inferior" />
+    </div>
+
+    <div class="login-container">
+      <div class="login-box">
+        <h1>Iniciar Sesión</h1>
+        <form action="/usuarios/login" method="POST">
+          <div class="form-group">
+            <label for="correo">Correo electrónico</label>
+            <input
+              type="email"
+              id="correo"
+              name="correo"
+              placeholder="usuario@ejemplo.com"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="contrase�a">Contraseña</label>
+            <input
+              type="password"
+              id="contraseña"
+              name="contraseña"
+              placeholder="********"
+              required
+            />
+          </div>
+
+          <button type="submit" class="btn-login">Entrar</button>
+        </form>
+        <p class="forgot-pass"><a href="#">¿Olvidaste tu contraseña?</a></p>
+      </div>
+    </div>
+  </body>
+</html>

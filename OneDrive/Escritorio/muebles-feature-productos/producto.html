@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Producto - Cama Bonnie</title>
+    <link rel="stylesheet" href="styleProducto.css"> 
+    <link rel="stylesheet" href="global.css">
+</head>
+<body class="producto">
+
+  <header class="navbar">
+    <a href="home.html" class="logo-link">
+        <div class="logo-container">
+            <div class="logo-circle">
+                <img src="img/image-Photoroom.png" alt="DNA Logo" class="logo-image">
+            </div>
+            <span class="brand-name">DNA</span>
+        </div>
+    </a>
+
+    <nav class="nav-links">
+        <a href="home.html">Home</a>
+        <a href="#">Sobre nosotros</a>
+        <a href="producto.html">Productos</a>
+        <a href="#">Contacto</a>
+    </nav>
+
+    <div class="nav-icons">
+        <a href="carrito.html" style="color: inherit;"><i class="fa-solid fa-cart-shopping"></i></a>
+        <a href="login.html" style="color: inherit;"><i class="fa-regular fa-user"></i></a>
+    </div>
+</header>
+
+<main>
+<div class="container">
+    <!-- IMAGEN PRODUCTO -->
+    <div class="imagen">
+        <img id="imagenProducto" src="images/producto/griscama.png" alt="Cama Bonnie">
+    </div>
+
+    <!-- INFORMACIÓN -->
+    <div class="info">
+        <h1>Cama Bonnie</h1>
+        <p>Pela Monet Pearl</p>
+
+        <!-- COLORES -->
+        <div class="colores">
+            <div class="color gris" onclick="cambiarColor('gris')"></div>
+            <div class="color beige" onclick="cambiarColor('beige')"></div>
+            <div class="color marron" onclick="cambiarColor('marron')"></div>
+            <div class="color oscuro" onclick="cambiarColor('oscuro')"></div>
+        </div>
+
+        <label>Dimensiones</label>
+        <select>
+            <option>Selecciona el tamaño</option>
+            <option>135 cm</option>
+            <option>150 cm</option>
+            <option>180 cm</option>
+        </select>
+
+        <p>Entrega en un plazo de 60 días</p>
+
+        <div class="precio">1.495,00 €</div>
+
+        <button>Añadir a mi cesta</button>
+    </div>
+</div>
+</main>
+<!-- JS al final del body -->
+<script src="scripts/script.js"></script>
+
+</body>
+</html>

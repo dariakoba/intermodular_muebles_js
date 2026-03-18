@@ -1,0 +1,190 @@
+/* --- CONTENEDOR DEL FORMULARIO --- */
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #d9ccbc;
+}
+
+/* HEADER */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #e9e6e3;
+  padding: 10px 60px;
+  height: 65px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+  font-size: 26px;
+  color: #5c4432;
+}
+
+.logo img {
+  width: 48px;
+}
+
+.menu a {
+  margin: 0 22px;
+  text-decoration: none;
+  color: #333;
+  font-size: 20px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.menu a:hover {
+  color: #2a9aa6;
+}
+
+.icons {
+  display: flex;
+  gap: 18px;
+  font-size: 42px;
+  color: #5c4432;
+  cursor: pointer;
+}
+
+.icons span {
+  transition: 0.2s;
+}
+
+.icons span:hover {
+  color: #2a9aa6;
+  transform: scale(1.15);
+}
+
+/* Contenedor del icono de persona */
+.person-menu-wrapper {
+  position: relative;
+}
+
+/* Minimenu */
+/* Minimenu del icono de persona */
+.person-menu-wrapper {
+  position: relative;
+}
+
+.person-menu {
+  position: absolute;
+  top: 50px; /* debajo del icono */
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: none; /* oculto por defecto */
+  min-width: 150px;
+  z-index: 100;
+  flex-direction: column;
+}
+
+/* Ajuste del tamaño y peso de letra */
+.person-menu a {
+  padding: 8px 12px;
+  text-decoration: none;
+  color: #333;
+  font-weight: normal; /* ya no bold */
+  font-size: 12px; /* más pequeño, legible */
+  transition: 0.2s;
+  display: block;
+}
+
+.person-menu a:hover {
+  background-color: #f5f5f5;
+  color: #2a9aa6;
+  border-radius: 6px;
+}
+
+/* Mostrar el menu al pulsar */
+.person-menu.show {
+  display: flex;
+}
+
+/* ICONOS MATERIAL */
+.material-symbols-outlined {
+  font-variation-settings:
+    "FILL" 0,
+    "wght" 400,
+    "GRAD" 0,
+    "opsz" 24;
+}
+.icons .material-symbols-outlined {
+  font-size: 42px;
+}
+
+/* --- FORMULARIO --- */
+.form-container {
+  max-width: 700px;
+  margin: 50px auto;
+  background: white;
+  padding: 40px 50px;
+  border-radius: 8px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.form-container h1 {
+  color: #5c4432;
+  font-size: 36px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 12px 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  outline: none;
+  transition: 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #2a9aa6;
+  box-shadow: 0 0 5px rgba(42, 154, 166, 0.4);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.btn-submit {
+  background: #5c4432;
+  color: white;
+  padding: 14px 28px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  transition: 0.2s;
+  display: block;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.btn-submit:hover {
+  background: #2a9aa6;
+}

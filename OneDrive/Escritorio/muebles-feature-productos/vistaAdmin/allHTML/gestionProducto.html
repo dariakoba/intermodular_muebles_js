@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Management</title>
+    <link rel="stylesheet" href="../allstyles/estiloGestionProducto.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+    />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="logo">
+        <img src="../../images/logo.png" />
+        <span>DNA</span>
+      </div>
+
+      <nav class="menu">
+        <a href="#">Gestor de Productos</a>
+        <a href="#">Gestor de Categor&iacute;as</a>
+        <a href="#">Gestor de Usuarios</a>
+        <a href="#">Gestor de Pedidos</a>
+      </nav>
+
+      <div class="icons">
+        <span class="material-symbols-outlined"> shopping_cart </span>
+
+        <div class="person-menu-wrapper">
+          <span id="person-icon" class="material-symbols-outlined">
+            person
+          </span>
+
+          <!-- Minimenu -->
+          <div class="person-menu">
+            <a href="#">Ver cuenta</a>
+            <a href="#">Cerrar sesi&oacute;n</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="container">
+      <div class="title-bar">
+        <h1>Nuestros Productos</h1>
+      </div>
+
+      <a href="crearProducto.html" class="btn-crear">Crear nuevo producto</a>
+      <div class="table-container">
+        <div class="table-actions">
+          <label>
+            <input type="checkbox" />
+            Seleccionar todo
+          </label>
+
+          <div class="actions-buttons">
+            <button class="btn-modificar">Modificar</button>
+            <button class="btn-eliminar">Eliminar</button>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Color</th>
+              <th>Precio</th>
+              <th>Stock</th>
+              <th>Descripci&oacute;n</th>
+              <th>Categoria</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td><input type="checkbox" /></td>
+              <td>1</td>
+              <td>Sof� moderno</td>
+              <td>Gris</td>
+              <td>799�</td>
+              <td>12</td>
+              <td>Sof� de tres plazas</td>
+              <td>Sal�n</td>
+            </tr>
+
+            <tr>
+              <td><input type="checkbox" /></td>
+              <td>2</td>
+              <td>Mesa comedor</td>
+              <td>Roble</td>
+              <td>399�</td>
+              <td>8</td>
+              <td>Mesa de madera</td>
+              <td>Comedor</td>
+            </tr>
+
+            <tr>
+              <td><input type="checkbox" /></td>
+              <td>3</td>
+              <td>Silla n�rdica</td>
+              <td>Blanco</td>
+              <td>89�</td>
+              <td>30</td>
+              <td>Silla escandinava</td>
+              <td>Comedor</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <script src="../allfuctions/functionMiniMenu.js"></script>
+  </body>
+</html>

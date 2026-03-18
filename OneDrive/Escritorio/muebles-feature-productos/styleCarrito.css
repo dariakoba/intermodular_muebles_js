@@ -1,0 +1,24 @@
+.carrito-container {
+    max-width: 1000px;
+    margin: 60px auto; /* Centra el bloque horizontalmente */
+    padding: 0 20px;
+    text-align: center; /* Centra los textos */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#carrito-contenido {
+    width: 100%;
+    margin-top: 30px;
+}
+
+.carrito-vacio {
+    margin-top: 20px;
+}
+
+.carrito-vacio a {
+    color: #483426;
+    text-decoration: underline;
+    font-weight: bold;
+}
