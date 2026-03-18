@@ -62,7 +62,7 @@ public class AuthController {
 
 			UserRepository repo = new UserRepository(con);
 
-			User user = new User( encoder.encode(req.passwordHash()), "USER",req.telefono() , req.nombre(),req.apellidos() ,req.email());
+			User user = new User( encoder.encode(req.passwordHash()), "cliente",req.telefono() , req.nombre(),req.apellidos() ,req.email());
 
 			repo.insert(user);
 

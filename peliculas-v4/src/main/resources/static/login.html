@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
+
+<!-- CSS propio -->
+<link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+
+<!-- Imagen decorativa superior izquierda -->
+<div class="decor-img-top">
+  <img src="/images/login/login1.jpg" alt="Sofá decorativo">
+</div>
+
+<!-- Imagen decorativa inferior derecha -->
+<div class="decor-img-bottom">
+  <img src="/images/login/login2.jpg" alt="Sofá inferior">
+</div>
+
+<!-- Contenedor del login -->
+<div class="login-container">
+  <div class="login-box">
+    <h1>Iniciar Sesión</h1>
+
+    <form id="form-login">
+      <div class="form-group">
+        <label for="email">Correo electrónico</label>
+        <input id="email" type="email" placeholder="usuario@ejemplo.com" required>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <input id="password" type="password" placeholder="********" required>
+      </div>
+
+      <button type="submit" class="btn-login">Entrar</button>
+
+      <p class="forgot-pass">
+        <a href="#">¿Olvidaste tu contraseña?</a>
+      </p>
+
+      <div id="error" class="text-danger mt-2 text-center" style="display:none;">
+        Credenciales incorrectas
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- JS del login -->
+<script src="/js/auth.js"></script>
+<script src="/js/login.js"></script>
+
+</body>
+</html>
