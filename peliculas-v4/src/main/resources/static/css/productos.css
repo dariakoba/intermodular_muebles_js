@@ -1,3 +1,5 @@
+
+
 /* Reset box-sizing */
 * {
     box-sizing: border-box;
@@ -193,59 +195,115 @@ body{
     flex: 1;
 }
 
-/* GRID DE PRODUCTOS */
-.productos-container{
-    display:grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap:25px;
+/* GRID DE PRODUCTOS con flex y última fila alineada a la izquierda */
+.productos-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start; /* fuerza la última fila a la izquierda */
+    gap: 15px; /* espacio entre tarjetas */
 }
 
-/* CARD PRODUCTO */
-.card{
-    background:white;
-    border-radius:10px;
-    overflow:hidden;
-    box-shadow:0 4px 10px rgba(0,0,0,0.1);
-    transition:transform 0.2s;
+/* Cada card */
+.card {
+    flex: 1 1 calc(25% - 15px); /* 4 cards por fila en pantallas grandes */
+    max-width: calc(25% - 15px);
+    background: white;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s;
+    margin-bottom: 15px; /* espacio vertical */
 }
-.card:hover{
-    transform:scale(1.03);
+
+.card:hover {
+    transform: scale(1.03);
     border-color: #ae4010;
 }
-.card img{
-    width:100%;
-    height:200px;
-    object-fit:cover;
+.card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
 }
-.card-body{
-    padding:15px;
+
+/* CARD - cuerpo */
+.card-body {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
-.card-body h3{
-    margin:0 0 10px 0;
+
+.card-body h3 {
+    font-size: 16px;
+    color: #333;
+    margin: 0 0 8px 0;
 }
-.descripcion{
-    font-size:14px;
-    color:#555;
-    margin-bottom:10px;
+
+.card-body .descripcion {
+    font-size: 13px;
+    color: #777;
+    flex: 1;
+    margin-bottom: 10px;
 }
-.descripcion:hover{
-    color: #ae4010;
+
+.card-body .precio {
+    font-size: 18px;
+    font-weight: bold;
+    color: #5c4432;
+    margin-bottom: 12px;
 }
-.precio{
-    font-size:18px;
-    font-weight:bold;
+
+/* BOTÓN VER PRODUCTO */
+.card-body a {
+    text-decoration: none;
 }
-.card button{
-    margin-top:10px;
-    width:100%;
-    padding:10px;
-    border:none;
-    background:#5c4432;
-    color:white;
-    border-radius:5px;
-    cursor:pointer;
-    transition: 0.2s;
+
+.card-body button {
+    width: 100%;
+    padding: 10px 0;
+    background: #ae4010;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
 }
-.card button:hover{
-    background:#ae4010;
+
+.card-body button:hover {
+    background: #5c4432;
+    transform: translateY(-2px);
+}
+
+.card-body button:active {
+    transform: translateY(0);
+    background: #8c3208;
+}
+
+/* Responsive: 3 por fila */
+@media (max-width: 1200px) {
+    .card {
+        flex: 1 1 calc(33.33% - 15px);
+        max-width: calc(33.33% - 15px);
+    }
+}
+
+/* Responsive: 2 por fila */
+@media (max-width: 800px) {
+    .card {
+        flex: 1 1 calc(50% - 15px);
+        max-width: calc(50% - 15px);
+    }
+}
+
+/* Responsive: 1 por fila */
+@media (max-width: 500px) {
+    .card {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
 }
