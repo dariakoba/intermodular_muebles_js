@@ -10,12 +10,12 @@ async function cargarProducto() {
     const p = await response.json();
 
     document.title = p.nombre;
-    document.getElementById("producto-img").src = `/images/productos/${p.id}.jpg`;
+	document.getElementById("producto-img").src = `/images/productos/${p.id_producto}.jpg`;
     document.getElementById("producto-img").alt = p.nombre;
     document.getElementById("producto-nombre").textContent = p.nombre;
     document.getElementById("producto-descripcion").textContent = p.descripcion;
     document.getElementById("producto-precio").textContent = `${p.precio}€`;
-    document.getElementById("producto-id").textContent = p.id;
+	document.getElementById("producto-id").textContent = p.id_producto;
 
     document.getElementById("btn-comprar").addEventListener("click", () => {
         alert(`Redirigiendo al pago de "${p.nombre}"...`);
