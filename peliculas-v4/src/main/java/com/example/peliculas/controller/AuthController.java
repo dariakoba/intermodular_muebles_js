@@ -59,11 +59,18 @@ public class AuthController {
 	public void register(@RequestBody RegisterRequest req) {
 
 		try (Connection con = ds.getConnection()) {
-
+			con.setAutoCommit(true);
 			UserRepository repo = new UserRepository(con);
 
-			User user = new User( encoder.encode(req.passwordHash()), "cliente",req.telefono() , req.nombre(),req.apellidos() ,req.email());
-
+			User user = new User(
+				    encoder.encode(req.passwordHash()),
+				    "cliente",
+				    req.telefono(),
+				    req.nombre(),
+				    req.apellidos(),
+				    req.email()
+				);
+				
 			repo.insert(user);
 
 		} catch (SQLException e) {

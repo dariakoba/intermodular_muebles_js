@@ -10,11 +10,11 @@ public class User {
     private String apellidos;         // apellidos VARCHAR(50)
     private String direccion;         // direccion VARCHAR(100)
     private String email;
-    private int puntos;
-    private int nivelAcceso;
-    private float salario;
+    private Integer puntos;       // antes int
+    private Integer nivelAcceso;  // antes int
+    private Float salario;
 	public User(int id, String passwordHash, String rol, String telefono, String estado, String nombre,
-			String apellidos, String direccion, String email, int puntos, int nivelAcceso, float salario) {
+			String apellidos, String direccion, String email, Integer puntos, Integer nivelAcceso, Float salario) {
 		super();
 		this.id = id;
 		this.passwordHash = passwordHash;
@@ -29,16 +29,22 @@ public class User {
 		this.nivelAcceso = nivelAcceso;
 		this.salario = salario;
 	}
+	
 	public User(String passwordHash, String rol, String telefono, String nombre,
-			String apellidos, String email) {
-		super();
-		this.passwordHash = passwordHash;
-		this.rol = rol;
-		this.telefono = telefono;
-		this.nombre = nombre;
-		this.apellidos = apellidos;
-		this.email = email;
-		
+            String apellidos, String email) {
+    this.passwordHash = passwordHash;
+    this.rol = rol;
+    this.telefono = telefono;
+    this.nombre = nombre;
+    this.apellidos = apellidos;
+    this.email = email;
+
+    // Inicializa los campos opcionales en null
+    this.puntos = (Integer) null;
+    this.nivelAcceso = (Integer) null;
+    this.salario = (Float) null;
+    this.estado = "activo";
+    this.direccion = null;
 	}
 	public int getId() {
 		return id;
