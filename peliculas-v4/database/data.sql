@@ -1,96 +1,89 @@
--- =========================
--- TABLA USUARIOS
--- =========================
+
+
+-- =====================================
+-- INSERT USUARIOS
+-- =====================================
 INSERT INTO usuarios (password_hash, rol, telefono, estado, nombre, apellidos, direccion, email, nivel_acceso, puntos, salario, fecha_alta)
 VALUES
-('hash1','admin','123456789','activo','Juan','Pérez','Calle Falsa 1','juan.perez@email.com',1,NULL,NULL,'2024-01-10'),
-('hash2','cliente','987654321','activo','Ana','Gómez','Av. Siempre Viva 2','ana.gomez@email.com',NULL,150,NULL,'2024-02-15'),
-('hash3','cliente','654321987','inactivo','Luis','Ramírez','Calle Luna 3','luis.ramirez@email.com',NULL,200,NULL,'2024-03-20'),
-('hash4','empleado','321654987','activo','Marta','Santos','Calle Sol 4','marta.santos@email.com',NULL,NULL,1500.00,'2024-01-05'),
-('hash5','empleado','789456123','activo','Carlos','Fernández','Av. Estrella 5','carlos.fernandez@email.com',NULL,NULL,1200.00,'2024-02-10'),
-('hash6','cliente','123789456','activo','Lucía','Torres','Calle Mar 6','lucia.torres@email.com',NULL,50,NULL,'2024-03-01'),
-('hash7','empleado','456123789','activo','Pedro','Vega','Av. Río 7','pedro.vega@email.com',NULL,NULL,1800.00,'2024-02-25'),
-('hash8','cliente','321987654','activo','Sofía','Ríos','Calle Nube 8','sofia.rios@email.com',NULL,100,NULL,'2024-01-30'),
-('hash9','admin','147258369','activo','Miguel','Cruz','Av. Sol 9','miguel.cruz@email.com',2,NULL,NULL,'2024-03-05'),
-('hash10','cliente','963852741','activo','Elena','Díaz','Calle Estrella 10','elena.diaz@email.com',NULL,75,NULL,'2024-03-10');
+('hash1','admin','600111111','activo','Admin','Principal','Calle Admin 1','admin@dna.com',NULL,NULL,NULL,'2024-01-01'),
+('hash2','cliente','600222222','activo','Laura','García','Calle Sofa 12','laura@gmail.com',NULL,120,NULL,'2024-02-01'),
+('hash3','cliente','600333333','activo','Carlos','Pérez','Av Mesa 45','carlos@gmail.com',NULL,60,NULL,'2024-02-10'),
+('hash4','cliente','600444444','activo','Marta','López','Calle Silla 7','marta@gmail.com',NULL,30,NULL,'2024-03-05'),
+('hash5','cliente','600555555','activo','David','Ruiz','Av Mueble 22','david@gmail.com',NULL,80,NULL,'2024-03-15');
 
--- =========================
--- TABLA CATEGORIA
--- =========================
-INSERT INTO categoria (nombre)
-VALUES
-('Electrónica'),
-('Ropa'),
-('Hogar'),
-('Juguetes'),
-('Deportes'),
-('Libros'),
-('Belleza'),
-('Alimentos'),
-('Muebles'),
-('Accesorios');
+-- =====================================
+-- INSERT CATEGORIAS (MUEBLES)
+-- =====================================
+INSERT INTO categoria (nombre) VALUES
+('Sofás'),
+('Mesas'),
+('Sillas'),
+('Camas'),
+('Armarios'),
+('Estanterías'),
+('Muebles TV'),
+('Escritorios');
 
--- =========================
--- TABLA PRODUCTOS
--- =========================
-INSERT INTO productos (nombre, color, precio, stock, descripcion, id_categoria)
-VALUES
-('Televisor', 'Negro', 450.00, 10, 'Televisor LED 42 pulgadas', 1),
-('Camiseta', 'Azul', 25.50, 50, 'Camiseta de algodón talla M', 2),
-('Sofá', 'Gris', 600.00, 5, 'Sofá de 3 plazas', 3),
-('Pelota', 'Rojo', 15.00, 30, 'Pelota de fútbol tamaño 5', 4),
-('Libro de ciencia', 'N/A', 20.00, 40, 'Libro educativo de ciencias', 6),
-('Perfume', 'Transparente', 75.00, 20, 'Perfume de 50ml', 7),
-('Galletas', 'N/A', 3.50, 100, 'Paquete de galletas', 8),
-('Mesa de comedor', 'Madera', 350.00, 7, 'Mesa de comedor para 6 personas', 9),
-('Auriculares', 'Negro', 80.00, 15, 'Auriculares bluetooth', 1),
-('Bolso', 'Marrón', 55.00, 25, 'Bolso de cuero', 10);
+-- =====================================
+-- INSERT PRODUCTOS
+-- =====================================
+INSERT INTO productos (nombre, color, precio, stock, descripcion, id_categoria) VALUES
+('Sofá 3 plazas', 'Gris', 550, 5, 'Sofá cómodo de 3 plazas', 1),
+('Sofá chaise longue', 'Beige', 899, 2, 'Sofá grande con chaise longue', 1),
+('Mesa comedor', 'Madera', 300, 10, 'Mesa de comedor para 6 personas', 2),
+('Mesa centro', 'Blanco', 120, 8, 'Mesa de centro moderna', 2),
+('Silla comedor', 'Negro', 60, 20, 'Silla acolchada', 3),
+('Cama matrimonio', 'Blanco', 450, 4, 'Cama de 135cm', 4),
+('Armario grande', 'Roble', 700, 3, 'Armario 3 puertas', 5),
+('Estantería', 'Blanco', 150, 6, 'Estantería moderna', 6),
+('Mueble TV', 'Marrón', 200, 7, 'Mueble para televisión', 7),
+('Escritorio', 'Roble', 250, 5, 'Escritorio oficina', 8);
 
--- =========================
--- TABLA EJEMPLAR
--- =========================
-INSERT INTO ejemplar (estado, id_producto)
-VALUES
-('nuevo', 1),
-('nuevo', 2),
-('usado', 3),
-('nuevo', 4),
-('nuevo', 5),
-('usado', 6),
-('nuevo', 7),
-('nuevo', 8),
-('nuevo', 9),
-('usado', 10);
+-- =====================================
+-- INSERT EJEMPLAR
+-- =====================================
+INSERT INTO ejemplar (estado, id_producto) VALUES
+('nuevo',1),
+('nuevo',2),
+('nuevo',3),
+('nuevo',4),
+('nuevo',5),
+('nuevo',6),
+('nuevo',7),
+('nuevo',8),
+('nuevo',9),
+('nuevo',10);
 
--- =========================
--- TABLA PEDIDOS
--- =========================
-INSERT INTO pedidos (fecha_pedido, fecha_devolucion, precio, metodo_pago, factura, envio, id_usuario)
-VALUES
-('2024-03-01', NULL, 450.00, 'Tarjeta', 'F001', 'DHL', 2),
-('2024-03-02', NULL, 25.50, 'PayPal', 'F002', 'MRW', 3),
-('2024-03-03', NULL, 600.00, 'Tarjeta', 'F003', 'UPS', 6),
-('2024-03-04', NULL, 15.00, 'Efectivo', 'F004', 'DHL', 8),
-('2024-03-05', NULL, 20.00, 'Tarjeta', 'F005', 'MRW', 2),
-('2024-03-06', NULL, 75.00, 'PayPal', 'F006', 'UPS', 3),
-('2024-03-07', NULL, 350.00, 'Tarjeta', 'F007', 'DHL', 6),
-('2024-03-08', NULL, 80.00, 'Efectivo', 'F008', 'MRW', 8),
-('2024-03-09', NULL, 55.00, 'Tarjeta', 'F009', 'UPS', 2),
-('2024-03-10', NULL, 3.50, 'PayPal', 'F010', 'DHL', 3);
+-- =====================================
+-- INSERT PEDIDOS
+-- =====================================
+INSERT INTO pedidos (fecha_pedido, fecha_devolucion, precio, metodo_pago, factura, envio, id_usuario) VALUES
+('2024-03-01', NULL, 550, 'Tarjeta', 'F001', 'DHL', 2),
+('2024-03-02', NULL, 300, 'PayPal', 'F002', 'MRW', 3),
+('2024-03-03', NULL, 60, 'Tarjeta', 'F003', 'SEUR', 4),
+('2024-03-04', NULL, 450, 'Tarjeta', 'F004', 'DHL', 5),
+('2024-03-05', NULL, 200, 'PayPal', 'F005', 'MRW', 2);
 
--- =========================
--- TABLA LINEA_PEDIDO
--- =========================
-INSERT INTO linea_pedido (id_pedido, id_ejemplar)
-VALUES
+-- =====================================
+-- INSERT LINEA_PEDIDO
+-- =====================================
+INSERT INTO linea_pedido (id_pedido, id_ejemplar) VALUES
 (1,1),
-(2,2),
-(3,3),
-(4,4),
-(5,5),
-(6,6),
-(7,7),
-(8,8),
-(9,9),
-(10,10);
+(2,3),
+(3,5),
+(4,6),
+(5,9);
 
+-- =====================================
+-- SELECT PARA TU API /api/productos
+-- =====================================
+SELECT 
+    p.id,
+    p.nombre,
+    p.descripcion,
+    p.precio,
+    p.stock,
+    p.color,
+    c.nombre AS categoria
+FROM productos p
+JOIN categoria c ON p.id_categoria = c.id;
