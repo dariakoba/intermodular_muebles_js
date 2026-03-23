@@ -56,4 +56,10 @@ public class PedidoRepository extends BaseRepository<Pedido> {
             p.getId() 
         };
     }
+
+	@Override
+	public Integer getPrimaryKey(Pedido instance) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

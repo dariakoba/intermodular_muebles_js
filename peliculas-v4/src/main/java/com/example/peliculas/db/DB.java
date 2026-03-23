@@ -17,7 +17,7 @@ public class DB {
 		// Evita instanciación
 	}
 
-	public static <T> List<T> queryMany(Connection con, String sql, RowMapper<T> mapper, Object... params) {
+	public static <T> List<T> queryMany(Connection con, String sql, RowMapper<T> mapper, Object... params)throws SQLException {
 		debug(sql, params);
 		
 		try (PreparedStatement stmt = con.prepareStatement(sql)) {
@@ -30,13 +30,11 @@ public class DB {
 			}
 
 			return objects;
-
-		} catch (SQLException e) {
-			throw new DataAccessException("Error ejecutando SQL select: " + sql, e);
 		}
+		
 	}
 
-	public static <T> T queryOne(Connection con, String sql, RowMapper<T> mapper, Object... params) {
+	public static <T> T queryOne(Connection con, String sql, RowMapper<T> mapper, Object... params)throws SQLException {
 		debug(sql, params);
 		
 		try (PreparedStatement stmt = con.prepareStatement(sql)) {
@@ -49,12 +47,10 @@ public class DB {
 
 			return null;
 
-		} catch (SQLException e) {
-			throw new DataAccessException("Error ejecutando SQL select: " + sql, e);
 		}
 	}
 
-	public static int insert(Connection con, String sql, Object... params) {
+	public static int insert(Connection con, String sql, Object... params)throws SQLException {
 		debug(sql, params);
 		
 		try (PreparedStatement stmt = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -68,23 +64,19 @@ public class DB {
 
 			throw new DataAccessException("Falta AUTO_INCREMENT en la PK de la tabla");
 
-		} catch (SQLException e) {
-			throw new DataAccessException("Error ejecutando SQL insert: " + sql, e);
 		}
 	}
 
-	public static int update(Connection con, String sql, Object... params) {
+	public static int update(Connection con, String sql, Object... params)throws SQLException {
 		debug(sql, params);
 		
 		try (PreparedStatement stmt = con.prepareStatement(sql)) {
 			bindParams(stmt, params);
 			return stmt.executeUpdate();
-		} catch (SQLException e) {
-			throw new DataAccessException("Error ejecutando SQL update: " + sql, e);
 		}
 	}
 
-	public static int delete(Connection con, String sql, Object... params) {
+	public static int delete(Connection con, String sql, Object... params)throws SQLException {
 		return update(con, sql, params);
 	}
 
@@ -94,7 +86,7 @@ public class DB {
 		}
 	}
 
-	private static void debug(String sql, Object... params) {
+	private static void debug(String sql, Object... params)throws SQLException {
 		if (!Config.SQL_DEBUG)
 			return;
 

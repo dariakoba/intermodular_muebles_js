@@ -46,6 +46,12 @@ public class CategoriaRepository extends BaseRepository<Categoria> {
 		return new Object[] {  c.getNombre() , c.getIdCategoria()};
 	}
 
+	@Override
+	public Integer getPrimaryKey(Categoria instance) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 	
 
