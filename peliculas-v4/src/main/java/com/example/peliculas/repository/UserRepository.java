@@ -118,6 +118,12 @@ public class UserRepository extends BaseRepository<User> {
 		String sql = "SELECT id, nombre, email, rol FROM usuarios";
 		return DB.queryMany(con, sql, new UserResponseMapper());
 	}
+
+	@Override
+	public Integer getPrimaryKey(User u) {
+		// TODO Auto-generated method stub
+		return u.getId();
+	}
 	
 	
 	
