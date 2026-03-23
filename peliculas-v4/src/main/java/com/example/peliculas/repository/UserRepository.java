@@ -36,7 +36,10 @@ public class UserRepository extends BaseRepository<User> {
 	public String getTable() {
 		return "usuarios";
 	}
-
+	@Override
+	public Integer getPrimaryKey(User u) {
+		return u.getId();
+	}
 	
 	@Override
 	public String[] getColumnNames() { 
@@ -102,28 +105,47 @@ public class UserRepository extends BaseRepository<User> {
 	}
 	
 	public User findByEmail(String email) {
-        String sql = "select * from usuarios where email = ?";
-        return DB.queryOne(con, sql, new UserMapper(), email);
+        
+        try {
+        	String sql = "select * from usuarios where email = ?";
+			return DB.queryOne(con, sql, new UserMapper(), email);
+		} catch (SQLException e) {
+			throw new DataAccessException("Error al buscar el usuario con email " + email);
+
+		}
     }
 	public UserResponse findResponseById(int id) {
-	    String sql = "select id, rol, telefono, estado, nombre, apellidos, direccion, email, puntos, nivel_acceso, salario " +
+	    
+	    try {
+	    	String sql = "select id, rol, telefono, estado, nombre, apellidos, direccion, email, puntos, nivel_acceso, salario " +
 	                 "from usuarios where id = ?";
-	    return DB.queryOne(con, sql, new UserResponseMapper(), id);
+			return DB.queryOne(con, sql, new UserResponseMapper(), id);
+		} catch (SQLException e) {
+			throw new DataAccessException("Error al buscar el usuario con id " + id, e);
+		}
 	}
 	public List<UserResponse> findResponses() {
-	    String sql = "select id, rol, telefono, estado, nombre, apellidos, direccion, email, puntos, nivel_acceso, salario from usuarios";
-	    return DB.queryMany(con, sql, new UserResponseMapper());
+	    try {
+		    String sql = "select id, rol, telefono, estado, nombre, apellidos, direccion, email, puntos, nivel_acceso, salario from usuarios";
+
+			return DB.queryMany(con, sql, new UserResponseMapper());
+		} catch (SQLException e) {
+			throw new DataAccessException("Error obteniendo los usuarios", e);
+
+		}
 	}
 	public List<UserResponse> findAllResponses() {
-		String sql = "SELECT id, nombre, email, rol FROM usuarios";
-		return DB.queryMany(con, sql, new UserResponseMapper());
+		try {
+			String sql = "SELECT id, nombre, email, rol FROM usuarios";
+
+			return DB.queryMany(con, sql, new UserResponseMapper());
+		} catch (SQLException e) {
+			throw new DataAccessException("Error obteniendo los usuarios", e);
+
+		}
 	}
 
-	@Override
-	public Integer getPrimaryKey(User u) {
-		// TODO Auto-generated method stub
-		return u.getId();
-	}
+	
 	
 	
 	
