@@ -9,5 +9,5 @@ public record ProductoDetalle(
         float precio,
         int stock,
         String descripcion,
-        Categoria categoria
+        Categoria categoriaId
 ) {}
