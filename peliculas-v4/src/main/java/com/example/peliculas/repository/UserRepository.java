@@ -55,7 +55,8 @@ public class UserRepository extends BaseRepository<User> {
 	        "email",
 	        "puntos",
 	        "nivel_acceso",
-	        "salario"
+	        "salario",
+	        "fecha_alta"
 	    };
 	}
 
@@ -67,7 +68,7 @@ public class UserRepository extends BaseRepository<User> {
 	public void setPrimaryKey(User u, int id) {
 		u.setId(id);
 	}
-
+	/*
 	@Override
 	public Object[] getInsertValues(User u) {
 		return new Object[] {
@@ -85,6 +86,24 @@ public class UserRepository extends BaseRepository<User> {
 			    u.getSalario()
 			};
 	}
+	*/
+	@Override
+	public Object[] getInsertValues(User u) {
+	    return new Object[] {
+	        u.getPasswordHash(),
+	        u.getRol(),
+	        u.getTelefono(),
+	        u.getEstado(),
+	        u.getNombre(),
+	        u.getApellidos(),
+	        u.getDireccion(),
+	        u.getEmail(),
+	        u.getPuntos(),
+	        u.getNivelAcceso(),
+	        u.getSalario(),
+	        java.sql.Date.valueOf(u.getFechaAlta()) // ahora sí coincide
+	    };
+	}
 
 	@Override
 	public Object[] getUpdateValues(User u) {
@@ -100,7 +119,8 @@ public class UserRepository extends BaseRepository<User> {
 			    u.getPuntos(),
 			    u.getNivelAcceso(),
 			    u.getSalario(),
-			    u.getId()
+			    u.getId(),
+			    java.sql.Date.valueOf(u.getFechaAlta())
 			};
 	}
 	
@@ -117,7 +137,7 @@ public class UserRepository extends BaseRepository<User> {
 	public UserResponse findResponseById(int id) {
 	    
 	    try {
-	    	String sql = "select id, rol, telefono, estado, nombre, apellidos, direccion, email, puntos, nivel_acceso, salario " +
+	    	String sql = "select id, rol, telefono, estado, nombre, apellidos, direccion, email, puntos, nivel_acceso, salario, fecha_alta " +
 	                 "from usuarios where id = ?";
 			return DB.queryOne(con, sql, new UserResponseMapper(), id);
 		} catch (SQLException e) {
@@ -126,7 +146,7 @@ public class UserRepository extends BaseRepository<User> {
 	}
 	public List<UserResponse> findResponses() {
 	    try {
-		    String sql = "select id, rol, telefono, estado, nombre, apellidos, direccion, email, puntos, nivel_acceso, salario from usuarios";
+		    String sql = "select id, rol, telefono, estado, nombre, apellidos, direccion, email, puntos, nivel_acceso, salario, fecha_alta from usuarios";
 
 			return DB.queryMany(con, sql, new UserResponseMapper());
 		} catch (SQLException e) {

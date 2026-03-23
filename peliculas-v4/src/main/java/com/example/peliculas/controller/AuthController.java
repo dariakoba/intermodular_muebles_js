@@ -53,7 +53,7 @@ public class AuthController {
 			throw new DataAccessException(e);
 		}
 	}
-
+	/*
 	// REGISTER
 	@PostMapping("/api/register")
 	public void register(@RequestBody RegisterRequest req) {
@@ -82,6 +82,42 @@ public class AuthController {
 
 			throw new DataAccessException(e);
 		}
+	}*/
+	@PostMapping("/api/register")
+	public void register(@RequestBody RegisterRequest req) {
+	    System.out.println("RegisterRequest recibida: " + req);
+	    try (Connection con = ds.getConnection()) {
+	        con.setAutoCommit(true);
+
+	        UserRepository repo = new UserRepository(con);
+
+	        // Aquí es donde se crea el usuario
+	        User user = new User(
+	            encoder.encode(req.passwordHash()), // 🔹 passwordHash debe tener valor
+	            "cliente",
+	            req.telefono(),
+	            req.nombre(),
+	            req.apellidos(),
+	            req.email()
+	        );
+
+	        // Inicializar campos opcionales
+	        user.setEstado("activo");
+	        user.setDireccion("");
+	        user.setPuntos(0);
+	        user.setNivelAcceso(0);
+	        user.setSalario(0f);
+
+	        repo.insert(user);
+
+	        System.out.println("Usuario insertado: " + user);
+
+	    } catch (SQLException e) {
+	        if (e.getErrorCode() == 1062) {
+	            throw new ResponseStatusException(HttpStatus.CONFLICT, "El email ya está registrado");
+	        }
+	        throw new DataAccessException(e);
+	    }
 	}
 
 	// LOGOUT
