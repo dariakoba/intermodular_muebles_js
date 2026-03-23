@@ -3,11 +3,11 @@ package com.example.peliculas.dto;
 import com.example.peliculas.entity.Categoria;
 
 public record ProductoDetalle(
-        int idProducto,
+        int id,
         String nombre,
         String color,
         float precio,
         int stock,
         String descripcion,
-        Categoria categoriaId
+        String categoria
 ) {}

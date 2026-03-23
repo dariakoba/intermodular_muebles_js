@@ -71,13 +71,14 @@ public class ProductoRepository extends BaseRepository<Producto> {
 	
 	public List<ProductoDetalle> findDetalle(){
 		String sql="""
-				select id,nombre, color, precio, stock, descripcion, id_categoria from productos;
-
+				select id,nombre, color, precio, stock, descripcion, c.nombre as categoria from productos p 
+				JOIN categoria c ON c.id = p.id_categoria;
 				""";
 				
 		try {
 			return DB.queryMany(con, sql, rs -> 
-				new ProductoResumen(rs.getInt("id"), rs.getString("nombre"), rs.getString("descripcion"),rs.getFloat("precio"))
+				new ProductoDetalle(rs.getInt("id"), rs.getString("nombre"), rs.getString("color"), rs.getFloat("precio"),
+						rs.getInt("stock"), rs.getString("descripcion"),rs.getString("categoria"))
 			);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
