@@ -7,7 +7,7 @@ import com.example.peliculas.entity.Categoria;
 
 public class CategoriaMapper implements RowMapper<Categoria> {
 	@Override
-    public Categoria map(ResultSet rs) throws SQLException {
+    public Categoria mapRow(ResultSet rs) throws SQLException {
         return new Categoria(
                 rs.getInt("id_categoria"),
                 rs.getString("nombre")
