@@ -26,7 +26,7 @@ public class RoleInterceptor implements HandlerInterceptor {
 			if (path.startsWith("/api/")) {
 				response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 			} else {
-				response.sendRedirect("/");
+				response.sendRedirect("/error/403.html");
 			}
 
 			return false;
