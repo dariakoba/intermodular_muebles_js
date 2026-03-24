@@ -71,21 +71,14 @@ CREATE TABLE linea_pedido (
 );
 
 CREATE TABLE resenyas ( 
-
-    id_resenya SERIAL PRIMARY KEY, 
-
+    id_resenya INT AUTO_INCREMENT PRIMARY KEY, 
     comentario TEXT, 
-
-    puntuacion INTEGER NOT NULL CHECK (puntuacion >= 1 AND puntuacion <= 5), 
-
-    fecha_publicacion DATE DEFAULT CURRENT_DATE, 
-
-    id_usuario INTEGER NOT NULL, 
-
-    id_producto INTEGER NOT NULL, 
-
+    puntuacion INT NOT NULL CHECK (puntuacion >= 1 AND puntuacion <= 5), 
+    fecha_publicacion DATE DEFAULT (CURRENT_DATE), 
+    id_usuario INT NOT NULL, 
+    id_producto INT NOT NULL, 
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE, 
-
-    FOREIGN KEY (id_producto) REFERENCES productos(id_producto) ON DELETE CASCADE 
+    FOREIGN KEY (id_producto) REFERENCES productos(id) ON DELETE CASCADE 
+);
 
 ); 
