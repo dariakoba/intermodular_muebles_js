@@ -56,12 +56,12 @@ public abstract class BaseRepository<T> {
 		}
 	}
 	
-	public int insert(T instance) {
+	public T insert(T instance) {
 		try {
 			String sql = buildInsertSql();
 			int id = DB.insert(con, sql, getInsertValues(instance));
 			setPrimaryKey(instance, id);
-			return (int) instance;
+			return instance;
 		}catch (SQLException e) {
 			throw translate(e);
 		}

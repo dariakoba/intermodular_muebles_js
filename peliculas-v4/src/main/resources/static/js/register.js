@@ -11,7 +11,7 @@ form.addEventListener("submit", async (e) => {
     apellidos: document.getElementById("apellidos").value.trim(),
     email: document.getElementById("email").value.trim(),
     telefono: document.getElementById("telefono").value.trim(),
-    passwordHash: document.getElementById("password").value
+    password_hash: document.getElementById("password").value
   };
 
   console.log("Datos a enviar:", data); // 🔥 Debug: confirma que passwordHash no sea null
