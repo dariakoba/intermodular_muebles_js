@@ -87,3 +87,28 @@ SELECT
     c.nombre AS categoria
 FROM productos p
 JOIN categoria c ON p.id_categoria = c.id;
+
+-- =====================================
+-- INSERT RESENYAS
+-- =====================================
+INSERT INTO resenyas (comentario, puntuacion, fecha_publicacion, id_usuario, id_producto) VALUES
+('El sofá es súper cómodo y el color gris queda genial en mi salón.', 5, '2024-03-10', 2, 1),
+('La mesa de comedor llegó con un pequeño rasguño, pero es robusta.', 3, '2024-03-12', 3, 3),
+('La silla es básica pero cumple su función por el precio que tiene.', 4, '2024-03-15', 4, 5),
+('Cama de muy buena calidad, el montaje fue sencillo.', 5, '2024-03-20', 5, 6),
+('El mueble de TV es un poco más oscuro de lo que se ve en la foto.', 4, '2024-03-22', 2, 9),
+('Me encanta el diseño de la mesa de centro, muy minimalista.', 5, '2024-03-25', 3, 4);
+
+-- =====================================
+-- SELECT PARA COMPROBAR RESEÑAS CON NOMBRES
+-- =====================================
+SELECT 
+    r.id_resenya,
+    u.nombre AS cliente,
+    p.nombre AS producto,
+    r.puntuacion,
+    r.comentario,
+    r.fecha_publicacion
+FROM resenyas r
+JOIN usuarios u ON r.id_usuario = u.id
+JOIN productos p ON r.id_producto = p.id_producto;

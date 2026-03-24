@@ -6,7 +6,7 @@ import com.example.peliculas.entity.Pedido;
 
 public class PedidoMapper implements RowMapper<Pedido> {
     @Override
-    public Pedido map(ResultSet rs) throws SQLException {
+    public Pedido mapRow(ResultSet rs) throws SQLException {
         return new Pedido(
             rs.getInt("id"),
             rs.getDate("fecha_pedido").toLocalDate(),

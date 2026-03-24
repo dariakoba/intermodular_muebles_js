@@ -26,7 +26,7 @@ public class DB {
 
 			List<T> objects = new ArrayList<>();
 			while (rs.next()) {
-				objects.add(mapper.map(rs));
+				objects.add(mapper.mapRow(rs));
 			}
 
 			return objects;
@@ -42,7 +42,7 @@ public class DB {
 			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {
-				return mapper.map(rs);
+				return mapper.mapRow(rs);
 			}
 
 			return null;

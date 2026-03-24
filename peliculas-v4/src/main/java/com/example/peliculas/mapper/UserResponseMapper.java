@@ -9,7 +9,7 @@ import com.example.peliculas.entity.User;
 public class UserResponseMapper implements RowMapper<UserResponse> {
 
 	@Override
-	public UserResponse map(ResultSet rs) throws SQLException {
+	public UserResponse mapRow(ResultSet rs) throws SQLException {
 		return new UserResponse(
                 rs.getInt("id"),
                 rs.getString("rol"),
