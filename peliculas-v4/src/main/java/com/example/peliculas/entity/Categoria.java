@@ -10,7 +10,7 @@ public class Categoria {
 	    System.out.println("Funcionalidad de registro");
 
 
-	    
+	    System.out.println("aa");
 	    public Categoria(int idCategoria, String nombre) {
 	        this.idCategoria = idCategoria;
 	        this.nombre = nombre;
