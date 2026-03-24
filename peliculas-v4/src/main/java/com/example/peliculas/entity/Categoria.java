@@ -4,6 +4,7 @@ public class Categoria {
 	 private int idCategoria;
 	    private String nombre;
 
+	    System.out.println("Funcionalidad de registro");
 
 	    
 	    public Categoria(int idCategoria, String nombre) {
