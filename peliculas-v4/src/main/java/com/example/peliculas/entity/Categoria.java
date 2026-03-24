@@ -3,9 +3,13 @@ package com.example.peliculas.entity;
 public class Categoria {
 	 private int idCategoria;
 	    private String nombre;
-	    
+
 	    
 	    System.out.println("Funcionalidad de login");
+
+	    System.out.println("Funcionalidad de registro");
+
+
 	    
 	    public Categoria(int idCategoria, String nombre) {
 	        this.idCategoria = idCategoria;
