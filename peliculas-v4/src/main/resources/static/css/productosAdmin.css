@@ -1,0 +1,52 @@
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f6f8;
+}
+
+.topbar {
+    background: #2c3e50;
+    color: white;
+    padding: 15px 30px;
+}
+
+.container {
+    padding: 20px 40px;
+}
+
+.acciones {
+    margin-bottom: 15px;
+}
+
+.acciones button {
+    padding: 10px 15px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+#crear { background: #27ae60; color: white; }
+#editar { background: #f39c12; color: white; }
+#eliminar { background: #c0392b; color: white; }
+
+.tabla {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+.tabla th, .tabla td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+.tabla th {
+    background: #ecf0f1;
+}
+
+.tabla tr:hover {
+    background: #f9f9f9;
+}

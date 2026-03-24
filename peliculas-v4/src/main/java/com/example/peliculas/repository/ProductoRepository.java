@@ -1,16 +1,20 @@
 package com.example.peliculas.repository;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 import com.example.peliculas.db.DB;
 import com.example.peliculas.entity.Producto;
+import com.example.peliculas.exception.DataAccessException;
 import com.example.peliculas.mapper.RowMapper;
 import com.example.peliculas.mapper.ProductoMapper;
+import com.example.peliculas.dto.ProductoDetalle;
 import com.example.peliculas.dto.ProductoResumen;
 
 public class ProductoRepository extends BaseRepository<Producto> {
 
+	
 	public ProductoRepository(Connection con) {
 		super(con, new ProductoMapper());
 	}
@@ -18,10 +22,10 @@ public class ProductoRepository extends BaseRepository<Producto> {
 	public ProductoRepository(Connection con, RowMapper<Producto> mapper) {
 		super(con, mapper);
 	}
-	@Override
-	public String getPrimaryKeyName() {
-		return "id";
-	}
+	
+	
+	
+	
 	@Override
 	public String getTable() {
 		return "productos";
@@ -30,6 +34,12 @@ public class ProductoRepository extends BaseRepository<Producto> {
 	@Override
 	public String[] getColumnNames() {
 		return new String[] { "id", "nombre", "color","precio","stock","descripcion","id_categoria" };
+	}
+	
+	@Override
+	public Integer getPrimaryKey(Producto p) {
+		// TODO Auto-generated method stub
+		return p.getIdProducto();
 	}
 	
 	@Override
@@ -49,8 +59,31 @@ public class ProductoRepository extends BaseRepository<Producto> {
 	
 	public List<ProductoResumen> findResumen(){
 		String sql="select id,nombre, descripcion, precio from productos";
-		return DB.queryMany(con, sql, rs -> 
-			new ProductoResumen(rs.getInt("id"), rs.getString("nombre"), rs.getString("descripcion"),rs.getFloat("precio"))
-		);
+		try {
+			return DB.queryMany(con, sql, rs -> 
+				new ProductoResumen(rs.getInt("id"), rs.getString("nombre"), rs.getString("descripcion"),rs.getFloat("precio"))
+			);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			throw new DataAccessException("Error al buscar el listado resumido de productos", e);
+		}
 	}
+	
+	public List<ProductoDetalle> findDetalle(){
+		String sql="""
+				select id,nombre, color, precio, stock, descripcion, c.nombre as categoria from productos p 
+				JOIN categoria c ON c.id = p.id_categoria;
+				""";
+				
+		try {
+			return DB.queryMany(con, sql, rs -> 
+				new ProductoDetalle(rs.getInt("id"), rs.getString("nombre"), rs.getString("color"), rs.getFloat("precio"),
+						rs.getInt("stock"), rs.getString("descripcion"),rs.getString("categoria"))
+			);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			throw new DataAccessException("Error al buscar el listado resumido de productos", e);
+		}
+	}
+
 }
