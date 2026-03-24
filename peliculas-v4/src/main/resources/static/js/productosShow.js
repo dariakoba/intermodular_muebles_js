@@ -10,7 +10,7 @@ async function cargarProducto() {
     const p = await response.json();
 
     document.title = p.nombre;
-	document.getElementById("producto-img").src = `/images/productos/${p.id_producto}.jpg`;
+	document.getElementById("producto-img").src = `/images/productos/${p.id}.jpg`;
     document.getElementById("producto-img").alt = p.nombre;
     document.getElementById("producto-nombre").textContent = p.nombre;
     document.getElementById("producto-descripcion").textContent = p.descripcion;
