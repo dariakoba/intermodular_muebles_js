@@ -5,7 +5,6 @@ public class Categoria {
 	    private String nombre;
 
 
-	    System.out.println("aa");
 	    public Categoria(int idCategoria, String nombre) {
 	        this.idCategoria = idCategoria;
 	        this.nombre = nombre;

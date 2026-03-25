@@ -6,7 +6,7 @@ function obtenerId() {
 
 async function cargarDirectores() {
 
-    const response = await fetch("/api/admin/directores");
+    const response = await fetch("/api/admin/categorias");
     const directores = await response.json();
 
     const select = document.getElementById("director");
@@ -26,7 +26,7 @@ async function cargar() {
 
     const id = obtenerId();
 
-    const response = await fetch(`/api/admin/peliculas/${id}`);
+    const response = await fetch(`/api/admin/productos/${id}`);
     const p = await response.json();
 
     titulo.value = p.titulo;
@@ -51,7 +51,7 @@ async function guardar(e) {
         director_id: director.value
     };
 
-    await fetch(`/api/admin/peliculas/${id}`, {
+    await fetch(`/api/admin/productos/${id}`, {
 
         method: "PUT",
 
