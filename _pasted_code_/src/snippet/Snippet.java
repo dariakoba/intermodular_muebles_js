@@ -1,0 +1,56 @@
+package snippet;
+
+public class Snippet {
+	<!DOCTYPE html>
+	<html lang="es">
+	<head>
+	    <meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <title>DNA Mobiliario</title>
+	    <link rel="stylesheet" href="styles.css">
+	    <link rel="stylesheet" href="global.css">
+	    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+	</head>
+	<body>
+	
+	    <header class="navbar">
+	    <a href="home.html" class="logo-link">
+	        <div class="logo-container">
+	            <div class="logo-circle">
+	                <img src="img/image-Photoroom.png" alt="DNA Logo" class="logo-image">
+	            </div>
+	            <span class="brand-name">DNA</span>
+	        </div>
+	    </a>
+	
+	    <nav class="nav-links">
+	        <a href="home.html">Home</a>
+	        <a href="#">Sobre nosotros</a>
+	        <a href="producto.html">Productos</a>
+	        <a href="#">Contacto</a>
+	    </nav>
+	
+	    <div class="nav-icons">
+	        <a href="carrito.html" style="color: inherit;"><i class="fa-solid fa-cart-shopping"></i></a>
+	        <a href="login.html" style="color: inherit;"><i class="fa-regular fa-user"></i></a>
+	    </div>
+	</header>
+	
+	    <section class="hero" id="hero-slider">
+	    <div class="hero-overlay"></div>
+	    
+	
+	    <div class="hero-content">
+	        <h1>Tu casa, tus reglas,<br>nuestro diseño</h1>
+	        <p>Mira nuestras ofertas de primavera</p>
+	        <a href="home.html" class="btn-main">Ver más</a>
+	    </div>
+	
+	     
+	</section>
+	
+	
+	</body>
+	</html>
+}
+
