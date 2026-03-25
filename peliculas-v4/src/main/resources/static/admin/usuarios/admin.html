@@ -1,250 +1,207 @@
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Panel Admin Usuarios</title>
-
-<style>
-
-body{
-    font-family: Arial, sans-serif;
-    margin:40px;
-    background:#f2f2f2;
-}
-
-h1{
-    margin-bottom:20px;
-}
-
-.form-box{
-    background:white;
-    padding:20px;
-    margin-bottom:30px;
-    border-radius:6px;
-}
-
-input,select{
-    padding:8px;
-    margin:5px;
-}
-
-button{
-    padding:6px 10px;
-    margin:3px;
-    cursor:pointer;
-}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-    background:white;
-}
-
-th,td{
-    padding:10px;
-    border:1px solid #ddd;
-}
-
-th{
-    background:#333;
-    color:white;
-}
-
-</style>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Administración de Usuarios</title>
+<link rel="stylesheet" href="/css/login.css">
 </head>
-
 <body>
 
-<h1>Administración de Usuarios</h1>
+<div class="login-container">
+  <div class="login-box">
+    <h1 id="formTitle">Crear Usuario</h1>
 
-<div class="form-box">
+    <form id="form-usuario">
+      <input type="hidden" id="userId">
 
-<h3 id="formTitle">Crear Usuario</h3>
+      <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input id="nombre" type="text" placeholder="Nombre" required>
+      </div>
 
-<input type="hidden" id="userId">
+      <div class="form-group">
+        <label for="apellidos">Apellidos</label>
+        <input id="apellidos" type="text" placeholder="Apellidos" required>
+      </div>
 
-<input id="nombre" placeholder="Nombre">
-<input id="apellidos" placeholder="Apellidos">
-<input id="email" placeholder="Email">
-<input id="telefono" placeholder="Teléfono">
-<input id="direccion" placeholder="Dirección">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input id="email" type="email" placeholder="usuario@ejemplo.com" required>
+      </div>
 
-<select id="rol">
-<option value="cliente">cliente</option>
-<option value="empleado">empleado</option>
-<option value="admin">admin</option>
-</select>
+      <div class="form-group">
+        <label for="telefono">Teléfono</label>
+        <input id="telefono" type="tel" placeholder="123456789">
+      </div>
 
-<input id="passwordHash" placeholder="Password">
+      <div class="form-group">
+        <label for="direccion">Dirección</label>
+        <input id="direccion" type="text" placeholder="Dirección">
+      </div>
 
-<br>
+      <div class="form-group">
+        <label for="rol">Rol</label>
+        <select id="rol">
+          <option value="cliente">Cliente</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
 
-<button onclick="guardarUsuario()">Guardar</button> <button onclick="limpiarFormulario()">Cancelar</button>
+      <div class="form-group">
+        <label for="passwordHash">Contraseña</label>
+        <input id="passwordHash" type="password" placeholder="********">
+      </div>
 
+      <button type="submit" class="btn-login">Guardar</button>
+      <button type="button" onclick="limpiarFormulario()">Cancelar</button>
+
+      <div id="error" class="text-danger mt-2 text-center" style="display:none;"></div>
+      <div id="success" class="text-success mt-2 text-center" style="display:none;">Operación exitosa</div>
+    </form>
+  </div>
 </div>
 
-<table id="tablaUsuarios">
-
-<thead>
-<tr>
-<th>ID</th>
-<th>Nombre</th>
-<th>Email</th>
-<th>Rol</th>
-<th>Teléfono</th>
-<th>Acciones</th>
-</tr>
-</thead>
-
-<tbody></tbody>
-
-</table>
+<div class="login-container">
+  <table id="tablaUsuarios">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Rol</th>
+        <th>Teléfono</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
 
 <script>
+const form = document.getElementById("form-usuario");
+const errorDiv = document.getElementById("error");
+const successDiv = document.getElementById("success");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const id = document.getElementById("userId").value;
+  const password = document.getElementById("passwordHash").value;
+
+  const usuario = {
+    nombre: document.getElementById("nombre").value.trim(),
+    apellidos: document.getElementById("apellidos").value.trim(),
+    email: document.getElementById("email").value.trim(),
+    telefono: document.getElementById("telefono").value.trim(),
+    direccion: document.getElementById("direccion").value.trim(),
+    rol: document.getElementById("rol").value,
+    estado: "activo"
+  };
+
+  if(password && password.trim() !== ""){
+    usuario.passwordHash = password;
+  } else if(!id){ // creación requiere contraseña
+    errorDiv.textContent = "La contraseña es obligatoria al crear un usuario";
+    errorDiv.style.display = "block";
+    return;
+  }
+
+  try {
+    let res;
+    if(id){
+      res = await fetch(`/api/admin/usuarios/${id}`, {
+        method:"PUT",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify(usuario)
+      });
+    } else {
+      res = await fetch("/api/admin/usuarios", {
+        method:"POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify(usuario)
+      });
+    }
+
+    if(res.ok){
+      errorDiv.style.display = "none";
+      successDiv.style.display = "block";
+      limpiarFormulario();
+      cargarUsuarios();
+    } else {
+      const text = await res.text();
+      errorDiv.textContent = "Error: " + text;
+      errorDiv.style.display = "block";
+      successDiv.style.display = "none";
+    }
+
+  } catch(err){
+    console.error(err);
+    errorDiv.textContent = "Error de conexión";
+    errorDiv.style.display = "block";
+    successDiv.style.display = "none";
+  }
+});
 
 async function cargarUsuarios(){
+  const res = await fetch("/api/admin/usuarios");
+  const usuarios = await res.json();
+  const tbody = document.querySelector("#tablaUsuarios tbody");
+  tbody.innerHTML = "";
 
-    const response = await fetch("/api/admin/usuarios")
-    const usuarios = await response.json()
-
-    const tbody = document.querySelector("#tablaUsuarios tbody")
-    tbody.innerHTML = ""
-
-    usuarios.forEach(u => {
-
-        const fila = `
-        <tr>
-            <td>${u.id}</td>
-            <td>${u.nombre} ${u.apellidos}</td>
-            <td>${u.email}</td>
-            <td>${u.rol}</td>
-            <td>${u.telefono ?? ""}</td>
-            <td>
-                <button onclick="editarUsuario(${u.id})">Editar</button>
-                <button onclick="borrarUsuario(${u.id})">Borrar</button>
-            </td>
-        </tr>
-        `
-
-        tbody.innerHTML += fila
-
-    })
-
+  usuarios.forEach(u => {
+    const fila = `
+      <tr>
+        <td>${u.id}</td>
+        <td>${u.nombre} ${u.apellidos}</td>
+        <td>${u.email}</td>
+        <td>${u.rol}</td>
+        <td>${u.telefono ?? ""}</td>
+        <td>
+          <button onclick="editarUsuario(${u.id})">Editar</button>
+          <button onclick="borrarUsuario(${u.id})">Borrar</button>
+        </td>
+      </tr>
+    `;
+    tbody.innerHTML += fila;
+  });
 }
-
-
-
-async function guardarUsuario(){
-
-    const id = document.getElementById("userId").value
-
-    const password = document.getElementById("passwordHash").value
-
-    const usuario = {
-        rol: document.getElementById("rol").value,
-        telefono: document.getElementById("telefono").value,
-        estado: "activo",
-        nombre: document.getElementById("nombre").value,
-        apellidos: document.getElementById("apellidos").value,
-        direccion: document.getElementById("direccion").value,
-        email: document.getElementById("email").value,
-        puntos: null,
-        nivelAcceso: null,
-        salario: null
-    }
-
-    // Solo añadir password si se ha escrito
-    if(password && password.trim() !== ""){
-        usuario.passwordHash = password
-    }
-
-    if(id){
-
-        await fetch(`/api/admin/usuarios/${id}`,{
-            method:"PUT",
-            headers:{ "Content-Type":"application/json" },
-            body: JSON.stringify(usuario)
-        })
-
-    }else{
-
-        // En creación la password es obligatoria
-        if(!usuario.passwordHash){
-            alert("La contraseña es obligatoria")
-            return
-        }
-
-        await fetch("/api/admin/usuarios",{
-            method:"POST",
-            headers:{ "Content-Type":"application/json" },
-            body: JSON.stringify(usuario)
-        })
-
-    }
-
-    limpiarFormulario()
-    cargarUsuarios()
-
-}
-
-
 
 async function borrarUsuario(id){
-
-    const confirmar = confirm("¿Borrar usuario?")
-
-    if(!confirmar) return
-
-    await fetch(`/api/admin/usuarios/${id}`,{
-        method:"DELETE"
-    })
-
-    cargarUsuarios()
-
+  if(!confirm("¿Borrar usuario?")) return;
+  await fetch(`/api/admin/usuarios/${id}`, {method:"DELETE"});
+  cargarUsuarios();
 }
-
-
 
 async function editarUsuario(id){
+  const res = await fetch(`/api/admin/usuarios/${id}`);
+  const u = await res.json();
 
-    const response = await fetch(`/api/admin/usuarios/${id}`)
-    const u = await response.json()
-
-    document.getElementById("userId").value = u.id
-    document.getElementById("nombre").value = u.nombre
-    document.getElementById("apellidos").value = u.apellidos
-    document.getElementById("email").value = u.email
-    document.getElementById("telefono").value = u.telefono
-    document.getElementById("direccion").value = u.direccion
-    document.getElementById("rol").value = u.rol
-    document.getElementById("passwordHash").value = ""
-
-    document.getElementById("formTitle").innerText = "Editar Usuario"
-
+  document.getElementById("userId").value = u.id;
+  document.getElementById("nombre").value = u.nombre;
+  document.getElementById("apellidos").value = u.apellidos;
+  document.getElementById("email").value = u.email;
+  document.getElementById("telefono").value = u.telefono;
+  document.getElementById("direccion").value = u.direccion;
+  document.getElementById("rol").value = u.rol;
+  document.getElementById("passwordHash").value = "";
+  document.getElementById("formTitle").innerText = "Editar Usuario";
 }
-
-
 
 function limpiarFormulario(){
-
-    document.getElementById("userId").value = ""
-    document.getElementById("nombre").value = ""
-    document.getElementById("apellidos").value = ""
-    document.getElementById("email").value = ""
-    document.getElementById("telefono").value = ""
-    document.getElementById("direccion").value = ""
-    document.getElementById("passwordHash").value = ""
-
-    document.getElementById("formTitle").innerText = "Crear Usuario"
-
+  document.getElementById("userId").value = "";
+  document.getElementById("nombre").value = "";
+  document.getElementById("apellidos").value = "";
+  document.getElementById("email").value = "";
+  document.getElementById("telefono").value = "";
+  document.getElementById("direccion").value = "";
+  document.getElementById("passwordHash").value = "";
+  document.getElementById("rol").value = "cliente";
+  document.getElementById("formTitle").innerText = "Crear Usuario";
 }
 
-
-
-cargarUsuarios()
-
+// Cargar la tabla al abrir
+cargarUsuarios();
 </script>
 
 </body>
