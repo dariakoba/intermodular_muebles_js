@@ -39,12 +39,17 @@ public class AuthController {
 			UserRepository repo = new UserRepository(con);
 
 			User user = repo.findByEmail(req.email());
+			
+			System.out.println(req);
+			System.out.println(user);
 			//System.out.println(encoder.encode("123456"));
 
 			if (user != null && encoder.matches(req.passwordHash(), user.getPasswordHash())) {
 				session.setAttribute("userId", user.getId());
 				session.setAttribute("role", user.getRol());
 				return;
+				
+				
 			}
 
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
@@ -148,4 +153,6 @@ public class AuthController {
 			throw new DataAccessException(e);
 		}
 	}
+	
+	
 }
