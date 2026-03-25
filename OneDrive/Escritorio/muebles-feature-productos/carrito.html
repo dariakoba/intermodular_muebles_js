@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DNA - Mi Carrito</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="global.css">
     <link rel="stylesheet" href="styleCarrito.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body class="bg-crema">
+<body>
 
     <header class="navbar">
     <a href="home.html" class="logo-link">
@@ -38,6 +38,10 @@
     <div id="carrito-contenido">
         </div>
 </main>
+<div id="carrito-resumen">
+    <h3>Total: <span id="precio-total">0.00</span>€</h3>
+    <button onclick="vaciarCarrito()">Vaciar Carrito</button>
+</div>
 
     <script src="carrito.js"></script>
 </body>

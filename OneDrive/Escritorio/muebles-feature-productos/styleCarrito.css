@@ -1,11 +1,30 @@
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5dc; 
+}
+
+.navbar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 60px;
+    background: white;
+    box-sizing: border-box; /
+}
+
+
 .carrito-container {
     max-width: 1000px;
-    margin: 60px auto; /* Centra el bloque horizontalmente */
+    margin: 60px auto; 
     padding: 0 20px;
-    text-align: center; /* Centra los textos */
+    text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
+    min-height: 70vh; 
 }
 
 #carrito-contenido {

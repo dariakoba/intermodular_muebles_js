@@ -1,9 +1,9 @@
 
-/* Solo afecta a producto.html */
+
 .producto {
     font-family: Arial, Helvetica, sans-serif;
     margin: 0;
-    background: #f5f5dc; /* beige suave */
+    background: #f5f5dc; 
     font-size: 16px;
     line-height: 1.6;
 }
@@ -52,7 +52,7 @@
     transform: scale(1.1);
 }
 
-/* Colores visibles */
+
 .producto .gris { background: #bfbfbf; }
 .producto .beige { background: #d6c6a6; }
 .producto .marron { background: #6b5a4c; }

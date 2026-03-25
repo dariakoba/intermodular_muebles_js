@@ -43,10 +43,10 @@
     margin-bottom: 30px;
 }
 
-/* El botón corregido: centrado y con estilo fiel */
+
 .btn-main {
     display: inline-block;
-    background-color: #c49a6c; /* Color tierra de la imagen */
+    background-color: #c49a6c; 
     color: white;
     text-decoration: none;
     padding: 15px 40px;
@@ -66,7 +66,7 @@
 
 .home-container {
     padding: 20px 50px;
-    background-color: #fdf6ed; /* Color crema de fondo del diseño */
+    background-color: #fdf6ed; 
     min-height: 100vh;
 }
 
@@ -175,7 +175,7 @@
     overflow: hidden;
 }
 
-/* Overlay con degradado para que el título resalte */
+
 .card-overlay {
     position: absolute;
     bottom: 0;
@@ -183,12 +183,12 @@
     height: 100%;
     background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 50%);
     display: flex;
-    justify-content: center; /* Centrado horizontal */
-    align-items: flex-end;   /* Posicionado abajo */
+    justify-content: center; 
+    align-items: flex-end;   
     padding-bottom: 30px;
 }
 
-/* Títulos como en la foto original */
+
 .card-title {
     color: white;
     font-size: 2.2rem;
@@ -196,7 +196,7 @@
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Flechas en los laterales extremos */
+
 .slider-arrow {
     position: absolute;
     top: 50%;
@@ -216,7 +216,7 @@
 .slider-arrow.prev { left: 0; }
 .slider-arrow.next { right: 0; }
 
-/* Esto hace que el enlace del logo no se comporte como un texto azul subrayado */
+
 .logo-link {
     text-decoration: none;
     color: inherit;
@@ -229,7 +229,7 @@
     opacity: 0.8;
 }
 
-/* Asegura que el contenedor del logo mantenga su forma */
+
 .logo-container {
     display: flex;
     align-items: center;

@@ -1,4 +1,4 @@
-// Simulación de productos para que pruebes (esto vendrá del backend o de tus cards luego)
+// Simulación de productos 
 let carrito = JSON.parse(localStorage.getItem('dna-carrito')) || [];
 
 const contenedor = document.getElementById('carrito-contenido');
@@ -51,5 +51,58 @@ function vaciarCarrito() {
     renderizarCarrito();
 }
 
-// Ejecutar al cargar la página
 renderizarCarrito();
+
+function renderizarCarrito() {
+    contenedor.innerHTML = '';
+
+    if (carrito.length === 0) {
+        contenedor.innerHTML = `...`;
+     
+        if (resumen) resumen.classList.add('oculto'); 
+    } else {
+        let total = 0;
+        
+        if (resumen) resumen.classList.remove('oculto');
+      
+    }
+}
+
+function renderizarCarrito() {
+    const contenedor = document.getElementById('carrito-contenido');
+    const resumen = document.getElementById('carrito-resumen');
+    const totalHTML = document.getElementById('precio-total');
+
+    // 1. Verificación de seguridad
+    if (!contenedor) {
+        console.error("No se encontró el contenedor 'carrito-contenido'");
+        return;
+    }
+
+    let carrito = JSON.parse(localStorage.getItem('dna-carrito')) || [];
+    contenedor.innerHTML = '';
+
+    if (carrito.length === 0) {
+        contenedor.innerHTML = `<p>Tu carrito está vacío.</p>`;
+        if (resumen) resumen.style.display = 'none';
+    } else {
+        if (resumen) resumen.style.display = 'block';
+        let total = 0;
+
+        carrito.forEach((prod, index) => {
+            total += prod.precio;
+            contenedor.innerHTML += `
+                <div class="item-carrito" style="border: 1px solid #ccc; margin: 10px; padding: 10px; display: flex; align-items: center; gap: 20px;">
+                    <img src="${prod.image || prod.imagen}" width="100">
+                    <div>
+                        <h3>${prod.nombre}</h3>
+                        <p>${prod.precio}€</p>
+                        <button onclick="eliminarDelCarrito(${index})">Eliminar</button>
+                    </div>
+                </div>
+            `;
+        });
+        
+        if (totalHTML) totalHTML.innerText = total.toFixed(2);
+    }
+}

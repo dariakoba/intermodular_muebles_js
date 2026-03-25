@@ -1,43 +1,82 @@
+/* RESETEO UNIVERSAL - IMPORTANTE */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+/* NAVBAR BLINDADO */
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 60px;
-    background: white;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 20px 60px !important;
+    background-color: white !important;
+    width: 100% !important;
+    position: relative !important;
+    z-index: 1000 !important;
 }
 
 .logo-container {
-    display: flex;
-    align-items: center;
-    gap: 15px;
+    display: flex !important;
+    align-items: center !important;
+    gap: 15px !important;
 }
 
 .logo-circle {
-    width: 50px;
-    height: 50px;
+    width: 50px !important;
+    height: 50px !important;
 }
 
 .logo-image {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
 }
 
 .brand-name {
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
+    font-size: 24px !important;
+    font-weight: bold !important;
+    color: #333 !important;
+}
+
+.nav-links {
+    display: flex !important;
 }
 
 .nav-links a {
-    text-decoration: none;
-    color: #333;
-    margin: 0 20px;
-    font-weight: 500;
+    text-decoration: none !important;
+    color: #333 !important;
+    margin: 0 20px !important;
+    font-weight: 500 !important;
 }
 
 .nav-icons {
+    display: flex !important;
+    gap: 25px !important;
+    font-size: 1.2rem !important;
+}
+
+.nav-icons a {
+    color: #333 !important;
+    text-decoration: none !important;
+}
+/* Quita el subrayado de todos los enlaces que envuelven al logo */
+.logo-link {
+    text-decoration: none !important; /* Elimina la línea de abajo */
+    color: inherit !important;       /* Mantiene el color original del texto */
     display: flex;
-    gap: 25px;
-    font-size: 1.2rem;
+    align-items: center;
+}
+
+/* Por si acaso el navegador aplica el estilo específicamente al span */
+.brand-name {
+    text-decoration: none !important;
+}
+
+/* Quita el subrayado azul/morado de los iconos también */
+.nav-icons a {
+    text-decoration: none !important;
+    color: inherit !important;
 }
