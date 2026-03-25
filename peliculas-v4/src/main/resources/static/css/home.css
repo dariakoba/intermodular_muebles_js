@@ -1,0 +1,397 @@
+/* Reset box-sizing */
+* {
+    box-sizing: border-box;
+}
+
+/* ESTILOS GENERALES */
+body{
+	padding-top: 65px;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #d9ccbc;
+}
+
+/* HEADER */
+.topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 200; /* encima de todo */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #e9e6e3;
+    padding: 10px 60px;
+    height: 65px;
+}
+
+/* LOGO */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    font-size: 26px;
+    color: #5c4432;
+}
+.logo img {
+    width: 48px;
+}
+
+/* MENU */
+.menu a {
+    margin: 0 22px;
+    text-decoration: none;
+    color: #333;
+    font-size: 20px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+.menu a:hover {
+    color: #ae4010;
+}
+
+/* ICONOS */
+.icons {
+    display: flex;
+    gap: 18px;
+    font-size: 42px;
+    color: #5c4432;
+    cursor: pointer;
+}
+.icons span {
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    line-height: 1;
+}
+.icons span:hover {
+    color: #ae4010;
+    transform: scale(1.15);
+}
+
+/* MINI MENU */
+.person-menu-wrapper {
+    position: relative;
+}
+.person-menu {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: none;
+    min-width: 150px;
+    flex-direction: column;
+    z-index: 100;
+}
+.person-menu a {
+    padding: 8px 12px;
+    text-decoration: none;
+    color: #333;
+    font-size: 12px;
+    display: block;
+    transition: 0.2s;
+}
+.person-menu a:hover {
+    background-color: #f5f5f5;
+    color: #ae4010;
+}
+.person-menu.show {
+    display: flex;
+}
+
+
+/* Hero Section */
+.hero {
+	margin-top:95px;
+    position: relative;
+    height: calc(100vh - 90px);
+    background-image: url('img/Gemini_Generated_Image_qi092yqi092yqi09.png'); 
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.2); /* Sutil para que resalte el texto */
+}
+
+.hero-content {
+    position: relative;
+    z-index: 5;
+}
+
+.hero-content h1 {
+    font-size: 4.5rem;
+    font-weight: bold;
+    line-height: 1.1;
+    margin-bottom: 20px;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+}
+
+/* El botón corregido: centrado y con estilo fiel */
+.btn-main {
+    display: inline-block;
+    background-color: #c49a6c; /* Color tierra de la imagen */
+    color: white;
+    text-decoration: none;
+    padding: 15px 40px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    transition: 0.3s;
+}
+
+.btn-main:hover {
+    background-color: #a67c52;
+}
+
+/* Navegación del Slider */
+.arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.5rem;
+    z-index: 10;
+}
+
+.prev { left: 40px; }
+.next { right: 40px; }
+
+.slider-dots {
+    position: absolute;
+    bottom: 40px;
+    display: flex;
+    gap: 10px;
+}
+
+.dot {
+    width: 40px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 2px;
+}
+
+.dot.active {
+    background: white;
+}
+
+/* --- ESTILOS PARA LA PÁGINA HOME --- */
+
+.home-container {
+    padding: 20px 50px;
+    background-color: #fdf6ed; /* Color crema de fondo del diseño */
+    min-height: 100vh;
+}
+
+/* Banner Superior */
+.selection-banner {
+    display: flex;
+    align-items: center;
+    background-color: #fdf6ed;
+    border-radius: 40px;
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+.banner-image-container {
+    flex: 1;
+    height: 400px;
+    border-radius: 40px;
+    overflow: hidden;
+    margin-right: 40px;
+}
+
+.banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.banner-text {
+    flex: 1;
+}
+
+.banner-text h1 {
+    font-size: 3.5rem;
+    color: #4a3728;
+    line-height: 1;
+    margin-bottom: 20px;
+}
+
+.banner-text p {
+    font-size: 1.2rem;
+    color: #6e5a4a;
+    margin-bottom: 30px;
+}
+
+/* Tags y Botón Learn More */
+.tags {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.tags span {
+    border: 1px solid #6e5a4a;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    color: #6e5a4a;
+    font-weight: bold;
+}
+
+.learn-more {
+    background-color: #4a3728;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Sección de Cards (Categorías) */
+/* Contenedor del Carrusel */
+.categories-section {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0 60px;
+    margin-top: 50px;
+}
+
+.slider-wrapper {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 40px;
+}
+
+.categories-grid {
+    display: flex;
+    gap: 20px;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Tarjeta de Categoría */
+.category-card {
+    min-width: calc(33.33% - 14px); /* 3 tarjetas visibles */
+    height: 400px;
+    border-radius: 40px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Overlay con degradado para que el título resalte */
+.card-overlay {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 50%);
+    display: flex;
+    justify-content: center; /* Centrado horizontal */
+    align-items: flex-end;   /* Posicionado abajo */
+    padding-bottom: 30px;
+}
+
+/* Títulos como en la foto original */
+.card-title {
+    color: white;
+    font-size: 2.2rem;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Flechas en los laterales extremos */
+.slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+    background: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #483426;
+}
+
+.slider-arrow.prev { left: 0; }
+.slider-arrow.next { right: 0; }
+
+/* Esto hace que el enlace del logo no se comporte como un texto azul subrayado */
+.logo-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.logo-link:hover {
+    opacity: 0.8;
+}
+
+/* Asegura que el contenedor del logo mantenga su forma */
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Estado base del Hero */
+.hero {
+    position: relative;
+    height: calc(100vh - 90px);
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    transition: background-image 0.7s ease-in-out; /* Transición suave */
+}
+
+
+.bg-0 { background-image: url('img/1.png'); }
+.bg-1 { background-image: url('img/2.png'); }
+.bg-2 { background-image: url('img/3.png'); }
+
+.hero-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.2);
+}
