@@ -5,12 +5,103 @@
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+/* ESTILO DEL NAVBAR UNIFICADO */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #e9e6e3;
+    padding: 10px 60px;
+    height: 65px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
 
+/* Logo */
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.logo-image {
+    width: 45px;
+}
+.brand-name {
+    font-weight: bold;
+    font-size: 24px;
+    color: #5c4432;
+}
+
+/* Enlaces */
+.nav-links a {
+    margin: 0 20px;
+    text-decoration: none;
+    color: #333;
+    font-size: 18px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+.nav-links a:hover {
+    color: #ae4010;
+}
+
+/* Iconos */
+.nav-icons {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+.icon-link {
+    text-decoration: none;
+    color: #5c4432;
+    font-size: 28px !important; /* Ajuste para Material Symbols */
+    cursor: pointer;
+    transition: 0.2s;
+}
+.icon-link:hover {
+    color: #ae4010;
+    transform: scale(1.1);
+}
+
+/* Menú desplegable del usuario */
+.person-menu-wrapper {
+    position: relative;
+}
+.person-menu {
+    position: absolute;
+    top: 45px;
+    right: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: none; /* Se activa con JS */
+    min-width: 150px;
+    flex-direction: column;
+    overflow: hidden;
+}
+.person-menu a {
+    padding: 12px;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    transition: 0.2s;
+}
+.person-menu a:hover {
+    background-color: #f5f5f5;
+    color: #ae4010;
+}
+.person-menu.show {
+    display: flex;
+}
 /* Hero Section */
 .hero {
     position: relative;
     height: calc(100vh - 90px);
-    background-image: url('img/Gemini_Generated_Image_qi092yqi092yqi09.png'); 
+    background-image: url('images/Gemini_Gesnerated_Image_qi092yqi092yqi09.png'); 
     background-size: cover;
     background-position: center;
     display: flex;
