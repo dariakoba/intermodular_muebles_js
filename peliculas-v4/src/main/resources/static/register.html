@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registrarse</title>
+
+<!-- CSS del login -->
+<link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+
+<!-- Imagen decorativa superior izquierda -->
+<div class="decor-img-top">
+  <img src="/images/login/login1.jpg" alt="Decorativo superior">
+</div>
+
+<!-- Imagen decorativa inferior derecha -->
+<div class="decor-img-bottom">
+  <img src="/images/login/login2.jpg" alt="Decorativo inferior">
+</div>
+
+<!-- Contenedor del formulario -->
+<div class="login-container">
+  <div class="login-box">
+    <h1>Registrarse</h1>
+
+    <form id="form-register">
+      <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input id="nombre" type="text" placeholder="Tu nombre" required>
+      </div>
+
+      <div class="form-group">
+        <label for="apellidos">Apellidos</label>
+        <input id="apellidos" type="text" placeholder="Tus apellidos" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Correo electrónico</label>
+        <input id="email" type="email" placeholder="usuario@ejemplo.com" required>
+      </div>
+
+      <div class="form-group">
+        <label for="telefono">Teléfono</label>
+        <input id="telefono" type="tel" placeholder="123456789">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <input id="password" type="password" placeholder="********" required>
+      </div>
+
+      <button type="submit" class="btn-login">Registrarse</button>
+
+      <p class="forgot-pass mt-2 text-center">
+        <a href="/login.html">¿Ya tienes cuenta? Inicia sesión</a>
+      </p>
+
+      <div id="error" class="text-danger mt-2 text-center" style="display:none;"></div>
+      <div id="success" class="text-success mt-2 text-center" style="display:none;">Registro exitoso</div>
+    </form>
+  </div>
+</div>
+
+<script src="/js/register.js"></script>
+</body>
+</html>

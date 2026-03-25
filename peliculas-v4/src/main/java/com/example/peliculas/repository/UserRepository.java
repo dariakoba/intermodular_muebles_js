@@ -1,16 +1,25 @@
 package com.example.peliculas.repository;
 
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.peliculas.db.DB;
 import com.example.peliculas.entity.Producto;
 import com.example.peliculas.entity.User;
+import com.example.peliculas.exception.DataAccessException;
 import com.example.peliculas.mapper.RowMapper;
 import com.example.peliculas.mapper.UserMapper;
 import com.example.peliculas.dto.ProductoResumen;
 import com.example.peliculas.dto.UserResponse;
 import com.example.peliculas.mapper.UserResponseMapper;
+
+import jakarta.servlet.http.HttpSession;
 public class UserRepository extends BaseRepository<User> {
 
 	public UserRepository(Connection con) {
@@ -28,7 +37,10 @@ public class UserRepository extends BaseRepository<User> {
 	public String getTable() {
 		return "usuarios";
 	}
-
+	@Override
+	public Integer getPrimaryKey(User u) {
+		return u.getId();
+	}
 	
 	@Override
 	public String[] getColumnNames() { 
@@ -44,7 +56,8 @@ public class UserRepository extends BaseRepository<User> {
 	        "email",
 	        "puntos",
 	        "nivel_acceso",
-	        "salario"
+	        "salario",
+	        "fecha_alta"
 	    };
 	}
 
@@ -56,7 +69,7 @@ public class UserRepository extends BaseRepository<User> {
 	public void setPrimaryKey(User u, int id) {
 		u.setId(id);
 	}
-
+	/*
 	@Override
 	public Object[] getInsertValues(User u) {
 		return new Object[] {
@@ -74,6 +87,26 @@ public class UserRepository extends BaseRepository<User> {
 			    u.getSalario()
 			};
 	}
+	*/
+	@Override
+	public Object[] getInsertValues(User u) {
+	    return new Object[] {
+	        u.getPasswordHash(),
+	        u.getRol(),
+	        u.getTelefono(),
+	        u.getEstado(),
+	        u.getNombre(),
+	        u.getApellidos(),
+	        u.getDireccion(),
+	        u.getEmail(),
+	        u.getPuntos(),
+	        u.getNivelAcceso(),
+	        u.getSalario(),
+	        LocalDate.now() // ahora sí coincide
+	        
+	       
+	    };
+	}
 
 	@Override
 	public Object[] getUpdateValues(User u) {
@@ -89,21 +122,66 @@ public class UserRepository extends BaseRepository<User> {
 			    u.getPuntos(),
 			    u.getNivelAcceso(),
 			    u.getSalario(),
+			    u.getFechaAlta(),
 			    u.getId()
+			    
 			};
 	}
 	
 	public User findByEmail(String email) {
-        String sql = "select * from usuarios where email = ?";
-        return DB.queryOne(con, sql, new UserMapper(), email);
+        
+        try {
+        	String sql = "select * from usuarios where email = ?";
+			return DB.queryOne(con, sql, new UserMapper(), email);
+		} catch (SQLException e) {
+			throw new DataAccessException("Error al buscar el usuario con email " + email);
+
+		}
     }
 	public UserResponse findResponseById(int id) {
-	    String sql = "select id, rol, telefono, estado, nombre, apellidos, direccion, email, puntos, nivel_acceso, salario " +
+	    
+	    try {
+	    	String sql = "select id, rol, telefono, estado, nombre, apellidos, direccion, email, puntos, nivel_acceso, salario, fecha_alta " +
 	                 "from usuarios where id = ?";
-	    return DB.queryOne(con, sql, new UserResponseMapper(), id);
+			return DB.queryOne(con, sql, new UserResponseMapper(), id);
+		} catch (SQLException e) {
+			throw new DataAccessException("Error al buscar el usuario con id " + id, e);
+		}
 	}
 	public List<UserResponse> findResponses() {
-	    String sql = "select id, rol, telefono, estado, nombre, apellidos, direccion, email, puntos, nivel_acceso, salario from usuarios";
-	    return DB.queryMany(con, sql, new UserResponseMapper());
+	    try {
+		    String sql = "select id, rol, telefono, estado, nombre, apellidos, direccion, email, puntos, nivel_acceso, salario, fecha_alta from usuarios";
+
+			return DB.queryMany(con, sql, new UserResponseMapper());
+		} catch (SQLException e) {
+			throw new DataAccessException("Error obteniendo los usuarios", e);
+
+		}
 	}
+	public List<UserResponse> findAllResponses() {
+		try {
+			String sql = "SELECT id, nombre, email, rol FROM usuarios";
+
+			return DB.queryMany(con, sql, new UserResponseMapper());
+		} catch (SQLException e) {
+			throw new DataAccessException("Error obteniendo los usuarios", e);
+
+		}
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Detalle de producto</title>
+<link rel="stylesheet" href="/css/app.css">
+<link rel="stylesheet" href="/css/productosShow.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+
+</head>
+<body>
+
+<!-- HEADER (igual que tu topbar) -->
+<div class="topbar">
+<div class="logo">
+<img src="images/logo.png" alt="logo">
+DNA
+</div>
+<nav class="menu">
+<a href="index.html">Home</a>
+<a href="catalogo.html">Catálogo</a>
+<a href="productos.html">Productos</a>
+<a href="contacto.html">Contacto</a>
+</nav>
+<div class="icons">
+
+<span class="material-symbols-outlined">shopping_cart</span>
+
+<div class="person-menu-wrapper">
+<span id="person-icon" class="material-symbols-outlined">person</span>
+
+<div class="person-menu">
+<a href="#">Ver cuenta</a>
+<a href="#">Cerrar sesión</a>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- CONTENIDO DETALLE -->
+<div class="detalle-wrapper">
+
+<!-- Breadcrumb -->
+<div class="breadcrumb">
+<a href="productos.html">← Volver al catálogo</a>
+</div>
+
+<div class="detalle-grid">
+
+<!-- IMAGEN IZQUIERDA -->
+<div class="detalle-imagen">
+<img id="producto-img" src="" alt="Imagen del producto">
+</div>
+
+<!-- INFO DERECHA -->
+<div class="detalle-info">
+
+<h1 id="producto-nombre"></h1>
+
+<div class="detalle-card">
+<p class="detalle-desc" id="producto-descripcion"></p>
+
+<div class="detalle-precio-box">
+<span class="detalle-precio" id="producto-precio"></span>
+<span class="detalle-iva">IVA incluido</span>
+</div>
+
+<div class="detalle-acciones">
+<button class="btn-comprar" id="btn-comprar">
+Comprar ahora
+</button>
+<button class="btn-carrito" id="btn-carrito">
+🛒 Añadir al carrito
+</button>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+<script src="/js/productosShow.js"></script>
+<script src="/js/menuUser.js"></script>
+
+</body>
+</html>

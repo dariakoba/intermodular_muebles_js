@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catálogo de Muebles</title>
+
+<link rel="stylesheet" href="/css/productos.css">
+
+<!-- ICONOS GOOGLE -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <div class="logo">
+        <img src="images/login/logo.png" alt="logo">
+        <span>DNA</span>
+    </div>
+
+    <nav class="menu">
+        <a href="index.html">Home</a>
+        <a href="catalogo.html">Catálogo</a>
+        <a href="productos.html">Productos</a>
+        <a href="contacto.html">Contacto</a>
+    </nav>
+
+    <div class="icons">
+
+        <span class="material-symbols-outlined">shopping_cart</span>
+
+        <div class="person-menu-wrapper">
+            <span id="person-icon" class="material-symbols-outlined">person</span>
+
+            <div class="person-menu">
+                <a href="#">Ver cuenta</a>
+                <a href="#">Cerrar sesión</a>
+            </div>
+        </div>
+
+    </div>
+
+</header>
+
+<main class="main-content">
+
+    <!-- Sidebar fija tipo PcComponentes -->
+    <aside class="sidebar">
+        <h2>Filtrar Productos</h2>
+
+        <!-- Sección Categorías -->
+        <div class="filter-section">
+            <div class="filter-header">
+                <h3>Categoría</h3>
+                <span class="toggle">+</span>
+            </div>
+            <div class="filter-options">
+                <label><input type="checkbox" value="Sofá"> Sofá</label>
+                <label><input type="checkbox" value="Mesa"> Mesa</label>
+                <label><input type="checkbox" value="Silla"> Silla</label>
+            </div>
+        </div>
+
+        <!-- Sección Precio -->
+        <div class="filter-section">
+            <div class="filter-header">
+                <h3>Precio</h3>
+                <span class="toggle">+</span>
+            </div>
+            <div class="filter-options">
+                <label>Min: <input type="number" min="0" placeholder="0"></label>
+                <label>Max: <input type="number" min="0" placeholder="1000"></label>
+            </div>
+        </div>
+
+        <!-- Sección Ordenar -->
+        <div class="filter-section">
+            <h3>Ordenar por</h3>
+            <select id="ordenar">
+                <option value="nombre-asc">Nombre A-Z</option>
+                <option value="nombre-desc">Nombre Z-A</option>
+                <option value="precio-asc">Precio más bajo</option>
+                <option value="precio-desc">Precio más alto</option>
+            </select>
+        </div>
+
+        <button id="aplicar-filtros">Aplicar filtros</button>
+    </aside>
+
+    <!-- Contenido principal -->
+    <section class="productos-wrapper">
+        <div id="productos-container" class="productos-container">
+            <!-- JS añadirá las tarjetas aquí -->
+        </div>
+    </section>
+
+</main>
+
+<script src="js/productos.js"></script>
+<script src="js/menuUser.js"></script>
+
+</body>
+</html>

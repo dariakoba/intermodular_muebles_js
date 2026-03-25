@@ -9,7 +9,7 @@ import com.example.peliculas.entity.User;
 public class UserResponseMapper implements RowMapper<UserResponse> {
 
 	@Override
-	public UserResponse map(ResultSet rs) throws SQLException {
+	public UserResponse mapRow(ResultSet rs) throws SQLException {
 		return new UserResponse(
                 rs.getInt("id"),
                 rs.getString("rol"),
@@ -21,7 +21,8 @@ public class UserResponseMapper implements RowMapper<UserResponse> {
                 rs.getString("email"),
                 rs.getInt("puntos"),
                 rs.getInt("nivel_acceso"),
-                rs.getFloat("salario")
+                rs.getFloat("salario"),
+                rs.getDate("fecha_alta") != null ? rs.getDate("fecha_alta").toLocalDate() : null
         );
 	}
 

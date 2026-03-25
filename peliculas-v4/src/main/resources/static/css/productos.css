@@ -1,0 +1,309 @@
+
+
+/* Reset box-sizing */
+* {
+    box-sizing: border-box;
+}
+
+/* ESTILOS GENERALES */
+body{
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #d9ccbc;
+}
+
+/* HEADER */
+.topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 200; /* encima de todo */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #e9e6e3;
+    padding: 10px 60px;
+    height: 65px;
+}
+
+/* LOGO */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    font-size: 26px;
+    color: #5c4432;
+}
+.logo img {
+    width: 48px;
+}
+
+/* MENU */
+.menu a {
+    margin: 0 22px;
+    text-decoration: none;
+    color: #333;
+    font-size: 20px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+.menu a:hover {
+    color: #ae4010;
+}
+
+/* ICONOS */
+.icons {
+    display: flex;
+    gap: 18px;
+    font-size: 42px;
+    color: #5c4432;
+    cursor: pointer;
+}
+.icons span {
+    transition: 0.2s;
+}
+.icons span:hover {
+    color: #ae4010;
+    transform: scale(1.15);
+}
+
+/* MINI MENU */
+.person-menu-wrapper {
+    position: relative;
+}
+.person-menu {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: none;
+    min-width: 150px;
+    flex-direction: column;
+    z-index: 100;
+}
+.person-menu a {
+    padding: 8px 12px;
+    text-decoration: none;
+    color: #333;
+    font-size: 12px;
+    display: block;
+    transition: 0.2s;
+}
+.person-menu a:hover {
+    background-color: #f5f5f5;
+    color: #ae4010;
+}
+.person-menu.show {
+    display: flex;
+}
+
+/* =================== */
+/* SIDEBAR FIJA         */
+/* =================== */
+.sidebar{
+    position: fixed;
+    top: 65px; /* debajo del header */
+    left: 0;
+    width: 280px;
+    height: calc(100vh - 65px);
+    background: #f8f8f8;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+    box-shadow: 2px 0 12px rgba(0,0,0,0.08);
+    overflow-y: auto;
+}
+
+/* Secciones de filtros */
+.sidebar h2{
+    font-size: 22px;
+    margin-bottom: 20px;
+    color: #333;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 8px;
+}
+.filter-section{
+    margin-bottom: 25px;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 10px;
+}
+.filter-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+.filter-header h3{
+    font-size: 16px;
+    color: #ae4010;
+    margin: 0;
+}
+.filter-header .toggle{
+    font-weight: bold;
+    font-size: 18px;
+    color: #ae4010;
+}
+.filter-options{
+    margin-top: 10px;
+}
+.filter-options label{
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.filter-options label:hover{
+    color: #ae4010;
+}
+.filter-options input[type="number"], .filter-options select{
+    width: 100%;
+    padding: 5px 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-top: 5px;
+}
+
+/* Botón aplicar filtros */
+#aplicar-filtros{
+    margin-top: 10px;
+    background: #2a9aa6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px;
+    width: 100%;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+#aplicar-filtros:hover{
+    background: #ae4010;
+}
+
+/* =================== */
+/* CONTENIDO PRINCIPAL  */
+/* =================== */
+.productos-wrapper {
+    margin-left: 280px; /* ancho sidebar fijo */
+    padding: 100px 40px 40px 20px;
+    flex: 1;
+}
+
+/* GRID DE PRODUCTOS con flex y última fila alineada a la izquierda */
+.productos-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start; /* fuerza la última fila a la izquierda */
+    gap: 15px; /* espacio entre tarjetas */
+}
+
+/* Cada card */
+.card {
+    flex: 1 1 calc(25% - 15px); /* 4 cards por fila en pantallas grandes */
+    max-width: calc(25% - 15px);
+    background: white;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s;
+    margin-bottom: 15px; /* espacio vertical */
+}
+
+.card:hover {
+    transform: scale(1.03);
+    border-color: #ae4010;
+}
+.card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+/* CARD - cuerpo */
+.card-body {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.card-body h3 {
+    font-size: 16px;
+    color: #333;
+    margin: 0 0 8px 0;
+}
+
+.card-body .descripcion {
+    font-size: 13px;
+    color: #777;
+    flex: 1;
+    margin-bottom: 10px;
+}
+
+.card-body .precio {
+    font-size: 18px;
+    font-weight: bold;
+    color: #5c4432;
+    margin-bottom: 12px;
+}
+
+/* BOTÓN VER PRODUCTO */
+.card-body a {
+    text-decoration: none;
+}
+
+.card-body button {
+    width: 100%;
+    padding: 10px 0;
+    background: #ae4010;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+}
+
+.card-body button:hover {
+    background: #5c4432;
+    transform: translateY(-2px);
+}
+
+.card-body button:active {
+    transform: translateY(0);
+    background: #8c3208;
+}
+
+/* Responsive: 3 por fila */
+@media (max-width: 1200px) {
+    .card {
+        flex: 1 1 calc(33.33% - 15px);
+        max-width: calc(33.33% - 15px);
+    }
+}
+
+/* Responsive: 2 por fila */
+@media (max-width: 800px) {
+    .card {
+        flex: 1 1 calc(50% - 15px);
+        max-width: calc(50% - 15px);
+    }
+}
+
+/* Responsive: 1 por fila */
+@media (max-width: 500px) {
+    .card {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+}

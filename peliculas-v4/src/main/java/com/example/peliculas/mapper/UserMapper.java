@@ -8,7 +8,7 @@ import com.example.peliculas.entity.User;
 
 public class UserMapper implements RowMapper<User> {
 	@Override
-    public User map(ResultSet rs) throws SQLException {
+    public User mapRow(ResultSet rs) throws SQLException {
         return new User(
                 rs.getInt("id"),
                 rs.getString("password_hash"),
@@ -21,7 +21,8 @@ public class UserMapper implements RowMapper<User> {
                 rs.getString("email"),
                 rs.getInt("puntos"),
                 rs.getInt("nivel_acceso"),
-                rs.getFloat("salario")
+                rs.getFloat("salario"),
+                rs.getDate("fecha_alta").toLocalDate() // <-- nueva línea
         );
     }
 }

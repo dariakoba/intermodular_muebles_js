@@ -1,5 +1,7 @@
 package com.example.peliculas.dto;
 
+import java.time.LocalDate;
+
 public record UserResponse(
 		int id,                  // id SERIAL -> int
 	    String rol,            // rol VARCHAR(20)
@@ -11,5 +13,8 @@ public record UserResponse(
 	    String email,
 	    int puntos,
 	    int nivelAcceso,
-	    float salario
+	    float salario,
+	    LocalDate fechaAlta
+
+	  
 ) {}
