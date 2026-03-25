@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Administración de Usuarios</title>
+<link rel="stylesheet" href="../../../css/usuarios-admin.css">
+</head>
+<body>
+
+
+	<header class="navbar">
+	    <a href="home.html" class="logo-link">
+	        <div class="logo-container">
+	            <div class="logo-circle">
+	                <img src="../../../img/image-Photoroom.png" alt="DNA Logo" class="logo-image">
+	            </div>
+	            <span class="brand-name">DNA</span>
+	        </div>
+	    </a>
+
+	    <nav class="nav-links">
+	        <a href="admin.html">Dashboard</a>
+	        <a href="#">Usuarios</a>
+	        <a href="#">Productos</a>
+	        <a href="#">Pedidos</a>
+	        <a href="#">Estadísticas</a>
+	    </nav>
+
+	    <div class="nav-icons">
+	        <i class="fa-solid fa-cart-shopping"></i>
+	        <i class="fa-regular fa-user"></i>
+	        <button id="logoutBtn" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Salir</button>
+	    </div>
+	</header>
+
+	<!-- CONTENIDO -->
+	<main class="admin-container">
+
+	<h1 class="title">Gestión de Usuarios</h1>
+
+	<!-- FORMULARIO HORIZONTAL -->
+	<form id="form-usuario" class="form-horizontal">
+	    <input type="hidden" id="userId">
+
+	    <input id="nombre" type="text" placeholder="Nombre" required>
+	    <input id="apellidos" type="text" placeholder="Apellidos" required>
+	    <input id="email" type="email" placeholder="Email" required>
+	    <input id="telefono" type="text" placeholder="Teléfono">
+	    <input id="direccion" type="text" placeholder="Dirección">
+
+	    <select id="rol">
+	        <option value="cliente">Cliente</option>
+	        <option value="admin">Admin</option>
+	    </select>
+
+	    <input id="passwordHash" type="password" placeholder="Contraseña">
+
+	    <button type="submit" class="btn-main">Guardar</button>
+	    <button type="button" onclick="limpiarFormulario()" class="btn-cancel">Cancelar</button>
+	</form>
+
+	<div id="error" class="error"></div>
+	<div id="success" class="success">Operación exitosa</div>
+
+	<!-- TABLA -->
+	<table id="tablaUsuarios">
+	    <thead>
+	        <tr>
+	            <th>ID</th>
+	            <th>Nombre</th>
+	            <th>Email</th>
+	            <th>Rol</th>
+	            <th>Teléfono</th>
+	            <th>Acciones</th>
+	        </tr>
+	    </thead>
+	    <tbody></tbody>
+	</table>
+	</div>
+<script src="../../../js/usuario-admin.js"></script>
+</body>
+</html>
