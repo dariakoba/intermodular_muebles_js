@@ -4,11 +4,6 @@ public class Categoria {
 	 private int idCategoria;
 	    private String nombre;
 
-	    
-	    System.out.println("Funcionalidad de login");
-
-	    System.out.println("Funcionalidad de registro");
-
 
 	    System.out.println("aa");
 	    public Categoria(int idCategoria, String nombre) {

@@ -107,7 +107,8 @@ public class AuthController {
 	        user.setPuntos(0);
 	        user.setNivelAcceso(0);
 	        user.setSalario(0f);
-
+	        System.out.println("Usuario insertado: " + user);
+	        
 	        repo.insert(user);
 
 	        System.out.println("Usuario insertado: " + user);

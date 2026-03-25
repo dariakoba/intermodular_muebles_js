@@ -2,6 +2,7 @@ package com.example.peliculas.repository;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -101,7 +102,9 @@ public class UserRepository extends BaseRepository<User> {
 	        u.getPuntos(),
 	        u.getNivelAcceso(),
 	        u.getSalario(),
-	        java.sql.Date.valueOf(u.getFechaAlta()) // ahora sí coincide
+	        LocalDate.now() // ahora sí coincide
+	        
+	       
 	    };
 	}
 
@@ -119,8 +122,9 @@ public class UserRepository extends BaseRepository<User> {
 			    u.getPuntos(),
 			    u.getNivelAcceso(),
 			    u.getSalario(),
-			    u.getId(),
-			    java.sql.Date.valueOf(u.getFechaAlta())
+			    u.getFechaAlta(),
+			    u.getId()
+			    
 			};
 	}
 	
