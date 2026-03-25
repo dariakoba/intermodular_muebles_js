@@ -17,7 +17,8 @@ public class User {
     private Float salario;
     private java.time.LocalDate fechaAlta;
     
-    
+    public User() {}
+
     
     
 	public User(int id, String passwordHash, String rol, String telefono, String estado, String nombre,
@@ -55,7 +56,14 @@ public class User {
     this.salario = 0f;
     this.fechaAlta = java.time.LocalDate.now();
 	}
-	
+	public User(String nombre, String apellidos, String email, String rol, String passwordHash) {
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.email = email;
+        this.rol = rol;
+        this.passwordHash = passwordHash;
+        this.estado = "activo";
+    }
 	public int getId() {
 		return id;
 	}
