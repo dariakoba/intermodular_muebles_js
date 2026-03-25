@@ -36,7 +36,7 @@ public class ProductoController {
             throw new DataAccessException(e);
         }
     }
-    
+    */
     
     @GetMapping("/{id}")
     public Producto show(@PathVariable int id) {
@@ -47,7 +47,7 @@ public class ProductoController {
             throw new DataAccessException(e);
         }
     }
-    */
+    
     
     //pruebas
     @GetMapping
