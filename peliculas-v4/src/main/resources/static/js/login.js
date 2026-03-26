@@ -41,12 +41,25 @@ document.addEventListener("DOMContentLoaded", () => {
             localStorage.setItem("user", JSON.stringify(user));
 
             // 🔹 Paso 3: redirigir según rol
+			/*
             if (user.rol === "admin") {
                 window.location.href = "adminhome.html";
             } else {
                 window.location.href = "index.html";
             }
+			*/
+			const rol = (user.rol || user.role || "")
+			    .toString()
+			    .toLowerCase()
+			    .trim();
 
+			console.log("ROL NORMALIZADO:", rol);
+
+			if (rol === "admin") {
+			    window.location.href = "adminhome.html";
+			} else {
+			    window.location.href = "index.html";
+			}
         } catch (err) {
             console.error(err);
             // Mostrar mensaje de error
