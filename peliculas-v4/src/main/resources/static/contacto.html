@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNA - Contacto</title>
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/contacto.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+</head>
+<body>
+
+	<header class="topbar">
+
+	    <div class="logo">
+	        <img src="images/login/logo.png" alt="logo">
+	        <span>DNA</span>
+	    </div>
+
+	    <nav class="menu">
+	        <a href="index.html">Home</a>
+	        <a href="productos.html">Catálogo</a>
+	        <a href="productos.html">Productos</a>
+	        <a href="contacto.html">Contacto</a>
+	    </nav>
+
+	    <div class="icons">
+
+			<a href="carrito.html" class="icon-link">
+			    <span class="material-symbols-outlined">shopping_cart</span>
+			</a>
+	        <div class="person-menu-wrapper">
+	            <span id="person-icon" class="material-symbols-outlined">person</span>
+
+	            <div class="person-menu">
+	                <a href="#">Ver cuenta</a>
+	                <a href="#">Cerrar sesión</a>
+	            </div>
+	        </div>
+
+	    </div>
+		</header>
+
+    <main class="contacto-container">
+        <section class="contacto-header">
+            <h1>Contacto</h1>
+            <p>¿Tienes alguna duda sobre nuestros muebles? Estamos aquí para ayudarte.</p>
+        </section>
+
+        <section class="contacto-content">
+            <div class="contacto-form">
+                <h2>Envíanos un mensaje</h2>
+                <form action="#">
+                    <div class="form-group">
+                        <label for="nombre">Nombre Completo</label>
+                        <input type="text" id="nombre" placeholder="Tu nombre..." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Correo Electrónico</label>
+                        <input type="email" id="email" placeholder="email@ejemplo.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="mensaje">Mensaje</label>
+                        <textarea id="mensaje" rows="5" placeholder="¿En qué podemos ayudarte?" required></textarea>
+                    </div>
+                    <button type="submit" class="btn-enviar">ENVIAR MENSAJE</button>
+                </form>
+            </div>
+
+            <div class="contacto-info">
+                <div class="info-card">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <h3>Nuestra Tienda</h3>
+                    <p>Calle Random 12, 46001 Valencia, España</p>
+                </div>
+                <div class="info-card">
+                    <i class="fa-solid fa-phone"></i>
+                    <h3>Llámanos</h3>
+                    <p>+34 600 000 000</p>
+                </div>
+                <div class="info-card">
+                    <i class="fa-solid fa-clock"></i>
+                    <h3>Horario</h3>
+                    <p>Lunes a Viernes: 10:00 - 20:00<br>Sábados: 10:00 - 14:00</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="contacto-map">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3079.8277334759715!2d-0.3787766!3d39.47351!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd604f4cf8022d8d%3A0x6451000000000000!2sValencia!5e0!3m2!1ses!2ses!4v1700000000000" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <p>&copy; 2026 DNA Mobiliario - Todos los derechos reservados.</p>
+    </footer>
+
+</body>
+</html>

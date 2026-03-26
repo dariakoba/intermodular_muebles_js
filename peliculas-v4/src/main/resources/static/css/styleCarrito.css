@@ -5,16 +5,98 @@ body {
     background-color: #f5f5dc; 
 }
 
-.navbar {
+/* --- CONFIGURACIÓN DEL NAVBAR --- */
+.topbar {
+    position: fixed; /* Para que se quede arriba al hacer scroll */
+    top: 0;
+    left: 0;
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* Empuja logo, menú e iconos a su sitio */
     align-items: center;
-    padding: 20px 60px;
-    background: white;
-    box-sizing: border-box; /
+    padding: 10px 60px;
+    background-color: #e9e6e3; /* El color gris/crema de tu diseño */
+    height: 70px;
+    box-sizing: border-box;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
+/* --- LOGO --- */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    font-size: 24px;
+    color: #5c4432;
+}
+
+.logo img {
+    height: 45px;
+    width: auto;
+}
+
+/* --- MENÚ CENTRAL --- */
+.menu {
+    display: flex;
+    gap: 30px;
+}
+
+.menu a {
+    text-decoration: none; /* QUITA EL SUBRAYADO */
+    color: #4a3728;        /* Color madera */
+    font-size: 18px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.menu a:hover {
+    color: #ae4010; /* Color naranja al pasar el ratón */
+}
+
+/* --- ICONOS DERECHA --- */
+.icons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.icon-link, #person-icon {
+    text-decoration: none;
+    color: #5c4432;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: 0.3s;
+}
+
+.icon-link:hover, #person-icon:hover {
+    color: #ae4010;
+    transform: scale(1.1);
+}
+
+/* --- AJUSTE DEL CUERPO (Para que el contenido no se meta bajo el navbar) --- */
+body {
+    padding-top: 80px; /* Igual al alto del navbar + un poco de margen */
+    margin: 0;
+    background-color: #f5f5dc; 
+    font-family: Arial, sans-serif;
+}
+
+
+.icon-link {
+    text-decoration: none; /* Quita el subrayado */
+    color: #5c4432;       /* El color marrón de tu diseño */
+    display: flex;         /* Ayuda a centrar el icono */
+    align-items: center;
+    transition: 0.3s;      /* Suaviza el efecto al pasar el ratón */
+}
+
+.icon-link:hover {
+    color: #ae4010;       /* Color naranja al pasar el ratón */
+    transform: scale(1.1); /* Se hace un pelín más grande */
+}
 
 .carrito-container {
     max-width: 1000px;
@@ -40,4 +122,53 @@ body {
     color: #483426;
     text-decoration: underline;
     font-weight: bold;
+}
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined' !important;
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* El contenedor del icono debe ser relativo */
+.person-menu-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* El menú ahora es ABSOLUTO: no ocupa espacio real en el navbar */
+.person-menu {
+    position: absolute;
+    top: 100%;       /* Aparece justo debajo del icono */
+    right: 0;        /* Alineado a la derecha del icono */
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    display: none;   /* Oculto por defecto */
+    flex-direction: column;
+    min-width: 140px;
+    z-index: 1000;   /* Para que flote sobre el resto de la web */
+}
+
+/* Estilo para los enlaces del mini menú */
+.person-menu a {
+    padding: 10px 15px;
+    text-decoration: none; /* Quita el subrayado azul */
+    color: #4a3728;
+    font-size: 14px;
+    display: block;
+}
+
+.person-menu a:hover {
+    background-color: #f5f5f5;
+    color: #ae4010;
+}
+
+/* Esta clase se añade con JS para mostrarlo */
+.person-menu.show {
+    display: flex;
 }
