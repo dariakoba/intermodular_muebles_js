@@ -1,11 +1,12 @@
 // ======================
 // Cargar Categorías en el select
 // ======================
+/*
 async function cargarCategorias() {
     try {
-        const response = await fetch("/api/admin/categorias"); // endpoint de categorías
+        const response = await fetch("/api/admin/categoria"); // endpoint de categorías
         const categorias = await response.json();
-
+		console.log(categorias);
         const select = document.getElementById("categoria");
         select.innerHTML = `<option value="">--Selecciona una categoría--</option>`;
 
@@ -19,7 +20,7 @@ async function cargarCategorias() {
         console.error("Error cargando categorías:", err);
     }
 }
-
+*/
 // ======================
 // Cargar Productos y mostrar en tabla
 // ======================
@@ -40,7 +41,7 @@ async function cargarProductos() {
 				<td>${p.color}</td>
                 <td>${p.precio}€</td>
                 <td>${p.stock}</td>
-                <td>${p.categoria_nombre ?? ""}</td>
+                <td>${p.categoria_id}</td>
                 <td>
                     <button onclick="editarProducto(${p.id_producto})">Editar</button>
                     <button onclick="borrarProducto(${p.id_producto})">Borrar</button>
@@ -135,5 +136,5 @@ function limpiarFormulario() {
 // ======================
 // Inicialización
 // ======================
-cargarCategorias();
+//cargarCategorias();
 cargarProductos();
