@@ -8,9 +8,9 @@ public class ResenyaMapper implements RowMapper<Resenya> {
     @Override
     public Resenya mapRow(ResultSet rs) throws SQLException {
         Resenya r = new Resenya();
-        r.setId(rs.getInt("id"));
-        r.setIdUsuario(rs.getInt("id_usuario"));
-        r.setIdProducto(rs.getInt("id_producto"));
+        r.setIdResenya(rs.getInt("id_resenya"));
+        r.setUsuarioId(rs.getInt("usuario_id"));
+        r.setProductoId(rs.getInt("producto_id"));
         r.setPuntuacion(rs.getInt("puntuacion"));
         r.setComentario(rs.getString("comentario"));
         if (rs.getDate("fecha_publicacion") != null) {

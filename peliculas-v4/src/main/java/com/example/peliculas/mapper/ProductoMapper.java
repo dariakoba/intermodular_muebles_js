@@ -9,9 +9,9 @@ public class ProductoMapper implements RowMapper<Producto> {
 	@Override
     public Producto mapRow(ResultSet rs) throws SQLException {
         return new Producto(
-        		rs.getInt("id"), rs.getString("nombre")
+        		rs.getInt("id_producto"), rs.getString("nombre")
         				, rs.getString("color"), rs.getFloat("precio"), rs.getInt("stock"), rs.getString("descripcion")
-        				, rs.getInt("id")
+        				, rs.getInt("categoria_id")
         );
     }
 }

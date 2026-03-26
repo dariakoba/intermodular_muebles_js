@@ -1,24 +1,24 @@
 package com.example.peliculas.entity;
 
 public class LineaPedido {
-    private int idPedido;
-    private int idEjemplar;
+    private int idLineaPedido;
+    private int cantidad;
 
     public LineaPedido() {}
 
-    public LineaPedido(int idPedido, int idEjemplar) {
-        this.idPedido = idPedido;
-        this.idEjemplar = idEjemplar;
+    public LineaPedido(int idLineaPedido, int cantidad) {
+        this.idLineaPedido = idLineaPedido;
+        this.cantidad = cantidad;
     }
 
-    public int getIdPedido() { return idPedido; }
-    public void setIdPedido(int idPedido) { this.idPedido = idPedido; }
+    public int getIdLineaPedido() { return cantidad; }
+    public void setIdLineaPedido(int idLineaPedido) { this.idLineaPedido = idLineaPedido; }
 
-    public int getIdEjemplar() { return idEjemplar; }
-    public void setIdEjemplar(int idEjemplar) { this.idEjemplar = idEjemplar; }
+    public int getCantidad() { return cantidad; }
+    public void setCantidad(int cantidad) { this.cantidad = cantidad; }
 
     @Override
     public String toString() {
-        return "LineaPedido [idPedido=" + idPedido + ", idEjemplar=" + idEjemplar + "]";
+        return "LineaPedido [idLineaPedido=" + idLineaPedido+  ", cantidad=" + cantidad + "]";
     }
 }

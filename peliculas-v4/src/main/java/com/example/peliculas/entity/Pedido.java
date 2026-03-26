@@ -2,31 +2,31 @@ package com.example.peliculas.entity;
 import java.time.LocalDate;
 
 public class Pedido {
-	private int id;
+	private int idPedido;
     private LocalDate fechaPedido;
     private LocalDate fechaDevolucion;
     private float precio;
     private String metodoPago;
     private String factura;
     private String envio;
-    private int idCliente;
-	public Pedido(int id, LocalDate fechaPedido, LocalDate fechaDevolucion, float precio, String metodoPago,
-			String factura, String envio, int idCliente) {
+    private int clienteId;
+	public Pedido(int idPedido, LocalDate fechaPedido, LocalDate fechaDevolucion, float precio, String metodoPago,
+			String factura, String envio, int clienteId) {
 		super();
-		this.id = id;
+		this.idPedido = idPedido;
 		this.fechaPedido = fechaPedido;
 		this.fechaDevolucion = fechaDevolucion;
 		this.precio = precio;
 		this.metodoPago = metodoPago;
 		this.factura = factura;
 		this.envio = envio;
-		this.idCliente = idCliente;
+		this.clienteId = clienteId;
 	}
-	public int getId() {
-		return id;
+	public int getIdPedido() {
+		return idPedido;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setId(int idPedido) {
+		this.idPedido = idPedido;
 	}
 	public LocalDate getFechaPedido() {
 		return fechaPedido;
@@ -64,17 +64,17 @@ public class Pedido {
 	public void setEnvio(String envio) {
 		this.envio = envio;
 	}
-	public int getIdCliente() {
-		return idCliente;
+	public int getClienteId() {
+		return clienteId;
 	}
-	public void setIdCliente(int idCliente) {
-		this.idCliente = idCliente;
+	public void setClienteId(int clienteId) {
+		this.clienteId = clienteId;
 	}
 	@Override
 	public String toString() {
-		return "Pedido [id=" + id + ", fechaPedido=" + fechaPedido + ", fechaDevolucion=" + fechaDevolucion
+		return "Pedido [id=" + idPedido + ", fechaPedido=" + fechaPedido + ", fechaDevolucion=" + fechaDevolucion
 				+ ", precio=" + precio + ", metodoPago=" + metodoPago + ", factura=" + factura + ", envio=" + envio
-				+ ", idCliente=" + idCliente + "]";
+				+ ", idCliente=" + clienteId + "]";
 	}
     
     

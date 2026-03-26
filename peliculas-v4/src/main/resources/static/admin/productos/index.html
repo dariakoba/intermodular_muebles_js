@@ -2,44 +2,91 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Administración de Productos</title>
-<link rel="stylesheet" href="/css/admin/productosAdmin.css">
-</head>
+<title>Panel Admin Productos</title>
 
+<style>
+body{
+    font-family: Arial, sans-serif;
+    margin:40px;
+    background:#f2f2f2;
+}
+
+h1{ margin-bottom:20px; }
+
+.form-box{
+    background:white;
+    padding:20px;
+    margin-bottom:30px;
+    border-radius:6px;
+}
+
+input,select{
+    padding:8px;
+    margin:5px;
+}
+
+button{
+    padding:6px 10px;
+    margin:3px;
+    cursor:pointer;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+}
+
+th,td{
+    padding:10px;
+    border:1px solid #ddd;
+}
+
+th{
+    background:#333;
+    color:white;
+}
+</style>
+
+</head>
 <body>
 
-<header class="topbar">
-    <h1>Administración de Productos</h1>
-</header>
+<h1>Administración de Productos</h1>
 
-<main class="container">
+<div class="form-box">
+<h3 id="formTitle">Crear Producto</h3>
 
-    <div class="acciones">
-        <button id="crear">Crear</button>
-        <button id="editar">Editar</button>
-        <button id="eliminar">Eliminar</button>
-    </div>
+<input type="hidden" id="id">
 
-    <table class="tabla">
-        <thead>
-            <tr>
-                <th><input type="checkbox" id="selectAll"></th>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Color</th>
-                <th>Precio</th>
-                <th>Stock</th>
-                <th>Categoría</th>
-            </tr>
-        </thead>
+<input id="nombre" placeholder="Nombre">
+<input id="color" placeholder="Color">
+<input id="precio" placeholder="Precio">
+<input id="stock" placeholder="Stock">
+<input id="descripcion" placeholder="Descripción">
+<input id="categoria" placeholder="Categoría">
 
-        <tbody id="tabla-body">
-        </tbody>
-    </table>
+<br>
+<button onclick="guardarProducto()">Guardar</button>
+<button onclick="limpiarFormulario()">Cancelar</button>
+</div>
 
-</main>
+<table id="tablaProductos">
+	<thead>
+		<tr>
+		<th>ID</th>
+		<th>Nombre</th>
+		<th>Color</th>
+		<th>Precio</th>
+		<th>Stock</th>
+		<th>Categoría</th>
+		<th>Acciones</th>
+		</tr>
+		</thead>
+	<tbody></tbody>
+</table>
 
-<script src="admin.js"></script>
+<!-- JS externo -->
+<script src="js/index.js"></script>
+
 </body>
 </html>

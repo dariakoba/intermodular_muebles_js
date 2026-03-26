@@ -5,7 +5,7 @@ public class Categoria {
 	    private String nombre;
 
 
-	  
+
 	    public Categoria(int idCategoria, String nombre) {
 	        this.idCategoria = idCategoria;
 	        this.nombre = nombre;
