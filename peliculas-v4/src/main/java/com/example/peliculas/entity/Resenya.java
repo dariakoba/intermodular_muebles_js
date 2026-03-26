@@ -3,21 +3,21 @@ package com.example.peliculas.entity;
 import java.time.LocalDate;
 
 public class Resenya {
-    private Integer idResenya;
-    private int idCliente;
+    private Integer id; 
+    private int idUsuario;
     private int idProducto;
     private int puntuacion;
     private String comentario;
-    private LocalDate fechaResenya;
+    private LocalDate fechaPublicacion;
 
     public Resenya() {}
 
     // Getters y Setters
-    public Integer getIdResenya() { return idResenya; }
-    public void setIdResenya(Integer idResenya) { this.idResenya = idResenya; }
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
 
-    public int getIdCliente() { return idCliente; }
-    public void setIdCliente(int idCliente) { this.idCliente = idCliente; }
+    public int getIdUsuario() { return idUsuario; }
+    public void setIdUsuario(int idUsuario) { this.idUsuario = idUsuario; }
 
     public int getIdProducto() { return idProducto; }
     public void setIdProducto(int idProducto) { this.idProducto = idProducto; }
@@ -28,6 +28,6 @@ public class Resenya {
     public String getComentario() { return comentario; }
     public void setComentario(String comentario) { this.comentario = comentario; }
 
-    public LocalDate getFechaResenya() { return fechaResenya; }
-    public void setFechaResenya(LocalDate fechaResenya) { this.fechaResenya = fechaResenya; }
+    public LocalDate getFechaPublicacion() { return fechaPublicacion; }
+    public void setFechaPublicacion(LocalDate fechaPublicacion) { this.fechaPublicacion = fechaPublicacion; }
 }

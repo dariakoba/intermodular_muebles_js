@@ -4,38 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DNA - Home</title>
-    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/home.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    
 </head>
 <body>
 
-    <header class="navbar">
-    <a href="home.html" class="logo-link">
-        <div class="logo-container">
-            <div class="logo-circle">
-                <img src="img/image-Photoroom.png" alt="DNA Logo" class="logo-image">
-            </div>
-            <span class="brand-name">DNA</span>
-        </div>
-    </a>
+<header class="topbar">
 
-    <nav class="nav-links">
-        <a href="home.html">Home</a>
-        <a href="#">Sobre nosotros</a>
-        <a href="#">Productos</a>
-        <a href="#">Contacto</a>
+    <div class="logo">
+        <img src="images/login/logo.png" alt="logo">
+        <span>DNA</span>
+    </div>
+
+    <nav class="menu">
+        <a href="index.html">Home</a>
+        <a href="productos.html">Catálogo</a>
+        <a href="productos.html">Productos</a>
+        <a href="contacto.html">Contacto</a>
     </nav>
 
-    <div class="nav-icons">
-        <i class="fa-solid fa-cart-shopping"></i>
-        <i class="fa-regular fa-user"></i>
+    <div class="icons">
+
+        <span class="material-symbols-outlined">shopping_cart</span>
+
+        <div class="person-menu-wrapper">
+            <span id="person-icon" class="material-symbols-outlined">person</span>
+
+            <div class="person-menu">
+                <a href="#">Ver cuenta</a>
+                <a href="#">Cerrar sesión</a>
+            </div>
+        </div>
+
     </div>
+
 </header>
 
     <main class="home-container">
         <section class="selection-banner">
             <div class="banner-image-container">
-                <img src="img/Gemini_Generated_Image_kkfc2pkkfc2pkkfc.png" alt="Ambiente" class="banner-img">
+                <img src="images/home/Gemini_Generated_Image_kkfc2pkkfc2pkkfc.png" alt="Ambiente" class="banner-img">
             </div>
             <div class="banner-text">
                 <h1>Elige la zona que quieras transformar</h1>
@@ -55,37 +65,37 @@
         
         <div class="slider-wrapper">
             <div class="categories-grid" id="sliderGrid">
-                <div class="category-card" style="background-image: url(img/unnamed.jpg);">
+                <div class="category-card" style="background-image: url(images/home/unnamed.jpg);">
                     <div class="card-overlay">
                         <h2 class="card-title">Dormitorio</h2>
                     </div>
                 </div>
-                <div class="category-card" style="background-image: url(img/Gemini_Generated_Image_kkfc2pkkfc2pkkfc\ \(3\).png);">
+                <div class="category-card" style="background-image: url(images/home/Gemini_Generated_Image_kkfc2pkkfc2pkkfc\ \(3\).png);">
                     <div class="card-overlay">
                         <h2 class="card-title">Baño</h2>
                     </div>
                 </div>
-                <div class="category-card" style="background-image: url(img/Gemini_Generated_Image_kkfc2pkkfc2pkkfc\ \(2\).png);">
+                <div class="category-card" style="background-image: url(images/home/Gemini_Generated_Image_kkfc2pkkfc2pkkfc\ \(2\).png);">
                     <div class="card-overlay">
                         <h2 class="card-title">Oficina</h2>
                     </div>
                 </div>
-                <div class="category-card" style="background-image: url(img/descarga\ \(3\).jpg);">
+                <div class="category-card" style="background-image: url(images/home/descarga\ \(3\).jpg);">
                     <div class="card-overlay">
                         <h2 class="card-title">Salón</h2>
                     </div>
                 </div>
-                <div class="category-card" style="background-image: url(img/descarga\ \(2\).jpg);">
+                <div class="category-card" style="background-image: url(images/home/descarga\ \(2\).jpg);">
                     <div class="card-overlay">
                         <h2 class="card-title">Cocina</h2>
                     </div>
                 </div>
-                <div class="category-card" style="background-image: url(img/luminárias\ artesanais\ lindas.jpg);">
+                <div class="category-card" style="background-image: url(images/home/luminárias\ artesanais\ lindas.jpg);">
                     <div class="card-overlay">
                         <h2 class="card-title">Iluminación</h2>
                     </div>
                 </div>
-                <div class="category-card" style="background-image: url(img/descarga\ \(4\).jpg);">
+                <div class="category-card" style="background-image: url(images/home/descarga\ \(4\).jpg);">
                     <div class="card-overlay">
                         <h2 class="card-title">Decoración</h2>
                     </div>
@@ -96,9 +106,10 @@
         <button class="slider-arrow next" id="nextBtn"><i class="fa-solid fa-chevron-right"></i></button>
     </section>
 </main>
+<script src="/js/menuUser.js"></script>
 
 
-<script src="script.js"></script>
+<script src="/js/scroll.js"></script>
 
 </body>
 </html>

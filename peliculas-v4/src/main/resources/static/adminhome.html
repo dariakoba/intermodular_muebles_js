@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DNA - Panel Admin</title>
+
+<!-- CSS propio -->
+<link rel="stylesheet" href="/css/app.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+</head>
+<body>
+
+<!-- Header / Navbar -->
+<header class="navbar">
+    <a href="home.html" class="logo-link">
+        <div class="logo-container">
+            <div class="logo-circle">
+                <img src="../../../img/image-Photoroom.png" alt="DNA Logo" class="logo-image">
+            </div>
+            <span class="brand-name">DNA</span>
+        </div>
+    </a>
+
+    <nav class="nav-links">
+        <a href="admin.html">Dashboard</a>
+        <a href="#">Usuarios</a>
+        <a href="#">Productos</a>
+        <a href="#">Pedidos</a>
+        <a href="#">Estadísticas</a>
+    </nav>
+
+    <div class="nav-icons">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <i class="fa-regular fa-user"></i>
+        <button id="logoutBtn" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Salir</button>
+    </div>
+</header>
+
+<!-- Contenido principal -->
+<main class="admin-container">
+    <section class="admin-welcome">
+        <h1>Bienvenido, Admin</h1>
+        <p>Gestiona usuarios, productos y pedidos desde este panel.</p>
+    </section>
+
+    <section class="admin-cards">
+        <div class="admin-card">
+            <i class="fa-solid fa-users"></i>
+            <h2>Usuarios</h2>
+            <p>Ver, editar o eliminar usuarios registrados.</p>
+            <button>Ir a Usuarios</button>
+        </div>
+
+        <div class="admin-card">
+            <i class="fa-solid fa-box-open"></i>
+            <h2>Productos</h2>
+            <p>Agregar, modificar o eliminar productos.</p>
+            <button>Ir a Productos</button>
+        </div>
+
+        <div class="admin-card">
+            <i class="fa-solid fa-truck"></i>
+            <h2>Pedidos</h2>
+            <p>Ver y actualizar el estado de los pedidos.</p>
+            <button>Ir a Pedidos</button>
+        </div>
+    </section>
+</main>
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+    // Verificar que sea admin
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user || user.rol !== "admin") {
+        // Redirigir si no es admin
+        window.location.href = "login.html";
+        return;
+    }
+
+    // Logout
+    const logoutBtn = document.getElementById("logoutBtn");
+    logoutBtn.addEventListener("click", async () => {
+        await fetch("/api/logout", { method: "POST", credentials: "include" });
+        localStorage.removeItem("user");
+        window.location.href = "login.html";
+    });
+});
+</script>
+
+</body>
+</html>
