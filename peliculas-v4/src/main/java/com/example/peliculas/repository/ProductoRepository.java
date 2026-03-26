@@ -33,7 +33,7 @@ public class ProductoRepository extends BaseRepository<Producto> {
 
 	@Override
 	public String[] getColumnNames() {
-		return new String[] { "id", "nombre", "color","precio","stock","descripcion","id_categoria" };
+		return new String[] { "id_producto", "nombre", "color","precio","stock","descripcion","id_categoria" };
 	}
 	
 	@Override

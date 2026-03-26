@@ -17,10 +17,10 @@ public class ResenyaRepository extends BaseRepository<Resenya> {
     public String getTable() { return "resenyas"; }
 
     @Override
-    public Integer getPrimaryKey(Resenya instance) { return instance.getId(); }
+    public Integer getPrimaryKey(Resenya instance) { return instance.getIdResenya(); }
 
     @Override
-    public void setPrimaryKey(Resenya instance, int id) { instance.setId(id); }
+    public void setPrimaryKey(Resenya instance, int id) { instance.setIdResenya(id); }
 
     @Override
     public String[] getColumnNames() {
@@ -29,12 +29,12 @@ public class ResenyaRepository extends BaseRepository<Resenya> {
 
     @Override
     public Object[] getInsertValues(Resenya r) {
-        return new Object[] { r.getIdUsuario(), r.getIdProducto(), r.getPuntuacion(), r.getComentario(), r.getFechaPublicacion() };
+        return new Object[] { r.getUsuarioId(), r.getProductoId(), r.getPuntuacion(), r.getComentario(), r.getFechaPublicacion() };
     }
 
     @Override
     public Object[] getUpdateValues(Resenya r) {
-        return new Object[] { r.getIdUsuario(), r.getIdProducto(), r.getPuntuacion(), r.getComentario(), r.getFechaPublicacion(), r.getId() };
+        return new Object[] { r.getUsuarioId(), r.getProductoId(), r.getPuntuacion(), r.getComentario(), r.getFechaPublicacion(), r.getIdResenya() };
     }
 
     public List<Resenya> findByProducto(int idProducto) {

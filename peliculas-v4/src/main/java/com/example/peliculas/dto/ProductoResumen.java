@@ -1,7 +1,7 @@
 package com.example.peliculas.dto;
 
 public record ProductoResumen(
-	int id,
+	int idProducto,
 	String nombre,
 	String descripcion,
 	float precio

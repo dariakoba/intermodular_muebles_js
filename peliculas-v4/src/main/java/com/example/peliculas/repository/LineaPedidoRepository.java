@@ -27,12 +27,12 @@ public class LineaPedidoRepository extends BaseRepository<LineaPedido> {
 
     @Override
     public Integer getPrimaryKey(LineaPedido lp) {
-        return lp.getIdPedido();
+        return lp.getIdLineaPedido();
     }
 
     @Override
     public void setPrimaryKey(LineaPedido lp, int id) {
-        lp.setIdPedido(id);
+        lp.setIdLineaPedido(id);
     }
 
     @Override
@@ -42,13 +42,13 @@ public class LineaPedidoRepository extends BaseRepository<LineaPedido> {
 
     @Override
     public Object[] getInsertValues(LineaPedido lp) {
-        return new Object[] { lp.getIdPedido(), lp.getIdEjemplar() };
+        return new Object[] { lp.getIdLineaPedido(), lp.getCantidad() };
     }
 
     @Override
     public Object[] getUpdateValues(LineaPedido lp) {
         // En una tabla de muchos a muchos, el update suele afectar a la segunda clave
-        return new Object[] { lp.getIdEjemplar(), lp.getIdPedido() };
+        return new Object[] { lp.getCantidad(), lp.getIdLineaPedido() };
     }
 
     /**
@@ -57,7 +57,7 @@ public class LineaPedidoRepository extends BaseRepository<LineaPedido> {
     public void create(LineaPedido lp) {
         String sql = "INSERT INTO linea_pedido (id_pedido, id_ejemplar) VALUES (?, ?)";
         try {
-            DB.update(con, sql, lp.getIdPedido(), lp.getIdEjemplar());
+            DB.update(con, sql, lp.getIdLineaPedido(), lp.getCantidad());
         } catch (SQLException e) {
             throw new DataAccessException("Error al insertar la línea de pedido", e);
         }

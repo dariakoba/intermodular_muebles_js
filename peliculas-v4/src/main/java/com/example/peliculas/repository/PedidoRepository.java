@@ -26,7 +26,7 @@ public class PedidoRepository extends BaseRepository<Pedido> {
 
     @Override
     public Integer getPrimaryKey(Pedido p) {
-        return p.getId();
+        return p.getIdPedido();
     }
 
     @Override
@@ -49,7 +49,7 @@ public class PedidoRepository extends BaseRepository<Pedido> {
             p.getMetodoPago(), 
             p.getFactura(), 
             p.getEnvio(), 
-            p.getIdCliente() 
+            p.getClienteId() 
         };
     }
 
@@ -62,8 +62,8 @@ public class PedidoRepository extends BaseRepository<Pedido> {
             p.getMetodoPago(), 
             p.getFactura(), 
             p.getEnvio(), 
-            p.getIdCliente(),
-            p.getId() 
+            p.getClienteId(),
+            p.getIdPedido() 
         };
     }
 
