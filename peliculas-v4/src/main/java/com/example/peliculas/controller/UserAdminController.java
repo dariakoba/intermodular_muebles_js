@@ -2,12 +2,15 @@ package com.example.peliculas.controller;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.peliculas.dto.UserRequest;
 import com.example.peliculas.entity.User;
 import com.example.peliculas.exception.DataAccessException;
 import com.example.peliculas.repository.UserRepository;
@@ -17,6 +20,7 @@ import com.example.peliculas.repository.UserRepository;
 public class UserAdminController {
 
     private final DataSource ds;
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public UserAdminController(DataSource ds) {
         this.ds = ds;
@@ -43,9 +47,27 @@ public class UserAdminController {
     }
 
     @PostMapping
-    public User store(@RequestBody User user) {
+    public User store(@RequestBody UserRequest req) {
         try (Connection con = ds.getConnection()) {
+        	System.out.println(req);
             UserRepository repo = new UserRepository(con);
+
+            User user= new User(
+            		null,
+            		encoder.encode(req.passwordHash()),
+            		req.rol(), 
+            		req.telefono(),
+            		req.estado(), 
+            		req.nombre(), 
+            		req.apellidos(),
+            		req.direccion(), 
+            		req.email(), 
+            		0, 
+            		0,
+            		0f, 
+            		LocalDate.now()
+            );
+            
             repo.insert(user);
             return user;
         } catch (SQLException e) {
