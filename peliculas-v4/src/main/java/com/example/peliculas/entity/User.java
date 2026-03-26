@@ -3,7 +3,7 @@ package com.example.peliculas.entity;
 import java.time.LocalDate;
 
 public class User {
-    private int id;                   // id SERIAL -> int
+    private Integer id;                   // id SERIAL -> int
     private String passwordHash;      // password_hash VARCHAR(255)
     private String rol;               // rol VARCHAR(20)
     private String telefono;          // telefono VARCHAR(20)
@@ -13,15 +13,13 @@ public class User {
     private String direccion;         // direccion VARCHAR(100)
     private String email;
     private Integer puntos;       // antes int
-    private Integer nivelAcceso;  // antes int
     private Float salario;
     private java.time.LocalDate fechaAlta;
     
     public User() {}
 
-    
-    
-	public User(int id, String passwordHash, String rol, String telefono, String estado, String nombre,
+	
+	public User(Integer id, String passwordHash, String rol, String telefono, String estado, String nombre,
 			String apellidos, String direccion, String email, Integer puntos, Integer nivelAcceso, Float salario,
 			LocalDate fechaAlta) {
 		super();
@@ -35,11 +33,11 @@ public class User {
 		this.direccion = direccion;
 		this.email = email;
 		this.puntos = puntos;
-		this.nivelAcceso = nivelAcceso;
 		this.salario = salario;
 		this.fechaAlta = fechaAlta;
 	}
-	
+
+
 	public User(String passwordHash, String rol, String telefono, String nombre,
             String apellidos, String email) {
     this.passwordHash = passwordHash;
@@ -52,7 +50,6 @@ public class User {
     this.estado = "activo";
     this.direccion = "";
     this.puntos = 0;
-    this.nivelAcceso = 0;
     this.salario = 0f;
     this.fechaAlta = java.time.LocalDate.now();
 	}
@@ -63,6 +60,11 @@ public class User {
         this.rol = rol;
         this.passwordHash = passwordHash;
         this.estado = "activo";
+
+        this.direccion = "";
+        this.puntos = 0;
+        this.salario = 0f;
+        this.fechaAlta = java.time.LocalDate.now();
     }
 	public int getId() {
 		return id;
@@ -124,12 +126,7 @@ public class User {
 	public void setPuntos(Integer puntos) {
 		this.puntos = puntos;
 	}
-	public Integer getNivelAcceso() {
-		return nivelAcceso;
-	}
-	public void setNivelAcceso(Integer nivelAcceso) {
-		this.nivelAcceso = nivelAcceso;
-	}
+	
 	public Float getSalario() {
 		return salario;
 	}
@@ -142,13 +139,15 @@ public class User {
 	public void setFechaAlta(java.time.LocalDate fechaAlta) {
 		this.fechaAlta = fechaAlta;
 	}
+
+
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", passwordHash=" + passwordHash + ", rol=" + rol + ", telefono=" + telefono
 				+ ", estado=" + estado + ", nombre=" + nombre + ", apellidos=" + apellidos + ", direccion=" + direccion
-				+ ", email=" + email + ", puntos=" + puntos + ", nivelAcceso=" + nivelAcceso + ", salario=" + salario
-				+ ", fechaAlta=" + fechaAlta + "]";
+				+ ", email=" + email + ", puntos=" + puntos + ", salario=" + salario + ", fechaAlta=" + fechaAlta + "]";
 	}
+	
     
 	
     
