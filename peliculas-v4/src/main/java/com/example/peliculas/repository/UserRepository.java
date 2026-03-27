@@ -55,7 +55,7 @@ public class UserRepository extends BaseRepository<User> {
 	        "direccion",
 	        "email",
 	        "puntos",
-	        "nivel_acceso",
+	        
 	        "salario",
 	        "fecha_alta"
 	    };
@@ -100,7 +100,7 @@ public class UserRepository extends BaseRepository<User> {
 	        u.getDireccion(),
 	        u.getEmail(),
 	        u.getPuntos(),
-	        u.getNivelAcceso(),
+	        //u.getNivelAcceso(),
 	        u.getSalario(),
 	        LocalDate.now() // ahora sí coincide
 	        
@@ -120,7 +120,7 @@ public class UserRepository extends BaseRepository<User> {
 			    u.getDireccion(),
 			    u.getEmail(),
 			    u.getPuntos(),
-			    u.getNivelAcceso(),
+			    //u.getNivelAcceso(),
 			    u.getSalario(),
 			    u.getFechaAlta(),
 			    u.getId()
@@ -141,7 +141,7 @@ public class UserRepository extends BaseRepository<User> {
 	public UserResponse findResponseById(int id) {
 	    
 	    try {
-	    	String sql = "select id, rol, telefono, estado, nombre, apellidos, direccion, email, puntos, nivel_acceso, salario, fecha_alta " +
+	    	String sql = "select id, rol, telefono, estado, nombre, apellidos, direccion, email, puntos,  salario, fecha_alta " +
 	                 "from usuarios where id = ?";
 			return DB.queryOne(con, sql, new UserResponseMapper(), id);
 		} catch (SQLException e) {
@@ -150,7 +150,7 @@ public class UserRepository extends BaseRepository<User> {
 	}
 	public List<UserResponse> findResponses() {
 	    try {
-		    String sql = "select id, rol, telefono, estado, nombre, apellidos, direccion, email, puntos, nivel_acceso, salario, fecha_alta from usuarios";
+		    String sql = "select id, rol, telefono, estado, nombre, apellidos, direccion, email, puntos,  salario, fecha_alta from usuarios";
 
 			return DB.queryMany(con, sql, new UserResponseMapper());
 		} catch (SQLException e) {

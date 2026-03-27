@@ -20,7 +20,7 @@ public class UserResponseMapper implements RowMapper<UserResponse> {
                 rs.getString("direccion"),
                 rs.getString("email"),
                 rs.getInt("puntos"),
-                rs.getInt("nivel_acceso"),
+                //rs.getInt("nivel_acceso"),
                 rs.getFloat("salario"),
                 rs.getDate("fecha_alta") != null ? rs.getDate("fecha_alta").toLocalDate() : null
         );

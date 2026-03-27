@@ -1,16 +1,16 @@
 package com.example.peliculas.entity;
 
 public class Producto {
-	private int idProducto;
+	private Integer idProducto;
 	private String nombre;
 	private String color;
 	private float precio;
 	private int stock;
 	private String descripcion;
-	private int categoriaId; // referencia a la entidad Categoria
+	private Integer categoriaId; // referencia a la entidad Categoria
 
-	public Producto(int idProducto, String nombre, String color, float precio, int stock, String descripcion,
-		int categoriaId) {
+	public Producto(Integer idProducto, String nombre, String color, float precio, int stock, String descripcion,
+			Integer categoriaId) {
 		super();
 		this.idProducto = idProducto;
 		this.nombre = nombre;
@@ -21,11 +21,11 @@ public class Producto {
 		this.categoriaId = categoriaId;
 	}
 
-	public int getIdProducto() {
+	public Integer getIdProducto() {
 		return idProducto;
 	}
 
-	public void setIdProducto(int idProducto) {
+	public void setIdProducto(Integer idProducto) {
 		this.idProducto = idProducto;
 	}
 
@@ -69,11 +69,11 @@ public class Producto {
 		this.descripcion = descripcion;
 	}
 
-	public int getCategoriaId() {
+	public Integer getCategoriaId() {
 		return categoriaId;
 	}
 
-	public void setCategoriaId(int categoriaId) {
+	public void setCategoriaId(Integer categoriaId) {
 		this.categoriaId = categoriaId;
 	}
 

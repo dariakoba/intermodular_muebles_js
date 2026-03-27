@@ -28,7 +28,7 @@ public class CategoriaRepository extends BaseRepository<Categoria> {
 
 	@Override
 	public String[] getColumnNames() {
-		return new String[] { "id","nombre"};
+		return new String[] { "id_categoria","nombre"};
 	}
 	
 	@Override
