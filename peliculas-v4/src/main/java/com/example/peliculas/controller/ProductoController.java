@@ -39,6 +39,17 @@ public class ProductoController {
     */
     
     @GetMapping("/{id}")
+    public ProductoDetalle show(@PathVariable int id) {
+        try (Connection con = ds.getConnection()) {
+            ProductoRepository repo = new ProductoRepository(con);
+            return repo.findByDetalleId(id);
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+    }
+    
+    /* anterior show
+	@GetMapping("/{id}")
     public Producto show(@PathVariable int id) {
         try (Connection con = ds.getConnection()) {
         	ProductoRepository repo = new ProductoRepository(con);
@@ -46,8 +57,8 @@ public class ProductoController {
         } catch (SQLException e) {
             throw new DataAccessException(e);
         }
-    }
-    
+    } 
+     */
     
     //pruebas
     @GetMapping

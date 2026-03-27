@@ -1,59 +1,282 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
 <meta charset="UTF-8">
-<title>Nueva película</title>
+<title>Admin – Nuevo Producto</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="/css/app.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+  body {
+    font-family: 'Lato', sans-serif;
+    background: #fdfbf6;
+    color: #222;
+    min-height: 100vh;
+  }
+
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    height: 64px;
+    background: linear-gradient(90deg, #1a1a1a, #2c2c2c);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+  }
+
+  .logo img { height: 40px; object-fit: contain; }
+
+  nav.menu { display: flex; gap: 28px; }
+
+  nav.menu a {
+    color: #ddd;
+    text-decoration: none;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+  }
+
+  nav.menu a:hover { color: #1abc9c; transform: translateY(-2px); }
+
+  .icons { display: flex; align-items: center; gap: 18px; color: #fff; }
+
+  .icons .material-symbols-outlined {
+    cursor: pointer;
+    font-size: 24px;
+    transition: color 0.3s ease, transform 0.2s ease;
+  }
+
+  .icons .material-symbols-outlined:hover { color: #1abc9c; transform: scale(1.2); }
+
+  .person-menu-wrapper { position: relative; }
+
+  .person-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 44px;
+    background: #fff;
+    border-radius: 8px;
+    min-width: 160px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    overflow: hidden;
+    z-index: 50;
+  }
+
+  .person-menu-wrapper:hover .person-menu { display: block; }
+
+  .person-menu a {
+    display: block;
+    padding: 12px 18px;
+    font-size: 0.88rem;
+    color: #333;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .person-menu a:hover { background: #f0f0f0; }
+
+  /* --- Formulario --- */
+  .admin-wrapper {
+    max-width: 680px;
+    margin: 48px auto;
+    padding: 0 24px;
+  }
+
+  .admin-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+  }
+
+  .admin-header h1 {
+    font-family: 'Lato', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #333;
+  }
+
+  .form-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 36px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #555;
+    margin-bottom: 6px;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 10px 14px;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.95rem;
+    border: 1.5px solid #e0ddd8;
+    border-radius: 6px;
+    background: #fdfbf6;
+    color: #222;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: #1abc9c;
+  }
+
+  .form-group textarea { resize: vertical; min-height: 100px; }
+
+  .form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 28px;
+  }
+
+  .btn-guardar {
+    padding: 10px 28px;
+    background: #1abc9c;
+    color: #fff;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(26,188,156,0.3);
+    transition: all 0.3s ease;
+  }
+
+  .btn-guardar:hover { background: #16a085; transform: translateY(-2px); }
+
+  .btn-cancelar {
+    padding: 10px 28px;
+    background: #f0ede8;
+    color: #555;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+  }
+
+  .btn-cancelar:hover { background: #e0ddd8; transform: translateY(-2px); }
+</style>
 </head>
-
 <body>
 
-<div class="container">
-
-<h1>Nueva película</h1>
-
-<form onsubmit="guardar(event)">
-
-<div class="mb-3">
-<label class="form-label">Título</label>
-<input id="titulo" class="form-control" required>
+<div class="topbar">
+  <div class="logo">
+    <img src="/images/logo.png" alt="logo">
+    DNA
+  </div>
+  <nav class="menu">
+    <a href="/index.html">Home</a>
+    <a href="/catalogo.html">Catálogo</a>
+    <a href="/productos.html">Productos</a>
+    <a href="/contacto.html">Contacto</a>
+  </nav>
+  <div class="icons">
+    <span class="material-symbols-outlined">shopping_cart</span>
+    <div class="person-menu-wrapper">
+      <span id="person-icon" class="material-symbols-outlined">person</span>
+      <div class="person-menu">
+        <a href="#">Ver cuenta</a>
+        <a href="#">Cerrar sesión</a>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="mb-3">
-<label class="form-label">Año</label>
-<input id="anyo" type="number" class="form-control" required>
+<div class="admin-wrapper">
+  <div class="admin-header">
+    <h1>Nuevo producto</h1>
+    <a href="index.html" class="btn-cancelar">← Volver</a>
+  </div>
+
+  <div class="form-card">
+    <form id="form-create">
+
+      <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input id="nombre" type="text" required>
+      </div>
+
+      <div class="form-group">
+        <label for="color">Color</label>
+        <input id="color" type="text">
+      </div>
+
+      <div class="form-group">
+        <label for="precio">Precio (€)</label>
+        <input id="precio" type="number" step="0.01" required>
+      </div>
+
+      <div class="form-group">
+        <label for="stock">Stock</label>
+        <input id="stock" type="number" required>
+      </div>
+
+      <div class="form-group">
+        <label for="categoria">Categoría</label>
+        <select id="categoria">
+          <option value="">-- Sin categoría --</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="descripcion">Descripción</label>
+        <textarea id="descripcion"></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-guardar">Guardar</button>
+        <a href="index.html" class="btn-cancelar">Cancelar</a>
+      </div>
+
+    </form>
+  </div>
 </div>
 
-<div class="mb-3">
-<label class="form-label">Duración</label>
-<input id="duracion" type="number" class="form-control" required>
-</div>
-
-<div class="mb-3">
-<label class="form-label">Director</label>
-<select id="director" class="form-select"></select>
-</div>
-
-<div class="mb-3">
-<label class="form-label">Sinopsis</label>
-<textarea id="sinopsis" class="form-control"></textarea>
-</div>
-
-<button class="btn btn-primary">Guardar</button>
-
-<a href="index.html" class="btn btn-secondary">
-Cancelar
-</a>
-
-</form>
-
-</div>
-
-<script src="js/create.js"></script>
-
+<script type="module" src="js/create.js"></script>
 </body>
 </html>

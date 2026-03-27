@@ -20,7 +20,7 @@ public class User {
 
 	
 	public User(Integer id, String passwordHash, String rol, String telefono, String estado, String nombre,
-			String apellidos, String direccion, String email, Integer puntos, Integer nivelAcceso, Float salario,
+			String apellidos, String direccion, String email, Integer puntos,  Float salario,
 			LocalDate fechaAlta) {
 		super();
 		this.id = id;

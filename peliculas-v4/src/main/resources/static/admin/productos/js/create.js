@@ -1,47 +1,42 @@
-async function cargarDirectores() {
+import { guard } from "/js/auth/guard.js";
+import { app }   from "/js/core/app.js";
+import { api }   from "/js/core/api.js";
+import { bind }  from "/js/core/events.js";
 
-    const response = await fetch("/api/admin/directores");
-    const directores = await response.json();
+app.run(async () => {
+    await guard.requireRole("admin");
 
-    const select = document.getElementById("director");
+    await cargarCategorias();
 
-    directores.forEach(d => {
+    bind(document.getElementById("form-create"), "submit", guardar);
+});
 
+async function cargarCategorias() {
+    const categorias = await api.get("/api/admin/categoria");
+
+    const select = document.getElementById("categoria");
+
+    categorias.forEach(c => {
         const option = document.createElement("option");
-
-        option.value = d.id;
-        option.textContent = d.nombre;
-
+        option.value = c.id_categoria;
+        option.textContent = c.nombre;
         select.appendChild(option);
     });
 }
 
 async function guardar(e) {
-
     e.preventDefault();
 
-    const pelicula = {
-
-        titulo: titulo.value,
-        anyo: anyo.value,
-        duracion: duracion.value,
-        sinopsis: sinopsis.value,
-        director_id: director.value
-
+    const producto = {
+        nombre:      document.getElementById("nombre").value,
+        color:       document.getElementById("color").value,
+        precio:      parseFloat(document.getElementById("precio").value),
+        stock:       parseInt(document.getElementById("stock").value),
+        descripcion: document.getElementById("descripcion").value,
+        categoriaId: parseInt(document.getElementById("categoria").value) || 0
     };
 
-    await fetch("/api/admin/peliculas", {
-
-        method: "POST",
-
-        headers: {
-            "Content-Type": "application/json"
-        },
-
-        body: JSON.stringify(pelicula)
-    });
+    await api.post("/api/admin/productos", producto);
 
     location.href = "index.html";
 }
-
-cargarDirectores();

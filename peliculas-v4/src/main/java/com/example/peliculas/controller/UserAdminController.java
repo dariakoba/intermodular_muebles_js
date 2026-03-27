@@ -63,7 +63,7 @@ public class UserAdminController {
             		req.direccion(), 
             		req.email(), 
             		0, 
-            		0,
+            		
             		0f, 
             		LocalDate.now()
             );

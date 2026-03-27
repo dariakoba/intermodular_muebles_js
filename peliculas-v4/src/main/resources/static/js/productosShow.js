@@ -8,6 +8,7 @@ async function cargarProducto() {
 
     const response = await fetch(`/api/productos/${id}`);
     const p = await response.json();
+	console.log(p);
 
     document.title = p.nombre;
 	document.getElementById("producto-img").src = `/images/productos/${p.id_producto}.jpg`;
@@ -17,7 +18,6 @@ async function cargarProducto() {
     document.getElementById("producto-precio").textContent = `${p.precio}€`;
 
 
-	document.getElementById("producto-id").textContent = p.id_producto;
 	
 	document.getElementById("btn-comprar").addEventListener("click", () => {
 		alert(`Redirigiendo al pago de "${p.nombre}"...`);
@@ -25,12 +25,12 @@ async function cargarProducto() {
 	
 	document.getElementById("btn-carrito").addEventListener("click", () => {
 		const carrito = JSON.parse(localStorage.getItem("carrito") || "[]");
-		const existe = carrito.find(item => item.id === p.id);
+		const existe = carrito.find(item => item.id === p.id_producto);
 		
 		if (existe) {
 			existe.cantidad += 1;
 		} else {
-			carrito.push({ id: p.id, nombre: p.nombre, precio: p.precio, cantidad: 1 });
+			carrito.push({ id: p.id_producto, nombre: p.nombre, precio: p.precio, cantidad: 1 });
 		}
 	
 		localStorage.setItem("carrito", JSON.stringify(carrito));
