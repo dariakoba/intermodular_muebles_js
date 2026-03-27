@@ -49,20 +49,27 @@
 
    <main class="carrito-container">
     <h1>Tu Carrito</h1>
-    <div id="carrito-contenido">
-        </div>
+    
 </main>
-<div id="carrito-resumen">
-    <h3>Total: <span id="precio-total">0.00</span>€</h3>
-    <button onclick="vaciarCarrito()">Vaciar Carrito</button>
+<div class="carrito-container">
+    <div id="carrito-contenido" class="productos-lista">
+        </div>
+
+    <aside id="carrito-resumen" class="resumen-lateral">
+        <h2 class="resumen-titulo">Resumen</h2>
+        <div class="resumen-fila">
+            <span>Subtotal</span>
+            <span id="precio-total">0.00€</span>
+        </div>
+        <div class="resumen-fila">
+            <span>Envío</span>
+            <span class="gratis">Gratis</span>
+        </div>
+        <hr>
+        <button class="btn-finalizar" onclick="finalizarCompra()">Finalizar Compra</button>
+        <button class="btn-vaciar" onclick="vaciarCarrito()">Vaciar Carrito</button>
+    </aside>
 </div>
-
-  
-	<div id="carrito-resumen">
-	    <p>Total: <span id="precio-total">0.00</span>€</p>
-	    <button onclick="finalizarCompra()" class="btn-main">FINALIZAR COMPRA</button>
-	</div>
-
 	<script src="js/carrito.js"></script>
 	<script src="/js/menuUser.js"></script>
 

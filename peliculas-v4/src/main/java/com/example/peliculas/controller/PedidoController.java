@@ -27,7 +27,7 @@ public class PedidoController {
             LineaPedidoRepository lineaRepo = new LineaPedidoRepository(con);
 
             Pedido nuevoPedido = pedidoRepo.insert(request.pedido);
-            int idGenerado = nuevoPedido.getId();
+            int idGenerado = nuevoPedido.getIdPedido();
 
             for (Integer idEjemplar : request.idsEjemplares) {
                 LineaPedido linea = new LineaPedido(idGenerado, idEjemplar);
