@@ -33,22 +33,17 @@ CREATE TABLE categoria (
 );
 
 CREATE TABLE productos (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_producto INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100),
     color VARCHAR(50),
     precio DECIMAL(10,2),
     stock INT,
     descripcion TEXT,
-    id_categoria INT,
+    categoria_id INT,
     FOREIGN KEY (id_categoria) REFERENCES categoria(id)
 );
 
-CREATE TABLE ejemplar (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    estado VARCHAR(20),
-    id_producto INT,
-    FOREIGN KEY (id_producto) REFERENCES productos(id)
-);
+
 
 CREATE TABLE pedidos (
     id INT AUTO_INCREMENT PRIMARY KEY,
