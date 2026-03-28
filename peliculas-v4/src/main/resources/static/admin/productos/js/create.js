@@ -33,7 +33,7 @@ async function guardar(e) {
         precio:      parseFloat(document.getElementById("precio").value),
         stock:       parseInt(document.getElementById("stock").value),
         descripcion: document.getElementById("descripcion").value,
-        categoriaId: parseInt(document.getElementById("categoria").value) || 0
+        categoria_id: parseInt(document.getElementById("categoria").value) || 0
     };
 
     await api.post("/api/admin/productos", producto);

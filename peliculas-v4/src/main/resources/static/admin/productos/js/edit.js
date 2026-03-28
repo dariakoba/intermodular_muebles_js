@@ -1,74 +1,76 @@
-function obtenerId() {
+import { guard } from "/js/auth/guard.js";
+import { app }   from "/js/core/app.js";
+import { api }   from "/js/core/api.js";
+import { bind }  from "/js/core/events.js";
 
+app.run(async () => {
+    await guard.requireRole("admin");
+
+    const id = obtenerId();
+    if (!id) {
+        location.href = "index.html";
+        return;
+    }
+
+    const producto   = await api.get(`/api/admin/productos/${id}`);
+    const categorias = await api.get("/api/admin/categoria");
+
+    render(producto, categorias);
+    bindEvents();
+});
+
+function obtenerId() {
     const params = new URLSearchParams(window.location.search);
     return params.get("id");
 }
 
-async function cargarDirectores() {
+function render(producto, categorias) {
+    const form   = document.getElementById("form-producto");
+    const select = document.getElementById("categoria");
 
-    const response = await fetch("/api/admin/categorias");
-    const directores = await response.json();
-
-    const select = document.getElementById("director");
-
-    directores.forEach(d => {
-
+    select.innerHTML = '<option value="">-- Selecciona categoría --</option>';
+    categorias.forEach(c => {
         const option = document.createElement("option");
-
-        option.value = d.id;
-        option.textContent = d.nombre;
-
+        option.value = c.id_categoria;
+        option.textContent = c.nombre;
         select.appendChild(option);
     });
+
+    form.nombre.value      = producto.nombre;
+    form.color.value       = producto.color;
+    form.precio.value      = producto.precio;
+    form.stock.value       = producto.stock;
+    form.descripcion.value = producto.descripcion;
+    form.categoria.value   = producto.categoria_id;
 }
 
-async function cargar() {
+function bindEvents() {
+    const form = document.getElementById("form-producto");
+	console.log("form encontrado:", form); // <-- ¿es null?
 
-    const id = obtenerId();
-
-    const response = await fetch(`/api/admin/productos/${id}`);
-    const p = await response.json();
-
-    titulo.value = p.titulo;
-    anyo.value = p.anyo;
-    duracion.value = p.duracion;
-    sinopsis.value = p.sinopsis;
-    director.value = p.director_id;
+    bind(form, "submit", guardar);
 }
 
 async function guardar(e) {
-
     e.preventDefault();
 
-    const id = obtenerId();
+    const id   = obtenerId();
+    const form = e.target;
+	console.log("nombre:",      form.nombre.value);
+	console.log("color:",       form.color.value);
+	console.log("precio:",      form.precio.value);
+	console.log("stock:",       form.stock.value);
+	console.log("descripcion:", form.descripcion.value);
+	console.log("categoria:",   form.categoria.value);
 
-    const pelicula = {
-
-        titulo: titulo.value,
-        anyo: anyo.value,
-        duracion: duracion.value,
-        sinopsis: sinopsis.value,
-        director_id: director.value
-    };
-
-    await fetch(`/api/admin/productos/${id}`, {
-
-        method: "PUT",
-
-        headers: {
-            "Content-Type": "application/json"
-        },
-
-        body: JSON.stringify(pelicula)
+    await api.put(`/api/admin/productos/${id}`, {
+        nombre:       form.nombre.value,
+        color:        form.color.value,
+        precio:       form.precio.value,
+        stock:        form.stock.value,
+        descripcion:  form.descripcion.value,
+        categoria_id: form.categoria.value
     });
 
-    location.href = "index.html";
+    location.replace("index.html");
 }
-
-async function init() {
-
-    await cargarDirectores();
-    await cargar();
-}
-
-init();

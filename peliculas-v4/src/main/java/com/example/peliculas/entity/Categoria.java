@@ -1,18 +1,18 @@
 package com.example.peliculas.entity;
 
 public class Categoria {
-	 private int idCategoria;
+	 private Integer idCategoria;
 	    private String nombre;
 
 
 
-	    public Categoria(int idCategoria, String nombre) {
+	    public Categoria(Integer idCategoria, String nombre) {
 	        this.idCategoria = idCategoria;
 	        this.nombre = nombre;
 	    }
 
 	    // Getters y setters
-	    public int getIdCategoria() { return idCategoria; }
+	    public Integer getIdCategoria() { return idCategoria; }
 	    public void setIdCategoria(int idCategoria) { this.idCategoria = idCategoria; }
 
 	    public String getNombre() { return nombre; }
