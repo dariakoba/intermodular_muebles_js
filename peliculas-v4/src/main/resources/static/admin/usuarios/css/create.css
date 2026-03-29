@@ -1,7 +1,5 @@
 /* --- RESET --- */
-*,
-*::before,
-*::after {
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -13,9 +11,9 @@ body {
   background: #fdfbf6;
   color: #222;
   min-height: 100vh;
-  margin: 0;          /* importante eliminar margen por defecto */
 }
 
+/* --- Topbar --- */
 .topbar {
   display: flex;
   align-items: center;
@@ -23,7 +21,7 @@ body {
   padding: 0 40px;
   height: 64px;
   background: linear-gradient(90deg, #1a1a1a, #2c2c2c);
-  position: fixed;       /* fijamos completamente arriba */
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
@@ -31,11 +29,7 @@ body {
   box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
-body .edit-container {
-  margin-top: 80px; /* deja espacio suficiente para header fijo */
-}
-
-.topbar .logo {
+.logo {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -43,21 +37,11 @@ body .edit-container {
   font-family: 'Playfair Display', serif;
   font-size: 1.6rem;
   font-weight: 700;
-  letter-spacing: 2px;
-  text-decoration: none;
 }
+.logo img { height: 40px; object-fit: contain; }
 
-.topbar .logo img {
-  height: 40px;
-  object-fit: contain;
-}
-
-.menu {
-  display: flex;
-  gap: 28px;
-}
-
-.menu a {
+nav.menu { display: flex; gap: 28px; }
+nav.menu a {
   color: #ddd;
   text-decoration: none;
   font-size: 0.9rem;
@@ -65,34 +49,20 @@ body .edit-container {
   text-transform: uppercase;
   transition: all 0.3s ease;
 }
+nav.menu a:hover { color: #1abc9c; transform: translateY(-2px); }
 
-.menu a:hover {
-  color: #1abc9c;
-  transform: translateY(-2px);
-}
-
-.icons {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  color: #fff;
-  position: relative;
-  cursor: pointer;
-}
-
+.icons { display: flex; align-items: center; gap: 18px; color: #fff; }
 .icons .material-symbols-outlined {
-  font-size: 28px;
+  cursor: pointer;
+  font-size: 24px;
   transition: color 0.3s ease, transform 0.2s ease;
 }
-
-.icons:hover .material-symbols-outlined {
-  color: #1abc9c;
+.icons .material-symbols-outlined:hover { 
+  color: #1abc9c; 
   transform: scale(1.2);
 }
 
-/* --- PERSON MENU --- */
 .person-menu-wrapper { position: relative; }
-
 .person-menu {
   display: none;
   position: absolute;
@@ -105,11 +75,7 @@ body .edit-container {
   overflow: hidden;
   z-index: 50;
 }
-
-.person-menu-wrapper:hover .person-menu {
-  display: block;
-}
-
+.person-menu-wrapper:hover .person-menu { display: block; }
 .person-menu a {
   display: block;
   padding: 12px 18px;
@@ -118,22 +84,18 @@ body .edit-container {
   text-decoration: none;
   transition: background 0.2s;
 }
+.person-menu a:hover { background: #f0f0f0; }
 
-.person-menu a:hover {
-  background: #f0f0f0;
-}
-
-/* --- MAIN CONTAINER --- */
-.edit-container {
+/* --- MAIN FORM CONTAINER --- */
+.create-container {
   max-width: 700px;
-  margin: 48px auto;
-  padding: 32px 24px;
+  margin: 96px auto 48px; /* deja espacio para topbar fijo */
+  padding: 32px;
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.08);
 }
 
-/* --- FORM TITLE --- */
 .title {
   font-size: 2rem;
   font-weight: 700;
@@ -142,29 +104,23 @@ body .edit-container {
 }
 
 /* --- FORM ELEMENTS --- */
-.edit-form {
+.create-form {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.edit-form label {
-  font-weight: 600;
+.create-form input,
+.create-form select {
+  padding: 10px 12px;
   font-size: 0.9rem;
-  color: #555;
-}
-
-.edit-form input,
-.edit-form select {
-  padding: 8px 10px; /* un poco más compactos */
-  font-size: 0.88rem;
   border-radius: 6px;
   border: 1px solid #ccc;
   transition: all 0.2s;
 }
 
-.edit-form input:focus,
-.edit-form select:focus {
+.create-form input:focus,
+.create-form select:focus {
   border-color: #1abc9c;
   outline: none;
   box-shadow: 0 0 6px rgba(26, 188, 156, 0.25);
@@ -173,28 +129,21 @@ body .edit-container {
 /* --- BUTTONS --- */
 .buttons {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   margin-top: 16px;
-}
-
-.btn-main,
-.btn-cancel {
-  border: none;
-  border-radius: 6px;
-  font-weight: 700;
-  padding: 8px 16px; /* botones más compactos */
-  cursor: pointer;
-  text-transform: uppercase;
-  transition: all 0.3s ease;
-  font-size: 0.88rem;
 }
 
 .btn-main {
   background: #1abc9c;
   color: #fff;
-  box-shadow: 0 4px 12px rgba(26,188,156,0.3);
+  border: none;
+  border-radius: 6px;
+  font-weight: 700;
+  padding: 10px 20px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
 }
-
 .btn-main:hover {
   background: #16a085;
   transform: translateY(-1px);
@@ -203,9 +152,14 @@ body .edit-container {
 .btn-cancel {
   background: #c0392b;
   color: #fff;
-  box-shadow: 0 4px 12px rgba(192,57,43,0.3);
+  border: none;
+  border-radius: 6px;
+  font-weight: 700;
+  padding: 10px 20px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
 }
-
 .btn-cancel:hover {
   background: #a93226;
   transform: translateY(-1px);
@@ -213,18 +167,9 @@ body .edit-container {
 
 /* --- RESPONSIVE --- */
 @media (max-width: 768px) {
-  .edit-container {
+  .create-container {
+    margin: 96px 16px 32px;
     padding: 24px;
-    margin: 32px 16px;
   }
-
-  .buttons {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .menu {
-    flex-wrap: wrap;
-    gap: 18px;
-  }
+  .buttons { flex-direction: column; }
 }

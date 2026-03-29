@@ -1,54 +1,65 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <title>Usuarios</title>
 <link rel="stylesheet" href="css/index.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
 </head>
-<header class="navbar">
-  <a href="home.html" class="logo-link">
-    <div class="logo-container">
-      <div class="logo-circle">
-        <img src="/images/logo.png" class="logo-image">
-      </div>
-      <span class="brand-name">DNA</span>
-    </div>
+<body>
+
+<!-- --- Topbar --- -->
+<header class="topbar">
+  <a href="home.html" class="logo">
+    <img src="/images/logo.png" alt="Logo">
+    DNA
   </a>
 
-  <nav class="nav-links">
-    <a href="admin.html">Dashboard</a>
+  <nav class="menu">
+    <a href="../../adminhome.html">Home</a>
     <a href="index.html">Usuarios</a>
-    <a href="#">Productos</a>
+    <a href="../productos/index.html">Productos</a>
     <a href="#">Pedidos</a>
     <a href="#">Estadísticas</a>
   </nav>
 
-  <div class="nav-icons">
-    <button id="logoutBtn" class="btn-logout">Salir</button>
+  <div class="icons person-menu-wrapper">
+    <span class="material-symbols-outlined">account_circle</span>
+    <div class="person-menu">
+      <a href="#">Perfil</a>
+      <a href="#" id="logoutBtn">Salir</a>
+    </div>
   </div>
 </header>
-<body>
 
-<h1>Usuarios</h1>
+<!-- --- Admin wrapper --- -->
+<div class="admin-wrapper">
+  <div class="admin-header">
+    <h1>Usuarios</h1>
+    <div class="admin-actions">
+      <a href="create.html" class="btn-nuevo">Crear Usuario</a>
+      <button id="btn-eliminar-seleccionados">Eliminar Seleccionados</button>
+    </div>
+  </div>
 
-<a href="create.html">
-  <button>Crear Usuario</button>
-</a>
-
-<table id="tablaUsuarios">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Nombre</th>
-      <th>Email</th>
-      <th>Rol</th>
-      <th>Teléfono</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
+  <div class="tabla-wrapper">
+    <table id="tablaUsuarios">
+      <thead>
+        <tr>
+          <th><input type="checkbox" id="checkAll"></th>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Rol</th>
+          <th>Teléfono</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
 
 <script src="js/index.js"></script>
 <script src="js/destroy.js"></script>

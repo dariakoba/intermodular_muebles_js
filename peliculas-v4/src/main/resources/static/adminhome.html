@@ -17,16 +17,16 @@
     <a href="home.html" class="logo-link">
         <div class="logo-container">
             <div class="logo-circle">
-                <img src="../../../img/image-Photoroom.png" alt="DNA Logo" class="logo-image">
+                <img src="/images/logo.png" alt="DNA Logo" class="logo-image">
             </div>
             <span class="brand-name">DNA</span>
         </div>
     </a>
 
     <nav class="nav-links">
-        <a href="admin.html">Dashboard</a>
-        <a href="/admin/usuarios/usuarios-admin.html">Usuarios</a>
-        <a href="#">Productos</a>
+        <a href="admin.html">Home</a>
+        <a href="/admin/usuarios/index.html">Usuarios</a>
+        <a href="/admin/productos/index.html">Productos</a>
         <a href="#">Pedidos</a>
         <a href="#">Estadísticas</a>
     </nav>
@@ -45,28 +45,28 @@
         <p>Gestiona usuarios, productos y pedidos desde este panel.</p>
     </section>
 
-    <section class="admin-cards">
-        <div class="admin-card">
-            <i class="fa-solid fa-users"></i>
-            <h2>Usuarios</h2>
-            <p>Ver, editar o eliminar usuarios registrados.</p>
-            <button onclick="window.location.href='/admin/usuarios/usuarios-admin.html'">Ir a Usuarios</button>
-        </div>
+	<section class="admin-cards">
+	    <div class="admin-card">
+	        <i class="fa-solid fa-users"></i>
+	        <h2>Usuarios</h2>
+	        <p>Ver, editar o eliminar usuarios registrados.</p>
+	        <button onclick="window.location.href='/admin/usuarios/index.html'">Ir a Usuarios</button>
+	    </div>
 
-        <div class="admin-card">
-            <i class="fa-solid fa-box-open"></i>
-            <h2>Productos</h2>
-            <p>Agregar, modificar o eliminar productos.</p>
-            <button>Ir a Productos</button>
-        </div>
+	    <div class="admin-card">
+	        <i class="fa-solid fa-box-open"></i>
+	        <h2>Productos</h2>
+	        <p>Agregar, modificar o eliminar productos.</p>
+	        <button onclick="window.location.href='/admin/productos/index.html'">Ir a Productos</button>
+	    </div>
 
-        <div class="admin-card">
-            <i class="fa-solid fa-truck"></i>
-            <h2>Pedidos</h2>
-            <p>Ver y actualizar el estado de los pedidos.</p>
-            <button>Ir a Pedidos</button>
-        </div>
-    </section>
+	    <div class="admin-card">
+	        <i class="fa-solid fa-truck"></i>
+	        <h2>Pedidos</h2>
+	        <p>Ver y actualizar el estado de los pedidos.</p>
+	        <button onclick="window.location.href='/admin/pedidos/index.html'">Ir a Pedidos</button>
+	    </div>
+	</section>
 </main>
 
 <script>
