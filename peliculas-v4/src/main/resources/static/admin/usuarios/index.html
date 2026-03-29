@@ -1,0 +1,56 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Usuarios</title>
+<link rel="stylesheet" href="css/index.css">
+</head>
+<header class="navbar">
+  <a href="home.html" class="logo-link">
+    <div class="logo-container">
+      <div class="logo-circle">
+        <img src="/images/logo.png" class="logo-image">
+      </div>
+      <span class="brand-name">DNA</span>
+    </div>
+  </a>
+
+  <nav class="nav-links">
+    <a href="admin.html">Dashboard</a>
+    <a href="index.html">Usuarios</a>
+    <a href="#">Productos</a>
+    <a href="#">Pedidos</a>
+    <a href="#">Estadísticas</a>
+  </nav>
+
+  <div class="nav-icons">
+    <button id="logoutBtn" class="btn-logout">Salir</button>
+  </div>
+</header>
+<body>
+
+<h1>Usuarios</h1>
+
+<a href="create.html">
+  <button>Crear Usuario</button>
+</a>
+
+<table id="tablaUsuarios">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Email</th>
+      <th>Rol</th>
+      <th>Teléfono</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<script src="js/index.js"></script>
+<script src="js/destroy.js"></script>
+</body>
+</html>

@@ -1,0 +1,348 @@
+/* RESET */
+* {
+    box-sizing: border-box;
+}
+
+/* BODY */
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    padding-top: 70px; /* espacio para navbar fijo */
+    background: #fdf6ed;
+}
+
+/* NAVBAR */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: #e9e6e3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 60px;
+    z-index: 200;
+}
+
+/* LOGO */
+.logo-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.logo-circle {
+    width: 50px;
+    height: 50px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-image {
+    width: 40px;
+}
+
+.brand-name {
+    font-size: 26px;
+    font-weight: bold;
+    color: #5c4432;
+}
+
+/* NAV LINKS */
+.nav-links a {
+    margin: 0 15px;
+    text-decoration: none;
+    color: #333;
+    font-size: 17px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.nav-links a:hover {
+    color: #ae4010;
+}
+
+/* ICONOS + LOGOUT */
+.nav-icons {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: #5c4432;
+    font-size: 22px;
+}
+
+.nav-icons i {
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.nav-icons i:hover {
+    color: #ae4010;
+    transform: scale(1.1);
+}
+
+/* BOTÓN LOGOUT */
+.btn-logout {
+    background: #c49a6c;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-logout:hover {
+    background: #a67c52;
+}
+/* RESET */
+* {
+    box-sizing: border-box;
+}
+
+/* BODY */
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    padding-top: 65px; /* espacio para header fijo */
+    background: #fdf6ed;
+}
+
+/* HEADER */
+.topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #e9e6e3;
+    padding: 10px 60px;
+    z-index: 200;
+}
+
+/* LOGO */
+.logo-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.logo-container img {
+    width: 48px;
+}
+
+.logo-container span {
+    font-size: 26px;
+    font-weight: bold;
+    color: #5c4432;
+}
+
+/* MENU */
+.menu a {
+    margin: 0 20px;
+    text-decoration: none;
+    color: #333;
+    font-size: 18px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.menu a:hover {
+    color: #ae4010;
+}
+
+/* ICONOS */
+.icons {
+    display: flex;
+    gap: 18px;
+    font-size: 28px;
+    color: #5c4432;
+    cursor: pointer;
+}
+
+.icons span {
+    display: flex;
+    align-items: center;
+    transition: 0.2s;
+}
+
+.icons span:hover {
+    color: #ae4010;
+    transform: scale(1.1);
+}
+
+/* MINI MENU USUARIO */
+.person-menu-wrapper {
+    position: relative;
+}
+
+.person-menu {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: none;
+    min-width: 150px;
+    flex-direction: column;
+    z-index: 100;
+}
+
+.person-menu a {
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+}
+
+.person-menu a:hover {
+    background: #f5f5f5;
+    color: #ae4010;
+}
+
+.person-menu.show {
+    display: flex;
+}
+
+/* CONTENEDOR */
+.admin-container {
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* TÍTULO */
+.title {
+    color: #4a3728;
+    margin-bottom: 20px;
+}
+
+/* FORMULARIO */
+.form-horizontal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.form-horizontal input,
+.form-horizontal select {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    flex: 1 1 150px;
+}
+
+/* BOTONES */
+.btn-main {
+    background: #c49a6c;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-main:hover {
+    background: #a67c52;
+}
+
+.btn-cancel {
+    background: #ccc;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+/* MENSAJES */
+.error {
+    color: red;
+    margin-bottom: 10px;
+}
+
+.success {
+    color: green;
+    margin-bottom: 10px;
+}
+
+/* TABLA */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: visible;
+}
+
+th {
+    background: #c49a6c;
+    color: white;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+}
+
+tr:nth-child(even) {
+    background: #f5f5f5;
+}
+
+/* BOTONES TABLA */
+table button {
+    padding: 5px 10px;
+    margin: 2px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+table button:hover {
+    opacity: 0.8;
+}
+.form-horizontal,
+.admin-container {
+    overflow: visible !important;
+}
+
+select {
+    position: relative;
+    z-index: 9999;
+}
+
+.form-horizontal {
+    display: block;
+}
+.navbar {
+    position: fixed;
+    z-index: 100;
+}
+
+.admin-container {
+    position: relative;
+    z-index: 200;
+}

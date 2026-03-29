@@ -80,6 +80,14 @@ public class UserAdminController {
         try (Connection con = ds.getConnection()) {
             UserRepository repo = new UserRepository(con);
             user.setId(id);
+            if (user.getPasswordHash() != null && !user.getPasswordHash().isEmpty()) {
+                String hashed = encoder.encode(user.getPasswordHash());
+                user.setPasswordHash(hashed);
+            } else {
+                // Opcional: mantener la contraseña antigua si no envían nueva
+                User oldUser = repo.find(id);
+                user.setPasswordHash(oldUser.getPasswordHash());
+            }
             repo.update(user);
             return user;
         } catch (SQLException e) {
