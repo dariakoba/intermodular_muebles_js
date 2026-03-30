@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Editar Usuario</title>
+<link rel="stylesheet" href="css/edit.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="topbar">
+  <a href="home.html" class="logo">
+    <img src="/images/logo.png" alt="Logo">
+    DNA
+  </a>
+
+  <nav class="menu">
+    <a href="../../adminhome.html">Home</a>
+    <a href="index.html">Usuarios</a>
+    <a href="../productos/index.html">Productos</a>
+    <a href="#">Pedidos</a>
+    <a href="#">Estadísticas</a>
+  </nav>
+
+  <div class="icons person-menu-wrapper">
+    <span class="material-symbols-outlined">account_circle</span>
+    <div class="person-menu">
+      <a href="#">Perfil</a>
+      <a href="#" id="logoutBtn">Salir</a>
+    </div>
+  </div>
+</header>
+
+
+<!-- CONTENIDO -->
+<main class="edit-container">
+
+<h1 class="title">Editar Usuario</h1>
+
+<form id="form-usuario" class="edit-form">
+
+  <input type="hidden" id="userId">
+
+  <label>Nombre</label>
+  <input id="nombre" required>
+
+  <label>Apellidos</label>
+  <input id="apellidos" required>
+
+  <label>Email</label>
+  <input id="email" type="email" required>
+
+  <label>Teléfono</label>
+  <input id="telefono">
+
+  <label>Dirección</label>
+  <input id="direccion">
+
+  <label>Rol</label>
+  <select id="rol">
+    <option value="cliente">Cliente</option>
+    <option value="admin">Admin</option>
+  </select>
+  
+  <label>Estado</label>
+  <select id="estado">
+    <option value="activo">Activo</option>
+    <option value="inactivo">Inactivo</option>
+  </select>
+
+  <label>Puntos (solo cliente)</label>
+  <input id="puntos" type="number">
+
+  <label>Salario (solo admin)</label>
+  <input id="salario" type="number">
+
+  <label>Contraseña</label>
+  <input id="password" type="password" placeholder="Dejar vacío para mantener contraseña">
+
+  <!-- BOTONES -->
+  <div class="buttons">
+    <button type="submit" class="btn-main">Actualizar</button>
+
+    <button type="button" onclick="window.location.href='index.html'" class="btn-cancel">
+      Cancelar
+    </button>
+  </div>
+
+</form>
+
+</main>
+
+<script src="js/edit.js"></script>
+</body>
+</html>
