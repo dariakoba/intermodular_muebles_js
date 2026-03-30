@@ -1,0 +1,205 @@
+/* --- RESET --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* --- BODY --- */
+body {
+  font-family: 'Lato', sans-serif;
+  background: #fdfbf6;
+  color: #222;
+  min-height: 100vh;
+  padding-top: 64px; /* espacio para navbar fija */
+}
+
+/* --- HEADER / NAVBAR --- */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  height: 64px;
+  background: linear-gradient(90deg, #1a1a1a, #2c2c2c);
+  position: fixed; /* siempre arriba */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* --- LOGO --- */
+.logo-link, .logo {
+  display: flex;           
+  align-items: center;     
+  gap: 10px;               
+  color: #fff;
+  text-decoration: none;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.logo-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.logo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* --- NAV LINKS --- */
+.nav-links {
+  display: flex;
+  gap: 28px;
+}
+.nav-links a {
+  color: #ddd;
+  text-decoration: none;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+.nav-links a:hover {
+  color: #1abc9c;
+  transform: translateY(-2px);
+}
+
+/* --- ICONS --- */
+.nav-icons {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.nav-icons i {
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.nav-icons i:hover { 
+  color: #1abc9c; 
+  transform: scale(1.2);
+}
+
+/* --- LOGOUT BUTTON --- */
+.btn-logout {
+  background: #c0392b;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-weight: 700;
+  cursor: pointer;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+}
+.btn-logout:hover {
+  background: #a93226;
+  transform: translateY(-1px);
+}
+
+/* --- MAIN ADMIN CONTAINER --- */
+.admin-container {
+  max-width: 1200px;
+  margin: 48px auto;
+  padding: 0 24px;
+}
+
+/* --- WELCOME SECTION --- */
+.admin-welcome h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 8px;
+}
+.admin-welcome p {
+  font-size: 1rem;
+  color: #555;
+}
+
+/* --- CARDS DASHBOARD --- */
+.admin-cards {
+  display: flex;
+  gap: 24px;
+  margin-top: 32px;
+  flex-wrap: wrap;
+}
+
+.admin-card {
+  background: #fff;
+  border-radius: 12px;
+  flex: 1 1 280px;
+  padding: 24px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.admin-card i {
+  font-size: 2.4rem;
+  color: #1abc9c;
+}
+
+.admin-card h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.admin-card p {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.admin-card button {
+  align-self: stretch;
+  padding: 10px 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: 6px;
+  border: none;
+  background: #1abc9c;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.admin-card button:hover {
+  background: #16a085;
+  transform: translateY(-2px);
+}
+
+.admin-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 992px) {
+  .admin-cards {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .navbar {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 12px 24px;
+  }
+  .nav-links {
+    gap: 16px;
+    margin-top: 8px;
+  }
+}

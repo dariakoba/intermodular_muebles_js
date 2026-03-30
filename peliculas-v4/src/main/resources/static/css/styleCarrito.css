@@ -1,3 +1,6 @@
+/* ══════════════════════════════════════════════
+   1. RESET Y CONFIGURACIÓN BASE
+   ══════════════════════════════════════════════ */
 * {
     margin: 0;
     padding: 0;
@@ -5,25 +8,26 @@
 }
 
 body {
-    margin: 0;
-    padding-top: 80px; /* Ajusta esto según el alto de tu navbar */
-    background-color: #f5f5dc; 
-    display: block; /* Asegúrate de que no sea flex */
+    background-color: #d9ccbc; /* Fondo unificado */
+    font-family: Arial, Helvetica, sans-serif;
+    padding-top: 85px; /* Espacio para el navbar fixed */
 }
-/* --- NAVBAR (TOPBAR) --- */
+
+/* ══════════════════════════════════════════════
+   2. NAVBAR UNIFICADO (TOPBAR)
+   ══════════════════════════════════════════════ */
 .topbar {
     position: fixed;
-    top: 0;
+    top: 0; 
     left: 0;
     width: 100%;
+    z-index: 2000;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
+    background: #e9e6e3;
     padding: 10px 60px;
-    background-color: #e9e6e3;
-    height: 70px;
-    box-sizing: border-box;
-    z-index: 2000; /* Siempre por encima de todo */
+    height: 65px; /* Altura idéntica a detalle producto */
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
@@ -32,62 +36,80 @@ body {
     align-items: center;
     gap: 10px;
     font-weight: bold;
-    font-size: 24px;
+    font-size: 26px;
     color: #5c4432;
+    text-decoration: none;
 }
 
-.logo img { height: 45px; width: auto; }
+.logo img { 
+    height: 48px; 
+    width: auto; 
+}
 
-.menu { display: flex; gap: 30px; }
+/* MENÚ: Espaciado corregido para que no estén juntos */
+.menu { 
+    display: flex; 
+    gap: 30px; /* Espacio amplio idéntico a productosShow */
+}
 
 .menu a {
     text-decoration: none;
-    color: #4a3728;
-    font-size: 18px;
+    color: #333;
+    font-size: 20px;
     font-weight: 600;
-    transition: 0.3s;
+    transition: 0.2s;
 }
 
-.menu a:hover { color: #ae4010; }
+.menu a:hover { 
+    color: #ae4010; 
+}
 
-.icons { display: flex; align-items: center; gap: 20px; }
-
-.icon-link, #person-icon {
-    text-decoration: none;
-    color: #5c4432;
-    cursor: pointer;
+.icons {
     display: flex;
     align-items: center;
-    transition: 0.3s;
+    gap: 18px;
+    font-size: 32px;
+    color: #5c4432;
 }
 
-.icon-link:hover { color: #ae4010; transform: scale(1.1); }
+.icons a {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    transition: 0.2s;
+}
 
-/* --- CONTENEDOR CARRITO (LAYOUT 2 COLUMNAS) --- */
+.icons span:hover { 
+    color: #ae4010; 
+    transform: scale(1.15); 
+}
+
+/* ══════════════════════════════════════════════
+   3. LAYOUT DEL CARRITO (2 COLUMNAS)
+   ══════════════════════════════════════════════ */
 .carrito-container {
     display: flex;
     gap: 30px;
     max-width: 1100px;
-    margin: 0 auto; /* Quitamos el margen superior manual */
+    margin: 0 auto;
     padding: 20px;
     align-items: flex-start;
-    /* BORRA cualquier línea que diga height o min-height aquí */
 }
+
 h1 {
-    margin: 0;
-    padding: 10px 0;
-    font-size: 24px;
-    text-align: left;
+    margin-bottom: 20px;
+    font-size: 28px;
+    color: #5c4432;
     width: 100%;
 }
 
 /* LISTA DE PRODUCTOS (IZQUIERDA) */
 .productos-lista {
-    flex: 2; /* Ocupa más espacio */
+    flex: 2;
     width: 100%;
 }
 
-/* CADA ITEM DEL CARRITO */
 .carrito-item {
     display: flex;
     justify-content: space-between;
@@ -99,7 +121,11 @@ h1 {
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
-.producto-info { display: flex; align-items: center; gap: 15px; }
+.producto-info { 
+    display: flex; 
+    align-items: center; 
+    gap: 15px; 
+}
 
 .producto-info img {
     width: 80px;
@@ -109,32 +135,42 @@ h1 {
 }
 
 .detalles h3 { margin: 0; font-size: 16px; color: #333; }
-.detalles p { margin: 5px 0 0 0; color: #888; font-weight: bold; }
+.detalles p { margin: 5px 0 0 0; color: #ae4010; font-weight: bold; }
 
 .btn-eliminar-item {
     background: #fff5f5;
     color: #ff4444;
     border: none;
-    padding: 12px;
+    padding: 10px 15px;
     border-radius: 8px;
     cursor: pointer;
     transition: 0.2s;
 }
 
-.btn-eliminar-item:hover { background: #ff4444; color: white; }
+.btn-eliminar-item:hover { 
+    background: #ff4444; 
+    color: white; 
+}
 
-/* --- SIDEBAR RESUMEN (DERECHA) --- */
+/* ══════════════════════════════════════════════
+   4. SIDEBAR RESUMEN (DERECHA)
+   ══════════════════════════════════════════════ */
 .resumen-lateral {
-    flex: 1; /* Ocupa menos espacio */
+    flex: 1;
     background: #ffffff;
     padding: 25px;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.05);
     position: sticky;
-    top: 100px; /* Se queda fijo al hacer scroll */
+    top: 100px;
 }
 
-.resumen-titulo { font-size: 20px; margin-bottom: 20px; font-weight: 700; color: #333; }
+.resumen-titulo { 
+    font-size: 20px; 
+    margin-bottom: 20px; 
+    font-weight: 700; 
+    color: #333; 
+}
 
 .resumen-fila {
     display: flex;
@@ -146,25 +182,33 @@ h1 {
 
 .gratis { color: #27ae60; font-weight: bold; }
 
-#precio-total { font-size: 20px; color: #000; font-weight: 800; }
+#precio-total { 
+    font-size: 22px; 
+    color: #ae4010; 
+    font-weight: 800; 
+}
 
 hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
 
-/* BOTONES RESUMEN */
 .btn-finalizar {
     width: 100%;
-    background: #000;
+    background: #ae4010;
     color: #fff;
     padding: 15px;
     border-radius: 10px;
     border: none;
     font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     cursor: pointer;
     margin-bottom: 10px;
     transition: 0.2s;
 }
 
-.btn-finalizar:hover { background: #333; transform: translateY(-2px); }
+.btn-finalizar:hover { 
+    background: #5c4432; 
+    transform: translateY(-2px); 
+}
 
 .btn-vaciar {
     width: 100%;
@@ -178,9 +222,9 @@ hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
     transition: 0.2s;
 }
 
-.btn-vaciar:hover { color: #ff4444; border-color: #ff4444; }
-
-/* --- MENÚ DE USUARIO (DROPDOWN) --- */
+/* ══════════════════════════════════════════════
+   5. DROPDOWN USUARIO
+   ══════════════════════════════════════════════ */
 .person-menu-wrapper { position: relative; }
 
 .person-menu {
@@ -193,7 +237,7 @@ hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     display: none;
     flex-direction: column;
-    min-width: 140px;
+    min-width: 150px;
     z-index: 2000;
 }
 
@@ -202,8 +246,12 @@ hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
 .person-menu a {
     padding: 12px 15px;
     text-decoration: none;
-    color: #4a3728;
+    color: #333;
     font-size: 14px;
+    border-bottom: 1px solid #eee;
 }
 
-.person-menu a:hover { background-color: #f5f5f5; color: #ae4010; }
+.person-menu a:hover { 
+    background-color: #f5f5f5; 
+    color: #ae4010; 
+}
