@@ -1,4 +1,4 @@
-
+//hola
 async function cargarProductos() {
     const response = await fetch("/api/productos");
     const productos = await response.json();

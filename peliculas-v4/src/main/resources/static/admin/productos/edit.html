@@ -1,59 +1,250 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
 <meta charset="UTF-8">
-<title>Editar película</title>
+<title>Editar Producto</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="/css/app.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Lato', sans-serif;
+  background: #fdfbf6;
+  color: #222;
+  min-height: 100vh;
+}
+
+/* --- Topbar --- */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  height: 64px;
+  background: linear-gradient(90deg, #1a1a1a, #2c2c2c);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #fff;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.logo img { height: 40px; }
+
+nav.menu { display: flex; gap: 28px; }
+
+nav.menu a {
+  color: #ddd;
+  text-decoration: none;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  transition: 0.3s;
+}
+
+nav.menu a:hover { color: #1abc9c; }
+
+.icons {
+  display: flex;
+  gap: 18px;
+  color: #fff;
+}
+
+.icons span {
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.icons span:hover { color: #1abc9c; }
+
+/* --- CONTENIDO --- */
+.admin-wrapper {
+  max-width: 900px;
+  margin: 60px auto;
+  padding: 0 24px;
+}
+
+/* CARD */
+.form-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 32px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+.form-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: #333;
+}
+
+/* FORM */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group.full {
+  grid-column: 1 / -1;
+}
+
+label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #888;
+  margin-bottom: 6px;
+}
+
+input, textarea, select {
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.95rem;
+  transition: 0.2s;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: #1abc9c;
+}
+
+/* BOTONES */
+.actions {
+  margin-top: 30px;
+  display: flex;
+  gap: 12px;
+}
+
+.btn {
+  padding: 10px 18px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  transition: 0.25s;
+}
+
+.btn-guardar {
+  background: #1abc9c;
+  color: #fff;
+}
+
+.btn-cancelar {
+  background: #e8f4f5;
+  color: #2a9aa6;
+}
+
+.btn:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
 </head>
 
 <body>
 
-<div class="container">
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="logo">
+    <img src="/images/logo.png">
+    DNA
+  </div>
 
-<h1>Editar película</h1>
+  <nav class="menu">
+    <a href="/adminhome.html">Home</a>
+    <a href="/admin/usuarios/usuarios-admin.html">Usuarios</a>
+    <a href="/admin/productos/index.html">Productos</a>
+    <a href="/contacto.html">Categorías</a>
+  </nav>
 
-<form onsubmit="guardar(event)">
-
-<div class="mb-3">
-<label class="form-label">Título</label>
-<input id="titulo" class="form-control" required>
+  <div class="icons">
+    <span class="material-symbols-outlined">shopping_cart</span>
+    <span class="material-symbols-outlined">person</span>
+  </div>
 </div>
 
-<div class="mb-3">
-<label class="form-label">Año</label>
-<input id="anyo" type="number" class="form-control" required>
+<!-- CONTENIDO -->
+<div class="admin-wrapper">
+  <div class="form-card">
+
+    <div class="form-title">Editar Producto</div>
+
+    <form>
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>Nombre</label>
+          <input type="text" id="nombre">
+        </div>
+
+        <div class="form-group">
+          <label>Categoría ID</label>
+          <input type="number" id="categoria_id">
+        </div>
+
+        <div class="form-group">
+          <label>Color</label>
+          <input type="text" id="color">
+        </div>
+
+        <div class="form-group">
+          <label>Precio (€)</label>
+          <input type="number" step="0.01" id="precio">
+        </div>
+
+        <div class="form-group">
+          <label>Stock</label>
+          <input type="number" id="stock">
+        </div>
+
+        <div class="form-group full">
+          <label>Descripción</label>
+          <textarea id="descripcion" rows="4"></textarea>
+        </div>
+
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn btn-guardar">Guardar</button>
+        <a href="/admin/productos/index.html" class="btn btn-cancelar">Cancelar</a>
+      </div>
+
+    </form>
+
+  </div>
 </div>
-
-<div class="mb-3">
-<label class="form-label">Duración</label>
-<input id="duracion" type="number" class="form-control" required>
-</div>
-
-<div class="mb-3">
-<label class="form-label">Director</label>
-<select id="director" class="form-select"></select>
-</div>
-
-<div class="mb-3">
-<label class="form-label">Sinopsis</label>
-<textarea id="sinopsis" class="form-control"></textarea>
-</div>
-
-<button class="btn btn-primary">Guardar</button>
-
-<a href="index.html" class="btn btn-secondary">
-Cancelar
-</a>
-
-</form>
-
-</div>
-
-<script src="js/edit.js"></script>
 
 </body>
 </html>
