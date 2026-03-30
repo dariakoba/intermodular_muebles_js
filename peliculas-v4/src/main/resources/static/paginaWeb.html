@@ -5,41 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DNA Mobiliario</title>
     <link rel="stylesheet" href="css/styles.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+	<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
-	<header class="navbar">
-	    <a href="index.html" class="logo-link">
-	        <div class="logo-container">
-	            <div class="logo-circle">
-	                <img src="images/logo.png" alt="DNA Logo" class="logo-image">
-	            </div>
-	            <span class="brand-name">DNA</span>
-	        </div>
-	    </a>
+	<header class="topbar">
 
-	    <nav class="nav-links">
+	    <div class="logo">
+	        <img src="images/login/logo.png" alt="logo">
+	        <span>DNA</span>
+	    </div>
+
+	    <nav class="menu">
 	        <a href="index.html">Home</a>
-	        <a href="#">Sobre nosotros</a>
+	        <a href="productos.html">Catálogo</a>
 	        <a href="productos.html">Productos</a>
 	        <a href="contacto.html">Contacto</a>
 	    </nav>
 
-	    <div class="nav-icons">
-	        <a href="carrito.html" class="icon-link">
-	            <span class="material-symbols-outlined">shopping_cart</span>
-	        </a>
+		<div class="icons">
+		            <a href="carrito.html" style="text-decoration: none; color: inherit;">
+		                <span class="material-symbols-outlined">shopping_cart</span>
+		            </a>
 
-	        <div class="person-menu-wrapper">
-	            <span id="person-icon" class="material-symbols-outlined icon-link">person</span>
-	            <div class="person-menu">
-	                <a href="#">Ver cuenta</a>
-	                <a href="#">Cerrar sesión</a>
-	            </div>
-	        </div>
+		            <div class="person-menu-wrapper">
+		                <a href="perfil.html" style="text-decoration: none; color: inherit;">
+		                    <span id="person-icon" class="material-symbols-outlined">person</span>
+		                </a>
+		                <div class="person-menu">
+		                    <a href="perfil.html">Ver cuenta</a>
+		                    <a href="logout.html">Cerrar sesión</a>
+		                </div>
+		            </div>
+		        </div>
+
 	    </div>
+
 	</header>
 
     <section class="hero" id="hero-slider">
