@@ -21,4 +21,5 @@ document.getElementById("form-usuario").addEventListener("submit", async (e) => 
   if (res.ok) {
     window.location.href = "index.html";
   }
+  
 });

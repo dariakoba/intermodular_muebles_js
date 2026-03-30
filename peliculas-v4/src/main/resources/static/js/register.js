@@ -14,7 +14,7 @@ form.addEventListener("submit", async (e) => {
     password_hash: document.getElementById("password").value
   };
 
-  console.log("Datos a enviar:", data); // 🔥 Debug: confirma que passwordHash no sea null
+  console.log("Datos a enviar:", data); 
 
   try {
     const res = await fetch("/api/register", {
