@@ -18,6 +18,7 @@ function render(productos) {
     tbody.innerHTML = productos.map(p => `
         <tr>
             <td><input type="checkbox" class="check-fila" data-id="${p.id_producto}"></td>
+			<td>${e(p.id_producto)}</td>
             <td>${e(p.nombre)}</td>
             <td>${e(p.color)}</td>
             <td>${e(p.precio)}€</td>
