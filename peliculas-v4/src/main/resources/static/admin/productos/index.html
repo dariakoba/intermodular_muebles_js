@@ -7,270 +7,242 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  body {
-    font-family: 'Lato', sans-serif;
-    background: #fdfbf6;
-    color: #222;
-    min-height: 100vh;
-  }
+body {
+  font-family: 'Lato', sans-serif;
+  background: #fdfbf6;
+  color: #222;
+  min-height: 100vh;
+}
 
-  /* --- Topbar --- */
-  .topbar {
+/* --- Topbar --- */
+header.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  height: 64px;
+  background: linear-gradient(90deg, #1a1a1a, #2c2c2c);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #fff;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+.logo img { height: 40px; object-fit: contain; }
+
+nav.menu { display: flex; gap: 28px; }
+nav.menu a {
+  color: #ddd;
+  text-decoration: none;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+nav.menu a:hover { color: #1abc9c; transform: translateY(-2px); }
+
+.icons { display: flex; align-items: center; gap: 18px; color: #fff; }
+.icons .material-symbols-outlined {
+  cursor: pointer;
+  font-size: 24px;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+.icons .material-symbols-outlined:hover { 
+  color: #1abc9c; 
+  transform: scale(1.2);
+}
+
+.person-menu-wrapper { position: relative; }
+.person-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 44px;
+  background: #fff;
+  border-radius: 8px;
+  min-width: 160px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  overflow: hidden;
+  z-index: 50;
+}
+.person-menu-wrapper:hover .person-menu { display: block; }
+.person-menu a {
+  display: block;
+  padding: 12px 18px;
+  font-size: 0.88rem;
+  color: #333;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.person-menu a:hover { background: #f0f0f0; }
+
+/* --- Main wrapper --- */
+main.admin-wrapper {
+  max-width: 1200px;
+  margin: 48px auto;
+  padding: 0 24px;
+}
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+
+.admin-header h1 {
+  font-family: 'Lato', sans-serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #333;
+}
+
+.admin-actions { display: flex; gap: 12px; }
+.btn-nuevo, #btn-eliminar-seleccionados {
+  display: inline-block;
+  padding: 10px 20px;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+}
+.btn-nuevo { background: #1abc9c; color: #fff; box-shadow: 0 4px 12px rgba(26,188,156,0.3); text-decoration:none; }
+.btn-nuevo:hover { background: #16a085; transform: translateY(-2px); }
+#btn-eliminar-seleccionados { background: #c0392b; color: #fff; box-shadow: 0 4px 12px rgba(192,57,43,0.3); }
+#btn-eliminar-seleccionados:hover { background: #a93226; transform: translateY(-2px); }
+
+.tabla-wrapper {
+  background: #fff;
+  border-radius: 12px;
+  overflow: auto;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  transition: transform 0.2s;
+  margin-top: 12px;
+}
+.tabla-wrapper:hover { transform: translateY(-2px); }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+thead th {
+  padding: 14px 12px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-align: left;
+  background: #1a1a1a;
+  color: #fff;
+  border-bottom: 2px solid #1abc9c;
+  
+}
+th:first-child, td:first-child { width: 40px; text-align: center; }
+
+tbody tr {
+  border-bottom: 1px solid #f0ede8;
+  transition: background 0.25s;
+  cursor: pointer;
+}
+
+thead th:last-child {
+  width: 180px; /* o 200px si quieres más espacio */
+}
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: #f7f7f7; }
+
+tbody td {
+  padding: 12px 10px;
+  font-size: 0.94rem;
+  color: #333;
+  vertical-align: middle;
+}
+
+/* --- Botones Ver, Editar, Borrar más compactos --- */
+.acciones {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 40px;
-    height: 64px;
-    background: linear-gradient(90deg, #1a1a1a, #2c2c2c);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-  }
+    gap: 6px;       /* menos espacio entre botones */
+    justify-content: center; /* centrarlos en la celda */
+}
 
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    color: #fff;
-    font-family: 'Playfair Display', serif;
-    font-size: 1.6rem;
+.btn-ver, .btn-editar, .btn-eliminar {
+    padding: 4px 10px;    /* menos padding */
+    font-size: 0.75rem;   /* letra más pequeña */
     font-weight: 700;
-    letter-spacing: 2px;
-  }
-
-  .logo img { height: 40px; object-fit: contain; }
-
-  nav.menu { display: flex; gap: 28px; }
-
-  nav.menu a {
-    color: #ddd;
-    text-decoration: none;
-    font-size: 0.9rem;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
-    transition: all 0.3s ease;
-  }
-
-  nav.menu a:hover {
-    color: #1abc9c;
-    transform: translateY(-2px);
-  }
-
-  .icons { display: flex; align-items: center; gap: 18px; color: #fff; }
-
-  .icons .material-symbols-outlined {
-    cursor: pointer;
-    font-size: 24px;
-    transition: color 0.3s ease, transform 0.2s ease;
-  }
-
-  .icons .material-symbols-outlined:hover { 
-    color: #1abc9c; 
-    transform: scale(1.2);
-  }
-
-  .person-menu-wrapper { position: relative; }
-
-  .person-menu {
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 44px;
-    background: #fff;
-    border-radius: 8px;
-    min-width: 160px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-    overflow: hidden;
-    z-index: 50;
-  }
-
-  .person-menu-wrapper:hover .person-menu { display: block; }
-
-  .person-menu a {
-    display: block;
-    padding: 12px 18px;
-    font-size: 0.88rem;
-    color: #333;
-    text-decoration: none;
-    transition: background 0.2s;
-  }
-
-  .person-menu a:hover { background: #f0f0f0; }
-
-  /* --- Admin Wrapper --- */
-  .admin-wrapper {
-    max-width: 1200px;
-    margin: 48px auto;
-    padding: 0 24px;
-  }
-
-  .admin-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-    gap: 12px;
-  }
-
-  .admin-header h1 {
-	font-family: 'Lato', sans-serif; /* limpia y moderna */
-    font-size: 2.4rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    color: #333;
-  }
-
-  .admin-actions {
-    display: flex;
-    gap: 12px;
-  }
-
-  .btn-nuevo, #btn-eliminar-seleccionados {
-    display: inline-block;
-    padding: 10px 20px;
-    font-family: 'Lato', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 700;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-    border-radius: 6px;
-    cursor: pointer;
-    border: none;
-    transition: all 0.3s ease;
-  }
-
-  .btn-nuevo {	
-	text-decoration:none;
-    background: #1abc9c;
-    color: #fff;
-    box-shadow: 0 4px 12px rgba(26, 188, 156, 0.3);
-  }
-  .btn-nuevo:hover { background: #16a085; transform: translateY(-2px); }
-
-  #btn-eliminar-seleccionados {
-    background: #c0392b;
-    color: #fff;
-    box-shadow: 0 4px 12px rgba(192, 57, 43, 0.3);
-  }
-  #btn-eliminar-seleccionados:hover { background: #a93226; transform: translateY(-2px); }
-
-  /* --- Table --- */
-  .tabla-wrapper {
-    background: #fff;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-    transition: transform 0.2s;
-  }
-
-  .tabla-wrapper:hover { transform: translateY(-2px); }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed; 
-  }
-
-  thead { display: table-header-group; }
-
-  thead th {
-    padding: 14px 12px;
-    font-size: 0.88rem;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    text-align: left;
-    background: #1a1a1a;
-    color: #fff;
-    border-bottom: 2px solid #1abc9c;
-  }
-
-  /* Columna de checkbox más estrecha */
-  th:first-child, td:first-child {
-    width: 40px;
-    text-align: center;
-  }
-
-  tbody tr {
-    border-bottom: 1px solid #f0ede8;
-    transition: background 0.25s;
-    cursor: pointer;
-  }
-
-  tbody tr:last-child { border-bottom: none; }
-  tbody tr:hover { background: #f7f7f7; }
-
-  tbody td {
-    padding: 12px 10px;
-    font-size: 0.94rem;
-    color: #333;
-    vertical-align: middle;
-  }
-
-  .acciones { display: flex; gap: 10px; }
-
-  .btn-ver, .btn-editar, .btn-eliminar {
-    padding: 6px 14px;
-    font-size: 0.82rem;
-    font-weight: 700;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    border-radius: 6px;
+    border-radius: 5px;
     cursor: pointer;
     text-decoration: none;
     display: inline-block;
-    transition: all 0.25s;
+    transition: all 0.2s;
     border: none;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  }
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
 
-  .btn-ver      { background: #e8f4f5; color: #2a9aa6; }
-  .btn-editar   { background: #fef3e2; color: #c07a00; }
-  .btn-eliminar { background: #fdecea; color: #c0392b; }
+.btn-ver      { background: #e8f4f5; color: #2a9aa6; }
+.btn-editar   { background: #fef3e2; color: #c07a00; }
+.btn-eliminar { background: #fdecea; color: #c0392b; }
 
-  .btn-ver:hover, .btn-editar:hover, .btn-eliminar:hover { 
+.btn-ver:hover, .btn-editar:hover, .btn-eliminar:hover { 
     opacity: 0.85; 
     transform: translateY(-1px);
-  }
-
-  /* --- Responsive --- */
-  @media (max-width: 992px) {
-    .topbar { flex-direction: column; padding: 12px 24px; height: auto; }
-    nav.menu { gap: 18px; flex-wrap: wrap; margin-top: 8px; }
-    .admin-header { flex-direction: column; align-items: flex-start; gap: 12px; }
-    .admin-actions { flex-direction: column; width: 100%; gap: 8px; }
-  }
+}
+/* --- Responsive --- */
+@media (max-width: 992px) {
+  header.topbar { flex-direction: column; padding: 12px 24px; height: auto; }
+  nav.menu { gap: 18px; flex-wrap: wrap; margin-top: 8px; }
+  .admin-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .admin-actions { flex-direction: column; width: 100%; gap: 8px; }
+}
 </style>
 </head>
 <body>
 
-<div class="topbar">
+<header class="topbar">
   <div class="logo">
     <img src="/images/logo.png" alt="logo">
     DNA
   </div>
   <nav class="menu">
     <a href="/adminhome.html">Home</a>
-    <a href="/admin/usuarios/usuarios-admin.html">Usuarios</a>
+    <a href="/admin/usuarios/index.html">Usuarios</a>
     <a href="/admin/productos/index.html">Productos</a>
     <a href="/admin/categorias/index.html">Categorías</a>
   </nav>
   <div class="icons">
     <span class="material-symbols-outlined">shopping_cart</span>
     <div class="person-menu-wrapper">
-      <span id="person-icon" class="material-symbols-outlined">person</span>
+      <span class="material-symbols-outlined">person</span>
       <div class="person-menu">
         <a href="#">Ver cuenta</a>
         <a href="#">Cerrar sesión</a>
       </div>
     </div>
   </div>
-</div>
+</header>
 
-<div class="admin-wrapper">
+<main class="admin-wrapper">
   <div class="admin-header">
     <h1>Productos</h1>
     <div class="admin-actions">
@@ -284,7 +256,7 @@
       <thead>
         <tr>
           <th><input type="checkbox" id="check-all"></th>
-		  <th>id_producto</th>
+          <th>ID</th>
           <th>Nombre</th>
           <th>Color</th>
           <th>Precio</th>
@@ -293,10 +265,12 @@
           <th>Acciones</th>
         </tr>
       </thead>
-      <tbody></tbody>
+      <tbody>
+        <!-- Aquí tu JS va a renderizar las filas -->
+      </tbody>
     </table>
   </div>
-</div>
+</main>
 
 <script type="module" src="js/index.js"></script>
 </body>
