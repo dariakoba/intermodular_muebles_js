@@ -1,108 +1,66 @@
-// Simulación de productos 
-let carrito = JSON.parse(localStorage.getItem('dna-carrito')) || [];
+// --- 1. CONFIGURACIÓN DE IDS (Ajustados a tu HTML) ---
+// Asegúrate de que en tu carrito.html existan estos IDs
+const contenedorCarrito = document.getElementById('carrito-contenido') || document.getElementById('lista-carrito');
+const totalHTML = document.getElementById('precio-total') || document.getElementById('total-precio');
 
-const contenedor = document.getElementById('carrito-contenido');
-const resumen = document.getElementById('carrito-resumen');
-const totalHTML = document.getElementById('precio-total');
+// --- 2. GESTIÓN DEL CARRITO (Lectura de la memoria) ---
+function obtenerCarrito() {
+    // Usamos "carrito" que es donde se guardan tus sofás y mesas
+    return JSON.parse(localStorage.getItem('carrito')) || [];
+}
 
 function renderizarCarrito() {
-    contenedor.innerHTML = '';
-
+    if (!contenedorCarrito) return;
+    const carrito = obtenerCarrito();
+    
     if (carrito.length === 0) {
-        contenedor.innerHTML = `
-            <div class="carrito-vacio">
-                <p>Tu carrito está actualmente vacío.</p>
-                <a href="home.html" class="btn-main" style="margin-top:20px; display:inline-block;">Volver a la tienda</a>
-            </div>
-        `;
-        resumen.classList.add('oculto');
-    } else {
-        let total = 0;
-        resumen.classList.remove('oculto');
-
-        carrito.forEach((prod, index) => {
-            total += prod.precio;
-            contenedor.innerHTML += `
-                <div class="item-carrito">
-                    <img src="${prod.imagen}">
-                    <div class="item-info">
-                        <h3>${prod.nombre}</h3>
-                        <p>${prod.precio.toFixed(2)}€</p>
-                    </div>
-                    <button class="btn-eliminar" onclick="eliminarDelCarrito(${index})">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </div>
-            `;
-        });
-        totalHTML.innerText = total.toFixed(2) + "€";
-    }
-}
-
-function eliminarDelCarrito(index) {
-    carrito.splice(index, 1);
-    localStorage.setItem('dna-carrito', JSON.stringify(carrito));
-    renderizarCarrito();
-}
-
-function vaciarCarrito() {
-    carrito = [];
-    localStorage.removeItem('dna-carrito');
-    renderizarCarrito();
-}
-
-renderizarCarrito();
-
-function renderizarCarrito() {
-    contenedor.innerHTML = '';
-
-    if (carrito.length === 0) {
-        contenedor.innerHTML = `...`;
-     
-        if (resumen) resumen.classList.add('oculto'); 
-    } else {
-        let total = 0;
-        
-        if (resumen) resumen.classList.remove('oculto');
-      
-    }
-}
-
-function renderizarCarrito() {
-    const contenedor = document.getElementById('carrito-contenido');
-    const resumen = document.getElementById('carrito-resumen');
-    const totalHTML = document.getElementById('precio-total');
-
-    // 1. Verificación de seguridad
-    if (!contenedor) {
-        console.error("No se encontró el contenedor 'carrito-contenido'");
+        contenedorCarrito.innerHTML = `<p class="vacio">Tu carrito está vacío.</p>`;
+        if (totalHTML) totalHTML.innerText = "0.00€";
         return;
     }
 
-    let carrito = JSON.parse(localStorage.getItem('dna-carrito')) || [];
-    contenedor.innerHTML = '';
+    let total = 0;
 
-    if (carrito.length === 0) {
-        contenedor.innerHTML = `<p>Tu carrito está vacío.</p>`;
-        if (resumen) resumen.style.display = 'none';
-    } else {
-        if (resumen) resumen.style.display = 'block';
-        let total = 0;
-
-        carrito.forEach((prod, index) => {
-            total += prod.precio;
-            contenedor.innerHTML += `
-                <div class="item-carrito" style="border: 1px solid #ccc; margin: 10px; padding: 10px; display: flex; align-items: center; gap: 20px;">
-                    <img src="${prod.image || prod.imagen}" width="100">
-                    <div>
-                        <h3>${prod.nombre}</h3>
-                        <p>${prod.precio}€</p>
-                        <button onclick="eliminarDelCarrito(${index})">Eliminar</button>
-                    </div>
-                </div>
-            `;
-        });
+    contenedorCarrito.innerHTML = carrito.map((prod, index) => {
+        // Calculamos el subtotal (precio * cantidad)
+        const subtotal = prod.precio * (prod.cantidad || 1);
+        total += subtotal;
         
-        if (totalHTML) totalHTML.innerText = total.toFixed(2);
+        return `
+            <div class="carrito-item" style="display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px solid #eee; padding: 10px;">
+                <div class="producto-info">
+                    <h3>${prod.nombre} (x${prod.cantidad || 1})</h3>
+                    <p>${prod.precio}€ c/u</p>
+                </div>
+                <div style="text-align: right;">
+                    <p><b>${subtotal.toFixed(2)}€</b></p>
+                    <button onclick="eliminarDelCarrito(${index})" style="color: red; cursor: pointer; border: none; background: none;">
+                        🗑️ Borrar
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    if (totalHTML) totalHTML.innerText = total.toFixed(2) + "€";
+}
+
+// --- 3. ACCIONES ---
+function eliminarDelCarrito(index) {
+    let carrito = obtenerCarrito();
+    carrito.splice(index, 1); // Quitamos el producto
+    localStorage.setItem('carrito', JSON.stringify(carrito));
+    renderizarCarrito(); // Refrescamos la vista
+}
+
+function vaciarCarrito() {
+    if (confirm("¿Quieres vaciar todo el carrito?")) {
+        localStorage.removeItem('carrito');
+        renderizarCarrito();
     }
 }
+
+// --- 4. INICIO ---
+document.addEventListener('DOMContentLoaded', () => {
+    renderizarCarrito();
+});
