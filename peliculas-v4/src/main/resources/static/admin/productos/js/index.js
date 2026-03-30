@@ -14,10 +14,12 @@ app.run(async () => {
 });
 
 function render(productos) {
+	console.log(productos);
     const tbody = document.querySelector("#tabla-productos tbody");
     tbody.innerHTML = productos.map(p => `
         <tr>
             <td><input type="checkbox" class="check-fila" data-id="${p.id_producto}"></td>
+			<td>${e(p.id_producto)}</td>
             <td>${e(p.nombre)}</td>
             <td>${e(p.color)}</td>
             <td>${e(p.precio)}€</td>
@@ -26,15 +28,34 @@ function render(productos) {
             <td class="acciones">
                 <a href="show.html?id=${p.id_producto}" class="btn-ver">Ver</a>
                 <a href="edit.html?id=${p.id_producto}" class="btn-editar">Editar</a>
-             
+				
+				<button class="btn-eliminar" onclick="borrarProducto(${p.id_producto})">
+				     Eliminar
+				 </button>
             </td>
         </tr>
     `).join("");
 }
 
+async function borrarProducto(id) {
+    if (!confirm("¿Seguro que quieres eliminar este producto?")) return;
+
+    try {
+        await api.delete(`/api/admin/productos/${id}`);
+
+        // Recargar lista completa
+        const productos = await api.get("/api/admin/productos");
+        render(productos);
+
+    } catch (err) {
+        console.error(err);
+        alert("Error al eliminar producto");
+    }
+}
+
 function bindEvents() {
     const tabla = document.getElementById("tabla-productos");
-    bind(tabla, "click", onAction);
+    //bind(tabla, "click", onAction);
 
     // Seleccionar todo
     document.getElementById("check-all").addEventListener("change", (ev) => {
@@ -70,6 +91,7 @@ function bindEvents() {
     });
 }
 
+/*
 async function onAction(e) {
     const el = e.target.closest("[data-action]");
     if (!el) return;
@@ -83,3 +105,5 @@ async function onAction(e) {
         el.closest("tr").remove();
     }
 }
+*/
+window.borrarProducto = borrarProducto;
