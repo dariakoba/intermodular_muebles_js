@@ -37,7 +37,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const user = await meRes.json();
 
-            // Guardar usuario en localStorage por si lo necesitas en otras páginas
             localStorage.setItem("user", JSON.stringify(user));
 
             // 🔹 Paso 3: redirigir según rol
@@ -54,12 +53,13 @@ document.addEventListener("DOMContentLoaded", () => {
 			    .trim();
 
 			console.log("ROL NORMALIZADO:", rol);
-
+			
 			if (rol === "admin") {
 			    window.location.href = "adminhome.html";
 			} else {
 			    window.location.href = "index.html";
 			}
+			
         } catch (err) {
             console.error(err);
             // Mostrar mensaje de error
