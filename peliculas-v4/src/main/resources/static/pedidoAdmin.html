@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel Admin - Pedidos</title>
+    <link rel="stylesheet" href="css/app.css">
+    <style>
+        .admin-wrapper { max-width: 1200px; margin: 100px auto; padding: 20px; }
+        .tabla-admin { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .tabla-admin th, .tabla-admin td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+        .tabla-admin th { background-color: #5c4432; color: white; }
+        .pago-badge { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+        .pago-si { background: #d4edda; color: #155724; }
+        .pago-no { background: #f8d7da; color: #721c24; }
+        .btn-delete { color: #ff4444; cursor: pointer; border: none; background: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="admin-wrapper">
+        <h1>Gestión de Pedidos (Panel Admin)</h1>
+        <table class="tabla-admin">
+            <thead>
+                <tr>
+                    <th>ID Pedido</th>
+                    <th>Fecha</th>
+                    <th>Total</th>
+                    <th>Método</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-pedidos-body">
+                </tbody>
+        </table>
+    </div>
+
+    <script src="js/admin_pedidos.js"></script>
+</body>
+</html>

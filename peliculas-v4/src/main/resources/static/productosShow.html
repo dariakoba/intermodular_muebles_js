@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Detalle de producto</title>
-<link rel="stylesheet" href="/css/app.css">
-<link rel="stylesheet" href="/css/productosShow.css">
+
+<link rel="stylesheet" href="css/productosShow.css">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 
@@ -24,20 +24,21 @@ DNA
 <a href="contacto.html">Contacto</a>
 </nav>
 <div class="icons">
+            <a href="carrito.html" style="text-decoration: none; color: inherit;">
+                <span class="material-symbols-outlined">shopping_cart</span>
+            </a>
 
-<span class="material-symbols-outlined">shopping_cart</span>
-
-<div class="person-menu-wrapper">
-<span id="person-icon" class="material-symbols-outlined">person</span>
-
-<div class="person-menu">
-<a href="#">Ver cuenta</a>
-<a href="#">Cerrar sesión</a>
-</div>
-</div>
-
-</div>
-</div>
+            <div class="person-menu-wrapper">
+                <a href="perfil.html" style="text-decoration: none; color: inherit;">
+                    <span id="person-icon" class="material-symbols-outlined">person</span>
+                </a>
+                <div class="person-menu">
+                    <a href="perfil.html">Ver cuenta</a>
+                    <a href="logout.html">Cerrar sesión</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <!-- CONTENIDO DETALLE -->
 <div class="detalle-wrapper">
@@ -80,8 +81,8 @@ Comprar ahora
 </div>
 </div>
 
-<script src="/js/productosShow.js"></script>
-<script src="/js/menuUser.js"></script>
+<script src="js/productosShow.js"></script>
+<script src="js/menuUser.js"></script>
 
 </body>
 </html>

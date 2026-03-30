@@ -1,4 +1,4 @@
-/*
+
 async function cargarProductos() {
     const response = await fetch("/api/productos");
     const productos = await response.json();
@@ -29,14 +29,24 @@ async function cargarProductos() {
 }
 
 cargarProductos();
-*/
+
 
 //pruebas
 async function cargarProductos() {
-    const response = await fetch("/api/productos");
-    const productos = await response.json();
-	console.log(productos)
-    renderProductos(productos);
+    try {
+        const response = await fetch('/api/productos');
+        const data = await response.json();
+
+        // Si el servidor mandó un error, 'data' será un objeto, no un array
+        if (!response.ok || !Array.isArray(data)) {
+            console.error("El servidor devolvió un error:", data.message);
+            return; // Nos salimos para que no falle el forEach
+        }
+
+        renderProductos(data);
+    } catch (error) {
+        console.error("Error de red:", error);
+    }
 }
 
 function renderProductos(productos) {
