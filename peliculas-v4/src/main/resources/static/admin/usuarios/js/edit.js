@@ -104,6 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error(error);
         alert("Error: " + error);
       }
+	  
     } catch (err) {
       console.error(err);
       alert("Error de conexión");
