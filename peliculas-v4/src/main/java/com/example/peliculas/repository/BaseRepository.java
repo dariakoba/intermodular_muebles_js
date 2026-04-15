@@ -88,6 +88,18 @@ public abstract class BaseRepository<T> {
 		}
 	}
 	
+	//softdelete generico
+	public int softDelete(int id) {
+	    try {
+	        String sql = "UPDATE " + getTable() +
+	                     " SET deleted_at = NOW() WHERE " + getPrimaryKeyName() + " = ?";
+	        return DB.update(con, sql, id);
+	    } catch (SQLException e) {
+	        throw new DataAccessException("Error al desactivar en " + getTable(), e);
+	    }
+	}
+	
+	
 	private String buildInsertSql() {
 		List<String> columns = new ArrayList<>(List.of(getColumnNames()));
 		columns.remove(getPrimaryKeyName());
