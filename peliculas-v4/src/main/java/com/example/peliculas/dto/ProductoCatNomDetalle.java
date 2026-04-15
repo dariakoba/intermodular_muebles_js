@@ -1,15 +1,17 @@
 package com.example.peliculas.dto;
 
+import java.time.LocalDateTime;
+
 import com.example.peliculas.entity.Categoria;
 
-public record ProductoDetalle(
+public record ProductoCatNomDetalle(
         int idProducto,
         String nombre,
         String color,
         float precio,
         int stock,
-        String descripcion,
-        String categoriaId
+        String categoriaNombre,
+        String estado
 ) {}
 
 
