@@ -15,7 +15,7 @@ import com.example.peliculas.repository.CategoriaRepository;
 import com.example.peliculas.repository.ProductoRepository;
 
 @RestController
-@RequestMapping("/api/admin/categoria")
+@RequestMapping("/api/admin/categorias")
 public class CategoriaAdminController {
 	private final DataSource ds;
 	

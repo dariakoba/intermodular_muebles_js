@@ -24,36 +24,19 @@ function render(productos) {
             <td>${e(p.color)}</td>
             <td>${e(p.precio)}€</td>
             <td>${e(p.stock)}</td>
-			<td>${e(p.estado)}</td>
-            <td>${e(p.categoria_nombre || "-")}</td>
+            <td>${e(p.categoria_id || "-")}</td>
             <td class="acciones">
                 <a href="show.html?id=${p.id_producto}" class="btn-ver">Ver</a>
                 <a href="edit.html?id=${p.id_producto}" class="btn-editar">Editar</a>
 				
-				<button class="btn-desactivar" onclick="desactivarProducto(${p.id_producto})">
-				     Desactivar
+				<button class="btn-eliminar" onclick="borrarProducto(${p.id_producto})">
+				     Eliminar
 				 </button>
             </td>
         </tr>
     `).join("");
 }
 
-async function desactivarProducto(id) {
-
-    try {
-        await api.put(`/api/admin/productos/${id}/desactivar`);
-
-        // Recargar lista completa
-        const productos = await api.get("/api/admin/productos");
-        render(productos);
-
-    } catch (err) {
-        console.error(err);
-        alert("Error al desactivar producto");
-    }
-}
-/*
-borrado de producto
 async function borrarProducto(id) {
     if (!confirm("¿Seguro que quieres eliminar este producto?")) return;
 
@@ -69,7 +52,7 @@ async function borrarProducto(id) {
         alert("Error al eliminar producto");
     }
 }
-*/
+
 function bindEvents() {
     const tabla = document.getElementById("tabla-productos");
     //bind(tabla, "click", onAction);
@@ -123,4 +106,4 @@ async function onAction(e) {
     }
 }
 */
-window.desactivarProducto = desactivarProducto;
+window.borrarProducto = borrarProducto;

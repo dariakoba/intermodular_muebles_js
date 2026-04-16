@@ -9,6 +9,7 @@ import com.example.peliculas.entity.Producto;
 import com.example.peliculas.exception.DataAccessException;
 import com.example.peliculas.mapper.RowMapper;
 import com.example.peliculas.mapper.ProductoMapper;
+import com.example.peliculas.dto.ProductoCatNomDetalle;
 import com.example.peliculas.dto.ProductoDetalle;
 import com.example.peliculas.dto.ProductoResumen;
 
@@ -35,7 +36,7 @@ public class ProductoRepository extends BaseRepository<Producto> {
 
 	@Override
 	public String[] getColumnNames() {
-		return new String[] { "id_producto", "nombre", "color","precio","stock","descripcion","categoria_id" };
+		return new String[] { "id_producto", "nombre", "color","precio","stock","descripcion","categoria_id", "deleted_at" };
 	}
 	
 	@Override
@@ -56,7 +57,8 @@ public class ProductoRepository extends BaseRepository<Producto> {
 
 	@Override
 	public Object[] getUpdateValues(Producto p) {
-		return new Object[] { p.getNombre(), p.getColor(), p.getPrecio(), p.getStock(), p.getDescripcion() ,p.getCategoriaId(),p.getIdProducto() };
+		return new Object[] { p.getNombre(), p.getColor(), p.getPrecio(), p.getStock(), p.getDescripcion() ,p.getCategoriaId(),p.getDeletedAt(),
+				p.getIdProducto() };
 	}
 	
 	public List<ProductoResumen> findResumen(){
@@ -99,5 +101,36 @@ public class ProductoRepository extends BaseRepository<Producto> {
 			throw new DataAccessException("Error al buscar el listado detallado de productos", e);
 		}
 	}
+	
+	public List<ProductoCatNomDetalle> findDetalleCategoria(){
+		String sql="""
+				select 
+				    p.id_producto,
+				    p.nombre,
+				    p.color,
+				    p.precio,
+				    p.stock,
+				    case 
+				        when p.deleted_at is null then 'activo'
+				        else 'inactivo'
+				    end as estado,
+				    c.nombre as categoria_nombre
+				from productos p
+				inner join categoria c 
+		    on c.id_categoria = p.categoria_id;
+				""";
+				
+		try {
+			return DB.queryMany(con, sql, rs -> 
+				new ProductoCatNomDetalle(rs.getInt("id_producto"), rs.getString("nombre"), rs.getString("color"), rs.getFloat("precio"),
+						rs.getInt("stock"), rs.getString("categoria_nombre"), rs.getString("estado") )
+			);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			throw new DataAccessException("Error al buscar el listado detallado CATNOM de productos", e);
+		}
+	}
+	
+	
 
 }

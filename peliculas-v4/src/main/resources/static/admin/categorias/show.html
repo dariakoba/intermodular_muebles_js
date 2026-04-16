@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Admin – Ver Producto</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Lato', sans-serif;
+  background: #fdfbf6;
+  color: #222;
+  min-height: 100vh;
+}
+
+/* --- Topbar (MISMO) --- */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  height: 64px;
+  background: linear-gradient(90deg, #1a1a1a, #2c2c2c);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #fff;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.logo img { height: 40px; }
+
+nav.menu { display: flex; gap: 28px; }
+
+nav.menu a {
+  color: #ddd;
+  text-decoration: none;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  transition: 0.3s;
+}
+
+nav.menu a:hover { color: #1abc9c; }
+
+.icons {
+  display: flex;
+  gap: 18px;
+  color: #fff;
+}
+
+.icons span {
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.icons span:hover {
+  color: #1abc9c;
+}
+
+/* --- CONTENIDO --- */
+.admin-wrapper {
+  max-width: 900px;
+  margin: 60px auto;
+  padding: 0 24px;
+}
+
+/* CARD */
+.product-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 32px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  transition: transform 0.2s;
+}
+
+.product-card:hover {
+  transform: translateY(-3px);
+}
+
+.product-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: #333;
+}
+
+/* GRID INFO */
+.product-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.product-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #888;
+  margin-bottom: 4px;
+}
+
+.value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #222;
+}
+
+/* DESCRIPCIÓN */
+.descripcion {
+  margin-top: 24px;
+}
+
+.descripcion .value {
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* BOTONES */
+.actions {
+  margin-top: 30px;
+  display: flex;
+  gap: 12px;
+}
+
+.btn {
+  padding: 10px 18px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  transition: 0.25s;
+}
+
+.btn-editar {
+  background: #fef3e2;
+  color: #c07a00;
+}
+
+.btn-volver {
+  background: #e8f4f5;
+  color: #2a9aa6;
+}
+
+.btn:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="logo">
+    <img src="/images/logo.png">
+    DNA
+  </div>
+
+  <nav class="menu">
+    <a href="/adminhome.html">Home</a>
+    <a href="/admin/usuarios/usuarios-admin.html">Usuarios</a>
+    <a href="/admin/productos/index.html">Productos</a>
+    <a href="/contacto.html">Categorías</a>
+  </nav>
+
+  <div class="icons">
+    <span class="material-symbols-outlined">shopping_cart</span>
+    <span class="material-symbols-outlined">person</span>
+  </div>
+</div>
+
+<!-- CONTENIDO -->
+<div class="admin-wrapper">
+  <div class="product-card">
+
+    <div class="product-title" id="nombre">Producto</div>
+
+    <div class="product-grid">
+      <div class="product-item">
+        <div class="label">ID</div>
+        <div class="value" id="id"></div>
+      </div>
+
+      <div class="product-item">
+        <div class="label">Categoría</div>
+        <div class="value" id="categoria"></div>
+      </div>
+
+      <div class="product-item">
+        <div class="label">Color</div>
+        <div class="value" id="color"></div>
+      </div>
+
+      <div class="product-item">
+        <div class="label">Precio</div>
+        <div class="value" id="precio"></div>
+      </div>
+
+      <div class="product-item">
+        <div class="label">Stock</div>
+        <div class="value" id="stock"></div>
+      </div>
+    </div>
+
+    <div class="descripcion">
+      <div class="label">Descripción</div>
+      <div class="value" id="descripcion"></div>
+    </div>
+
+    <div class="actions">
+      <a id="btn-editar" class="btn btn-editar">Editar</a>
+      <a href="/admin/productos/index.html" class="btn btn-volver">Volver</a>
+    </div>
+
+  </div>
+</div>
+<script src="js/show.js"></script>
+</body>
+</html>
