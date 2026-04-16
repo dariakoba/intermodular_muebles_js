@@ -44,7 +44,7 @@ public class PedidoAdminController {
     public Pedido update(@PathVariable int id, @RequestBody Pedido pedido) {
         try (Connection con = ds.getConnection()) {
             PedidoRepository repo = new PedidoRepository(con);
-            pedido.setId(id);
+            pedido.setIdPedido(id);
             repo.update(pedido);
             return pedido;
         } catch (SQLException e) {
@@ -59,6 +59,18 @@ public class PedidoAdminController {
             repo.delete(id);
         } catch (SQLException e) {
             throw new DataAccessException(e);
+        }
+    }
+    
+ // Añade este método a PedidoController.java
+
+    @GetMapping("/admin/todos")
+    public List<Pedido> listarTodosLosPedidos() {
+        try (Connection con = ds.getConnection()) {
+            PedidoRepository repo = new PedidoRepository(con);
+            return repo.findAll(); 
+        } catch (SQLException e) {
+            throw new DataAccessException("Error de acceso al panel de administración", e);
         }
     }
 }

@@ -21,7 +21,7 @@ public class PedidoRepository extends BaseRepository<Pedido> {
 
     @Override
     public String getPrimaryKeyName() {
-        return "id";
+        return "id_pedido"; // Ajustado a tu SQL
     }
 
     @Override
@@ -31,49 +31,59 @@ public class PedidoRepository extends BaseRepository<Pedido> {
 
     @Override
     public void setPrimaryKey(Pedido p, int id) {
-        p.setId(id);
+        p.setIdPedido(id); // Usa el nombre nuevo de tu entidad
     }
 
     @Override
     public String[] getColumnNames() {
-        
-        return new String[] { "id", "fecha_pedido", "fecha_devolucion", "precio", "metodo_pago", "factura", "envio", "id_usuario" };
+        // Estas son las columnas REALES de tu tabla en phpMyAdmin
+        return new String[] { "fecha", "cliente_nombre", "total", "metodo_pago", "estado_pago" };
     }
 
     @Override
     public Object[] getInsertValues(Pedido p) {
         return new Object[] { 
-            p.getFechaPedido(), 
-            p.getFechaDevolucion(), 
-            p.getPrecio(), 
+            java.sql.Timestamp.valueOf(p.getFecha().atStartOfDay()), // Convierte LocalDate a Timestamp para MySQL
+            p.getClienteNombre(), 
+            p.getTotal(), 
             p.getMetodoPago(), 
-            p.getFactura(), 
-            p.getEnvio(), 
-            p.getClienteId() 
+            p.getEstadoPago() 
         };
     }
 
     @Override
     public Object[] getUpdateValues(Pedido p) {
         return new Object[] { 
-            p.getFechaPedido(), 
-            p.getFechaDevolucion(), 
-            p.getPrecio(), 
+            java.sql.Timestamp.valueOf(p.getFecha().atStartOfDay()), 
+            p.getClienteNombre(), 
+            p.getTotal(), 
             p.getMetodoPago(), 
-            p.getFactura(), 
-            p.getEnvio(), 
-            p.getClienteId(),
-            p.getIdPedido() 
+            p.getEstadoPago(),
+            p.getIdPedido() // El ID para el WHERE
         };
     }
 
-    
-    public List<Pedido> findByUsuarioId(int userId) {
-        String sql = "SELECT * FROM pedidos WHERE id_usuario = ? ORDER BY fecha_pedido DESC";
+    /**
+     * Lista todos los pedidos para el panel de administración
+     */
+    public List<Pedido> findAll() {
+        String sql = "SELECT * FROM pedidos ORDER BY fecha DESC";
         try {
-            return DB.queryMany(con, sql, mapper, userId);
+            return DB.queryMany(con, sql, mapper);
         } catch (SQLException e) {
-            throw new DataAccessException("Error buscando los pedidos del usuario: " + userId, e);
+            throw new DataAccessException("Error al listar todos los pedidos", e);
+        }
+    }
+
+    /**
+     * Busca pedidos por nombre de cliente (ya que en tu SQL no hay id_usuario)
+     */
+    public List<Pedido> findByCliente(String nombre) {
+        String sql = "SELECT * FROM pedidos WHERE cliente_nombre = ? ORDER BY fecha DESC";
+        try {
+            return DB.queryMany(con, sql, mapper, nombre);
+        } catch (SQLException e) {
+            throw new DataAccessException("Error buscando los pedidos del cliente: " + nombre, e);
         }
     }
 }

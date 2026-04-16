@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pasarela de Pago - DNA Muebles</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 40px;
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+        }
+
+        .form-box {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        h1 { color: #333; margin-bottom: 10px; }
+        .total-pago {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            padding: 10px;
+            background: #e8f4fd;
+            border-radius: 4px;
+            color: rgb(128, 64, 0);
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            background: rgb(159, 80, 0);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+
+        button:hover { background: #333; }
+
+        #mensaje-exito {
+            display: none;
+            padding: 20px;
+        }
+
+        .check-icon {
+            font-size: 60px;
+            color: #27ae60;
+            margin-bottom: 15px;
+        }
+
+        .btn-volver {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #27ae60;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-box">
+        <div id="contenido-pago">
+            <h1>Finalizar Pago</h1>
+            <div class="total-pago">
+                Total a pagar: <strong id="monto-total">0.00€</strong>
+            </div>
+
+            <form id="form-tarjeta">
+                <input type="text" id="nombre-titular" placeholder="Nombre del titular" required>
+                <input type="text" placeholder="Número de tarjeta (16 dígitos)" required autocomplete="off">
+                
+                <div class="row">
+                    <input type="text" placeholder="MM/AA" required autocomplete="off">
+                    <input type="text" placeholder="CVV" required autocomplete="off">
+                </div>
+
+                <button type="submit" id="btn-pagar">CONFIRMAR PAGO</button>
+            </form>
+        </div>
+
+        <div id="mensaje-exito">
+            <div class="check-icon">✔</div>
+            <h2>¡Pedido Realizado!</h2>
+            <p>Tu pago ha sido procesado correctamente y el pedido ha sido registrado.</p>
+            <a href="index.html" class="btn-volver">Volver a la tienda</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            
+            // Calculamos el total asegurándonos de que sean números
+            const totalVenta = carrito.reduce((acc, prod) => {
+                const precio = parseFloat(prod.precio) || 0;
+                const cantidad = parseInt(prod.cantidad) || 1;
+                return acc + (precio * cantidad);
+            }, 0);
+
+            document.getElementById('monto-total').innerText = totalVenta.toFixed(2) + "€";
+
+            const form = document.getElementById('form-tarjeta');
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const btn = document.getElementById('btn-pagar');
+                const nombreTitular = document.getElementById('nombre-titular').value;
+
+                btn.innerText = "Procesando...";
+                btn.disabled = true;
+
+                // OBJETO PEDIDO: Los nombres de las claves deben ser IGUALES a los de tu clase Pedido.java
+                const objetoPedido = {
+                    fecha: new Date().toISOString().split('T')[0],
+                    clienteNombre: document.getElementById('nombre-titular').value.trim(),
+                    total: totalVenta,
+                    metodoPago: "Tarjeta",
+                    estadoPago: "Pagado",
+                    activo: 1 // Si tu compañera puso Soft Delete, enviamos 1 por defecto
+                };
+
+                try {
+                    const respuesta = await fetch('/api/carrito/comprar', {
+                        method: 'POST',
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({ pedido: objetoPedido })
+                    });
+
+                    if (respuesta.ok) {
+                        localStorage.removeItem('carrito'); 
+                        document.getElementById('contenido-pago').style.display = 'none';
+                        document.getElementById('mensaje-exito').style.display = 'block';
+                    } else {
+                        // Si falla, intentamos leer el error que manda Java
+                        const errorMsg = await respuesta.text();
+                        console.error("Error del servidor:", errorMsg);
+                        alert("Error en el servidor: " + errorMsg);
+                        btn.innerText = "CONFIRMAR PAGO";
+                        btn.disabled = false;
+                    }
+                } catch (error) {
+                    console.error("Error de red:", error);
+                    alert("No se pudo conectar con el servidor.");
+                    btn.innerText = "CONFIRMAR PAGO";
+                    btn.disabled = false;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

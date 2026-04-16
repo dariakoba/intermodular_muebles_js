@@ -1,81 +1,53 @@
 package com.example.peliculas.entity;
+
 import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Pedido {
-	private int idPedido;
-    private LocalDate fechaPedido;
-    private LocalDate fechaDevolucion;
-    private float precio;
+    private Integer idPedido;
+    private LocalDate fecha;
+    
+    @JsonProperty("clienteNombre")
+    private String clienteNombre;
+    
+    private float total;
+    
+    @JsonProperty("metodoPago")
     private String metodoPago;
-    private String factura;
-    private String envio;
-    private int clienteId;
-	public Pedido(int idPedido, LocalDate fechaPedido, LocalDate fechaDevolucion, float precio, String metodoPago,
-			String factura, String envio, int clienteId) {
-		super();
-		this.idPedido = idPedido;
-		this.fechaPedido = fechaPedido;
-		this.fechaDevolucion = fechaDevolucion;
-		this.precio = precio;
-		this.metodoPago = metodoPago;
-		this.factura = factura;
-		this.envio = envio;
-		this.clienteId = clienteId;
-	}
-	public int getIdPedido() {
-		return idPedido;
-	}
-	public void setId(int idPedido) {
-		this.idPedido = idPedido;
-	}
-	public LocalDate getFechaPedido() {
-		return fechaPedido;
-	}
-	public void setFechaPedido(LocalDate fechaPedido) {
-		this.fechaPedido = fechaPedido;
-	}
-	public LocalDate getFechaDevolucion() {
-		return fechaDevolucion;
-	}
-	public void setFechaDevolucion(LocalDate fechaDevolucion) {
-		this.fechaDevolucion = fechaDevolucion;
-	}
-	public float getPrecio() {
-		return precio;
-	}
-	public void setPrecio(float precio) {
-		this.precio = precio;
-	}
-	public String getMetodoPago() {
-		return metodoPago;
-	}
-	public void setMetodoPago(String metodoPago) {
-		this.metodoPago = metodoPago;
-	}
-	public String getFactura() {
-		return factura;
-	}
-	public void setFactura(String factura) {
-		this.factura = factura;
-	}
-	public String getEnvio() {
-		return envio;
-	}
-	public void setEnvio(String envio) {
-		this.envio = envio;
-	}
-	public int getClienteId() {
-		return clienteId;
-	}
-	public void setClienteId(int clienteId) {
-		this.clienteId = clienteId;
-	}
-	@Override
-	public String toString() {
-		return "Pedido [id=" + idPedido + ", fechaPedido=" + fechaPedido + ", fechaDevolucion=" + fechaDevolucion
-				+ ", precio=" + precio + ", metodoPago=" + metodoPago + ", factura=" + factura + ", envio=" + envio
-				+ ", idCliente=" + clienteId + "]";
-	}
     
-    
+    @JsonProperty("estadoPago")
+    private String estadoPago;
+
+    // 1. CONSTRUCTOR VACÍO (Ponlo siempre arriba, es vital para Spring)
+    public Pedido() {
+    }
+
+    // 2. CONSTRUCTOR CON PARÁMETROS (Para tu Mapper)
+    public Pedido(Integer idPedido, LocalDate fecha, String clienteNombre, float total, String metodoPago, String estadoPago) {
+        this.idPedido = idPedido;
+        this.fecha = fecha;
+        this.clienteNombre = clienteNombre;
+        this.total = total;
+        this.metodoPago = metodoPago;
+        this.estadoPago = estadoPago;
+    }
+
+    // 3. GETTERS Y SETTERS (Asegúrate de que los nombres coincidan exactamente)
+    public Integer getIdPedido() { return idPedido; }
+    public void setIdPedido(Integer idPedido) { this.idPedido = idPedido; }
+
+    public LocalDate getFecha() { return fecha; }
+    public void setFecha(LocalDate fecha) { this.fecha = fecha; }
+
+    public String getClienteNombre() { return clienteNombre; }
+    public void setClienteNombre(String clienteNombre) { this.clienteNombre = clienteNombre; }
+
+    public float getTotal() { return total; }
+    public void setTotal(float total) { this.total = total; }
+
+    public String getMetodoPago() { return metodoPago; }
+    public void setMetodoPago(String metodoPago) { this.metodoPago = metodoPago; }
+
+    public String getEstadoPago() { return estadoPago; }
+    public void setEstadoPago(String estadoPago) { this.estadoPago = estadoPago; }
 }
