@@ -42,7 +42,7 @@ async function cargarProducto() {
         document.getElementById("btn-carrito").onclick = () => {
             agregarAlCarrito(p);
             
-            // Feedback visual
+            
             const btn = document.getElementById("btn-carrito");
             btn.textContent = "✓ Añadido";
             btn.style.background = "#2a9aa6";

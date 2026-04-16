@@ -1,11 +1,7 @@
-// --- 1. CONFIGURACIÓN DE IDS (Ajustados a tu HTML) ---
-// Asegúrate de que en tu carrito.html existan estos IDs
 const contenedorCarrito = document.getElementById('carrito-contenido') || document.getElementById('lista-carrito');
 const totalHTML = document.getElementById('precio-total') || document.getElementById('total-precio');
 
-// --- 2. GESTIÓN DEL CARRITO (Lectura de la memoria) ---
 function obtenerCarrito() {
-    // Usamos "carrito" que es donde se guardan tus sofás y mesas
     return JSON.parse(localStorage.getItem('carrito')) || [];
 }
 
@@ -22,20 +18,26 @@ function renderizarCarrito() {
     let total = 0;
 
     contenedorCarrito.innerHTML = carrito.map((prod, index) => {
-        // Calculamos el subtotal (precio * cantidad)
-        const subtotal = prod.precio * (prod.cantidad || 1);
+        const cantidad = prod.cantidad || 1;
+        const subtotal = prod.precio * cantidad;
         total += subtotal;
         
         return `
-            <div class="carrito-item" style="display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px solid #eee; padding: 10px;">
+            <div class="carrito-item" style="display: flex; align-items: center; justify-content: space-between; padding: 15px; border-bottom: 1px solid #eee;">
                 <div class="producto-info">
-                    <h3>${prod.nombre} (x${prod.cantidad || 1})</h3>
+                    <h3>${prod.nombre}</h3>
                     <p>${prod.precio}€ c/u</p>
                 </div>
-                <div style="text-align: right;">
+                
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <input type="number" value="${cantidad}" min="1" 
+                           style="width: 50px; padding: 5px; text-align: center;"
+                           onchange="actualizarCantidad(${index}, this.value)">
+                    
                     <p><b>${subtotal.toFixed(2)}€</b></p>
-                    <button onclick="eliminarDelCarrito(${index})" style="color: red; cursor: pointer; border: none; background: none;">
-                        🗑️ Borrar
+                    
+                    <button onclick="eliminarDelCarrito(${index})" style="color: red; cursor: pointer; border: none; background: none; font-size: 1.2rem;">
+                        🗑️
                     </button>
                 </div>
             </div>
@@ -45,22 +47,22 @@ function renderizarCarrito() {
     if (totalHTML) totalHTML.innerText = total.toFixed(2) + "€";
 }
 
-// --- 3. ACCIONES ---
+// Función nueva para cambiar la cantidad desde el carrito
+function actualizarCantidad(index, nuevaCant) {
+    let carrito = obtenerCarrito();
+    let cant = parseInt(nuevaCant);
+    if (cant < 1) cant = 1; 
+    
+    carrito[index].cantidad = cant;
+    localStorage.setItem('carrito', JSON.stringify(carrito));
+    renderizarCarrito(); 
+}
+
 function eliminarDelCarrito(index) {
     let carrito = obtenerCarrito();
-    carrito.splice(index, 1); // Quitamos el producto
+    carrito.splice(index, 1);
     localStorage.setItem('carrito', JSON.stringify(carrito));
-    renderizarCarrito(); // Refrescamos la vista
-}
-
-function vaciarCarrito() {
-    if (confirm("¿Quieres vaciar todo el carrito?")) {
-        localStorage.removeItem('carrito');
-        renderizarCarrito();
-    }
-}
-
-// --- 4. INICIO ---
-document.addEventListener('DOMContentLoaded', () => {
     renderizarCarrito();
-});
+}
+
+document.addEventListener('DOMContentLoaded', renderizarCarrito);
