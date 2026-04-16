@@ -24,8 +24,16 @@ document.addEventListener("DOMContentLoaded", () => {
                     password_hash: password
                 })
             });
-
-            if (!loginRes.ok) throw new Error("Login fallido");
+			//cambio de desactivar
+			if (!loginRes.ok) {
+			    if (loginRes.status === 401) {
+			        throw new Error("Credenciales incorrectas");
+			    } else if (loginRes.status === 403) {
+			        throw new Error("Usuario desactivado");
+			    } else {
+			        throw new Error("Error en el servidor");
+			    }
+			}
 
             // 🔹 Paso 2: obtener usuario actual
             const meRes = await fetch("/api/me", {
@@ -61,9 +69,10 @@ document.addEventListener("DOMContentLoaded", () => {
 			}
 			
         } catch (err) {
-            console.error(err);
-            // Mostrar mensaje de error
-            errorDiv.style.display = "block";
+			console.error(err);
+
+			errorDiv.textContent = err.message;
+			errorDiv.style.display = "block";
         }
     });
 });

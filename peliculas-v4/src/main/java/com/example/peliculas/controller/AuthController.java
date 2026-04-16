@@ -45,6 +45,14 @@ public class AuthController {
 			//System.out.println(encoder.encode("123456"));
 
 			if (user != null && encoder.matches(req.passwordHash(), user.getPasswordHash())) {
+				// VALIDACIÓN DE ESTADO
+	            if (!"activo".equalsIgnoreCase(user.getEstado())) {
+	                throw new ResponseStatusException(
+	                    HttpStatus.FORBIDDEN,
+	                    "Usuario desactivado"
+	                );
+	            }
+				
 				session.setAttribute("userId", user.getId());
 				session.setAttribute("role", user.getRol());
 				return;

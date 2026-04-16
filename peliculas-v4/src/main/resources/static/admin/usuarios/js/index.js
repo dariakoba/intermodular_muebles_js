@@ -37,10 +37,12 @@ async function cargarUsuarios() {
     const res = await fetch("/api/admin/usuarios");
     const usuarios = await res.json();
 
-    tbody.innerHTML = "";
+    let html = "";
 
     usuarios.forEach(u => {
-      tbody.innerHTML += `
+      const estado = (u.estado ?? "").toLowerCase();
+
+      html += `
         <tr>
           <td><input type="checkbox" data-id="${u.id}"></td>
           <td>${u.id}</td>
@@ -48,20 +50,32 @@ async function cargarUsuarios() {
           <td>${u.email}</td>
           <td>${u.rol}</td>
           <td>${u.telefono ?? ""}</td>
+
+          <td>
+            <span class="${estado === 'activo' ? 'estado-activo' : 'estado-inactivo'}">
+              ${estado}
+            </span>
+          </td>
+
           <td class="acciones">
             <a href="show.html?id=${u.id}" class="btn-ver">Ver</a>
             <a href="edit.html?id=${u.id}" class="btn-editar">Editar</a>
-            <button class="btn-eliminar" onclick="borrarUsuario(${u.id})">Borrar</button>
+
+            <button class="${estado === 'activo' ? 'btn-desactivar' : 'btn-activar'}"
+                    onclick="toggleUsuario(${u.id}, '${estado}')">
+              ${estado === 'activo' ? 'Desactivar' : 'Activar'}
+            </button>
           </td>
         </tr>
       `;
     });
 
+    tbody.innerHTML = html;
+
   } catch (err) {
     console.error("Error al cargar usuarios:", err);
   }
 }
-
 async function borrarUsuario(id) {
   if (!confirm("¿Seguro que quieres eliminar este usuario?")) return;
 
@@ -71,5 +85,24 @@ async function borrarUsuario(id) {
   } catch (err) {
     console.error(err);
     alert("Error al eliminar usuario");
+  }
+}
+
+async function toggleUsuario(id, estadoActual) {
+  const nuevoEstado = estadoActual === "activo" ? "inactivo" : "activo";
+
+  try {
+    await fetch(`/api/admin/usuarios/${id}/estado`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ estado: nuevoEstado })
+    });
+
+    cargarUsuarios();
+  } catch (err) {
+    console.error(err);
+    alert("Error al cambiar estado del usuario");
   }
 }
