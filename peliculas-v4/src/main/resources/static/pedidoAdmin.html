@@ -2,38 +2,49 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Panel Admin - Pedidos</title>
-    <link rel="stylesheet" href="css/app.css">
+    <title>DNA - Admin Pedidos</title>
     <style>
-        .admin-wrapper { max-width: 1200px; margin: 100px auto; padding: 20px; }
-        .tabla-admin { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .tabla-admin th, .tabla-admin td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
-        .tabla-admin th { background-color: #5c4432; color: white; }
-        .pago-badge { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
-        .pago-si { background: #d4edda; color: #155724; }
-        .pago-no { background: #f8d7da; color: #721c24; }
-        .btn-delete { color: #ff4444; cursor: pointer; border: none; background: none; font-weight: bold; }
+        body{ font-family: Arial, sans-serif; margin:40px; background:#f2f2f2; }
+        h1{ margin-bottom:20px; }
+        .table-container{ background:white; padding:20px; border-radius:6px; }
+        table{ width:100%; border-collapse:collapse; background:white; }
+        th,td{ padding:10px; border:1px solid #ddd; text-align: left; }
+        th{ background:#333; color:white; }
     </style>
 </head>
 <body>
-    <div class="admin-wrapper">
-        <h1>Gestión de Pedidos (Panel Admin)</h1>
-        <table class="tabla-admin">
+    <h1>Gestión de Pedidos</h1>
+    <div class="table-container">
+        <table>
             <thead>
                 <tr>
-                    <th>ID Pedido</th>
+                    <th>ID</th>
                     <th>Fecha</th>
+                    <th>Cliente</th>
                     <th>Total</th>
-                    <th>Método</th>
+                    <th>Método Pago</th>
                     <th>Estado</th>
-                    <th>Acciones</th>
                 </tr>
             </thead>
-            <tbody id="tabla-pedidos-body">
-                </tbody>
+            <tbody id="tabla-admin"></tbody>
         </table>
     </div>
 
-    <script src="js/admin_pedidos.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const res = await fetch('/api/carrito/admin/todos');
+            const pedidos = await res.json();
+            document.getElementById('tabla-admin').innerHTML = pedidos.map(p => `
+                <tr>
+                    <td>#${p.idPedido}</td>
+                    <td>${p.fecha}</td>
+                    <td>${p.clienteNombre}</td>
+                    <td>${p.total.toFixed(2)}€</td>
+                    <td>${p.metodoPago}</td>
+                    <td><b>${p.estadoPago}</b></td>
+                </tr>
+            `).join('');
+        });
+    </script>
 </body>
 </html>

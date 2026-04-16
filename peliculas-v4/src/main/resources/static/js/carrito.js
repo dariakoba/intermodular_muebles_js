@@ -65,4 +65,15 @@ function eliminarDelCarrito(index) {
     renderizarCarrito();
 }
 
+async function finalizarCompra() {
+    const carrito = obtenerCarrito(); // Usamos tu función existente
+    
+    if (carrito.length === 0) {
+        alert("El carrito está vacío.");
+        return;
+    }
+
+	window.location.href = "pago.html";
+	}
+
 document.addEventListener('DOMContentLoaded', renderizarCarrito);
