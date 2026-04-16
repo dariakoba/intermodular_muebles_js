@@ -30,9 +30,17 @@ function render(productos) {
                 <a href="show.html?id=${p.id_producto}" class="btn-ver">Ver</a>
                 <a href="edit.html?id=${p.id_producto}" class="btn-editar">Editar</a>
 				
-				<button class="btn-desactivar" onclick="desactivarProducto(${p.id_producto})">
-				     Desactivar
-				 </button>
+				
+				
+				${
+				    p.estado === "activo"
+				        ? `<button class="btn-desactivar" onclick="desactivarProducto(${p.id_producto})">
+				                Desactivar
+				           </button>`
+				        : `<button class="btn-activar" onclick="activarProducto(${p.id_producto})">
+				                Activar
+				           </button>`
+				}
             </td>
         </tr>
     `).join("");
@@ -50,6 +58,19 @@ async function desactivarProducto(id) {
     } catch (err) {
         console.error(err);
         alert("Error al desactivar producto");
+    }
+}
+
+async function activarProducto(id) {
+    try {
+        await api.put(`/api/admin/productos/${id}/activar`);
+
+        const productos = await api.get("/api/admin/productos");
+        render(productos);
+
+    } catch (err) {
+        console.error(err);
+        alert("Error al activar producto");
     }
 }
 /*

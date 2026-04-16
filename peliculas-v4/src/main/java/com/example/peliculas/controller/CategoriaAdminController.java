@@ -42,3 +42,4 @@ public class CategoriaAdminController {
             throw new DataAccessException(e);
         }
     }
+}

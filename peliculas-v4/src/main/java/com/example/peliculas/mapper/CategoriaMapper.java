@@ -10,7 +10,8 @@ public class CategoriaMapper implements RowMapper<Categoria> {
     public Categoria mapRow(ResultSet rs) throws SQLException {
         return new Categoria(
                 rs.getInt("id_categoria"),
-                rs.getString("nombre")
+                rs.getString("nombre"),
+                rs.getTimestamp("deleted_at").toLocalDateTime()
         );
     }
 }

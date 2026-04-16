@@ -11,7 +11,8 @@ public class ProductoMapper implements RowMapper<Producto> {
         return new Producto(
         		rs.getInt("id_producto"), rs.getString("nombre")
         				, rs.getString("color"), rs.getFloat("precio"), rs.getInt("stock"), rs.getString("descripcion")
-        				, rs.getInt("categoria_id"), rs.getTimestamp("deleted_at").toLocalDateTime()
+        				, rs.getInt("categoria_id"), 
+        				rs.getTimestamp("deleted_at").toLocalDateTime()
         );
     }
 }

@@ -28,7 +28,7 @@ public class CategoriaRepository extends BaseRepository<Categoria> {
 
 	@Override
 	public String[] getColumnNames() {
-		return new String[] { "id_categoria","nombre"};
+		return new String[] { "id_categoria","nombre","deleted_at"};
 	}
 	
 	@Override
@@ -43,7 +43,7 @@ public class CategoriaRepository extends BaseRepository<Categoria> {
 
 	@Override
 	public Object[] getUpdateValues(Categoria c) {
-		return new Object[] {  c.getNombre() , c.getIdCategoria()};
+		return new Object[] {  c.getNombre() , c.getIdCategoria(), c.getDeleted_at()};
 	}
 
 	@Override
