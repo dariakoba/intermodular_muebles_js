@@ -32,4 +32,13 @@ public class CategoriaAdminController {
             throw new DataAccessException(e);
         }
     }
-}
+    
+    @PutMapping("/{id}/desactivar")
+    public void desactivar(@PathVariable int id) {
+        try (Connection con = ds.getConnection()) {
+        	CategoriaRepository repo = new CategoriaRepository(con);
+            repo.softDelete(id);
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+    }
