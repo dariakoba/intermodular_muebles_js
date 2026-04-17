@@ -1,0 +1,139 @@
+/* =========================
+   PERFIL - ESTILO BEIGE
+   ========================= */
+
+body {
+  background: #f7f3ee;
+}
+
+/* Contenedor principal */
+.perfil-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  font-family: 'Lato', sans-serif;
+  color: #2b2b2b;
+}
+
+/* Título */
+.perfil-container h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+  color: #2b2b2b;
+}
+
+/* =========================
+   CARDS
+   ========================= */
+
+.card {
+  background: #fffdf8;
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  border: 1px solid #e9e1d6;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.08);
+}
+
+.card h2 {
+  margin-bottom: 12px;
+  font-size: 1.2rem;
+  border-left: 4px solid #c7b299;
+  padding-left: 10px;
+  color: #3a3a3a;
+}
+
+.card p {
+  margin: 6px 0;
+  font-size: 0.95rem;
+  color: #444;
+}
+
+/* =========================
+   TABLA PEDIDOS
+   ========================= */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  background: #fffdf8;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+thead {
+  background: #c7b299;
+  color: #fff;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+tbody tr {
+  border-bottom: 1px solid #eee6dc;
+  transition: background 0.2s ease;
+}
+
+tbody tr:hover {
+  background: #f3ede5;
+}
+
+/* =========================
+   ESTADOS PEDIDO
+   ========================= */
+
+.estado {
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  display: inline-block;
+  text-transform: capitalize;
+}
+
+/* beige status palette */
+.estado.pendiente {
+  background: #f7e7c6;
+  color: #7a5c1b;
+}
+
+.estado.pagado {
+  background: #dff0d8;
+  color: #2f5d3a;
+}
+
+.estado.enviado {
+  background: #d9e6f2;
+  color: #2c4a66;
+}
+
+.estado.cancelado {
+  background: #f2d7d5;
+  color: #7a2f2f;
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 768px) {
+  .perfil-container {
+    padding: 12px;
+  }
+
+  th, td {
+    font-size: 0.8rem;
+    padding: 8px;
+  }
+}
