@@ -12,7 +12,7 @@ public class ProductoMapper implements RowMapper<Producto> {
         		rs.getInt("id_producto"), rs.getString("nombre")
         				, rs.getString("color"), rs.getFloat("precio"), rs.getInt("stock"), rs.getString("descripcion")
         				, rs.getInt("categoria_id"), 
-        				rs.getTimestamp("deleted_at").toLocalDateTime()
+        				rs.getObject("deleted_at", java.time.LocalDateTime.class)
         );
     }
 }

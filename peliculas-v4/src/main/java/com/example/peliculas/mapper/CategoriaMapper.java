@@ -11,7 +11,7 @@ public class CategoriaMapper implements RowMapper<Categoria> {
         return new Categoria(
                 rs.getInt("id_categoria"),
                 rs.getString("nombre"),
-                rs.getTimestamp("deleted_at").toLocalDateTime()
+				rs.getObject("deleted_at", java.time.LocalDateTime.class)
         );
     }
 }

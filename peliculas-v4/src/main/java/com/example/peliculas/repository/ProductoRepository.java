@@ -52,7 +52,7 @@ public class ProductoRepository extends BaseRepository<Producto> {
 
 	@Override
 	public Object[] getInsertValues(Producto p) {
-		return new Object[] { p.getNombre(), p.getColor(), p.getPrecio(), p.getStock(), p.getDescripcion(), p.getCategoriaId() };
+		return new Object[] { p.getNombre(), p.getColor(), p.getPrecio(), p.getStock(), p.getDescripcion(), p.getCategoriaId() , p.getDeletedAt() };
 	}
 
 	@Override
