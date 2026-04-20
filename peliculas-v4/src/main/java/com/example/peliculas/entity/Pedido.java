@@ -4,7 +4,9 @@ import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Pedido {
+    @JsonProperty("idPedido")
     private Integer idPedido;
+    
     private LocalDate fecha;
     
     @JsonProperty("clienteNombre")
@@ -18,21 +20,15 @@ public class Pedido {
     @JsonProperty("estadoPago")
     private String estadoPago;
 
-    // 1. CONSTRUCTOR VACÍO (Ponlo siempre arriba, es vital para Spring)
-    public Pedido() {
-    }
+    @JsonProperty("idProducto") 
+    private Integer idProducto;
 
-    // 2. CONSTRUCTOR CON PARÁMETROS (Para tu Mapper)
-    public Pedido(Integer idPedido, LocalDate fecha, String clienteNombre, float total, String metodoPago, String estadoPago) {
-        this.idPedido = idPedido;
-        this.fecha = fecha;
-        this.clienteNombre = clienteNombre;
-        this.total = total;
-        this.metodoPago = metodoPago;
-        this.estadoPago = estadoPago;
-    }
+    @JsonProperty("nombreProducto")
+    private String nombreProducto;
 
-    // 3. GETTERS Y SETTERS (Asegúrate de que los nombres coincidan exactamente)
+    public Pedido() {}
+
+    // Getters y Setters
     public Integer getIdPedido() { return idPedido; }
     public void setIdPedido(Integer idPedido) { this.idPedido = idPedido; }
 
@@ -50,4 +46,10 @@ public class Pedido {
 
     public String getEstadoPago() { return estadoPago; }
     public void setEstadoPago(String estadoPago) { this.estadoPago = estadoPago; }
+
+    public Integer getIdProducto() { return idProducto; } // <--- NUEVO
+    public void setIdProducto(Integer idProducto) { this.idProducto = idProducto; } // <--- NUEVO
+
+    public String getNombreProducto() { return nombreProducto; }
+    public void setNombreProducto(String nombreProducto) { this.nombreProducto = nombreProducto; }
 }

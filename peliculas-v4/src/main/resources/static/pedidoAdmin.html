@@ -2,49 +2,149 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>DNA - Admin Pedidos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNA - Administración de Pedidos</title>
+    <link rel="stylesheet" href="../../../css/usuarios-admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body{ font-family: Arial, sans-serif; margin:40px; background:#f2f2f2; }
-        h1{ margin-bottom:20px; }
-        .table-container{ background:white; padding:20px; border-radius:6px; }
-        table{ width:100%; border-collapse:collapse; background:white; }
-        th,td{ padding:10px; border:1px solid #ddd; text-align: left; }
-        th{ background:#333; color:white; }
+        .btn-sort { padding: 8px 15px; margin-right: 10px; border-radius: 5px; cursor: pointer; border: 1px solid #ddd; background: white; font-weight: bold; transition: 0.3s; }
+        .btn-sort:hover { background: #f0f0f0; border-color: #bbb; }
+        .badge { padding: 5px 10px; border-radius: 15px; color: white; font-size: 11px; font-weight: bold; text-transform: uppercase; }
+        .status-pagado { background-color: #2ecc71; }
+        .status-pendiente { background-color: #e67e22; }
+        .price-text { font-weight: bold; color: #2c3e50; }
     </style>
 </head>
 <body>
-    <h1>Gestión de Pedidos</h1>
-    <div class="table-container">
-        <table>
+
+    <header class="navbar">
+        <a href="home.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo-circle">
+                    <img src="/images/logo.png" alt="DNA Logo" class="logo-image">
+                </div>
+                <span class="brand-name">DNA</span>
+            </div>
+        </a>
+
+        <nav class="nav-links">
+            <a href="admin.html">Dashboard</a>
+            <a href="usuarios.html">Usuarios</a>
+            <a href="productos.html">Productos</a>
+            <a href="pedidos.html" class="active">Pedidos</a>
+            <a href="#">Estadísticas</a>
+        </nav>
+
+        <div class="nav-icons">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <i class="fa-regular fa-user"></i>
+            <button id="logoutBtn" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Salir</button>
+        </div>
+    </header>
+
+    <main class="admin-container">
+        <h1 class="title">Gestión de Pedidos</h1>
+
+        <div class="form-horizontal" style="justify-content: flex-start; margin-bottom: 20px;">
+            <button class="btn-sort" onclick="ordenarPedidos('id')">
+                <i class="fa-solid fa-sort-numeric-down"></i> Ordenar por ID
+            </button>
+            <button class="btn-sort" onclick="ordenarPedidos('fecha')">
+                <i class="fa-solid fa-calendar-days"></i> Ordenar por Fecha
+            </button>
+            <button class="btn-main" onclick="cargarPedidos()" style="margin-left: auto;">
+                <i class="fa-solid fa-rotate"></i> Actualizar
+            </button>
+        </div>
+
+        <table id="tablaPedidos">
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Fecha</th>
-                    <th>Cliente</th>
+                    <th>Titular Tarjeta</th>
+                    <th>Producto</th>
                     <th>Total</th>
-                    <th>Método Pago</th>
                     <th>Estado</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
-            <tbody id="tabla-admin"></tbody>
+            <tbody id="tbody-pedidos">
+                </tbody>
         </table>
-    </div>
+    </main>
 
     <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            const res = await fetch('/api/carrito/admin/todos');
-            const pedidos = await res.json();
-            document.getElementById('tabla-admin').innerHTML = pedidos.map(p => `
-                <tr>
-                    <td>#${p.idPedido}</td>
-                    <td>${p.fecha}</td>
-                    <td>${p.clienteNombre}</td>
-                    <td>${p.total.toFixed(2)}€</td>
-                    <td>${p.metodoPago}</td>
-                    <td><b>${p.estadoPago}</b></td>
-                </tr>
-            `).join('');
-        });
+        let pedidosOriginales = [];
+
+        async function cargarPedidos() {
+            try {
+                // Ruta de tu controller
+                const res = await fetch('/api/carrito/admin/lista');
+                if (!res.ok) throw new Error("Error al obtener datos");
+                
+                pedidosOriginales = await res.json();
+                renderizar(pedidosOriginales);
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function renderizar(lista) {
+            const tbody = document.getElementById('tbody-pedidos');
+            if (!tbody) return;
+
+            tbody.innerHTML = lista.map(p => {
+                const esPagado = (p.estadoPago || "").toLowerCase() === 'pagado';
+                const statusClass = esPagado ? 'status-pagado' : 'status-pendiente';
+                
+                return `
+                    <tr>
+                        <td>#${p.idPedido}</td>
+                        <td>${p.fecha ? new Date(p.fecha).toLocaleDateString() : '---'}</td>
+                        <td>${p.clienteNombre || 'Usuario DNA'}</td>
+                        <td><strong style="color:#e67e22">${p.nombreProducto || 'Mueble'}</strong></td>
+                        <td class="price-text">${(p.total || 0).toFixed(2)}€</td>
+                        <td>
+                            <span class="badge ${statusClass}">${p.estadoPago || 'Pendiente'}</span>
+                        </td>
+                        <td>
+                            <button onclick="eliminarPedido(${p.idPedido})" class="btn-cancel" style="padding: 5px 10px; font-size: 12px;">
+                                <i class="fa-solid fa-trash"></i> Eliminar
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function ordenarPedidos(criterio) {
+            let copia = [...pedidosOriginales];
+            if (criterio === 'id') {
+                copia.sort((a, b) => b.idPedido - a.idPedido);
+            } else if (criterio === 'fecha') {
+                copia.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+            }
+            renderizar(copia);
+        }
+
+        async function eliminarPedido(id) {
+            if (!confirm(`¿Deseas eliminar permanentemente el pedido #${id}?`)) return;
+            
+            try {
+                const res = await fetch(`/api/carrito/admin/eliminar/${id}`, { method: 'DELETE' });
+                if (res.ok) {
+                    cargarPedidos();
+                } else {
+                    alert("Error al eliminar");
+                }
+            } catch (e) {
+                alert("Error de conexión");
+            }
+        }
+
+        // Carga inicial
+        document.addEventListener('DOMContentLoaded', cargarPedidos);
     </script>
 </body>
 </html>
