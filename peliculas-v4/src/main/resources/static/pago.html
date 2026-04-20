@@ -2,87 +2,43 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pasarela de Pago - DNA Muebles</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 40px;
-            background: #f4f4f4;
-            display: flex;
-            justify-content: center;
+            margin: 0; padding: 40px; background: #f4f4f4;
+            display: flex; justify-content: center;
         }
-
         .form-box {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            width: 100%;
-            max-width: 450px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            text-align: center;
+            background: white; padding: 30px; border-radius: 8px;
+            width: 100%; max-width: 450px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); text-align: center;
         }
-
         h1 { color: #333; margin-bottom: 10px; }
         .total-pago {
-            font-size: 1.2rem;
-            margin-bottom: 25px;
-            padding: 10px;
-            background: #e8f4fd;
-            border-radius: 4px;
-            color: rgb(128, 64, 0);
-            font-weight: bold;
+            font-size: 1.2rem; margin-bottom: 25px; padding: 10px;
+            background: #e8f4fd; border-radius: 4px;
+            color: rgb(128, 64, 0); font-weight: bold;
         }
-
         input {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
+            width: 100%; padding: 12px; margin: 10px 0;
+            border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;
         }
-
-        .row {
-            display: flex;
-            gap: 10px;
-        }
-
+        .row { display: flex; gap: 10px; }
         button {
-            background: rgb(159, 80, 0);
-            color: white;
-            padding: 14px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-            font-size: 16px;
-            font-weight: bold;
-            margin-top: 15px;
-            transition: 0.3s;
+            background: rgb(159, 80, 0); color: white; padding: 14px;
+            border: none; border-radius: 4px; cursor: pointer;
+            width: 100%; font-size: 16px; font-weight: bold;
+            margin-top: 15px; transition: 0.3s;
         }
-
         button:hover { background: #333; }
-
-        #mensaje-exito {
-            display: none;
-            padding: 20px;
-        }
-
-        .check-icon {
-            font-size: 60px;
-            color: #27ae60;
-            margin-bottom: 15px;
-        }
-
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        #mensaje-exito { display: none; padding: 20px; }
+        .check-icon { font-size: 60px; color: #27ae60; margin-bottom: 15px; }
         .btn-volver {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            background: #27ae60;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
+            display: inline-block; margin-top: 20px; padding: 10px 20px;
+            background: #27ae60; color: white; text-decoration: none; border-radius: 4px;
         }
     </style>
 </head>
@@ -97,11 +53,11 @@
 
             <form id="form-tarjeta">
                 <input type="text" id="nombre-titular" placeholder="Nombre del titular" required>
-                <input type="text" placeholder="Número de tarjeta (16 dígitos)" required autocomplete="off">
+                <input type="text" placeholder="Número de tarjeta (16 dígitos)" required maxlength="16">
                 
                 <div class="row">
-                    <input type="text" placeholder="MM/AA" required autocomplete="off">
-                    <input type="text" placeholder="CVV" required autocomplete="off">
+                    <input type="text" placeholder="MM/AA" required maxlength="5">
+                    <input type="text" placeholder="CVV" required maxlength="3">
                 </div>
 
                 <button type="submit" id="btn-pagar">CONFIRMAR PAGO</button>
@@ -118,9 +74,10 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // 1. Obtener datos del carrito
             const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
             
-            // Calculamos el total asegurándonos de que sean números
+            // 2. Calcular total de la venta
             const totalVenta = carrito.reduce((acc, prod) => {
                 const precio = parseFloat(prod.precio) || 0;
                 const cantidad = parseInt(prod.cantidad) || 1;
@@ -129,25 +86,31 @@
 
             document.getElementById('monto-total').innerText = totalVenta.toFixed(2) + "€";
 
+            // 3. Manejar el envío del formulario
             const form = document.getElementById('form-tarjeta');
+            
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
 
                 const btn = document.getElementById('btn-pagar');
-                const nombreTitular = document.getElementById('nombre-titular').value;
-
                 btn.innerText = "Procesando...";
                 btn.disabled = true;
 
-                // OBJETO PEDIDO: Los nombres de las claves deben ser IGUALES a los de tu clase Pedido.java
-                const objetoPedido = {
-                    fecha: new Date().toISOString().split('T')[0],
-                    clienteNombre: document.getElementById('nombre-titular').value.trim(),
-                    total: totalVenta,
-                    metodoPago: "Tarjeta",
-                    estadoPago: "Pagado",
-                    activo: 1 // Si tu compañera puso Soft Delete, enviamos 1 por defecto
-                };
+                // Sacamos el ID del primer producto del carrito para asociarlo al pedido
+                // Buscamos tanto 'id_producto' como 'id' por si acaso
+				const idProductoReal = carrito.length > 0 
+				    ? (carrito[0].id_producto || carrito[0].id || carrito[0].idProducto) 
+				    : 1;
+
+				const objetoPedido = {
+				    fecha: new Date().toISOString().split('T')[0],
+				    clienteNombre: document.getElementById('nombre-titular').value.trim(),
+				    total: totalVenta,
+				    metodoPago: "Tarjeta",
+				    estadoPago: "Pagado",
+				    idProducto: idProductoReal, // <--- CAMBIADO: idProducto (mayúscula) para que Java lo entienda
+				    activo: 1 
+				};
 
                 try {
                     const respuesta = await fetch('/api/carrito/comprar', {
@@ -156,17 +119,16 @@
                             'Content-Type': 'application/json',
                             'Accept': 'application/json'
                         },
-                        body: JSON.stringify({ pedido: objetoPedido })
+                        body: JSON.stringify({ pedido: objetoPedido }) 
                     });
 
                     if (respuesta.ok) {
+                        // Limpiar carrito y mostrar mensaje de éxito
                         localStorage.removeItem('carrito'); 
                         document.getElementById('contenido-pago').style.display = 'none';
                         document.getElementById('mensaje-exito').style.display = 'block';
                     } else {
-                        // Si falla, intentamos leer el error que manda Java
                         const errorMsg = await respuesta.text();
-                        console.error("Error del servidor:", errorMsg);
                         alert("Error en el servidor: " + errorMsg);
                         btn.innerText = "CONFIRMAR PAGO";
                         btn.disabled = false;

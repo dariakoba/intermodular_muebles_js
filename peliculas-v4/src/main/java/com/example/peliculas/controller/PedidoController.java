@@ -2,13 +2,18 @@ package com.example.peliculas.controller;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.sql.DataSource;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
+import com.example.peliculas.db.DB;
 import com.example.peliculas.dto.CarritoRequest;
 import com.example.peliculas.entity.Pedido;
 import com.example.peliculas.entity.User;
@@ -18,6 +23,7 @@ import com.example.peliculas.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 
 import com.example.peliculas.exception.DataAccessException;
+
 
 @RestController
 @RequestMapping("/api/carrito")
@@ -29,9 +35,10 @@ public class PedidoController {
         this.ds = ds;
     }
 
+    // --- SECCIÓN CLIENTE: REALIZAR COMPRA ---
+    
     @PostMapping("/comprar")
     public ResponseEntity<?> realizarCompra(@RequestBody CarritoRequest request) {
-        // 1. Validación de seguridad: ¿Llega el pedido?
         if (request == null || request.pedido == null) {
             return ResponseEntity.badRequest().body("{\"message\": \"El pedido está vacío\"}");
         }
@@ -39,56 +46,71 @@ public class PedidoController {
         try (Connection con = ds.getConnection()) {
             PedidoRepository pedidoRepo = new PedidoRepository(con);
             
-            // 2. Limpieza de ID para evitar el error de "Clave duplicada"
+            // Forzamos ID null para evitar error de clave duplicada
             request.pedido.setIdPedido(null);
             
-            // 3. Verificación de los campos que llegaban como NULL en tu log
             if (request.pedido.getClienteNombre() == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                                     .body("{\"message\": \"Error: El nombre del cliente no ha llegado al servidor\"}");
+                                     .body("{\"message\": \"Error: El nombre del cliente es nulo\"}");
             }
 
-            // 4. Inserción
             Pedido nuevoPedido = pedidoRepo.insert(request.pedido);
-            
-            // 5. Respuesta en formato JSON puro para que el JS no falle al leerla
             return ResponseEntity.ok("{\"message\": \"Compra realizada\", \"id\": " + nuevoPedido.getIdPedido() + "}");
 
         } catch (Exception e) {
             e.printStackTrace();
-            // Si el error es de base de datos, mandamos un 409
             return ResponseEntity.status(HttpStatus.CONFLICT)
                                  .body("{\"message\": \"Error SQL: " + e.getMessage() + "\"}");
         }
     }
 
-    @GetMapping("/admin/todos")
-    public List<Pedido> listarTodosLosPedidos() {
+    // --- SECCIÓN ADMIN: GESTIÓN DE PEDIDOS (Rutas desbloqueadas) ---
+
+    @GetMapping("/admin/lista")
+    public List<Pedido> listarParaAdmin() {
         try (Connection con = ds.getConnection()) {
             PedidoRepository repo = new PedidoRepository(con);
-            return repo.findAll();
+            return repo.findAll(); // Asegúrate de que findAll() tenga el ORDER BY id_pedido DESC
         } catch (SQLException e) {
-            throw new DataAccessException("Error al listar", e);
+            throw new DataAccessException("Error al listar pedidos", e);
         }
     }
 
-    @PutMapping("/{id}")
-    public Pedido update(@PathVariable int id, @RequestBody Pedido pedido) {
+    @DeleteMapping("/admin/eliminar/{id}")
+    public ResponseEntity<?> borrar(@PathVariable int id) {
         try (Connection con = ds.getConnection()) {
             PedidoRepository repo = new PedidoRepository(con);
-            pedido.setIdPedido(id); 
-            repo.update(pedido);
-            return pedido;
+            repo.delete(id);
+            return ResponseEntity.ok("{\"message\": \"Pedido eliminado\"}");
         } catch (SQLException e) {
-            throw new DataAccessException("Error al actualizar", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Error al borrar\"}");
         }
     }
+
+
+    @GetMapping("/admin/usuarios")
+    public List<Map<String, Object>> listarUsuariosCompañera() {
+        String sql = "SELECT id, nombre, apellidos, email, rol, estado FROM usuarios";
+        try (Connection con = ds.getConnection()) {
+            return DB.queryMany(con, sql, (rs) -> {
+                Map<String, Object> u = new HashMap<>();
+                u.put("id", rs.getInt("id"));
+                u.put("nombre", rs.getString("nombre") + " " + rs.getString("apellidos"));
+                u.put("email", rs.getString("email"));
+                u.put("rol", rs.getString("rol"));
+                u.put("estado", rs.getString("estado"));
+                return u;
+            });
+        } catch (SQLException e) {
+            throw new DataAccessException("Error al acceder a la tabla de usuarios", e);
+        }
+    }
+
 
     @GetMapping("/{id}")
     public Pedido verPedido(@PathVariable int id) {
         try (Connection con = ds.getConnection()) {
-            PedidoRepository repo = new PedidoRepository(con);
-            return repo.find(id); 
+            return new PedidoRepository(con).find(id); 
         } catch (SQLException e) {
             throw new DataAccessException("No encontrado", e);
         }

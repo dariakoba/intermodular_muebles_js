@@ -1,103 +1,119 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DNA - Panel Admin</title>
-
-<!-- CSS propio -->
-<link rel="stylesheet" href="/css/adminhome.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
+    <meta charset="UTF-8">
+    <title>DNA Muebles - Administración</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 40px; background: #f4f7f6; color: #333; }
+        .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); max-width: 1100px; margin: auto; }
+        h1 { color: #2c3e50; border-bottom: 3px solid rgb(159, 80, 0); padding-bottom: 10px; }
+        
+        /* Controles */
+        .controls { margin: 20px 0; display: flex; gap: 10px; flex-wrap: wrap; }
+        .btn-sort { background: #3498db; color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .btn-sort:hover { background: #2980b9; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background: #2c3e50; color: white; padding: 15px; text-align: left; }
+        td { padding: 12px; border-bottom: 1px solid #eee; }
+        
+        .btn-del { background: #e74c3c; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        
+        .badge { padding: 5px 12px; border-radius: 20px; font-size: 0.85em; font-weight: bold; color: white; display: inline-block; }
+        .badge-pagado { background: #27ae60; }
+        .badge-pendiente { background: #e67e22; }
+        .badge-metodo { background: #95a5a6; }
+        
+        .price { font-weight: bold; color: #2c3e50; }
+        .nav-back { margin-bottom: 20px; display: inline-block; text-decoration: none; color: rgb(159, 80, 0); font-weight: bold; }
+    </style>
 </head>
 <body>
 
-<!-- Header / Navbar -->
-<header class="navbar">
-    <a href="home.html" class="logo-link">
-        <div class="logo-container">
-            <div class="logo-circle">
-                <img src="/images/logo.png" alt="DNA Logo" class="logo-image">
-            </div>
-            <span class="brand-name">DNA</span>
-        </div>
-    </a>
+<div class="container">
+    <a href="index.html" class="nav-back">← Volver a la Tienda</a>
+    <h1>Panel de Gestión: Pedidos</h1>
 
-    <nav class="nav-links">
-        <a href="admin.html">Home</a>
-        <a href="/admin/usuarios/index.html">Usuarios</a>
-        <a href="/admin/productos/index.html">Productos</a>
-        <a href="#">Pedidos</a>
-        <a href="#">Estadísticas</a>
-    </nav>
+    <div class="controls">
+        <button class="btn-sort" onclick="ordenar('id')">🔢 Ordenar por ID</button>
+        <button class="btn-sort" onclick="ordenar('fecha')">📅 Ordenar por Fecha</button>
+        <button class="btn-sort" onclick="cargarPedidos()" style="background:#2ecc71;">🔄 Refrescar</button>
+    </div>
 
-	<div class="icons">
-	            <a href="carrito.html" style="text-decoration: none; color: inherit;">
-	                <span class="material-symbols-outlined">shopping_cart</span>
-	            </a>
-
-	            <div class="person-menu-wrapper">
-	                <a href="perfil.html" style="text-decoration: none; color: inherit;">
-	                    <span id="person-icon" class="material-symbols-outlined">person</span>
-	                </a>
-	                <div class="person-menu">
-	                    <a href="perfil.html">Ver cuenta</a>
-	                    <a href="logout.html">Cerrar sesión</a>
-	                </div>
-	            </div>
-	        </div>
-</header>
-
-<!-- Contenido principal -->
-<main class="admin-container">
-    <section class="admin-welcome">
-        <h1>Bienvenido, Admin</h1>
-        <p>Gestiona usuarios, productos y pedidos desde este panel.</p>
-    </section>
-
-	<section class="admin-cards">
-	    <div class="admin-card">
-	        <i class="fa-solid fa-users"></i>
-	        <h2>Usuarios</h2>
-	        <p>Ver, editar o eliminar usuarios registrados.</p>
-	        <button onclick="window.location.href='/admin/usuarios/index.html'">Ir a Usuarios</button>
-	    </div>
-
-	    <div class="admin-card">
-	        <i class="fa-solid fa-box-open"></i>
-	        <h2>Productos</h2>
-	        <p>Agregar, modificar o eliminar productos.</p>
-	        <button onclick="window.location.href='/admin/productos/index.html'">Ir a Productos</button>
-	    </div>
-
-	    <div class="admin-card">
-	        <i class="fa-solid fa-truck"></i>
-	        <h2>Pedidos</h2>
-	        <p>Ver y actualizar el estado de los pedidos.</p>
-	        <button onclick="window.location.href='/admin/pedidos/index.html'">Ir a Pedidos</button>
-	    </div>
-	</section>
-</main>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Fecha</th>
+                <th>Cliente</th>
+                <th>Producto</th>
+                <th>Total</th>
+                <th>Método</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="tabla-admin">
+            <tr><td colspan="8" style="text-align:center;">Cargando pedidos...</td></tr>
+        </tbody>
+    </table>
+</div>
 
 <script>
-document.addEventListener("DOMContentLoaded", async () => {
-    // Verificar que sea admin
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (!user || user.rol !== "admin") {
-        // Redirigir si no es admin
-        window.location.href = "login.html";
-        return;
+    let pedidosOriginales = [];
+
+    async function cargarPedidos() {
+        try {
+            // Ruta del controlador que ya sabemos que funciona
+            const res = await fetch('/api/carrito/admin/lista');
+            if (!res.ok) throw new Error("Error en la respuesta");
+            pedidosOriginales = await res.json();
+            renderizar(pedidosOriginales);
+        } catch (e) {
+            console.error(e);
+            document.getElementById('tabla-admin').innerHTML = '<tr><td colspan="8" style="color:red;text-align:center;">Error al conectar con el servidor.</td></tr>';
+        }
     }
 
-    // Logout
-    const logoutBtn = document.getElementById("logoutBtn");
-    logoutBtn.addEventListener("click", async () => {
-        await fetch("/api/logout", { method: "POST", credentials: "include" });
-        localStorage.removeItem("user");
-        window.location.href = "login.html";
-    });
-});
-</script>
+    function renderizar(datos) {
+        const tbody = document.getElementById('tabla-admin');
+        tbody.innerHTML = datos.map(p => {
+            const idReal = p.idPedido || p.id || "N/A";
+            const claseEstado = p.estadoPago === 'Pagado' ? 'badge-pagado' : 'badge-pendiente';
+            
+            return `
+            <tr>
+                <td><b>#${idReal}</b></td>
+                <td>${p.fecha ? new Date(p.fecha).toLocaleDateString() : '---'}</td>
+                <td>${p.clienteNombre || 'Sin nombre'}</td>
+                <td><small>Ref: ${p.idProducto || 'Mueble'}</small></td>
+                <td class="price">${(p.total || 0).toFixed(2)}€</td>
+                <td><span class="badge badge-metodo">${p.metodoPago || 'N/A'}</span></td>
+                <td><span class="badge ${claseEstado}">${p.estadoPago || 'Pendiente'}</span></td>
+                <td>
+                    <button class="btn-del" onclick="borrarPedido(${idReal})">Eliminar</button>
+                </td>
+            </tr>`;
+        }).join('');
+    }
 
+    function ordenar(criterio) {
+        let copia = [...pedidosOriginales];
+        if (criterio === 'id') {
+            copia.sort((a, b) => (b.idPedido || b.id) - (a.idPedido || a.id));
+        } else if (criterio === 'fecha') {
+            copia.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+        }
+        renderizar(copia);
+    }
+
+    async function borrarPedido(id) {
+        if (!confirm(`¿Eliminar pedido #${id}?`)) return;
+        const res = await fetch(`/api/carrito/admin/eliminar/${id}`, { method: 'DELETE' });
+        if (res.ok) cargarPedidos();
+    }
+
+    document.addEventListener('DOMContentLoaded', cargarPedidos);
+</script>
 </body>
 </html>
