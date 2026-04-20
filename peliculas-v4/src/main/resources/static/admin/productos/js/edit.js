@@ -13,7 +13,7 @@ app.run(async () => {
     }
 
     const producto   = await api.get(`/api/admin/productos/${id}`);
-    const categorias = await api.get("/api/admin/categoria");
+    const categorias = await api.get("/api/admin/categorias");
 
     render(producto, categorias);
     bindEvents();
@@ -36,17 +36,20 @@ function render(producto, categorias) {
         select.appendChild(option);
     });
 
+	
+	
     form.nombre.value      = producto.nombre;
     form.color.value       = producto.color;
     form.precio.value      = producto.precio;
     form.stock.value       = producto.stock;
     form.descripcion.value = producto.descripcion;
     form.categoria.value   = producto.categoria_id;
+	form.estado.value = producto.deleted_at ? "inactivo" : "activo";
 }
 
 function bindEvents() {
     const form = document.getElementById("form-producto");
-	console.log("form encontrado:", form); // <-- ¿es null?
+	console.log("form encontrado:", form); 
 
     bind(form, "submit", guardar);
 }
@@ -62,6 +65,11 @@ async function guardar(e) {
 	console.log("stock:",       form.stock.value);
 	console.log("descripcion:", form.descripcion.value);
 	console.log("categoria:",   form.categoria.value);
+	console.log("estado:",   form.estado.value);
+
+	const deleted_at = form.estado.value === "inactivo"
+	       ? new Date().toISOString()
+	       : null;
 
     await api.put(`/api/admin/productos/${id}`, {
         nombre:       form.nombre.value,
@@ -69,7 +77,9 @@ async function guardar(e) {
         precio:       form.precio.value,
         stock:        form.stock.value,
         descripcion:  form.descripcion.value,
-        categoria_id: form.categoria.value
+        categoria_id: form.categoria.value,
+		deleted_at:   deleted_at
+
     });
 
     location.replace("index.html");

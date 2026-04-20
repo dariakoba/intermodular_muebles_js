@@ -7,46 +7,47 @@ import { e }     from "/js/core/utils.js";
 app.run(async () => {
     await guard.requireRole("admin");
 
-    const productos = await api.get("/api/admin/categorias");
+    const categorias = await api.get("/api/admin/categorias");
 
-    render(productos);
+    render(categorias);
     bindEvents();
 });
 
-function render(productos) {
-	console.log(productos);
+function render(categorias) {
+	console.log(categorias);
     const tbody = document.querySelector("#tabla-productos tbody");
-    tbody.innerHTML = productos.map(p => `
+    tbody.innerHTML = categorias.map(p => `
         <tr>
             <td><input type="checkbox" class="check-fila" data-id="${p.id_producto}"></td>
 			<td>${e(p.id_categoria)}</td>
             <td>${e(p.nombre)}</td>
-      
+			<td>${e(p.estado)}</td>
+
             <td class="acciones">
-                <a href="show.html?id=${p.id_producto}" class="btn-ver">Ver</a>
-                <a href="edit.html?id=${p.id_producto}" class="btn-editar">Editar</a>
+                <a href="show.html?id=${p.id_categoria}" class="btn-ver">Ver</a>
+                <a href="edit.html?id=${p.id_categoria}" class="btn-editar">Editar</a>
 				
 				<button class="btn-desactivar" onclick="borrarProducto(${p.id_categoria})">
-				     Eliminar
+				     Desactivar
 				 </button>
             </td>
         </tr>
     `).join("");
 }
 
-async function desactivarProducto(id) {
-    if (!confirm("¿Seguro que quieres eliminar este producto?")) return;
+async function desactivarCategoria(id) {
+   // if (!confirm("¿Seguro que quieres eliminar esta categoria?")) return;
 
     try {
         await api.put(`/api/admin/categorias/${id}/desactivar`);
 
         // Recargar lista completa
         const productos = await api.get("/api/admin/categorias");
-        render(productos);
+        render(categorias);
 
     } catch (err) {
         console.error(err);
-        alert("Error al eliminar producto");
+        alert("Error al desactivarr producto");
     }
 }
 

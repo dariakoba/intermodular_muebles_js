@@ -4,5 +4,6 @@ import com.example.peliculas.entity.Categoria;
 
 public record CategoriaDetalle(
         int id,
-        String nombre
+        String nombre,
+        String estado
 ) {}
