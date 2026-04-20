@@ -116,7 +116,7 @@ public class ProductoRepository extends BaseRepository<Producto> {
 				    end as estado,
 				    c.nombre as categoria_nombre
 				from productos p
-				inner join categoria c 
+				left join categoria c 
 		    on c.id_categoria = p.categoria_id;
 				""";
 				
