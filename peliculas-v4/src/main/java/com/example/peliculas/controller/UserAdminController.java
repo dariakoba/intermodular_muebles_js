@@ -104,4 +104,25 @@ public class UserAdminController {
             throw new DataAccessException(e);
         }
     }
+    
+    @PutMapping("/{id}/estado")
+    public User toggleEstado(@PathVariable int id) {
+        try (Connection con = ds.getConnection()) {
+            UserRepository repo = new UserRepository(con);
+
+            User user = repo.find(id);
+
+            if ("activo".equals(user.getEstado())) {
+                user.setEstado("inactivo");
+            } else {
+                user.setEstado("activo");
+            }
+
+            repo.update(user);
+            return user;
+
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+    }
 }

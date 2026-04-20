@@ -190,7 +190,39 @@ tbody td {
 .btn-ver      { background: #e8f4f5; color: #2a9aa6; }
 .btn-editar   { background: #fef3e2; color: #c07a00; }
 .btn-eliminar { background: #fdecea; color: #c0392b; }
+.btn-activar,
+.btn-desactivar {
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s;
+    border: none;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
 
+/* estado ACTIVO → botón desactivar (rojo suave como borrar) */
+.btn-desactivar {
+    background: #fdecea;
+    color: #c0392b;
+}
+
+/* estado INACTIVO → botón activar (verde suave elegante) */
+.btn-activar {
+    background: #eafaf1;
+    color: #1e8449;
+}
+
+.btn-activar:hover,
+.btn-desactivar:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+}
 .btn-ver:hover, .btn-editar:hover, .btn-eliminar:hover { 
     opacity: 0.85; 
     transform: translateY(-1px);
@@ -202,4 +234,16 @@ tbody td {
   nav.menu { gap: 18px; flex-wrap: wrap; margin-top: 8px; }
   .admin-header { flex-direction: column; align-items: flex-start; gap: 12px; }
   .admin-actions { flex-direction: column; width: 100%; gap: 8px; }
+}
+
+th:last-child,
+td:last-child {
+    width: 230px;
+}
+
+td:nth-child(4) {
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

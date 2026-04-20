@@ -9,13 +9,19 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
 import com.example.peliculas.db.DB;
 import com.example.peliculas.dto.CarritoRequest;
 import com.example.peliculas.entity.Pedido;
+import com.example.peliculas.entity.User;
 import com.example.peliculas.repository.PedidoRepository;
+import com.example.peliculas.repository.UserRepository;
+
+import jakarta.servlet.http.HttpSession;
+
 import com.example.peliculas.exception.DataAccessException;
 
 
@@ -107,6 +113,31 @@ public class PedidoController {
             return new PedidoRepository(con).find(id); 
         } catch (SQLException e) {
             throw new DataAccessException("No encontrado", e);
+        }
+    }
+    
+    
+    //añadido por daria, no borrar porfiiiis
+    @GetMapping("/mis")
+    public List<Pedido> misPedidos(HttpSession session) {
+
+        Integer userId = (Integer) session.getAttribute("userId");
+
+        if (userId == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+
+        try (Connection con = ds.getConnection()) {
+
+            UserRepository userRepo = new UserRepository(con);
+            User user = userRepo.find(userId);
+
+            PedidoRepository pedidoRepo = new PedidoRepository(con);
+
+            return pedidoRepo.findByCliente(user.getNombre());
+
+        } catch (SQLException e) {
+            throw new DataAccessException("Error al obtener pedidos", e);
         }
     }
 }

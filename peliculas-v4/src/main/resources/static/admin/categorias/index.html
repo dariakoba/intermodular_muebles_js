@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Admin – Categorías</title>
+<title>Admin – Productos</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 
@@ -16,7 +16,7 @@ body {
   min-height: 100vh;
 }
 
-/* --- Header Topbar --- */
+/* --- Topbar --- */
 header.topbar {
   display: flex;
   align-items: center;
@@ -88,7 +88,7 @@ nav.menu a:hover { color: #1abc9c; transform: translateY(-2px); }
 }
 .person-menu a:hover { background: #f0f0f0; }
 
-/* --- Main Admin --- */
+/* --- Main wrapper --- */
 main.admin-wrapper {
   max-width: 1200px;
   margin: 48px auto;
@@ -99,8 +99,7 @@ main.admin-wrapper {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
+  margin-bottom: 16px;
   gap: 12px;
 }
 
@@ -112,11 +111,7 @@ main.admin-wrapper {
   color: #333;
 }
 
-.admin-actions {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
+.admin-actions { display: flex; gap: 12px; }
 
 .btn-nuevo, #btn-eliminar-seleccionados {
   display: inline-block;
@@ -131,82 +126,127 @@ main.admin-wrapper {
   border: none;
   transition: all 0.3s ease;
 }
+
 .btn-nuevo { background: #1abc9c; color: #fff; box-shadow: 0 4px 12px rgba(26,188,156,0.3); text-decoration:none; }
 .btn-nuevo:hover { background: #16a085; transform: translateY(-2px); }
 #btn-eliminar-seleccionados { background: #c0392b; color: #fff; box-shadow: 0 4px 12px rgba(192,57,43,0.3); }
 #btn-eliminar-seleccionados:hover { background: #a93226; transform: translateY(-2px); }
 
-/* --- Cards Grid --- */
-.cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 20px;
-}
-
-/* --- Card individual --- */
-.card {
-  position: relative;
+.tabla-wrapper {
   background: #fff;
   border-radius: 12px;
-  overflow: hidden;
-  height: 180px;
-  display: flex;
-  flex-direction: column;
-  padding: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  transition: transform 0.2s, box-shadow 0.2s;
+  overflow: auto;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  transition: transform 0.2s;
+  margin-top: 12px;
 }
-.card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+.tabla-wrapper:hover { transform: translateY(-2px); }
 
-/* Nombre y ID de la categoría */
-.card-info {
-  flex: 1;
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+thead th {
+  padding: 14px 12px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-align: left;
+  background: #1a1a1a;
+  color: #fff;
+  border-bottom: 2px solid #1abc9c;
+}
+
+th:first-child, td:first-child {
+  width: 40px;
+  text-align: center;
+}
+
+tbody tr {
+  border-bottom: 1px solid #f0ede8;
+  transition: background 0.25s;
+  cursor: pointer;
+}
+
+thead th:last-child {
+  width: 180px;
+}
+
+tbody tr:last-child {
+  border-bottom: none;
+}
+
+tbody tr:hover {
+  background: #f7f7f7;
+}
+
+tbody td {
+  padding: 12px 10px;
+  font-size: 0.94rem;
+  color: #333;
+  vertical-align: middle;
+}
+
+/* --- Botones Ver, Editar, Borrar --- */
+.acciones {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   gap: 6px;
-}
-.card-info strong { font-size: 1.1rem; }
-.card-info span { font-size: 0.9rem; color: #555; }
-
-/* Checkbox */
-.card-info input[type="checkbox"] {
-  align-self: flex-start;
-}
-
-/* Botones de acciones */
-.card-actions {
-  margin-top: auto;
-  display: flex;
-  gap: 6px;
   justify-content: center;
 }
-.btn-ver, .btn-editar, .btn-eliminar {
-  padding: 6px 12px;
+
+.btn-ver, .btn-editar, .btn-desactivar {
+  padding: 4px 10px;
   font-size: 0.75rem;
   font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
   border-radius: 5px;
   cursor: pointer;
   text-decoration: none;
+  display: inline-block;
+  transition: all 0.2s;
   border: none;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  transition: all 0.2s;
 }
-.btn-ver      { background: #e8f4f5; color: #2a9aa6; }
-.btn-editar   { background: #fef3e2; color: #c07a00; }
-.btn-eliminar { background: #fdecea; color: #c0392b; }
-.btn-ver:hover, .btn-editar:hover, .btn-eliminar:hover { 
-    opacity: 0.85; 
-    transform: translateY(-1px);
+
+.btn-ver { background: #e8f4f5; color: #2a9aa6; }
+.btn-editar { background: #fef3e2; color: #c07a00; }
+.btn-desactivar { background: #fdecea; color: #c0392b; }
+
+.btn-ver:hover, .btn-editar:hover, .btn-dsactivar:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
 }
 
 /* --- Responsive --- */
-@media (max-width: 768px) {
-  .cards-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
-  .card { height: 160px; }
+@media (max-width: 992px) {
+  header.topbar {
+    flex-direction: column;
+    padding: 12px 24px;
+    height: auto;
+  }
+  nav.menu {
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .admin-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .admin-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+  }
 }
 </style>
 </head>
+
 <body>
 
 <header class="topbar">
@@ -214,12 +254,14 @@ main.admin-wrapper {
     <img src="/images/logo.png" alt="logo">
     DNA
   </div>
+
   <nav class="menu">
     <a href="/adminhome.html">Home</a>
-    <a href="/admin/usuarios/usuarios-admin.html">Usuarios</a>
+    <a href="/admin/usuarios/index.html">Usuarios</a>
     <a href="/admin/productos/index.html">Productos</a>
     <a href="/admin/categorias/index.html">Categorías</a>
   </nav>
+
   <div class="icons">
     <span class="material-symbols-outlined">shopping_cart</span>
     <div class="person-menu-wrapper">
@@ -234,42 +276,28 @@ main.admin-wrapper {
 
 <main class="admin-wrapper">
   <div class="admin-header">
-    <h1>Categorías</h1>
+    <h1>Productos</h1>
     <div class="admin-actions">
       <button id="btn-eliminar-seleccionados">Eliminar seleccionados</button>
-      <a href="/admin/categorias/create.html" class="btn-nuevo">Nueva categoría</a>
+      <a href="/admin/productos/create.html" class="btn-nuevo">Nuevo producto</a>
     </div>
   </div>
 
-  <div class="cards-grid">
-    <!-- Card ejemplo -->
-    <div class="card">
-      <div class="card-info">
-        <input type="checkbox">
-        <strong>ID: 1</strong>
-        <span>Nombre: Sala</span>
-        <div class="card-actions">
-          <button class="btn-ver">Ver</button>
-          <button class="btn-editar">Editar</button>
-          <button class="btn-eliminar">Eliminar</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-info">
-        <input type="checkbox">
-        <strong>ID: 2</strong>
-        <span>Nombre: Comedor</span>
-        <div class="card-actions">
-          <button class="btn-ver">Ver</button>
-          <button class="btn-editar">Editar</button>
-          <button class="btn-eliminar">Eliminar</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Más categorías generadas por JS -->
+  <div class="tabla-wrapper">
+    <table id="tabla-productos">
+      <thead>
+        <tr>
+          <th><input type="checkbox" id="check-all"></th>
+          <th>ID</th>
+          <th>Nombre</th>
+       
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Aquí tu JS va a renderizar las filas -->
+      </tbody>
+    </table>
   </div>
 </main>
 

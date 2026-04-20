@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi cuenta - DNA</title>
+
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/perfil.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+<header class="topbar">
+
+    <div class="logo">
+        <img src="images/login/logo.png" alt="logo">
+        <span>DNA</span>
+    </div>
+
+    <nav class="menu">
+        <a href="index.html">Home</a>
+        <a href="productos.html">Catálogo</a>
+        <a href="productos.html">Productos</a>
+        <a href="contacto.html">Contacto</a>
+    </nav>
+
+    <div class="icons">
+
+        <a href="carrito.html" style="text-decoration: none; color: inherit;">
+            <span class="material-symbols-outlined">shopping_cart</span>
+        </a>
+
+        <div class="person-menu-wrapper">
+            <span id="person-icon" class="material-symbols-outlined">person</span>
+
+            <div class="person-menu" id="person-menu">
+                <!-- JS -->
+            </div>
+        </div>
+
+    </div>
+
+</header>
+
+<!-- ================= PERFIL ================= -->
+<main class="perfil-container">
+
+    <h1>Mi cuenta</h1>
+
+    <!-- DATOS -->
+    <div class="card">
+        <h2>Datos personales</h2>
+        <p><strong>Nombre:</strong> <span id="nombre"></span></p>
+        <p><strong>Email:</strong> <span id="email"></span></p>
+        <p><strong>Teléfono:</strong> <span id="telefono"></span></p>
+    </div>
+
+    <!-- PUNTOS -->
+    <div class="card">
+        <h2>Puntos acumulados</h2>
+        <p id="puntos"></p>
+    </div>
+
+    <!-- PEDIDOS -->
+    <div class="card">
+        <h2>Mis pedidos</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody id="pedidos-body"></tbody>
+        </table>
+    </div>
+
+</main>
+
+<!-- ================= JS ================= -->
+<script src="/js/menuUser.js"></script>
+<script src="/js/perfil.js"></script>
+
+</body>
+</html>
