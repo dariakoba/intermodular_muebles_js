@@ -2,6 +2,7 @@ package com.example.peliculas.controller;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,29 +39,40 @@ public class PedidoController {
     // --- SECCIÓN CLIENTE: REALIZAR COMPRA ---
     
     @PostMapping("/comprar")
-    public ResponseEntity<?> realizarCompra(@RequestBody CarritoRequest request) {
-        if (request == null || request.pedido == null) {
-            return ResponseEntity.badRequest().body("{\"message\": \"El pedido está vacío\"}");
+    public ResponseEntity<?> realizarCompra(@RequestBody CarritoRequest request, HttpSession session) {
+        // 1. Pillamos el ID del usuario de la sesión
+        Integer userId = (Integer) session.getAttribute("userId");
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\": \"Inicia sesión para comprar\"}");
         }
 
         try (Connection con = ds.getConnection()) {
             PedidoRepository pedidoRepo = new PedidoRepository(con);
             
-            // Forzamos ID null para evitar error de clave duplicada
-            request.pedido.setIdPedido(null);
-            
-            if (request.pedido.getClienteNombre() == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                                     .body("{\"message\": \"Error: El nombre del cliente es nulo\"}");
+            // 2. Preparamos el pedido principal
+            Pedido p = request.getPedido();
+            p.setIdUsuario(userId);
+            p.setFecha(LocalDate.now());
+
+            // 3. Insertamos el pedido (esto nos devuelve el ID generado)
+            Pedido nuevoPedido = pedidoRepo.insert(p);
+            int idGenerado = nuevoPedido.getIdPedido();
+
+            // 4. Recorremos los productos del carrito y guardamos cada detalle
+            // Asumiendo que CarritoRequest tiene una lista llamada getProductos()
+            for (Map<String, Object> item : request.getProductos()) {
+                int idProd = (int) item.get("id_producto");
+                int cant = (int) item.get("cantidad");
+                float precio = Float.parseFloat(item.get("precio").toString());
+                
+                pedidoRepo.guardarDetalle(idGenerado, idProd, cant, precio);
             }
 
-            Pedido nuevoPedido = pedidoRepo.insert(request.pedido);
-            return ResponseEntity.ok("{\"message\": \"Compra realizada\", \"id\": " + nuevoPedido.getIdPedido() + "}");
+            return ResponseEntity.ok("{\"message\": \"Compra realizada con éxito\"}");
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                                 .body("{\"message\": \"Error SQL: " + e.getMessage() + "\"}");
+            return ResponseEntity.status(500).body("{\"message\": \"Error al procesar: " + e.getMessage() + "\"}");
         }
     }
 
@@ -118,7 +130,7 @@ public class PedidoController {
     
     
     //añadido por daria, no borrar porfiiiis
-    @GetMapping("/mis")
+   @GetMapping("/mis")
     public List<Pedido> misPedidos(HttpSession session) {
 
         Integer userId = (Integer) session.getAttribute("userId");
@@ -139,5 +151,6 @@ public class PedidoController {
         } catch (SQLException e) {
             throw new DataAccessException("Error al obtener pedidos", e);
         }
-    }
+    
+}
 }

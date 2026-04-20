@@ -36,8 +36,7 @@ public class PedidoRepository extends BaseRepository<Pedido> {
 
     @Override
     public String[] getColumnNames() {
-        // Añadimos id_producto a la lista
-        return new String[] { "fecha", "cliente_nombre", "total", "metodo_pago", "estado_pago", "activo", "id_producto" };
+        return new String[] { "fecha", "cliente_nombre", "total", "metodo_pago", "estado_pago", "activo", "id_usuario" };
     }
 
     @Override
@@ -48,17 +47,40 @@ public class PedidoRepository extends BaseRepository<Pedido> {
             p.getTotal(), 
             p.getMetodoPago(), 
             p.getEstadoPago(),
-            1,
-            p.getIdProducto() 
+            1, // activo
+            p.getIdUsuario() 
         };
     }
 
     @Override
+    public Object[] getUpdateValues(Pedido p) {
+        return new Object[] { 
+            p.getFecha(), 
+            p.getClienteNombre(), 
+            p.getTotal(), 
+            p.getMetodoPago(), 
+            p.getEstadoPago(),
+            1, // activo
+            p.getIdUsuario(),
+            p.getIdPedido() // Para el WHERE id_pedido = ?
+        };
+    }
+
+    // Método para guardar los detalles (las cantidades)
+    public void guardarDetalle(int idPedido, int idProducto, int cantidad, float precio) throws SQLException {
+        String sql = "INSERT INTO detalles_pedidos (id_pedido, id_producto, cantidad, precio_unitario) VALUES (?, ?, ?, ?)";
+        DB.update(con, sql, idPedido, idProducto, cantidad, precio);
+    }
+
+    @Override
     public List<Pedido> findAll() {
-        String sql = "SELECT p.*, m.nombre as nombre_producto " +
+        String sql = "SELECT p.*, " +
+                     "GROUP_CONCAT(CONCAT(m.nombre, ' (x', d.cantidad, ')') SEPARATOR ', ') as nombre_producto " +
                      "FROM pedidos p " +
-                     "LEFT JOIN productos m ON p.id_producto = m.id_producto " + 
-                     "ORDER BY p.id_pedido DESC"; 
+                     "LEFT JOIN detalles_pedidos d ON p.id_pedido = d.id_pedido " +
+                     "LEFT JOIN productos m ON d.id_producto = m.id_producto " +
+                     "GROUP BY p.id_pedido " +
+                     "ORDER BY p.id_pedido DESC";
         try {
             return DB.queryMany(con, sql, mapper);
         } catch (SQLException e) {
@@ -66,10 +88,19 @@ public class PedidoRepository extends BaseRepository<Pedido> {
         }
     }
 
-	@Override
-	public Object[] getUpdateValues(Pedido instance) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-    
+    public List<Pedido> findByCliente(String nombre) {
+        String sql = "SELECT p.*, " +
+                     "GROUP_CONCAT(CONCAT(m.nombre, ' (x', d.cantidad, ')') SEPARATOR ', ') as nombre_producto " +
+                     "FROM pedidos p " +
+                     "LEFT JOIN detalles_pedidos d ON p.id_pedido = d.id_pedido " +
+                     "LEFT JOIN productos m ON d.id_producto = m.id_producto " +
+                     "WHERE p.cliente_nombre = ? " +
+                     "GROUP BY p.id_pedido " +
+                     "ORDER BY p.fecha DESC";
+        try {
+            return DB.queryMany(con, sql, mapper, nombre);
+        } catch (SQLException e) {
+            throw new DataAccessException("Error al buscar pedidos del cliente", e);
+        }
+    }
 }

@@ -74,10 +74,9 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // 1. Obtener datos del carrito
+            // 1. Obtener datos del carrito y calcular total al cargar la página
             const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-            
-            // 2. Calcular total de la venta
+
             const totalVenta = carrito.reduce((acc, prod) => {
                 const precio = parseFloat(prod.precio) || 0;
                 const cantidad = parseInt(prod.cantidad) || 1;
@@ -86,40 +85,45 @@
 
             document.getElementById('monto-total').innerText = totalVenta.toFixed(2) + "€";
 
-            // 3. Manejar el envío del formulario
+            // 2. Manejar el envío del formulario al hacer clic en el botón
             const form = document.getElementById('form-tarjeta');
             
             form.addEventListener('submit', async (e) => {
-                e.preventDefault();
+                e.preventDefault(); // Evitamos que la página se recargue
 
                 const btn = document.getElementById('btn-pagar');
                 btn.innerText = "Procesando...";
                 btn.disabled = true;
 
-                // Sacamos el ID del primer producto del carrito para asociarlo al pedido
-                // Buscamos tanto 'id_producto' como 'id' por si acaso
-				const idProductoReal = carrito.length > 0 
-				    ? (carrito[0].id_producto || carrito[0].id || carrito[0].idProducto) 
-				    : 1;
+                // Preparamos los datos básicos del pedido
+                const objetoPedido = {
+                    fecha: new Date().toISOString().split('T')[0],
+                    clienteNombre: document.getElementById('nombre-titular').value.trim(),
+                    total: totalVenta,
+                    metodoPago: "Tarjeta",
+                    estadoPago: "Pagado",
+                    activo: 1
+                };
 
-				const objetoPedido = {
-				    fecha: new Date().toISOString().split('T')[0],
-				    clienteNombre: document.getElementById('nombre-titular').value.trim(),
-				    total: totalVenta,
-				    metodoPago: "Tarjeta",
-				    estadoPago: "Pagado",
-				    idProducto: idProductoReal, // <--- CAMBIADO: idProducto (mayúscula) para que Java lo entienda
-				    activo: 1 
-				};
+                // Formateamos los productos para que Java los entienda bien
+                const listaProductos = carrito.map(item => ({
+                    id_producto: item.id_producto || item.id,
+                    cantidad: item.cantidad || 1,
+                    precio: item.precio || 0
+                }));
 
                 try {
+                    // Enviamos todo el paquete (Pedido + Lista de Productos)
                     const respuesta = await fetch('/api/carrito/comprar', {
                         method: 'POST',
                         headers: { 
                             'Content-Type': 'application/json',
                             'Accept': 'application/json'
                         },
-                        body: JSON.stringify({ pedido: objetoPedido }) 
+                        body: JSON.stringify({ 
+                            pedido: objetoPedido, 
+                            productos: listaProductos 
+                        }) 
                     });
 
                     if (respuesta.ok) {
