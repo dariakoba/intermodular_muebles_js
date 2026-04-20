@@ -120,24 +120,26 @@ public class PedidoController {
     //añadido por daria, no borrar porfiiiis
     @GetMapping("/mis")
     public List<Pedido> misPedidos(HttpSession session) {
-
+        // 1. Extraemos el ID del usuario directamente de la sesión
         Integer userId = (Integer) session.getAttribute("userId");
 
+        // 2. Si no hay sesión, lanzamos error 401 (Unauthorized)
         if (userId == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Debes iniciar sesión");
         }
 
+        // 3. Abrimos la conexión y ejecutamos la lógica
         try (Connection con = ds.getConnection()) {
-
-            UserRepository userRepo = new UserRepository(con);
-            User user = userRepo.find(userId);
-
+            // Inicializamos el repositorio con la conexión actual
             PedidoRepository pedidoRepo = new PedidoRepository(con);
-
-            return pedidoRepo.findByCliente(user.getNombre());
+            
+            // Llamamos al método que acabas de escribir
+            return pedidoRepo.findByUserId(userId);
 
         } catch (SQLException e) {
-            throw new DataAccessException("Error al obtener pedidos", e);
+            // Si hay un error de base de datos, lanzamos una excepción de acceso a datos
+            e.printStackTrace();
+            throw new DataAccessException("Error al obtener el historial de pedidos", e);
         }
     }
 }

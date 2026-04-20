@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("nombre").textContent = user.nombre;
     document.getElementById("email").textContent = user.email;
     document.getElementById("telefono").textContent = user.telefono ?? "-";
-    document.getElementById("puntos").textContent = user.puntos + " puntos";
+    document.getElementById("puntos").textContent = (user.puntos ?? 0) + " puntos";
 
   } catch (err) {
     console.error("Error usuario:", err);
@@ -28,23 +28,34 @@ document.addEventListener("DOMContentLoaded", async () => {
   // =========================
   try {
     const res = await fetch("/api/carrito/mis");
+    const tbody = document.getElementById("pedidos-body");
 
-    if (!res.ok) return;
+    if (!res.ok) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No se pudieron cargar los pedidos</td></tr>`;
+        return;
+    }
 
     const pedidos = await res.json();
 
-    const tbody = document.getElementById("pedidos-body");
+    if (pedidos.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">Aún no has realizado ningún pedido.</td></tr>`;
+      return;
+    }
 
     let html = "";
 
     pedidos.forEach(p => {
+      // Formateamos el estado para CSS (ej: "Pagado" -> "pagado")
+      const estadoClase = p.estadoPago ? p.estadoPago.toLowerCase() : "pendiente";
+      
       html += `
         <tr>
-          <td>${p.idPedido}</td>
-          <td>${p.fecha}</td>
-          <td>${p.total} €</td>
+          <td>#${p.idPedido}</td>
+          <td>${p.fecha || "---"}</td>
+          <td><strong>${p.nombreProducto || "Mueble Intermodular"}</strong></td>
+          <td>${p.total.toFixed(2)} €</td>
           <td>
-            <span class="estado ${p.estadoPago}">
+            <span class="estado ${estadoClase}">
               ${p.estadoPago}
             </span>
           </td>
@@ -56,6 +67,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   } catch (err) {
     console.error("Error pedidos:", err);
+    document.getElementById("pedidos-body").innerHTML = `<tr><td colspan="5">Error de conexión al cargar pedidos.</td></tr>`;
   }
 
 });

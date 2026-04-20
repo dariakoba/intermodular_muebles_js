@@ -2,6 +2,7 @@ package com.example.peliculas.repository;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import com.example.peliculas.db.DB;
 import com.example.peliculas.entity.Pedido;
@@ -70,6 +71,20 @@ public class PedidoRepository extends BaseRepository<Pedido> {
 	public Object[] getUpdateValues(Pedido instance) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	//daria:
+	public List<Pedido> findByUserId(Integer userId) {
+	    // IMPORTANTE: Asegúrate de que 'id_usuario' existe en la tabla
+	    String sql = "SELECT id_pedido, fecha, cliente_nombre, total, metodo_pago, estado_pago FROM pedidos WHERE id_usuario = ? AND activo = 1 ORDER BY fecha DESC";
+	    
+	    try {
+	        // Usa tu método de base de datos habitual
+	        return DB.queryMany(con, sql, mapper, userId); 
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return new ArrayList<>();
+	    }
 	}
     
 }
