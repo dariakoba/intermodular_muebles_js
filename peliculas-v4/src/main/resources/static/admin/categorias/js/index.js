@@ -7,7 +7,7 @@ import { e }     from "/js/core/utils.js";
 app.run(async () => {
     await guard.requireRole("admin");
 
-    const productos = await api.get("/api/admin/productos");
+    const productos = await api.get("/api/admin/categorias");
 
     render(productos);
     bindEvents();
@@ -19,17 +19,14 @@ function render(productos) {
     tbody.innerHTML = productos.map(p => `
         <tr>
             <td><input type="checkbox" class="check-fila" data-id="${p.id_producto}"></td>
-			<td>${e(p.id_producto)}</td>
+			<td>${e(p.id_categoria)}</td>
             <td>${e(p.nombre)}</td>
-            <td>${e(p.color)}</td>
-            <td>${e(p.precio)}€</td>
-            <td>${e(p.stock)}</td>
-            <td>${e(p.categoria_id || "-")}</td>
+      
             <td class="acciones">
                 <a href="show.html?id=${p.id_producto}" class="btn-ver">Ver</a>
                 <a href="edit.html?id=${p.id_producto}" class="btn-editar">Editar</a>
 				
-				<button class="btn-eliminar" onclick="borrarProducto(${p.id_producto})">
+				<button class="btn-desactivar" onclick="borrarProducto(${p.id_categoria})">
 				     Eliminar
 				 </button>
             </td>
@@ -37,6 +34,24 @@ function render(productos) {
     `).join("");
 }
 
+async function desactivarProducto(id) {
+    if (!confirm("¿Seguro que quieres eliminar este producto?")) return;
+
+    try {
+        await api.put(`/api/admin/categorias/${id}/desactivar`);
+
+        // Recargar lista completa
+        const productos = await api.get("/api/admin/categorias");
+        render(productos);
+
+    } catch (err) {
+        console.error(err);
+        alert("Error al eliminar producto");
+    }
+}
+
+
+/*
 async function borrarProducto(id) {
     if (!confirm("¿Seguro que quieres eliminar este producto?")) return;
 
@@ -52,6 +67,7 @@ async function borrarProducto(id) {
         alert("Error al eliminar producto");
     }
 }
+*/
 
 function bindEvents() {
     const tabla = document.getElementById("tabla-productos");
@@ -106,4 +122,4 @@ async function onAction(e) {
     }
 }
 */
-window.borrarProducto = borrarProducto;
+window.desactivarProducto = desactivarProducto;
