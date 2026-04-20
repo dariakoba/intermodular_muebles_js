@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 
 import org.springframework.web.bind.annotation.*;
 
+import com.example.peliculas.dto.CategoriaDetalle;
 import com.example.peliculas.entity.Categoria;
 import com.example.peliculas.entity.Producto;
 import com.example.peliculas.exception.DataAccessException;
@@ -24,10 +25,10 @@ public class CategoriaAdminController {
     }
     
     @GetMapping
-    public List<Categoria> index() {
+    public List<CategoriaDetalle> index() {
         try (Connection con = ds.getConnection()) {
         	CategoriaRepository repo = new CategoriaRepository(con);
-            return repo.findAll();
+            return repo.findAllCategoria();
         } catch (SQLException e) {
             throw new DataAccessException(e);
         }
