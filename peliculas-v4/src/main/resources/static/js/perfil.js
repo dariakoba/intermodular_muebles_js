@@ -49,19 +49,18 @@ document.addEventListener("DOMContentLoaded", async () => {
       const estadoClase = p.estadoPago ? p.estadoPago.toLowerCase() : "pendiente";
       
       html += `
-        <tr>
-          <td>#${p.idPedido}</td>
-          <td>${p.fecha || "---"}</td>
-          <td><strong>${p.nombreProducto || "Mueble Intermodular"}</strong></td>
-          <td>${p.total.toFixed(2)} €</td>
-          <td>
-            <span class="estado ${estadoClase}">
-              ${p.estadoPago}
-            </span>
-          </td>
-        </tr>
-      `;
-    });
+	  <tr>
+	        <td>#${p.idPedido}</td>
+	        <td>${p.fecha || "---"}</td>
+	        <td>${p.total.toFixed(2)} €</td>
+	        <td>
+	          <span class="estado ${p.estadoPago.toLowerCase()}">
+	            ${p.estadoPago}
+	          </span>
+	        </td>
+	      </tr>
+	    `;
+	  });
 
     tbody.innerHTML = html;
 
