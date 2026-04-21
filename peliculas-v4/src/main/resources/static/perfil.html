@@ -51,7 +51,18 @@
                 <span class="material-symbols-outlined">edit</span> Editar
             </button>
         </div>
-
+		<div class="profile-photo-container" style="text-align: center; margin-bottom: 20px;">
+		    <div style="position: relative; display: inline-block;">
+		        <img id="img-perfil" src="images/fotoperfil/default-avatar.png" 
+		             style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 2px solid #ccc;">
+		        
+		        <button onclick="document.getElementById('file-input').click()" 
+		                style="position: absolute; bottom: 0; right: 0; border-radius: 50%; width: 35px; height: 35px; border: none; background: #887a69; color: white; cursor: pointer;">
+		            <span class="material-symbols-outlined" style="font-size: 20px;">photo_camera</span>
+		        </button>
+		    </div>
+		    <input type="file" id="file-input" style="display: none;" accept="image/*">
+		</div>
         <div id="perfil-info">
             <p><strong>Nombre:</strong> <span id="nombre"></span></p>
             <p><strong>Email:</strong> <span id="email"></span></p>
