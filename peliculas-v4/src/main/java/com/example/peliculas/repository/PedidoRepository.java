@@ -74,11 +74,12 @@ public class PedidoRepository extends BaseRepository<Pedido> {
 
     @Override
     public List<Pedido> findAll() {
+        // CORRECCIÓN: m.id en lugar de m.id_producto
         String sql = "SELECT p.*, " +
                      "GROUP_CONCAT(CONCAT(m.nombre, ' (x', d.cantidad, ')') SEPARATOR ', ') as nombre_producto " +
                      "FROM pedidos p " +
                      "LEFT JOIN detalles_pedidos d ON p.id_pedido = d.id_pedido " +
-                     "LEFT JOIN productos m ON d.id_producto = m.id_producto " +
+                     "LEFT JOIN productos m ON d.id_producto = m.id " + 
                      "GROUP BY p.id_pedido " +
                      "ORDER BY p.id_pedido DESC";
         try {
@@ -88,22 +89,23 @@ public class PedidoRepository extends BaseRepository<Pedido> {
         }
     }
 
-    
     public List<Pedido> findByUsuarioId(Integer userId) {
-        String sql = "SELECT p.*, " +
-                     "GROUP_CONCAT(CONCAT(m.nombre, ' (x', d.cantidad, ')') SEPARATOR ', ') as nombre_producto " +
-                     "FROM pedidos p " +
-                     "LEFT JOIN detalles_pedidos d ON p.id_pedido = d.id_pedido " +
-                     "LEFT JOIN productos m ON d.id_producto = m.id_producto " +
-                     "WHERE p.id_usuario = ? AND p.activo = 1 " +
-                     "GROUP BY p.id_pedido " +
-                     "ORDER BY p.fecha DESC";
+
+        String sql =
+            "SELECT p.*, m.nombre as nombre_producto " +
+            "FROM pedidos p " +
+            "LEFT JOIN productos m ON p.id_producto = m.id_producto " +
+            "WHERE p.id_usuario = ? AND p.activo = 1 " +
+            "ORDER BY p.fecha DESC";
+
         try {
             return DB.queryMany(con, sql, mapper, userId);
         } catch (SQLException e) {
-            throw new DataAccessException("Error al buscar pedidos del usuario", e);
+            e.printStackTrace();
+            throw new DataAccessException("Error pedidos usuario: " + e.getMessage(), e);
         }
     }
+    
 
    
     public void actualizarEstado(int idPedido, String nuevoEstado) throws SQLException {
