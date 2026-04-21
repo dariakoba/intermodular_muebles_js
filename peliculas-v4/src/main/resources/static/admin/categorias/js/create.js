@@ -12,31 +12,22 @@ app.run(async () => {
 });
 
 async function cargarCategorias() {
-    const categorias = await api.get("/api/admin/categoria");
+    const categorias = await api.get("/api/admin/categorias");
 
-    const select = document.getElementById("categoria");
 
-    categorias.forEach(c => {
-        const option = document.createElement("option");
-        option.value = c.id_categoria;
-        option.textContent = c.nombre;
-        select.appendChild(option);
-    });
 }
 
 async function guardar(e) {
     e.preventDefault();
+	const estadoVal = document.getElementById("estado").value;
 
-    const producto = {
+    const c = {
         nombre:      document.getElementById("nombre").value,
-        color:       document.getElementById("color").value,
-        precio:      parseFloat(document.getElementById("precio").value),
-        stock:       parseInt(document.getElementById("stock").value),
-        descripcion: document.getElementById("descripcion").value,
-        categoria_id: parseInt(document.getElementById("categoria").value) || 0
+		deleted_at:   estadoVal === "inactivo" ? new Date().toISOString() : null
+  
     };
-
-    await api.post("/api/admin/productos", producto);
-
+	console.log(c);
+    await api.post("/api/admin/categorias", c);
+	
     location.href = "index.html";
 }

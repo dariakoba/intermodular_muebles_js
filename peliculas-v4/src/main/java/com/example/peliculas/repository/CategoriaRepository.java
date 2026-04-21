@@ -42,7 +42,7 @@ public class CategoriaRepository extends BaseRepository<Categoria> {
 
 	@Override
 	public Object[] getInsertValues(Categoria c) {
-		return new Object[] { c.getIdCategoria(), c.getNombre(), c.getDeleted_at() };
+		return new Object[] { c.getNombre(), c.getDeleted_at() };
 	}
 
 	@Override

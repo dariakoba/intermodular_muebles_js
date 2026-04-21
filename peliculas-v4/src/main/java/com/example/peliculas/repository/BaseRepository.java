@@ -25,7 +25,7 @@ public abstract class BaseRepository<T> {
 	
 	public abstract String getTable();
 	public String getPrimaryKeyName() {
-		return "id";
+		return "id_categoria";
 	}
 	public abstract Integer getPrimaryKey(T instance);
 

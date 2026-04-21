@@ -52,7 +52,7 @@ async function desactivarCategoria(id) {
         await api.put(`/api/admin/categorias/${id}/desactivar`);
 
         // Recargar lista completa
-        const productos = await api.get("/api/admin/categorias");
+        const categorias = await api.get("/api/admin/categorias");
         render(categorias);
 
     } catch (err) {

@@ -43,4 +43,48 @@ public class CategoriaAdminController {
             throw new DataAccessException(e);
         }
     }
+    
+    @GetMapping("/{id}")
+    public Categoria show(@PathVariable int id) {
+        try (Connection con = ds.getConnection()) {
+            CategoriaRepository repo = new CategoriaRepository(con);
+            return repo.find(id);
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+    }
+    
+    @PostMapping
+    public Categoria store(@RequestBody Categoria categoria) {
+        try (Connection con = ds.getConnection()) {
+            CategoriaRepository repo = new CategoriaRepository(con);
+            repo.insert(categoria);
+            return categoria;
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public Categoria update(@PathVariable int id, @RequestBody Categoria c) {
+        System.out.println(c);
+        try (Connection con = ds.getConnection()) {
+            CategoriaRepository repo = new CategoriaRepository(con);
+            c.setIdCategoria(id);
+            repo.update(c);
+            return c;
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public void destroy(@PathVariable int id) {
+        try (Connection con = ds.getConnection()) {
+            CategoriaRepository repo = new CategoriaRepository(con);
+            repo.delete(id);
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+    }
 }
