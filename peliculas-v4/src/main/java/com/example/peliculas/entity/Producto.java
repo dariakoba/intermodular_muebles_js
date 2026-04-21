@@ -11,7 +11,8 @@ public class Producto {
 	private String descripcion;
 	private Integer categoriaId; // referencia a la entidad Categoria
 	private LocalDateTime deletedAt;
-
+	//nuevo
+	private String estado;
 	
 
 	public Producto(Integer idProducto, String nombre, String color, float precio, int stock, String descripcion,
