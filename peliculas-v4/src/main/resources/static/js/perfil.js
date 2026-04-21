@@ -26,48 +26,54 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // =========================
-  // 📦 2. CARGAR PEDIDOS
-  // =========================
-  try {
-    const res = await fetch("/api/carrito/mis");
-    const tbody = document.getElementById("pedidos-body");
+    // 📦 2. CARGAR PEDIDOS (Actualizado para mostrar productos)
+    // =========================
+    try {
+      const res = await fetch("/api/carrito/mis");
+      const tbody = document.getElementById("pedidos-body");
 
-    if (!res.ok) {
-        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">No se pudieron cargar los pedidos</td></tr>`;
+      if (!res.ok) {
+          tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">No se pudieron cargar los pedidos</td></tr>`;
+          return;
+      }
+
+      const pedidos = await res.json();
+
+      if (pedidos.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Aún no has realizado ningún pedido.</td></tr>`;
         return;
+      }
+
+      let html = "";
+      pedidos.forEach(p => {
+        const estadoClase = p.estadoPago ? p.estadoPago.toLowerCase() : "pendiente";
+        
+        html += `
+          <tr>
+            <td>#${p.idPedido}</td>
+            <td>${p.fecha || "---"}</td>
+            <td>
+              <strong>${p.total.toFixed(2)} €</strong>
+              <br>
+              <small style="color: #887a69; display: block; margin-top: 4px;">
+                  ${p.nombreProducto || "Mueble DNA"}
+              </small>
+            </td>
+            <td>
+              <span class="estado ${estadoClase}">
+                ${p.estadoPago}
+              </span>
+            </td>
+          </tr>
+        `;
+      });
+
+      tbody.innerHTML = html;
+
+    } catch (err) {
+      console.error("Error pedidos:", err);
+      document.getElementById("pedidos-body").innerHTML = `<tr><td colspan="4">Error de conexión.</td></tr>`;
     }
-
-    const pedidos = await res.json();
-
-    if (pedidos.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Aún no has realizado ningún pedido.</td></tr>`;
-      return;
-    }
-
-    let html = "";
-    pedidos.forEach(p => {
-      const estadoClase = p.estadoPago ? p.estadoPago.toLowerCase() : "pendiente";
-      
-      html += `
-        <tr>
-          <td>#${p.idPedido}</td>
-          <td>${p.fecha || "---"}</td>
-          <td>${p.total.toFixed(2)} €</td>
-          <td>
-            <span class="estado ${estadoClase}">
-              ${p.estadoPago}
-            </span>
-          </td>
-        </tr>
-      `;
-    });
-
-    tbody.innerHTML = html;
-
-  } catch (err) {
-    console.error("Error pedidos:", err);
-    document.getElementById("pedidos-body").innerHTML = `<tr><td colspan="4">Error de conexión.</td></tr>`;
-  }
 
   // =========================
   // ✏️ 3. LÓGICA DE EDICIÓN
