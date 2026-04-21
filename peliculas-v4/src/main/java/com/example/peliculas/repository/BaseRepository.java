@@ -99,6 +99,16 @@ public abstract class BaseRepository<T> {
 	    }
 	}
 	
+	public int softDeleteActivar(int id) {
+	    try {
+	        String sql = "UPDATE " + getTable() +
+	                     " SET deleted_at = null WHERE " + getPrimaryKeyName() + " = ?";
+	        return DB.update(con, sql, id);
+	    } catch (SQLException e) {
+	        throw new DataAccessException("Error al activar en " + getTable(), e);
+	    }
+	}
+	
 	
 	private String buildInsertSql() {
 		List<String> columns = new ArrayList<>(List.of(getColumnNames()));
