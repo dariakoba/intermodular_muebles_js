@@ -12,7 +12,7 @@ app.run(async () => {
 });
 
 async function cargarCategorias() {
-    const categorias = await api.get("/api/admin/categoria");
+    const categorias = await api.get("/api/admin/categorias");
 
     const select = document.getElementById("categoria");
 
@@ -26,6 +26,7 @@ async function cargarCategorias() {
 
 async function guardar(e) {
     e.preventDefault();
+	const estadoVal = document.getElementById("estado").value;
 
     const producto = {
         nombre:      document.getElementById("nombre").value,
@@ -33,7 +34,11 @@ async function guardar(e) {
         precio:      parseFloat(document.getElementById("precio").value),
         stock:       parseInt(document.getElementById("stock").value),
         descripcion: document.getElementById("descripcion").value,
-        categoria_id: parseInt(document.getElementById("categoria").value) || 0
+        categoria_id: parseInt(document.getElementById("categoria").value) || 0,
+		
+
+		deleted_at:   estadoVal === "inactivo" ? new Date().toISOString() : null
+
     };
 
     await api.post("/api/admin/productos", producto);

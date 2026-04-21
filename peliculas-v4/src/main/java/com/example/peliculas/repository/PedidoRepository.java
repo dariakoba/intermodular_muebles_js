@@ -88,19 +88,30 @@ public class PedidoRepository extends BaseRepository<Pedido> {
         }
     }
 
-    public List<Pedido> findByCliente(String nombre) {
+    
+    public List<Pedido> findByUsuarioId(Integer userId) {
         String sql = "SELECT p.*, " +
                      "GROUP_CONCAT(CONCAT(m.nombre, ' (x', d.cantidad, ')') SEPARATOR ', ') as nombre_producto " +
                      "FROM pedidos p " +
                      "LEFT JOIN detalles_pedidos d ON p.id_pedido = d.id_pedido " +
                      "LEFT JOIN productos m ON d.id_producto = m.id_producto " +
-                     "WHERE p.cliente_nombre = ? " +
+                     "WHERE p.id_usuario = ? AND p.activo = 1 " +
                      "GROUP BY p.id_pedido " +
                      "ORDER BY p.fecha DESC";
         try {
-            return DB.queryMany(con, sql, mapper, nombre);
+            return DB.queryMany(con, sql, mapper, userId);
         } catch (SQLException e) {
-            throw new DataAccessException("Error al buscar pedidos del cliente", e);
+            throw new DataAccessException("Error al buscar pedidos del usuario", e);
+        }
+    }
+
+   
+    public void actualizarEstado(int idPedido, String nuevoEstado) throws SQLException {
+        String sql = "UPDATE pedidos SET estado_pago = ? WHERE id_pedido = ?";
+        try (java.sql.PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, nuevoEstado);
+            ps.setInt(2, idPedido);
+            ps.executeUpdate();
         }
     }
 }
