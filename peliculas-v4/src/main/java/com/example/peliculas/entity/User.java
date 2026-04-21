@@ -15,6 +15,7 @@ public class User {
     private Integer puntos;       // antes int
     private Float salario;
     private java.time.LocalDate fechaAlta;
+    private String fotoUrl;
     
     public User() {}
 
@@ -66,6 +67,13 @@ public class User {
         this.salario = 0f;
         this.fechaAlta = java.time.LocalDate.now();
     }
+	public String getFotoUrl() {
+	    return fotoUrl;
+	}
+
+	public void setFotoUrl(String fotoUrl) {
+	    this.fotoUrl = fotoUrl;
+	}
 	public int getId() {
 		return id;
 	}
