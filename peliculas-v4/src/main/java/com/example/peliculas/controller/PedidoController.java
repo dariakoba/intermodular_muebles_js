@@ -2,7 +2,7 @@ package com.example.peliculas.controller;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,14 +16,10 @@ import org.springframework.http.HttpStatus;
 import com.example.peliculas.db.DB;
 import com.example.peliculas.dto.CarritoRequest;
 import com.example.peliculas.entity.Pedido;
-import com.example.peliculas.entity.User;
 import com.example.peliculas.repository.PedidoRepository;
-import com.example.peliculas.repository.UserRepository;
-
-import jakarta.servlet.http.HttpSession;
-
 import com.example.peliculas.exception.DataAccessException;
 
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/api/carrito")
@@ -38,39 +34,49 @@ public class PedidoController {
     // --- SECCIÓN CLIENTE: REALIZAR COMPRA ---
     
     @PostMapping("/comprar")
-    public ResponseEntity<?> realizarCompra(@RequestBody CarritoRequest request) {
-        if (request == null || request.pedido == null) {
-            return ResponseEntity.badRequest().body("{\"message\": \"El pedido está vacío\"}");
+    public ResponseEntity<?> realizarCompra(@RequestBody CarritoRequest request, HttpSession session) {
+        // 1. Pillamos el ID del usuario de la sesión
+        Integer userId = (Integer) session.getAttribute("userId");
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\": \"Inicia sesión para comprar\"}");
         }
 
         try (Connection con = ds.getConnection()) {
             PedidoRepository pedidoRepo = new PedidoRepository(con);
             
-            // Forzamos ID null para evitar error de clave duplicada
-            request.pedido.setIdPedido(null);
-            
-            if (request.pedido.getClienteNombre() == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                                     .body("{\"message\": \"Error: El nombre del cliente es nulo\"}");
+            // 2. Preparamos el pedido principal
+            Pedido p = request.getPedido();
+            p.setIdUsuario(userId);
+            p.setFecha(LocalDate.now());
+
+            // 3. Insertamos el pedido (esto nos devuelve el ID generado)
+            Pedido nuevoPedido = pedidoRepo.insert(p);
+            int idGenerado = nuevoPedido.getIdPedido();
+
+            // 4. Recorremos los productos del carrito y guardamos cada detalle
+            for (Map<String, Object> item : request.getProductos()) {
+                int idProd = (int) item.get("id_producto");
+                int cant = (int) item.get("cantidad");
+                float precio = Float.parseFloat(item.get("precio").toString());
+                
+                pedidoRepo.guardarDetalle(idGenerado, idProd, cant, precio);
             }
 
-            Pedido nuevoPedido = pedidoRepo.insert(request.pedido);
-            return ResponseEntity.ok("{\"message\": \"Compra realizada\", \"id\": " + nuevoPedido.getIdPedido() + "}");
+            return ResponseEntity.ok("{\"message\": \"Compra realizada con éxito\"}");
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                                 .body("{\"message\": \"Error SQL: " + e.getMessage() + "\"}");
+            return ResponseEntity.status(500).body("{\"message\": \"Error al procesar: " + e.getMessage() + "\"}");
         }
     }
 
-    // --- SECCIÓN ADMIN: GESTIÓN DE PEDIDOS (Rutas desbloqueadas) ---
+    // --- SECCIÓN ADMIN: GESTIÓN DE PEDIDOS ---
 
     @GetMapping("/admin/lista")
     public List<Pedido> listarParaAdmin() {
         try (Connection con = ds.getConnection()) {
             PedidoRepository repo = new PedidoRepository(con);
-            return repo.findAll(); // Asegúrate de que findAll() tenga el ORDER BY id_pedido DESC
+            return repo.findAll(); 
         } catch (SQLException e) {
             throw new DataAccessException("Error al listar pedidos", e);
         }
@@ -87,6 +93,21 @@ public class PedidoController {
         }
     }
 
+    
+    @PutMapping("/admin/estado/{id}")
+    public ResponseEntity<?> cambiarEstado(@PathVariable int id, @RequestBody Map<String, String> body) {
+        try (Connection con = ds.getConnection()) {
+            PedidoRepository repo = new PedidoRepository(con);
+            String nuevoEstado = body.get("estado");
+            
+            repo.actualizarEstado(id, nuevoEstado);
+            
+            return ResponseEntity.ok("{\"message\": \"Estado actualizado correctamente\"}");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Error al cambiar estado\"}");
+        }
+    }
 
     @GetMapping("/admin/usuarios")
     public List<Map<String, Object>> listarUsuariosCompañera() {
@@ -106,7 +127,6 @@ public class PedidoController {
         }
     }
 
-
     @GetMapping("/{id}")
     public Pedido verPedido(@PathVariable int id) {
         try (Connection con = ds.getConnection()) {
@@ -116,8 +136,7 @@ public class PedidoController {
         }
     }
     
-    
-    //añadido por daria, no borrar porfiiiis
+    // --- SECCIÓN CLIENTE: MIS PEDIDOS (DARIA) ---
     @GetMapping("/mis")
     public List<Pedido> misPedidos(HttpSession session) {
         // 1. Extraemos el ID del usuario directamente de la sesión
@@ -130,14 +149,12 @@ public class PedidoController {
 
         // 3. Abrimos la conexión y ejecutamos la lógica
         try (Connection con = ds.getConnection()) {
-            // Inicializamos el repositorio con la conexión actual
             PedidoRepository pedidoRepo = new PedidoRepository(con);
             
-            // Llamamos al método que acabas de escribir
-            return pedidoRepo.findByUserId(userId);
+            // Llamamos al método correcto del repositorio (findByUsuarioId)
+            return pedidoRepo.findByUsuarioId(userId);
 
         } catch (SQLException e) {
-            // Si hay un error de base de datos, lanzamos una excepción de acceso a datos
             e.printStackTrace();
             throw new DataAccessException("Error al obtener el historial de pedidos", e);
         }

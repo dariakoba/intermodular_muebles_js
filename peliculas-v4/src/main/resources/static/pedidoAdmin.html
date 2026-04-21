@@ -6,13 +6,69 @@
     <title>DNA - Administración de Pedidos</title>
     <link rel="stylesheet" href="../../../css/usuarios-admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    
     <style>
+        /* --- ESTILOS BASE --- */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Lato', sans-serif; background: #fdfbf6; color: #222; min-height: 100vh; padding-top: 64px; }
+        .navbar { display: flex; align-items: center; justify-content: space-between; padding: 0 40px; height: 64px; background: linear-gradient(90deg, #1a1a1a, #2c2c2c); position: fixed; top: 0; left: 0; right: 0; z-index: 100; box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
+        .logo-link { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; }
+        .logo-circle { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; }
+        .logo-image { width: 100%; height: 100%; object-fit: contain; }
+        .nav-links { display: flex; gap: 28px; }
+        .nav-links a { color: #ddd; text-decoration: none; font-size: 0.9rem; text-transform: uppercase; transition: 0.3s; }
+        .nav-links a:hover, .nav-links a.active { color: #1abc9c; }
+        .nav-icons { display: flex; align-items: center; gap: 18px; color: white;}
+        .admin-container { max-width: 1200px; margin: 48px auto; padding: 0 24px; }
+        .title { font-size: 2rem; font-weight: 700; color: #333; margin-bottom: 20px; }
+        
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background-color: #f8f9fa; color: #333; font-weight: 700; }
+        
+        /* --- CORRECCIÓN DE COLORES DE LA TABLA --- */
+        #tablaPedidos thead th { background-color: #111111 !important; color: #ffffff !important; border-bottom: none !important; }
+        #tablaPedidos tbody tr { background-color: #ffffff !important; color: #222222 !important; }
+        #tablaPedidos tbody tr:nth-child(even) { background-color: #f8f9fa !important; }
+        #tablaPedidos tbody td { color: #333333 !important; }
+
+        /* --- BOTONES Y ETIQUETAS --- */
         .btn-sort { padding: 8px 15px; margin-right: 10px; border-radius: 5px; cursor: pointer; border: 1px solid #ddd; background: white; font-weight: bold; transition: 0.3s; }
-        .btn-sort:hover { background: #f0f0f0; border-color: #bbb; }
-        .badge { padding: 5px 10px; border-radius: 15px; color: white; font-size: 11px; font-weight: bold; text-transform: uppercase; }
-        .status-pagado { background-color: #2ecc71; }
-        .status-pendiente { background-color: #e67e22; }
-        .price-text { font-weight: bold; color: #2c3e50; }
+        .btn-sort:hover { background: #f0f0f0; }
+        .btn-main { padding: 8px 15px; border-radius: 5px; cursor: pointer; border: none; background: #3498db; color: white; font-weight: bold; transition: 0.3s; }
+        
+        .badge { padding: 6px 12px; border-radius: 15px; color: white; font-size: 11px; font-weight: bold; text-transform: uppercase; display: inline-block; }
+        
+        /* Colores de los estados */
+        .bg-pendiente { background-color: #f39c12; }
+        .bg-pagado { background-color: #3498db; }
+        .bg-proceso { background-color: #9b59b6; }
+        .bg-enviando { background-color: #1abc9c; }
+        .bg-recibido { background-color: #2ecc71; }
+        .bg-devuelto { background-color: #34495e; }
+        .bg-cancelado { background-color: #e74c3c; }
+
+        /* Acciones de Tabla */
+        .acciones-container { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+        .fila-botones { display: flex; gap: 5px; }
+        
+        .btn-edit { background: #f1c40f; color: #333; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; }
+        .btn-edit:disabled { background: #bdc3c7; color: #7f8c8d; cursor: not-allowed; opacity: 0.7; }
+        .btn-cancelar { background: #e67e22; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; }
+        .btn-cancelar:disabled { background: #bdc3c7; cursor: not-allowed; opacity: 0.7; }
+        .btn-delete-hard { background: transparent; color: #95a5a6; border: 1px solid #bdc3c7; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 10px; margin-top: 5px; transition: 0.3s; }
+        .btn-delete-hard:hover { background: #ffcccc; color: #c0392b; border-color: #c0392b; }
+
+        /* --- VENTANAS MODALES --- */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-box { background: white; padding: 30px; border-radius: 8px; width: 350px; text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
+        .modal-box select, .modal-box input { width: 100%; padding: 10px; margin: 15px 0; border-radius: 5px; border: 1px solid #ccc; font-size: 16px; }
+        .modal-botones { display: flex; justify-content: space-between; gap: 10px; }
+        .modal-btn { flex: 1; padding: 10px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .btn-guardar { background: #2ecc71; color: white; }
+        .btn-cerrar { background: #95a5a6; color: white; }
+        .btn-eliminar-rojo { background: #e74c3c; color: white; }
     </style>
 </head>
 <body>
@@ -20,13 +76,10 @@
     <header class="navbar">
         <a href="home.html" class="logo-link">
             <div class="logo-container">
-                <div class="logo-circle">
-                    <img src="/images/logo.png" alt="DNA Logo" class="logo-image">
-                </div>
+                <div class="logo-circle"><img src="/images/logo.png" alt="DNA Logo" class="logo-image"></div>
                 <span class="brand-name">DNA</span>
             </div>
         </a>
-
         <nav class="nav-links">
             <a href="admin.html">Dashboard</a>
             <a href="usuarios.html">Usuarios</a>
@@ -34,7 +87,6 @@
             <a href="pedidos.html" class="active">Pedidos</a>
             <a href="#">Estadísticas</a>
         </nav>
-
         <div class="nav-icons">
             <i class="fa-solid fa-cart-shopping"></i>
             <i class="fa-regular fa-user"></i>
@@ -45,16 +97,10 @@
     <main class="admin-container">
         <h1 class="title">Gestión de Pedidos</h1>
 
-        <div class="form-horizontal" style="justify-content: flex-start; margin-bottom: 20px;">
-            <button class="btn-sort" onclick="ordenarPedidos('id')">
-                <i class="fa-solid fa-sort-numeric-down"></i> Ordenar por ID
-            </button>
-            <button class="btn-sort" onclick="ordenarPedidos('fecha')">
-                <i class="fa-solid fa-calendar-days"></i> Ordenar por Fecha
-            </button>
-            <button class="btn-main" onclick="cargarPedidos()" style="margin-left: auto;">
-                <i class="fa-solid fa-rotate"></i> Actualizar
-            </button>
+        <div class="form-horizontal" style="display: flex; margin-bottom: 20px;">
+            <button class="btn-sort" onclick="ordenarPedidos('id')"><i class="fa-solid fa-sort-numeric-down"></i> ID</button>
+            <button class="btn-sort" onclick="ordenarPedidos('fecha')"><i class="fa-solid fa-calendar-days"></i> Fecha</button>
+            <button class="btn-main" onclick="cargarPedidos()" style="margin-left: auto;"><i class="fa-solid fa-rotate"></i> Actualizar Lista</button>
         </div>
 
         <table id="tablaPedidos">
@@ -62,88 +108,259 @@
                 <tr>
                     <th>ID</th>
                     <th>Fecha</th>
-                    <th>Titular Tarjeta</th>
-                    <th>Producto</th>
+                    <th>Cliente</th>
+                    <th>Productos</th>
                     <th>Total</th>
                     <th>Estado</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
-            <tbody id="tbody-pedidos">
-                </tbody>
+            <tbody id="tbody-pedidos"></tbody>
         </table>
     </main>
 
+    <div id="modalEstado" class="modal-overlay">
+        <div class="modal-box">
+            <h2>Cambiar Estado</h2>
+            <p>Pedido #<span id="modal-id-pedido"></span></p>
+            
+            <select id="select-estado"></select>
+            
+            <div class="modal-botones">
+                <button class="modal-btn btn-cerrar" onclick="cerrarModal()">Cancelar</button>
+                <button class="modal-btn btn-guardar" onclick="guardarEstado()">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalBorrar" class="modal-overlay">
+        <div class="modal-box" style="border-top: 5px solid #e74c3c;">
+            <h2 style="color: #e74c3c;"><i class="fa-solid fa-triangle-exclamation"></i> Atención</h2>
+            <p style="margin-top: 10px;">Vas a eliminar permanentemente de la base de datos el pedido <strong>#<span id="modal-borrar-id"></span></strong>.</p>
+            <p style="font-size: 13px; color: #7f8c8d; margin-top: 5px;">Esta acción no se puede deshacer.</p>
+            
+            <input type="text" id="input-borrar" placeholder="Escribe BORRAR" style="text-align: center; text-transform: uppercase; font-weight: bold; margin-top: 20px;">
+            <p id="error-borrar" style="color: #e74c3c; font-size: 12px; display: none; margin-bottom: 10px;">Debes escribir la palabra exacta.</p>
+
+            <div class="modal-botones">
+                <button class="modal-btn btn-cerrar" onclick="cerrarModalBorrar()">Cancelar</button>
+                <button class="modal-btn btn-eliminar-rojo" onclick="confirmarBorradoFuerte()">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         let pedidosOriginales = [];
+        let pedidoEditandoId = null;
+        let pedidoBorrandoId = null;
+
+        // Variables para recordar cómo está ordenado actualmente
+        let ordenIdAscendente = false;
+        let ordenFechaAscendente = false;
+
+        // EL CEREBRO DE LA MÁQUINA DE ESTADOS
+        const flujoEstados = {
+            'pendiente de pago': ['Pendiente de pago', 'Pagado'],
+            'pagado': ['Pagado', 'En proceso'],
+            'en proceso': ['En proceso', 'Enviando'],
+            'enviando': ['Enviando', 'Recibido'],
+            'recibido': ['Recibido', 'Devuelto'], 
+            'devuelto': ['Devuelto'],             
+            'cancelado': ['Cancelado']            
+        };
 
         async function cargarPedidos() {
             try {
-                // Ruta de tu controller
                 const res = await fetch('/api/carrito/admin/lista');
-                if (!res.ok) throw new Error("Error al obtener datos");
-                
                 pedidosOriginales = await res.json();
                 renderizar(pedidosOriginales);
             } catch (e) {
-                console.error(e);
+                console.error("Error cargando pedidos");
             }
+        }
+
+        function obtenerClaseEstado(estado) {
+            const e = (estado || '').toLowerCase();
+            if (e.includes('pendiente')) return 'bg-pendiente';
+            if (e.includes('pagado')) return 'bg-pagado';
+            if (e.includes('proceso')) return 'bg-proceso';
+            if (e.includes('enviando') || e.includes('enviado')) return 'bg-enviando';
+            if (e.includes('recibido')) return 'bg-recibido';
+            if (e.includes('devuelto')) return 'bg-devuelto';
+            if (e.includes('cancelado')) return 'bg-cancelado';
+            return 'bg-pendiente';
         }
 
         function renderizar(lista) {
             const tbody = document.getElementById('tbody-pedidos');
             if (!tbody) return;
 
+            if (lista.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;">No hay pedidos registrados</td></tr>`;
+                return;
+            }
+
             tbody.innerHTML = lista.map(p => {
-                const esPagado = (p.estadoPago || "").toLowerCase() === 'pagado';
-                const statusClass = esPagado ? 'status-pagado' : 'status-pendiente';
+                const estado = p.estadoPago || 'Pendiente de pago';
+                const claseEstado = obtenerClaseEstado(estado);
+                const fecha = p.fecha ? new Date(p.fecha).toLocaleDateString() : '---';
                 
+                const estadoLower = estado.toLowerCase();
+                
+                const bloqueadoCancelacion = estadoLower.includes('enviando') || estadoLower.includes('recibido') || estadoLower.includes('devuelto') || estadoLower.includes('cancelado');
+                const bloqueadoEdicion = estadoLower.includes('devuelto') || estadoLower.includes('cancelado');
+
                 return `
                     <tr>
-                        <td>#${p.idPedido}</td>
-                        <td>${p.fecha ? new Date(p.fecha).toLocaleDateString() : '---'}</td>
-                        <td>${p.clienteNombre || 'Usuario DNA'}</td>
-                        <td><strong style="color:#e67e22">${p.nombreProducto || 'Mueble'}</strong></td>
-                        <td class="price-text">${(p.total || 0).toFixed(2)}€</td>
+                        <td><strong>#${p.idPedido}</strong></td>
+                        <td>${fecha}</td>
+                        <td>${p.clienteNombre || 'Usuario'}</td>
+                        <td><div style="max-width: 200px; font-size:14px; color:#d35400;"><b>${p.nombreProducto || 'Mueble'}</b></div></td>
+                        <td style="font-weight:bold;">${(p.total || 0).toFixed(2)}€</td>
+                        <td><span class="badge ${claseEstado}">${estado}</span></td>
                         <td>
-                            <span class="badge ${statusClass}">${p.estadoPago || 'Pendiente'}</span>
-                        </td>
-                        <td>
-                            <button onclick="eliminarPedido(${p.idPedido})" class="btn-cancel" style="padding: 5px 10px; font-size: 12px;">
-                                <i class="fa-solid fa-trash"></i> Eliminar
-                            </button>
+                            <div class="acciones-container">
+                                <div class="fila-botones">
+                                    <button class="btn-edit" onclick="abrirModal(${p.idPedido}, '${estado}')" ${bloqueadoEdicion ? 'disabled title="Estado finalizado"' : 'title="Cambiar Estado"'}>
+                                        <i class="fa-solid fa-pen"></i> Editar
+                                    </button>
+                                    <button class="btn-cancelar" onclick="cancelarPedido(${p.idPedido}, '${estadoLower}')" ${bloqueadoCancelacion ? 'disabled title="No se puede cancelar en este estado"' : 'title="Cancelar Pedido"'}>
+                                        <i class="fa-solid fa-ban"></i>
+                                    </button>
+                                </div>
+                                <button class="btn-delete-hard" onclick="abrirModalBorrar(${p.idPedido})" title="Borrar de la Base de Datos">
+                                    <i class="fa-solid fa-trash-can"></i> Borrado Total
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 `;
             }).join('');
         }
 
+        // --- FUNCIONES DEL MODAL DE EDICIÓN ---
+        function abrirModal(id, estadoActual) {
+            pedidoEditandoId = id;
+            document.getElementById('modal-id-pedido').innerText = id;
+            
+            const select = document.getElementById('select-estado');
+            select.innerHTML = ''; 
+            
+            const estadoKey = estadoActual.toLowerCase();
+            const opcionesPermitidas = flujoEstados[estadoKey] || [estadoActual]; 
+
+            opcionesPermitidas.forEach(estado => {
+                const option = document.createElement('option');
+                option.value = estado;
+                option.textContent = estado;
+                if (estado.toLowerCase() === estadoKey) {
+                    option.selected = true; 
+                }
+                select.appendChild(option);
+            });
+
+            document.getElementById('modalEstado').style.display = 'flex';
+        }
+
+        function cerrarModal() {
+            document.getElementById('modalEstado').style.display = 'none';
+            pedidoEditandoId = null;
+        }
+
+        async function guardarEstado() {
+            const nuevoEstado = document.getElementById('select-estado').value;
+            await realizarCambioEstado(pedidoEditandoId, nuevoEstado);
+            cerrarModal();
+        }
+
+        // --- FUNCIÓN CANCELAR ---
+        async function cancelarPedido(id, estadoActual) {
+            if (estadoActual.includes('enviando') || estadoActual.includes('recibido') || estadoActual.includes('devuelto')) {
+                alert("Operación bloqueada: No puedes cancelar un pedido en esta etapa.");
+                return;
+            }
+            if (confirm("¿Estás seguro de que deseas CANCELAR este pedido?")) {
+                await realizarCambioEstado(id, "Cancelado");
+            }
+        }
+
+        // --- CONEXIÓN CON JAVA ---
+        async function realizarCambioEstado(id, estado) {
+            try {
+                const res = await fetch(`/api/carrito/admin/estado/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ estado: estado })
+                });
+                if (res.ok) cargarPedidos();
+            } catch (e) {
+                console.error("Error actualizando estado");
+            }
+        }
+
+        // --- MODAL DE BORRADO ---
+        function abrirModalBorrar(id) {
+            pedidoBorrandoId = id;
+            document.getElementById('modal-borrar-id').innerText = id;
+            document.getElementById('input-borrar').value = ''; 
+            document.getElementById('error-borrar').style.display = 'none'; 
+            document.getElementById('modalBorrar').style.display = 'flex';
+            setTimeout(() => document.getElementById('input-borrar').focus(), 100);
+        }
+
+        function cerrarModalBorrar() {
+            document.getElementById('modalBorrar').style.display = 'none';
+            pedidoBorrandoId = null;
+        }
+
+        async function confirmarBorradoFuerte() {
+            const textoEscrito = document.getElementById('input-borrar').value.trim().toUpperCase();
+            if (textoEscrito === "BORRAR") {
+                try {
+                    const res = await fetch(`/api/carrito/admin/eliminar/${pedidoBorrandoId}`, { method: 'DELETE' });
+                    if (res.ok) {
+                        cerrarModalBorrar();
+                        cargarPedidos(); 
+                    } else {
+                        alert("El servidor no pudo eliminar el pedido.");
+                    }
+                } catch (e) {
+                    alert("Error de red al intentar eliminar.");
+                }
+            } else {
+                document.getElementById('error-borrar').style.display = 'block';
+                document.getElementById('input-borrar').focus();
+            }
+        }
+
+        // --- ORDENACIÓN DINÁMICA (Ascendente / Descendente) ---
         function ordenarPedidos(criterio) {
             let copia = [...pedidosOriginales];
+
             if (criterio === 'id') {
-                copia.sort((a, b) => b.idPedido - a.idPedido);
-            } else if (criterio === 'fecha') {
-                copia.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+                if (ordenIdAscendente) {
+                    // Mayor a menor (25, 24, 23...)
+                    copia.sort((a, b) => b.idPedido - a.idPedido);
+                } else {
+                    // Menor a mayor (1, 2, 3...)
+                    copia.sort((a, b) => a.idPedido - b.idPedido);
+                }
+                ordenIdAscendente = !ordenIdAscendente; 
+            } 
+            else if (criterio === 'fecha') {
+                if (ordenFechaAscendente) {
+                    // Más reciente a más antiguo
+                    copia.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+                } else {
+                    // Más antiguo a más reciente
+                    copia.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+                }
+                ordenFechaAscendente = !ordenFechaAscendente; 
             }
+
             renderizar(copia);
         }
 
-        async function eliminarPedido(id) {
-            if (!confirm(`¿Deseas eliminar permanentemente el pedido #${id}?`)) return;
-            
-            try {
-                const res = await fetch(`/api/carrito/admin/eliminar/${id}`, { method: 'DELETE' });
-                if (res.ok) {
-                    cargarPedidos();
-                } else {
-                    alert("Error al eliminar");
-                }
-            } catch (e) {
-                alert("Error de conexión");
-            }
-        }
-
-        // Carga inicial
         document.addEventListener('DOMContentLoaded', cargarPedidos);
     </script>
 </body>
