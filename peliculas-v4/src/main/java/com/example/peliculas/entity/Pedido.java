@@ -26,9 +26,15 @@ public class Pedido {
     @JsonProperty("nombreProducto")
     private String nombreProducto;
 
+    @JsonProperty("idUsuario")
+    private Integer idUsuario;
+    
     public Pedido() {}
 
     // Getters y Setters
+    public Integer getIdUsuario() { return idUsuario; }
+    public void setIdUsuario(Integer idUsuario) { this.idUsuario = idUsuario; }
+    
     public Integer getIdPedido() { return idPedido; }
     public void setIdPedido(Integer idPedido) { this.idPedido = idPedido; }
 
