@@ -13,7 +13,7 @@ import com.example.peliculas.dto.ProductoCatNomDetalle;
 import com.example.peliculas.dto.ProductoDetalle;
 import com.example.peliculas.dto.ProductoResumen;
 
-public class ProductoRepository extends BaseRepository<Producto> {
+public class ProductoRepository extends SoftDeleteRepository<Producto> {
 
 	
 	public ProductoRepository(Connection con) {

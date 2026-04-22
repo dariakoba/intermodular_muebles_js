@@ -44,6 +44,16 @@ public class CategoriaAdminController {
         }
     }
     
+    @PutMapping("/{id}/activar")
+    public void activar(@PathVariable int id) {
+        try (Connection con = ds.getConnection()) {
+            CategoriaRepository repo = new CategoriaRepository(con);
+            repo.softDeleteActivar(id);
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+    }
+    
     @GetMapping("/{id}")
     public Categoria show(@PathVariable int id) {
         try (Connection con = ds.getConnection()) {

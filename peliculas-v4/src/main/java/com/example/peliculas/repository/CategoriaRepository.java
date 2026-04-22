@@ -15,7 +15,7 @@ import com.example.peliculas.dto.CategoriaDetalle;
 import com.example.peliculas.dto.ProductoCatNomDetalle;
 import com.example.peliculas.dto.ProductoDetalle;
 
-public class CategoriaRepository extends BaseRepository<Categoria> {
+public class CategoriaRepository extends SoftDeleteRepository<Categoria> {
 
 	public CategoriaRepository(Connection con) {
 		super(con, new CategoriaMapper());
