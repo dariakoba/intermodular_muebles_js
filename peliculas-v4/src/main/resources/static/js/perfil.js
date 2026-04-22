@@ -1,72 +1,171 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
-  // =========================
-  // 👤 DATOS USUARIO
-  // =========================
-  try {
-    const res = await fetch("/api/me");
+    // =========================
+    // 👤 1. CARGAR DATOS USUARIO
+    // =========================
+    try {
+        const res = await fetch("/api/me");
 
-    if (!res.ok) {
-      window.location.href = "/login.html";
-      return;
+        if (!res.ok) {
+            window.location.href = "/login.html";
+            return;
+        }
+
+        const user = await res.json();
+
+        // Rellenamos los campos de texto
+        document.getElementById("nombre").textContent = user.nombre;
+        document.getElementById("email").textContent = user.email;
+        document.getElementById("telefono").textContent = user.telefono ?? "-";
+        document.getElementById("direccion").textContent = user.direccion ?? "No definida";
+        document.getElementById("puntos").textContent = (user.puntos ?? 0) + " puntos";
+
+        // ✅ CORRECCIÓN: Cargar la foto de perfil al iniciar
+		// --- Dentro del bloque donde cargas los datos del usuario ---
+		const imgPerfil = document.getElementById("img-perfil");
+
+		// Si el usuario tiene fotoUrl en la BD, la usamos. 
+		// Si no, usamos tu nueva ruta por defecto.
+		if (user.fotoUrl) {
+		    imgPerfil.src = user.fotoUrl;
+		} else {
+		    imgPerfil.src = "/images/fotoperfil/default-avatar.png"; 
+		}
+
+    } catch (err) {
+        console.error("Error usuario:", err);
+        window.location.href = "/login.html";
     }
 
-    const user = await res.json();
+    // =========================
+    // 📦 2. CARGAR PEDIDOS
+    // =========================
+    try {
+        const res = await fetch("/api/carrito/mis");
+        const tbody = document.getElementById("pedidos-body");
 
-    document.getElementById("nombre").textContent = user.nombre;
-    document.getElementById("email").textContent = user.email;
-    document.getElementById("telefono").textContent = user.telefono ?? "-";
-    document.getElementById("puntos").textContent = (user.puntos ?? 0) + " puntos";
+        if (!res.ok) {
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">No se pudieron cargar los pedidos</td></tr>`;
+            return;
+        }
 
-  } catch (err) {
-    console.error("Error usuario:", err);
-    window.location.href = "/login.html";
-  }
+        const pedidos = await res.json();
 
-  // =========================
-  // 📦 PEDIDOS
-  // =========================
-  try {
-    const res = await fetch("/api/carrito/mis");
-    const tbody = document.getElementById("pedidos-body");
+        if (pedidos.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Aún no has realizado ningún pedido.</td></tr>`;
+            return;
+        }
 
-    if (!res.ok) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No se pudieron cargar los pedidos</td></tr>`;
-        return;
+        let html = "";
+        pedidos.forEach(p => {
+            const estadoClase = p.estadoPago ? p.estadoPago.toLowerCase() : "pendiente";
+            html += `
+                <tr>
+                    <td>#${p.idPedido}</td>
+                    <td>${p.fecha || "---"}</td>
+                    <td>
+                        <strong>${p.total.toFixed(2)} €</strong>
+                        <br>
+                        <small style="color: #887a69; display: block; margin-top: 4px;">
+                            ${p.nombreProducto || "Mueble DNA"}
+                        </small>
+                    </td>
+                    <td><span class="estado ${estadoClase}">${p.estadoPago}</span></td>
+                </tr>`;
+        });
+        tbody.innerHTML = html;
+    } catch (err) {
+        console.error("Error pedidos:", err);
+        document.getElementById("pedidos-body").innerHTML = `<tr><td colspan="4">Error de conexión.</td></tr>`;
     }
 
-    const pedidos = await res.json();
+    // =========================
+    // ✏️ 3. LÓGICA DE EDICIÓN
+    // =========================
+    const btnEdit = document.getElementById("btn-edit");
+    const btnCancel = document.getElementById("btn-cancel");
+    const btnSave = document.getElementById("btn-save");
+    const infoDiv = document.getElementById("perfil-info");
+    const formDiv = document.getElementById("perfil-form");
 
-    if (pedidos.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">Aún no has realizado ningún pedido.</td></tr>`;
-      return;
+    btnEdit.addEventListener("click", () => {
+        document.getElementById("input-nombre").value = document.getElementById("nombre").textContent;
+        document.getElementById("input-email").value = document.getElementById("email").textContent;
+        document.getElementById("input-telefono").value = document.getElementById("telefono").textContent;
+        document.getElementById("input-direccion").value = document.getElementById("direccion").textContent;
+        
+        infoDiv.style.display = "none";
+        formDiv.style.display = "block";
+        btnEdit.style.display = "none";
+    });
+
+    btnCancel.addEventListener("click", () => {
+        infoDiv.style.display = "block";
+        formDiv.style.display = "none";
+        btnEdit.style.display = "inline-flex";
+    });
+
+    btnSave.addEventListener("click", async () => {
+        const updatedUser = {
+            nombre: document.getElementById("input-nombre").value.trim(),
+            email: document.getElementById("input-email").value.trim(),
+            telefono: document.getElementById("input-telefono").value.trim(),
+            direccion: document.getElementById("input-direccion").value.trim()
+        };
+
+        if (Object.values(updatedUser).some(val => !val)) {
+            alert("Por favor, rellena todos los campos.");
+            return;
+        }
+
+        try {
+            const res = await fetch("/api/users/update-me", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(updatedUser)
+            });
+
+            if (res.ok) {
+                alert("¡Datos actualizados!");
+                location.reload();
+            } else {
+                alert("Error al actualizar.");
+            }
+        } catch (err) {
+            alert("Error de conexión.");
+        }
+    });
+
+    // =========================
+    // 📸 4. SUBIDA DE FOTO
+    // =========================
+    const fileInput = document.getElementById('file-input');
+    if (fileInput) {
+        fileInput.addEventListener('change', async function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('/api/users/upload-photo', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    // ✅ MEJORA: Añadimos un "timestamp" (?t=...) para forzar al navegador 
+                    // a recargar la imagen y que no use la vieja de la caché.
+                    document.getElementById('img-perfil').src = data.fotoUrl + "?t=" + new Date().getTime();
+                    alert("Foto actualizada correctamente");
+                } else {
+                    alert("Error al subir la foto");
+                }
+            } catch (error) {
+                console.error("Error subida:", error);
+            }
+        });
     }
-
-    let html = "";
-
-    pedidos.forEach(p => {
-      // Formateamos el estado para CSS (ej: "Pagado" -> "pagado")
-      const estadoClase = p.estadoPago ? p.estadoPago.toLowerCase() : "pendiente";
-      
-      html += `
-	  <tr>
-	        <td>#${p.idPedido}</td>
-	        <td>${p.fecha || "---"}</td>
-	        <td>${p.total.toFixed(2)} €</td>
-	        <td>
-	          <span class="estado ${p.estadoPago.toLowerCase()}">
-	            ${p.estadoPago}
-	          </span>
-	        </td>
-	      </tr>
-	    `;
-	  });
-
-    tbody.innerHTML = html;
-
-  } catch (err) {
-    console.error("Error pedidos:", err);
-    document.getElementById("pedidos-body").innerHTML = `<tr><td colspan="5">Error de conexión al cargar pedidos.</td></tr>`;
-  }
-
 });

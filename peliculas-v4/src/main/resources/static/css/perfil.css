@@ -137,3 +137,95 @@ tbody tr:hover {
     padding: 8px;
   }
 }
+
+/* =========================
+   BOTONES PRO
+   ========================= */
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  font-family: inherit;
+  font-weight: 600;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* EDITAR */
+.btn-edit {
+  background: transparent;
+  color: #c7b299;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+}
+
+.btn-edit:hover {
+  color: #a38f78;
+  transform: scale(1.05);
+}
+
+/* GUARDAR */
+.btn-save {
+  background: linear-gradient(135deg, #c7b299, #a38f78);
+  color: white;
+  padding: 12px 26px;
+  font-size: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.btn-save:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+}
+
+/* CANCELAR */
+.btn-cancel {
+  background: #f1ece6;
+  color: #555;
+  padding: 12px 26px;
+  font-size: 1rem;
+  border-radius: 12px;
+}
+
+.btn-cancel:hover {
+  background: #e2dbd3;
+  transform: translateY(-2px);
+}
+
+/* =========================
+   INPUTS OBLIGATORIOS
+   ========================= */
+
+.form-group label::after {
+  content: " *";
+  color: #d46a6a;
+  font-weight: bold;
+}
+
+/* INPUT BONITO */
+.form-group input {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #e9e1d6;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+
+/* FOCUS */
+.form-group input:focus {
+  border-color: #c7b299;
+  box-shadow: 0 0 0 3px rgba(199,178,153,0.2);
+}
+
+/* ERROR VISUAL */
+.form-group input:invalid {
+  border-color: #e07a7a;
+  background: #fff5f5;
+}
