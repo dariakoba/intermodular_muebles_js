@@ -62,7 +62,7 @@ public class PedidoRepository extends BaseRepository<Pedido> {
             p.getEstadoPago(),
             1, // activo
             p.getIdUsuario(),
-            p.getIdPedido() // Para el WHERE id_pedido = ?
+            p.getIdPedido() 
         };
     }
 

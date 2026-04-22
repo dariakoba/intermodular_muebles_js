@@ -55,8 +55,8 @@ public class PedidoController {
 
             // 4. Recorremos los productos del carrito y guardamos cada detalle
             for (Map<String, Object> item : request.getProductos()) {
-                int idProd = (int) item.get("id_producto");
-                int cant = (int) item.get("cantidad");
+            	int idProd = Integer.parseInt(item.get("id_producto").toString());
+            	int cant = Integer.parseInt(item.get("cantidad").toString());
                 float precio = Float.parseFloat(item.get("precio").toString());
                 
                 pedidoRepo.guardarDetalle(idGenerado, idProd, cant, precio);
