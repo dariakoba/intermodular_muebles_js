@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar director</title>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container py-4">
+
+    <h1 class="h3 mb-4">Editar director</h1>
+
+    <form id="form-director">
+
+        <input type="hidden" id="id">
+
+        <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input type="text" id="nombre" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">País</label>
+            <input type="text" id="pais" class="form-control">
+        </div>
+
+		<button type="submit">Guardar</button>
+	</form>
+
+	<hr>
+
+	<h3>Imágenes</h3>
+
+	<input type="file" id="imagen">
+
+	<div id="galeria" style="display:flex;gap:10px;flex-wrap:wrap;"></div>
+
+	<script type="module" src="/js/admin/directores/edit.js"></script>

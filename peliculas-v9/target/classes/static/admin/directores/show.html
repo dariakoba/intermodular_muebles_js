@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ver director</title>
+    <link rel="stylesheet" href="/css/app.css">
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+<body>
+	
+	<h1 id="nombre"></h1>
+    <p><strong>País:</strong> <span id="pais"></span></p>
+
+    <!-- Imagen principal -->
+    <div>
+        <img id="imagen-principal" style="max-width: 400px; display: none;">
+    </div>
+	
+	<a href="index.html" class="btn btn-secondary mt-2 mb-4">Volver</a>
+	
+    <!-- Galería -->
+    <h3>Imágenes</h3>
+    <div id="galeria" style="display: flex; gap: 10px; flex-wrap: wrap;"></div>
+	
+	<!-- Modal -->
+	<div id="modal" style="
+	    display:none;
+	    position:fixed;
+	    top:0;left:0;
+	    width:100%;height:100%;
+	    background:rgba(0,0,0,0.8);
+	    justify-content:center;
+	    align-items:center;
+	">
+
+	    <div style="position:relative">
+
+	        <button id="cerrar-modal" style="
+	            position:absolute;
+	            top:-10px;
+	            right:-10px;
+	            background:white;
+	            border:none;
+	            font-size:20px;
+	            cursor:pointer;
+	        ">✕</button>
+
+	        <img id="modal-img" style="max-width:90vw;max-height:90vh">
+
+	    </div>
+	</div>
+
+    <script type="module" src="/js/admin/directores/show.js"></script>
+
+</body>
+</html>

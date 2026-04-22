@@ -106,7 +106,7 @@ public class UserController {
             throw new DataAccessException(e);
         }
     }
-    
+    /*
     @PostMapping("/upload-photo")
     public UserResponse uploadPhoto(@RequestParam("file") MultipartFile file, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
@@ -139,4 +139,5 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al guardar la imagen");
         }
     }
+    */
 }

@@ -122,7 +122,7 @@ public class UserRepository extends BaseRepository<User> {
 	    return new String[] { 
 	        "id", "password_hash", "rol", "telefono", "estado", 
 	        "nombre", "apellidos", "direccion", "email", "puntos", 
-	        "salario", "fecha_alta", "foto_url" // <-- Añadir aquí
+	        "salario", "fecha_alta"
 	    };
 	}
 
@@ -132,7 +132,6 @@ public class UserRepository extends BaseRepository<User> {
 	        u.getPasswordHash(), u.getRol(), u.getTelefono(), u.getEstado(),
 	        u.getNombre(), u.getApellidos(), u.getDireccion(), u.getEmail(),
 	        u.getPuntos(), u.getSalario(), LocalDate.now(), 
-	        u.getFotoUrl() // <-- Añadir aquí
 	    };
 	}
 
@@ -142,7 +141,6 @@ public class UserRepository extends BaseRepository<User> {
 	        u.getPasswordHash(), u.getRol(), u.getTelefono(), u.getEstado(),
 	        u.getNombre(), u.getApellidos(), u.getDireccion(), u.getEmail(),
 	        u.getPuntos(), u.getSalario(), u.getFechaAlta(),
-	        u.getFotoUrl(), // <-- Añadir aquí
 	        u.getId()       // El ID siempre al final para el WHERE
 	    };
 	}
