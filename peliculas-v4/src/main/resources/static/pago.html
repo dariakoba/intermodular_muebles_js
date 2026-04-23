@@ -38,10 +38,10 @@
                 </select>
                 
                 <div id="datos-tarjeta">
-                    <input type="text" placeholder="Número de tarjeta (16 dígitos)" required maxlength="16" id="input-tarjeta">
+                    <input type="text" placeholder="Número de tarjeta (16 dígitos)" required id="input-tarjeta" oninput="formatearTarjeta(this)">
                     <div class="row">
-                        <input type="text" placeholder="MM/AA" required maxlength="5" id="input-fecha">
-                        <input type="text" placeholder="CVV" required maxlength="3" id="input-cvv">
+                        <input type="text" placeholder="MM/AA" required id="input-fecha" oninput="formatearFecha(this)">
+                        <input type="text" placeholder="CVV" required id="input-cvv" oninput="formatearCVV(this)">
                     </div>
                 </div>
 
@@ -64,6 +64,26 @@
     </div>
 
     <script>
+        function formatearTarjeta(input) {
+            input.value = input.value.replace(/\D/g, '').substring(0, 16);
+        }
+
+        function formatearCVV(input) {
+            input.value = input.value.replace(/\D/g, '').substring(0, 3);
+        }
+
+        function formatearFecha(input) {
+            let valor = input.value.replace(/\D/g, '');
+            
+            valor = valor.substring(0, 4);
+
+            if (valor.length > 2) {
+                input.value = valor.substring(0, 2) + '/' + valor.substring(2, 4);
+            } else {
+                input.value = valor;
+            }
+        }
+
         function cambiarMetodoPago() {
             const metodo = document.getElementById('metodo-pago').value;
             const divTarjeta = document.getElementById('datos-tarjeta');
@@ -86,6 +106,11 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+
+            if (carrito.length === 0) {
+                window.location.href = "carrito.html";
+                return;
+            }
 
             const totalVenta = carrito.reduce((acc, prod) => {
                 const precio = parseFloat(prod.precio) || 0;
@@ -125,7 +150,11 @@
                 try {
                     const respuesta = await fetch('/api/carrito/comprar', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                        credentials: 'include', 
+                        headers: { 
+                            'Content-Type': 'application/json', 
+                            'Accept': 'application/json' 
+                        },
                         body: JSON.stringify({ pedido: objetoPedido, productos: listaProductos }) 
                     });
 
@@ -139,12 +168,16 @@
                         
                         document.getElementById('mensaje-exito').style.display = 'block';
                     } else {
-                        alert("Error en el servidor");
+                        if (respuesta.status === 401) {
+                            alert("Por favor, inicia sesión para poder comprar.");
+                        } else {
+                            alert("Error en el servidor al intentar registrar la compra.");
+                        }
                         btn.innerText = "CONFIRMAR PEDIDO";
                         btn.disabled = false;
                     }
                 } catch (error) {
-                    alert("No se pudo conectar con el servidor.");
+                    alert("No se pudo conectar con el servidor. Revisa si Spring Boot está encendido.");
                     btn.disabled = false;
                 }
             });

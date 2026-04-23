@@ -29,9 +29,20 @@ public class Pedido {
     @JsonProperty("idUsuario")
     private Integer idUsuario;
     
+    // --- NUEVO: AÑADIMOS EMAIL Y TELÉFONO ---
+    private String email;
+    private String telefono;
+    
     public Pedido() {}
 
     // Getters y Setters
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getTelefono() { return telefono; }
+    public void setTelefono(String telefono) { this.telefono = telefono; }
+    // ----------------------------------------
+
     public Integer getIdUsuario() { return idUsuario; }
     public void setIdUsuario(Integer idUsuario) { this.idUsuario = idUsuario; }
     
@@ -53,8 +64,8 @@ public class Pedido {
     public String getEstadoPago() { return estadoPago; }
     public void setEstadoPago(String estadoPago) { this.estadoPago = estadoPago; }
 
-    public Integer getIdProducto() { return idProducto; } // <--- NUEVO
-    public void setIdProducto(Integer idProducto) { this.idProducto = idProducto; } // <--- NUEVO
+    public Integer getIdProducto() { return idProducto; } 
+    public void setIdProducto(Integer idProducto) { this.idProducto = idProducto; } 
 
     public String getNombreProducto() { return nombreProducto; }
     public void setNombreProducto(String nombreProducto) { this.nombreProducto = nombreProducto; }
