@@ -50,6 +50,14 @@ CREATE TABLE `usuarios` (
   `fecha_alta` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE producto_imagenes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    producto_id INT NOT NULL,
+    url VARCHAR(255) NOT NULL,
+
+    FOREIGN KEY (producto_id) REFERENCES productos(id_producto) ON DELETE CASCADE
+);
+
 -- PRIMARY KEYS
 ALTER TABLE `categoria` ADD PRIMARY KEY (`id_categoria`);
 ALTER TABLE `linea_pedido` ADD PRIMARY KEY (`id`), ADD KEY `id_pedido` (`id_pedido`), ADD KEY `id_ejemplar` (`id_ejemplar`);
