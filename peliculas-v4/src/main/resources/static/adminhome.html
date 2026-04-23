@@ -8,12 +8,13 @@
 <!-- CSS propio -->
 <link rel="stylesheet" href="/css/adminhome.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 </head>
 <body>
 
 <!-- Header / Navbar -->
 <header class="navbar">
+
     <a href="home.html" class="logo-link">
         <div class="logo-container">
             <div class="logo-circle">
@@ -31,23 +32,23 @@
         <a href="#">Estadísticas</a>
     </nav>
 
-	<div class="icons">
-	            <a href="carrito.html" style="text-decoration: none; color: inherit;">
-	                <span class="material-symbols-outlined">shopping_cart</span>
-	            </a>
+	<div class="person-menu-wrapper">
 
-	            <div class="person-menu-wrapper">
-	                <a href="perfil.html" style="text-decoration: none; color: inherit;">
-	                    <span id="person-icon" class="material-symbols-outlined">person</span>
-	                </a>
-	                <div class="person-menu">
-	                    <a href="perfil.html">Ver cuenta</a>
-	                    <a href="logout.html">Cerrar sesión</a>
-	                </div>
-	            </div>
-	        </div>
+	    <span id="person-icon" class="material-symbols-outlined">
+	        account_circle
+	    </span>
+
+	    <div class="person-menu" id="person-menu">
+
+	        <a href="#" id="logoutBtn" class="logout-link">
+	            <span class="material-symbols-outlined">logout</span>
+	            Cerrar sesión
+	        </a>
+
+	    </div>
+	</div>
+
 </header>
-
 <!-- Contenido principal -->
 <main class="admin-container">
     <section class="admin-welcome">
@@ -80,22 +81,53 @@
 </main>
 
 <script>
-document.addEventListener("DOMContentLoaded", async () => {
-    // Verificar que sea admin
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (!user || user.rol !== "admin") {
-        // Redirigir si no es admin
-        window.location.href = "login.html";
-        return;
-    }
+	document.addEventListener("DOMContentLoaded", () => {
 
-    // Logout
-    const logoutBtn = document.getElementById("logoutBtn");
-    logoutBtn.addEventListener("click", async () => {
-        await fetch("/api/logout", { method: "POST", credentials: "include" });
-        localStorage.removeItem("user");
-        window.location.href = "login.html";
-    });
+	    const icon = document.getElementById("person-icon");
+	    const menu = document.getElementById("person-menu");
+	    const logoutBtn = document.getElementById("logoutBtn");
+
+	    if (!icon || !menu) return;
+
+	    // abrir / cerrar menú
+	    icon.addEventListener("click", (e) => {
+	        e.stopPropagation();
+	        menu.classList.toggle("show");
+	    });
+
+	    // evitar cierre al clicar dentro del menú
+	    menu.addEventListener("click", (e) => {
+	        e.stopPropagation();
+	    });
+
+	    // cerrar al clicar fuera
+	    document.addEventListener("click", () => {
+	        menu.classList.remove("show");
+	    });
+
+	    // logout (CORREGIDO)
+	    if (logoutBtn) {
+	        logoutBtn.addEventListener("click", async (e) => {
+	            e.preventDefault();
+
+	            try {
+	                await fetch("/logout", {   // 👈 ESTE ES EL CORRECTO (como dijiste)
+	                    method: "POST",
+	                    credentials: "include"
+	                });
+
+	                localStorage.removeItem("user");
+	                window.location.href = "/login.html";
+
+	            } catch (err) {
+	                console.error("Error al cerrar sesión:", err);
+	                alert("No se pudo cerrar sesión");
+	            }
+	        });
+	    }
+	});
+	
+
 });
 </script>
 

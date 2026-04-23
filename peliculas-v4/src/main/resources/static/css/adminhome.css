@@ -203,3 +203,72 @@ body {
     margin-top: 8px;
   }
 }
+.icons {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+/* ICONOS GENERALES */
+.icons .material-symbols-outlined {
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.icons .material-symbols-outlined:hover {
+  color: #1abc9c;
+  transform: scale(1.15);
+}
+.material-symbols-outlined {
+    cursor: pointer;
+    color: #fff;
+    font-size: 26px;
+    transition: 0.2s;
+}
+
+.material-symbols-outlined:hover {
+    color: #1abc9c;
+    transform: scale(1.1);
+}
+
+/* 🔥 WRAPPER CLAVE */
+.person-menu-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+/* 🔥 MENÚ */
+.person-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%; /* IMPORTANTE: justo debajo del icono */
+    background: white;
+    border-radius: 8px;
+    padding: 8px 0;
+    min-width: 160px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    z-index: 999;
+}
+
+/* 🔥 MANTENER HOVER EN TODO EL BLOQUE */
+.person-menu-wrapper:hover .person-menu {
+    display: block;
+}
+
+/* links */
+.logout-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #333;
+    text-decoration: none;
+    padding: 10px 12px;
+    white-space: nowrap;
+}
+
+.logout-link:hover {
+    background: #f2f2f2;
+}

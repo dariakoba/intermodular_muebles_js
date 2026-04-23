@@ -12,14 +12,35 @@ document.getElementById("form-usuario").addEventListener("submit", async (e) => 
     estado: "activo"
   };
 
-  const res = await fetch("/api/admin/usuarios", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(usuario)
-  });
+  try {
+    const res = await fetch("/api/admin/usuarios", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(usuario)
+    });
 
-  if (res.ok) {
+    // 🔥 leer respuesta del backend
+    let data;
+
+    try {
+      data = await res.json();
+    } catch {
+      data = await res.text();
+    }
+
+    // ❌ si hay error
+    if (!res.ok) {
+      const msg = typeof data === "object" ? data.message : data;
+      alert("❌ Error: " + msg);
+      return;
+    }
+
+    // ✅ éxito
+    alert("✅ Usuario creado correctamente");
     window.location.href = "index.html";
+
+  } catch (err) {
+    console.error(err);
+    alert("Error de conexión");
   }
-  
 });

@@ -80,12 +80,28 @@ public abstract class BaseRepository<T> {
 	}
 	
 	public boolean delete(int id) {
-		try {
-			String sql = "DELETE FROM  " + getTable() + " WHERE " + getPrimaryKeyName() + " = ?";
-			return DB.delete(con, sql, id) == 1;
-		} catch (SQLException e) {
-			throw new DataAccessException("Error al eliminar registro con id=" + id + " de la tabla " + getTable(), e);
-		}
+	    // 1. Verificamos que el nombre de la tabla y PK no sean nulos
+	    String table = getTable();
+	    String pk = getPrimaryKeyName();
+	    
+	    if (table == null || pk == null) {
+	        throw new DataAccessException("Error: Tabla o Primary Key no definidas en el repositorio.");
+	    }
+
+	    try {
+	        // 2. Construcción limpia del SQL
+	        String sql = "DELETE FROM " + table + " WHERE " + pk + " = ?";
+	        
+	        // 3. Ejecución. DB.delete debe retornar el número de filas afectadas.
+	        int rowsAffected = DB.delete(con, sql, id); 
+	        
+	        return rowsAffected > 0; // Es mejor > 0 que == 1 por seguridad
+	        
+	    } catch (SQLException e) {
+	        // 4. Captura específica de errores de SQL (como claves foráneas)
+	        throw new DataAccessException("No se pudo eliminar el ID " + id + " de " + table + ". " +
+	                                     "Es probable que este registro esté vinculado a otras tablas.", e);
+	    }
 	}
 	
 	//softdelete generico
