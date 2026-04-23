@@ -42,28 +42,39 @@
     </div>
 
 </header>
+<main class="home-container">
+    
+    <section class="selection-banner" style="display: flex; align-items: center; background-color: #fdf6ed; border-radius: 40px; overflow: hidden; height: 400px !important; max-height: 400px !important; margin-bottom: 20px !important;">
+        
+        <div style="flex: 1; height: 400px !important; max-height: 400px !important; border-radius: 40px; overflow: hidden; margin-right: 40px;">
+            <video autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                <source src="videos/Corrección_de_video_y_contenido.mp4" type="video/mp4">
+            </video>
+        </div>
 
-    <main class="home-container">
-        <section class="selection-banner">
-            <div class="banner-image-container">
-                <img src="images/home/Gemini_Generated_Image_kkfc2pkkfc2pkkfc.png" alt="Ambiente" class="banner-img">
+        <div class="banner-text" style="flex: 1;">
+            <h1 style="font-size: 3.5rem; color: #4a3728; margin-top: 0; margin-bottom: 20px;">Elige la zona que quieras transformar</h1>
+            <p style="font-size: 1.2rem; color: #6e5a4a; margin-bottom: 30px;">Encuentra muebles diseñados para cada espacio</p>
+            <div class="tags" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <span style="border: 1px solid #6e5a4a; padding: 5px 15px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; color: #6e5a4a;">CALIDAD SUPREMA</span>
+                <span style="border: 1px solid #6e5a4a; padding: 5px 15px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; color: #6e5a4a;">DISEÑOS DE CALIDAD</span>
+                <span style="border: 1px solid #6e5a4a; padding: 5px 15px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; color: #6e5a4a;">VERSÁTILES</span>
+                <button class="learn-more" onclick="window.location.href='productos.html'" style="background-color: #4a3728; color: white; border: none; padding: 10px 20px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; cursor: pointer;">
+                    VER MÁS <i class="fa-solid fa-chevron-right"></i>
+                </button>
             </div>
-            <div class="banner-text">
-                <h1>Elige la zona que quieras transformar</h1>
-                <p>Encuentra muebles diseñados para cada espacio</p>
-                <div class="tags">
-                    <span>CALIDAD SUPREMA</span>
-                    <span>DISEÑOS DE CALIDAD</span>
-                    <span>VERSÁTILES</span>
-					<button class="learn-more" onclick="window.location.href='productos.html'">VER MÁS <i class="fa-solid fa-chevron-right"></i></button>                </div>
-            </div>
-        </section>
+        </div>
+    </section>
 
-        <main class="home-container">
-    <section class="categories-section">
+	<h2 style="color: #4a3728; font-size: 2.2rem; font-weight: bold; margin-top: 140px; margin-bottom: 40px; margin-left: 60px;">
+	        Categorías:
+	    </h2>
+
+    <section class="categories-section" style="margin-top: 10px !important;">
         <button class="slider-arrow prev" id="prevBtn"><i class="fa-solid fa-chevron-left"></i></button>
         
         <div class="slider-wrapper">
+			           
             <div class="categories-grid" id="sliderGrid">
                 <div class="category-card" style="background-image: url(images/home/unnamed.jpg);">
                     <div class="card-overlay">

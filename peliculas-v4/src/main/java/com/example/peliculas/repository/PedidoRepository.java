@@ -74,23 +74,25 @@ public class PedidoRepository extends BaseRepository<Pedido> {
 
     @Override
     public List<Pedido> findAll() {
-        // CORRECCIÓN: m.id en lugar de m.id_producto
-        String sql = "SELECT p.*, " +
-                     "GROUP_CONCAT(CONCAT(m.nombre, ' (x', d.cantidad, ')') SEPARATOR ', ') as nombre_producto " +
+        // CORREGIDO: m.id_producto en lugar de m.id
+        String sql = "SELECT p.*, u.email, u.telefono, " +
+                     "GROUP_CONCAT(CONCAT(d.cantidad, 'x ', m.nombre, ' : ', d.precio_unitario, '€') SEPARATOR '|') as nombre_producto " +
                      "FROM pedidos p " +
+                     "LEFT JOIN usuarios u ON p.id_usuario = u.id " +
                      "LEFT JOIN detalles_pedidos d ON p.id_pedido = d.id_pedido " +
-                     "LEFT JOIN productos m ON d.id_producto = m.id " + 
+                     "LEFT JOIN productos m ON d.id_producto = m.id_producto " + 
                      "GROUP BY p.id_pedido " +
                      "ORDER BY p.id_pedido DESC";
         try {
             return DB.queryMany(con, sql, mapper);
         } catch (SQLException e) {
+            e.printStackTrace();
             return super.findAll();
         }
     }
 
     public List<Pedido> findByUsuarioId(Integer userId) {
-
+        // CORREGIDO: Nos aseguramos de que el JOIN sea correcto aquí también.
         String sql =
             "SELECT p.*, m.nombre as nombre_producto " +
             "FROM pedidos p " +
@@ -105,9 +107,7 @@ public class PedidoRepository extends BaseRepository<Pedido> {
             throw new DataAccessException("Error pedidos usuario: " + e.getMessage(), e);
         }
     }
-    
 
-   
     public void actualizarEstado(int idPedido, String nuevoEstado) throws SQLException {
         String sql = "UPDATE pedidos SET estado_pago = ? WHERE id_pedido = ?";
         try (java.sql.PreparedStatement ps = con.prepareStatement(sql)) {

@@ -215,19 +215,24 @@ body{
     margin-bottom: 30px;
 }
 
+/* --- CORRECCIÓN CLAVE PARA EL VÍDEO --- */
 .banner-image-container {
     flex: 1;
     height: 400px;
+    max-height: 400px; /* Bloqueamos la altura máxima */
     border-radius: 40px;
     overflow: hidden;
     margin-right: 40px;
+    display: flex; /* Obliga al vídeo a comportarse como caja y no como texto */
 }
 
 .banner-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block; /* Elimina los huecos fantasmas por debajo del vídeo */
 }
+/* -------------------------------------- */
 
 .banner-text {
     flex: 1;
