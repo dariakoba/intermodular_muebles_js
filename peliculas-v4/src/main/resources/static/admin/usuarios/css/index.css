@@ -247,3 +247,105 @@ td:nth-child(4) {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* Ajuste del Header para mantener tamaños originales */
+.admin-header {
+    display: flex;
+    align-items: center; 
+    justify-content: space-between;
+    margin-bottom: 24px; /* Espacio con la tabla */
+    gap: 20px;
+}
+
+/* 1. Título con su tamaño original (2.4rem) */
+.admin-header h1 {
+    font-family: 'Lato', sans-serif;
+    font-size: 2.4rem; 
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #333;
+    white-space: nowrap; /* Evita que el título se parta */
+}
+
+/* 2. Contenedor de filtros en medio */
+.admin-filters {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1; 
+    justify-content: center; /* Centra el buscador en el espacio sobrante */
+}
+
+/* Buscador sin bordes internos y con altura acorde */
+.search-box {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 2px 12px;
+    max-width: 300px;
+    flex: 1;
+    height: 42px; /* Un poco más alto para que no se vea minúsculo */
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.search-box input {
+    border: none !important;
+    outline: none !important;
+    background: transparent;
+    padding: 8px;
+    width: 100%;
+    font-size: 14px;
+    color: #333;
+}
+
+.select-filters select {
+    padding: 0 10px;
+    height: 42px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    background: #fff;
+    outline: none;
+}
+
+/* 3. Botones con sus estilos y tamaños originales */
+.admin-actions { 
+    display: flex; 
+    gap: 12px; 
+    align-items: center;
+}
+
+.btn-nuevo, #btn-eliminar-seleccionados {
+    display: inline-block;
+    padding: 10px 20px; /* Tamaño original */
+    font-family: 'Lato', sans-serif;
+    font-size: 0.9rem; /* Tamaño original */
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+    white-space: nowrap; /* Evita que el texto del botón se amontone */
+}
+
+.btn-nuevo { 
+    background: #1abc9c; 
+    color: #fff; 
+    box-shadow: 0 4px 12px rgba(26,188,156,0.3); 
+    text-decoration:none; 
+}
+
+#btn-eliminar-seleccionados { 
+    background: #c0392b; 
+    color: #fff; 
+    box-shadow: 0 4px 12px rgba(192,57,43,0.3); 
+}
+
+/* Hover original */
+.btn-nuevo:hover, #btn-eliminar-seleccionados:hover { 
+    transform: translateY(-2px); 
+}
