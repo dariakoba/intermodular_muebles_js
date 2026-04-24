@@ -13,41 +13,36 @@
 <body>
 
 <!-- Header / Navbar -->
+<!-- Header / Navbar -->
 <header class="navbar">
+	<a href="home.html" class="logo-link">
+		<div class="logo-container">
+			<div class="logo-circle">
+				<img src="/images/logo.png" alt="DNA Logo" class="logo-image">
+			</div>
+			<span class="brand-name">DNA</span>
+		</div>
+	</a>
 
-    <a href="home.html" class="logo-link">
-        <div class="logo-container">
-            <div class="logo-circle">
-                <img src="/images/logo.png" alt="DNA Logo" class="logo-image">
-            </div>
-            <span class="brand-name">DNA</span>
-        </div>
-    </a>
+	<nav class="nav-links">
+		<a href="index.html">Home</a>
+		<a href="/admin/usuarios/index.html">Usuarios</a>
+		<a href="/admin/productos/index.html">Productos</a>
+		<a href="pedidoAdmin.html">Pedidos</a>
+	</nav>
 
-    <nav class="nav-links">
-        <a href="admin.html">Home</a>
-        <a href="/admin/usuarios/index.html">Usuarios</a>
-        <a href="/admin/productos/index.html">Productos</a>
-        <a href="#">Pedidos</a>
-        <a href="#">Estadísticas</a>
-    </nav>
+	<div class="icons">
+		<div class="person-menu-wrapper">
+			<a href="perfil.html" style="text-decoration: none; color: inherit;">
+				<span id="person-icon" class="material-symbols-outlined">person</span>
+			</a>
 
-	<div class="person-menu-wrapper">
-
-	    <span id="person-icon" class="material-symbols-outlined">
-	        account_circle
-	    </span>
-
-	    <div class="person-menu" id="person-menu">
-
-	        <a href="#" id="logoutBtn" class="logout-link">
-	            <span class="material-symbols-outlined">logout</span>
-	            Cerrar sesión
-	        </a>
-
-	    </div>
+			<div class="person-menu">
+				
+				<a href="logout.html">Cerrar sesión</a>
+			</div>
+		</div>
 	</div>
-
 </header>
 <!-- Contenido principal -->
 <main class="admin-container">

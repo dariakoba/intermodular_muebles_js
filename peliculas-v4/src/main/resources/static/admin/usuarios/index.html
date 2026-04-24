@@ -1,65 +1,89 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Usuarios</title>
-<link rel="stylesheet" href="css/index.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuarios | DNA Admin</title>
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
 </head>
 <body>
 
-<!-- --- Topbar --- -->
 <header class="topbar">
-  <a href="home.html" class="logo">
-    <img src="/images/logo.png" alt="Logo">
-    DNA
-  </a>
+    <a href="home.html" class="logo">
+        <img src="/images/logo.png" alt="Logo">
+        DNA
+    </a>
 
-  <nav class="menu">
-    <a href="../../adminhome.html">Home</a>
-    <a href="index.html">Usuarios</a>
-    <a href="../productos/index.html">Productos</a>
-    <a href="#">Pedidos</a>
-    <a href="#">Estadísticas</a>
-  </nav>
+    <nav class="menu">
+        <a href="../../adminhome.html">Home</a>
+        <a href="index.html">Usuarios</a>
+        <a href="../productos/index.html">Productos</a>
+        <a href="#">Pedidos</a>
+        <a href="#">Estadísticas</a>
+    </nav>
 
-  <div class="icons person-menu-wrapper">
-    <span class="material-symbols-outlined">account_circle</span>
-    <div class="person-menu">
-      <a href="#">Perfil</a>
-      <a href="#" id="logoutBtn">Salir</a>
+    <div class="icons person-menu-wrapper">
+        <span class="material-symbols-outlined">account_circle</span>
+        <div class="person-menu">
+            <a href="#">Perfil</a>
+            <a href="#" id="logoutBtn">Salir</a>
+        </div>
     </div>
-  </div>
 </header>
 
-<!-- --- Admin wrapper --- -->
 <div class="admin-wrapper">
-  <div class="admin-header">
-    <h1>Usuarios</h1>
-    <div class="admin-actions">
-      <a href="create.html" class="btn-nuevo">Crear Usuario</a>
-      <button id="btn-eliminar-seleccionados">Eliminar Seleccionados</button>
-    </div>
-  </div>
+    
+    <div class="admin-header">
+        <h1>Usuarios</h1>
 
-  <div class="tabla-wrapper">
-    <table id="tablaUsuarios">
-      <thead>
-        <tr>
-          <th><input type="checkbox" id="checkAll"></th>
-          <th>ID</th>
-          <th>Nombre</th>
-          <th>Email</th>
-          <th>Rol</th>
-          <th>Teléfono</th>
-		  <th>Estado</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
+        <div class="admin-filters">
+            <div class="search-box">
+                <span class="material-symbols-outlined">search</span>
+                <input type="text" id="inputBuscar" placeholder="Buscar nombre o email...">
+            </div>
+            
+            <div class="select-filters">
+                <select id="filterRol">
+                    <option value="">Roles</option>
+                    <option value="admin">Admin</option>
+                    <option value="usuario">Usuario</option>
+                </select>
+
+                <select id="filterEstado">
+                    <option value="">Estados</option>
+                    <option value="activo">Activo</option>
+                    <option value="inactivo">Inactivo</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="admin-actions">
+			<button id="btn-eliminar-seleccionados">Eliminar Seleccionados</button>
+            <a href="create.html" class="btn-nuevo">Nuevo Usuario</a>
+            
+        </div>
+    </div>
+
+    <div class="tabla-wrapper">
+        <table id="tablaUsuarios">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="checkAll"></th>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Rol</th>
+                    <th>Teléfono</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                </tbody>
+        </table>
+    </div>
 </div>
 
 <script src="js/index.js"></script>
