@@ -1,7 +1,6 @@
-// js/destroy.js
 window.borrarUsuario = async function(id) {
-    console.log("Intentando borrar ID:", id); // Esto aparecerá en consola
-    alert("Iniciando borrado..."); // Alert de prueba inmediata
+    console.log("Intentando borrar ID:", id); 
+    alert("Iniciando borrado...");
 
     if (!confirm("¿Borrar usuario?")) return;
 
@@ -10,7 +9,7 @@ window.borrarUsuario = async function(id) {
             method: "DELETE"
         });
 
-        // Importante: No uses res.json() todavía para probar
+        
         const texto = await res.text();
         console.log("Respuesta servidor:", texto);
 

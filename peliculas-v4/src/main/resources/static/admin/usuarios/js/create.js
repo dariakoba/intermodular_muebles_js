@@ -19,7 +19,6 @@ document.getElementById("form-usuario").addEventListener("submit", async (e) => 
       body: JSON.stringify(usuario)
     });
 
-    // 🔥 leer respuesta del backend
     let data;
 
     try {
@@ -28,15 +27,13 @@ document.getElementById("form-usuario").addEventListener("submit", async (e) => 
       data = await res.text();
     }
 
-    // ❌ si hay error
     if (!res.ok) {
       const msg = typeof data === "object" ? data.message : data;
       alert("❌ Error: " + msg);
       return;
     }
 
-    // ✅ éxito
-    alert("✅ Usuario creado correctamente");
+    alert(" Usuario creado correctamente");
     window.location.href = "index.html";
 
   } catch (err) {

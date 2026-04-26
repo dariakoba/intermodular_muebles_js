@@ -89,7 +89,7 @@ public class UserAdminController {
                 String hashed = encoder.encode(user.getPasswordHash());
                 user.setPasswordHash(hashed);
             } else {
-                // Opcional: mantener la contraseña antigua si no envían nueva
+                // mantener la contraseña antigua si no envían nueva
                 User oldUser = repo.find(id);
                 user.setPasswordHash(oldUser.getPasswordHash());
             }
@@ -101,7 +101,7 @@ public class UserAdminController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseBody // Esto asegura que Spring convierta el Map a JSON directamente
+    @ResponseBody 
     public Map<String, Object> destroy(@PathVariable int id) {
         Map<String, Object> response = new HashMap<>();
         
@@ -142,21 +142,22 @@ public class UserAdminController {
         return response;
     }
     @PutMapping("/{id}/estado")
-    public User toggleEstado(@PathVariable int id) {
+    public User toggleEstado(@PathVariable int id, @RequestBody Map<String, String> body) {
         try (Connection con = ds.getConnection()) {
             UserRepository repo = new UserRepository(con);
-
             User user = repo.find(id);
-
-            if ("activo".equals(user.getEstado())) {
-                user.setEstado("inactivo");
-            } else {
-                user.setEstado("activo");
+            
+            if (user == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
             }
 
-            repo.update(user);
-            return user;
+            String nuevoEstado = body.get("estado");
+            user.setEstado(nuevoEstado);
 
+            
+            repo.update(user); 
+            
+            return user;
         } catch (SQLException e) {
             throw new DataAccessException(e);
         }

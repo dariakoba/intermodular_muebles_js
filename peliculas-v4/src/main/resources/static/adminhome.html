@@ -25,23 +25,22 @@
 	</a>
 
 	<nav class="nav-links">
-		<a href="index.html">Home</a>
+		<a href="adminhome.html">Home</a>
 		<a href="/admin/usuarios/index.html">Usuarios</a>
 		<a href="/admin/productos/index.html">Productos</a>
 		<a href="pedidoAdmin.html">Pedidos</a>
+		<a href="../categorias/index.html">Categorías</a>
+
 	</nav>
 
 	<div class="icons">
-		<div class="person-menu-wrapper">
-			<a href="perfil.html" style="text-decoration: none; color: inherit;">
-				<span id="person-icon" class="material-symbols-outlined">person</span>
-			</a>
+	    <div class="person-menu-wrapper">
+	        <span id="person-icon" class="material-symbols-outlined" style="cursor: pointer;">person</span>
 
-			<div class="person-menu">
-				
-				<a href="logout.html">Cerrar sesión</a>
-			</div>
-		</div>
+	        <div class="person-menu">
+	            <a href="#" id="logoutBtn">Cerrar sesión</a>
+	        </div>
+	    </div>
 	</div>
 </header>
 <!-- Contenido principal -->
@@ -77,46 +76,42 @@
 
 <script>
 	document.addEventListener("DOMContentLoaded", () => {
-
 	    const icon = document.getElementById("person-icon");
-	    const menu = document.getElementById("person-menu");
+	    const menu = document.querySelector(".person-menu");
 	    const logoutBtn = document.getElementById("logoutBtn");
 
-	    if (!icon || !menu) return;
+	    if (icon && menu) {
+	        icon.addEventListener("click", (e) => {
+	            e.stopPropagation();
+	            menu.classList.toggle("show");
+	        });
 
-	    // abrir / cerrar menú
-	    icon.addEventListener("click", (e) => {
-	        e.stopPropagation();
-	        menu.classList.toggle("show");
-	    });
+	        document.addEventListener("click", () => {
+	            menu.classList.remove("show");
+	        });
+	    }
 
-	    // evitar cierre al clicar dentro del menú
-	    menu.addEventListener("click", (e) => {
-	        e.stopPropagation();
-	    });
-
-	    // cerrar al clicar fuera
-	    document.addEventListener("click", () => {
-	        menu.classList.remove("show");
-	    });
-
-	    // logout (CORREGIDO)
 	    if (logoutBtn) {
 	        logoutBtn.addEventListener("click", async (e) => {
 	            e.preventDefault();
 
+	            if (!confirm("¿Estás seguro de que quieres cerrar sesión?")) return;
+
 	            try {
-	                await fetch("/logout", {   // 👈 ESTE ES EL CORRECTO (como dijiste)
+	                const res = await fetch("/logout", {   
 	                    method: "POST",
 	                    credentials: "include"
 	                });
 
-	                localStorage.removeItem("user");
-	                window.location.href = "/login.html";
+	                localStorage.clear();
+	                sessionStorage.clear();
+
+	                window.location.href = "/../../login.html";
 
 	            } catch (err) {
 	                console.error("Error al cerrar sesión:", err);
-	                alert("No se pudo cerrar sesión");
+	                // En caso de error de red, forzamos la salida al login
+	                window.location.href = "/../../login.html";
 	            }
 	        });
 	    }

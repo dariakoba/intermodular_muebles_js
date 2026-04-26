@@ -84,10 +84,10 @@ document.addEventListener("DOMContentLoaded", () => {
       fecha_alta: usuarioOriginal.fecha_alta
     };
 
-    // 🔐 CONTRASEÑA: solo incluir si hay valor
+    // solo incluir si hay valor
     const passValue = password.value.trim();
     if (passValue !== "") {
-      usuario.password_hash = passValue; // backend hará hash
+      usuario.password_hash = passValue; 
     }
 
 	try {
@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	    body: JSON.stringify(usuario)
 	  });
 
-	  // 🔥 leer respuesta segura (JSON o texto)
+	  
 	  let data;
 	  let msg = "Error desconocido";
 
@@ -108,14 +108,13 @@ document.addEventListener("DOMContentLoaded", () => {
 	    msg = await res.text();
 	  }
 
-	  // ❌ ERROR (email duplicado, etc.)
+	  
 	  if (!res.ok) {
 	    alert("❌ No se puede actualizar: " + msg);
 	    return;
 	  }
 
-	  // ✅ OK
-	  alert("✅ Usuario actualizado correctamente");
+	  alert("Usuario actualizado correctamente");
 	  window.location.href = "index.html";
 
 	} catch (err) {

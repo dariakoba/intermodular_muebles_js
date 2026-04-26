@@ -1,9 +1,7 @@
 let currentUser = null;
 let todosLosUsuarios = []; // Almacén local para filtrado rápido
 
-// ======================
-// 👤 USUARIO LOGUEADO
-// ======================
+// USUARIO LOGUEADO
 async function cargarMe() {
     try {
         const res = await fetch("/api/me");
@@ -13,10 +11,8 @@ async function cargarMe() {
     }
 }
 
-// ======================
-// 📋 RENDERIZAR TABLA
-// ======================
-// Esta función se encarga solo de pintar los datos que recibe
+// RENDERIZAR TABLA
+
 function renderizarTabla(usuarios) {
     const tbody = document.querySelector("#tablaUsuarios tbody");
     if (!tbody) return;
@@ -61,9 +57,7 @@ function renderizarTabla(usuarios) {
     tbody.innerHTML = html;
 }
 
-// ======================
-// 🔍 FILTRADO LÓGICO
-// ======================
+// FILTRADO 
 function filtrarUsuarios() {
     const query = document.getElementById("inputBuscar").value.toLowerCase();
     const filtroRol = document.getElementById("filterRol").value.toLowerCase();
@@ -73,7 +67,7 @@ function filtrarUsuarios() {
         const nombreCompleto = `${u.nombre} ${u.apellidos}`.toLowerCase();
         const email = u.email.toLowerCase();
         
-        // Coincidencia por texto (Nombre o Email)
+        // Nombre o Email
         const coincideTexto = nombreCompleto.includes(query) || email.includes(query);
         
         // Coincidencia por Selects
@@ -86,52 +80,41 @@ function filtrarUsuarios() {
     renderizarTabla(usuariosFiltrados);
 }
 
-// ======================
-// 📥 CARGAR USUARIOS (API)
-// ======================
+// CARGAR USUARIOS (API)
 async function cargarUsuarios() {
     try {
         const res = await fetch("/api/admin/usuarios");
         todosLosUsuarios = await res.json();
         
-        // Al cargar, aplicamos filtros por si hay algo escrito
         filtrarUsuarios(); 
     } catch (err) {
         console.error("Error al cargar usuarios:", err);
     }
 }
 
-// ======================
-// 🔄 TOGGLE ESTADO
-// ======================
 async function toggleUsuario(id, estadoActual) {
-    if (currentUser && currentUser.id === id) {
-        alert("❌ No puedes cambiar tu propio estado.");
-        return;
-    }
-
     const nuevoEstado = estadoActual === "activo" ? "inactivo" : "activo";
 
     try {
         const res = await fetch(`/api/admin/usuarios/${id}/estado`, {
             method: "PUT",
-            headers: { "Content-Type": "application/json" },
+            headers: { 
+                "Content-Type": "application/json" 
+            },
             body: JSON.stringify({ estado: nuevoEstado })
         });
 
         if (res.ok) {
-            cargarUsuarios(); // Recarga y actualiza la lista global
+            await cargarUsuarios(); 
         } else {
-            alert("❌ No se pudo cambiar el estado");
+            alert("Error al cambiar estado");
         }
     } catch (err) {
-        alert("Error de conexión");
+        console.error("Error:", err);
     }
 }
 
-// ======================
-// 🚀 INIT
-// ======================
+// INIT
 document.addEventListener("DOMContentLoaded", async () => {
 
     await cargarMe();
@@ -198,9 +181,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
             if (errores.length > 0) {
-                alert(`✅ ${ok} eliminados\n❌ ERRORES:\n${errores.join("\n")}`);
+                alert(` ${ok} eliminados\n❌ ERRORES:\n${errores.join("\n")}`);
             } else {
-                alert(`✅ ${ok} eliminados correctamente`);
+                alert(` ${ok} eliminados correctamente`);
             }
 
             cargarUsuarios();
