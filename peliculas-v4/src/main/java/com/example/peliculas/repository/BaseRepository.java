@@ -25,7 +25,7 @@ public abstract class BaseRepository<T> {
 	
 	public abstract String getTable();
 	public String getPrimaryKeyName() {
-		return "id";
+		return "id_categoria";
 	}
 	public abstract Integer getPrimaryKey(T instance);
 
@@ -104,16 +104,7 @@ public abstract class BaseRepository<T> {
 	    }
 	}
 	
-	//softdelete generico
-	public int softDelete(int id) {
-	    try {
-	        String sql = "UPDATE " + getTable() +
-	                     " SET deleted_at = NOW() WHERE " + getPrimaryKeyName() + " = ?";
-	        return DB.update(con, sql, id);
-	    } catch (SQLException e) {
-	        throw new DataAccessException("Error al desactivar en " + getTable(), e);
-	    }
-	}
+	
 	
 	
 	private String buildInsertSql() {

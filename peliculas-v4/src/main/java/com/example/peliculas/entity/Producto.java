@@ -2,7 +2,7 @@ package com.example.peliculas.entity;
 
 import java.time.LocalDateTime;
 
-public class Producto {
+public class Producto  {
 	private Integer idProducto;
 	private String nombre;
 	private String color;

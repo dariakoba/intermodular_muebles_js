@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 
 import org.springframework.web.bind.annotation.*;
 
+import com.example.peliculas.dto.CategoriaDetalle;
 import com.example.peliculas.entity.Categoria;
 import com.example.peliculas.entity.Producto;
 import com.example.peliculas.exception.DataAccessException;
@@ -24,10 +25,10 @@ public class CategoriaAdminController {
     }
     
     @GetMapping
-    public List<Categoria> index() {
+    public List<CategoriaDetalle> index() {
         try (Connection con = ds.getConnection()) {
         	CategoriaRepository repo = new CategoriaRepository(con);
-            return repo.findAll();
+            return repo.findAllCategoria();
         } catch (SQLException e) {
             throw new DataAccessException(e);
         }
@@ -38,6 +39,60 @@ public class CategoriaAdminController {
         try (Connection con = ds.getConnection()) {
         	CategoriaRepository repo = new CategoriaRepository(con);
             repo.softDelete(id);
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+    }
+    
+    @PutMapping("/{id}/activar")
+    public void activar(@PathVariable int id) {
+        try (Connection con = ds.getConnection()) {
+            CategoriaRepository repo = new CategoriaRepository(con);
+            repo.softDeleteActivar(id);
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+    }
+    
+    @GetMapping("/{id}")
+    public Categoria show(@PathVariable int id) {
+        try (Connection con = ds.getConnection()) {
+            CategoriaRepository repo = new CategoriaRepository(con);
+            return repo.find(id);
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+    }
+    
+    @PostMapping
+    public Categoria store(@RequestBody Categoria categoria) {
+        try (Connection con = ds.getConnection()) {
+            CategoriaRepository repo = new CategoriaRepository(con);
+            repo.insert(categoria);
+            return categoria;
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public Categoria update(@PathVariable int id, @RequestBody Categoria c) {
+        System.out.println(c);
+        try (Connection con = ds.getConnection()) {
+            CategoriaRepository repo = new CategoriaRepository(con);
+            c.setIdCategoria(id);
+            repo.update(c);
+            return c;
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public void destroy(@PathVariable int id) {
+        try (Connection con = ds.getConnection()) {
+            CategoriaRepository repo = new CategoriaRepository(con);
+            repo.delete(id);
         } catch (SQLException e) {
             throw new DataAccessException(e);
         }
