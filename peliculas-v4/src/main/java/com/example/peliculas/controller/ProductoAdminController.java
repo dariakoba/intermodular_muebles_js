@@ -41,6 +41,16 @@ public class ProductoAdminController {
             throw new DataAccessException(e);
         }
     }
+    
+    @PutMapping("/{id}/activar")
+    public void activar(@PathVariable int id) {
+        try (Connection con = ds.getConnection()) {
+            ProductoRepository repo = new ProductoRepository(con);
+            repo.softDeleteActivar(id);
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+    }
     /*
      * antiguo sin nombre categoria
     @GetMapping

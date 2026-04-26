@@ -229,7 +229,7 @@
 
 <div class="admin-wrapper">
   <div class="admin-header">
-    <h1>Nuevo producto</h1>
+    <h1>Nueva Categoría</h1>
     <a href="index.html" class="btn-cancelar">← Volver</a>
   </div>
 
@@ -242,32 +242,15 @@
       </div>
 
       <div class="form-group">
-        <label for="color">Color</label>
-        <input id="color" type="text">
-      </div>
-
-      <div class="form-group">
-        <label for="precio">Precio (€)</label>
-        <input id="precio" type="number" step="0.01" required>
-      </div>
-
-      <div class="form-group">
-        <label for="stock">Stock</label>
-        <input id="stock" type="number" required>
-      </div>
-
-      <div class="form-group">
-        <label for="categoria">Categoría</label>
-        <select id="categoria">
-          <option value="">-- Sin categoría --</option>
+        <label for="estado">Estado</label>
+        <select id="estado" type="text" required>
+        	<option value="activo">Activo</option>
+          	<option value="inactivo">Inactivo</option>
+          
         </select>
       </div>
 
-      <div class="form-group">
-        <label for="descripcion">Descripción</label>
-        <textarea id="descripcion"></textarea>
-      </div>
-
+      
       <div class="form-actions">
         <button type="submit" class="btn-guardar">Guardar</button>
         <a href="index.html" class="btn-cancelar">Cancelar</a>

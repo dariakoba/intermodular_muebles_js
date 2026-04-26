@@ -27,6 +27,7 @@ async function cargarCategorias() {
 async function guardar(e) {
     e.preventDefault();
 	const estadoVal = document.getElementById("estado").value;
+	const catVal = document.getElementById("categoria").value;
 
     const producto = {
         nombre:      document.getElementById("nombre").value,
@@ -34,7 +35,8 @@ async function guardar(e) {
         precio:      parseFloat(document.getElementById("precio").value),
         stock:       parseInt(document.getElementById("stock").value),
         descripcion: document.getElementById("descripcion").value,
-        categoria_id: parseInt(document.getElementById("categoria").value) || 0,
+
+		categoria_id: catVal ? parseInt(catVal) : null,
 		
 
 		deleted_at:   estadoVal === "inactivo" ? new Date().toISOString() : null

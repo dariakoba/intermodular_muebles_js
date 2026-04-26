@@ -145,3 +145,4 @@ async function onAction(e) {
 }
 */
 window.desactivarProducto = desactivarProducto;
+window.activarProducto = activarProducto;
