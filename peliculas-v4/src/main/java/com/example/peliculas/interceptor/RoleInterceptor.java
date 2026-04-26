@@ -41,7 +41,6 @@ public class RoleInterceptor implements HandlerInterceptor {
 
 	    String path = request.getRequestURI();
 
-	    // 🔓 PERMITIR REGISTER Y LOGIN
 	    if (path.startsWith("/api/login") || path.startsWith("/api/register")) {
 	        return true;
 	    }
@@ -49,11 +48,10 @@ public class RoleInterceptor implements HandlerInterceptor {
 	    HttpSession session = request.getSession(false);
 
 	    if (session == null) {
-	        return true; // 🔓 temporalmente dejar pasar
+	        return true; 
 	    }
 
-	    String role = (String) session.getAttribute("role"); // 👈 CORREGIDO
-
+	    String role = (String) session.getAttribute("role"); 
 	    if (!"admin".equals(role)) {
 
 	        if (path.startsWith("/api/")) {

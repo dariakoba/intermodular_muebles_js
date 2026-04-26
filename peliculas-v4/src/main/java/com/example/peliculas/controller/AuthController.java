@@ -45,7 +45,7 @@ public class AuthController {
 			//System.out.println(encoder.encode("123456"));
 
 			if (user != null && encoder.matches(req.passwordHash(), user.getPasswordHash())) {
-				// VALIDACIÓN DE ESTADO
+				
 	            if (!"activo".equalsIgnoreCase(user.getEstado())) {
 	                throw new ResponseStatusException(
 	                    HttpStatus.FORBIDDEN,
@@ -104,9 +104,8 @@ public class AuthController {
 
 	        UserRepository repo = new UserRepository(con);
 
-	        // Aquí es donde se crea el usuario
 	        User user = new User(
-	            encoder.encode(req.passwordHash()), // 🔹 passwordHash debe tener valor
+	            encoder.encode(req.passwordHash()), 
 	            "cliente",
 	            req.telefono(),
 	            req.nombre(),
@@ -114,7 +113,6 @@ public class AuthController {
 	            req.email()
 	        );
 
-	        // Inicializar campos opcionales
 	        user.setEstado("activo");
 	        user.setDireccion("");
 	        user.setPuntos(0);
