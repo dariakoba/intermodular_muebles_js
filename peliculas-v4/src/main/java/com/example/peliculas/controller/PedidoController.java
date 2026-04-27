@@ -139,19 +139,15 @@ public class PedidoController {
     // --- SECCIÓN CLIENTE: MIS PEDIDOS (DARIA) ---
     @GetMapping("/mis")
     public List<Pedido> misPedidos(HttpSession session) {
-        // 1. Extraemos el ID del usuario directamente de la sesión
         Integer userId = (Integer) session.getAttribute("userId");
 
-        // 2. Si no hay sesión, lanzamos error 401 (Unauthorized)
         if (userId == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Debes iniciar sesión");
         }
 
-        // 3. Abrimos la conexión y ejecutamos la lógica
         try (Connection con = ds.getConnection()) {
             PedidoRepository pedidoRepo = new PedidoRepository(con);
             
-            // Llamamos al método correcto del repositorio (findByUsuarioId)
             return pedidoRepo.findByUsuarioId(userId);
 
         } catch (SQLException e) {
