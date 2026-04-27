@@ -15,7 +15,7 @@ public class ResenyaMapper implements RowMapper<Resenya> {
         r.setProductoId(rs.getInt("id_producto"));
         r.setPuntuacion(rs.getInt("puntuacion"));
         r.setComentario(rs.getString("comentario"));
-        
+        r.setNombreUsuario(rs.getString("nombre_autor"));
         // Cambiado de 'fecha_publicacion' a 'fecha'
         if (rs.getDate("fecha") != null) {
             r.setFechaPublicacion(rs.getDate("fecha").toLocalDate());

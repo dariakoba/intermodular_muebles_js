@@ -15,7 +15,11 @@ public class Resenya {
     private int puntuacion;
     private String comentario;
     private LocalDate fechaPublicacion;
+ // Dentro de la clase Resenya
+    private String nombreUsuario; 
 
+    public String getNombreUsuario() { return nombreUsuario; }
+    public void setNombreUsuario(String nombreUsuario) { this.nombreUsuario = nombreUsuario; }
     public Resenya() {}
 
     // Getters y Setters

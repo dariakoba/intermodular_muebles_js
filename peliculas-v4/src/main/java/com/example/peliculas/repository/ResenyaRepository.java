@@ -59,7 +59,11 @@ public class ResenyaRepository extends BaseRepository<Resenya> {
     }
 
     public List<Resenya> findByProducto(int idProducto) {
-        String sql = "SELECT * FROM resenas WHERE id_producto = ?";
+        // IMPORTANTE: r.* trae los datos de la reseña, u.nombre trae el nombre del usuario
+        String sql = "SELECT r.*, u.nombre AS nombre_autor " +
+                     "FROM resenas r " +
+                     "JOIN usuarios u ON r.id_usuario = u.id " + 
+                     "WHERE r.id_producto = ?";
         try {
             return DB.queryMany(con, sql, mapper, idProducto);
         } catch (SQLException e) {
