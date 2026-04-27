@@ -15,18 +15,17 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /**
- * Carga las reseñas desde el servidor y las muestra con el nombre real y fecha real.
+ * Carga las reseñas y gestiona la visualización del botón de eliminar.
  */
 async function cargarResenyas(id) {
     const contenedor = document.getElementById("contenedor-resenyas");
     if (!contenedor) return;
 
+    const userIdLogueado = sessionStorage.getItem("userId");
+
     try {
         const response = await fetch(`/api/resenyas/producto/${id}`);
-        
-        if (!response.ok) {
-            throw new Error("No se pudieron cargar las reseñas");
-        }
+        if (!response.ok) throw new Error("No se pudieron cargar las reseñas");
 
         const resenyas = await response.json();
 
@@ -34,75 +33,111 @@ async function cargarResenyas(id) {
             contenedor.innerHTML = `
                 <div class="resenya-empty" style="text-align: center; padding: 40px; color: #9c8c7e;">
                     <i class="fa-solid fa-comments" style="font-size: 2rem; display: block; margin-bottom: 10px;"></i>
-                    <p>Aún no hay opiniones sobre este producto. ¡Sé el primero en compartir tu experiencia!</p>
+                    <p>Aún no hay opiniones sobre este producto.</p>
                 </div>`;
             return;
         }
 
         contenedor.innerHTML = resenyas.map(r => {
-            // 1. PROCESAMIENTO DE FECHA (Usando fecha_publicacion que viene de tu JSON)
-            let fechaTexto = "Fecha no disponible";
-            if (r.fecha_publicacion) {
-                const d = new Date(r.fecha_publicacion);
+            // CORRECCIÓN: Aseguramos capturar el ID de la reseña bajo cualquier nombre común de base de datos
+            const idResenya = r.idResenya || r.id_resena || r.id;
+            const idUsuarioResenya = r.usuarioId || r.id_usuario;
+            const nombreAutor = r.nombreUsuario || r.nombre_usuario || "Usuario";
+            const fechaOriginal = r.fechaPublicacion || r.fecha || r.fecha_publicacion;
+
+            let fechaTexto = "Reciente";
+            if (fechaOriginal) {
+                const d = new Date(fechaOriginal);
                 if (!isNaN(d.getTime())) {
                     fechaTexto = d.toLocaleDateString('es-ES', { 
-                        day: '2-digit', 
-                        month: 'long', 
-                        year: 'numeric' 
+                        day: '2-digit', month: 'long', year: 'numeric' 
                     });
                 }
             }
 
-            // 2. PROCESAMIENTO DE NOMBRE (Usando nombre_usuario que viene de tu JSON)
-            const autor = r.nombre_usuario ? r.nombre_usuario : "Usuario no identificado";
+            let botonEliminar = "";
+            // Comparamos con == por si uno es string y el otro number en sessionStorage
+            if (userIdLogueado && idUsuarioResenya && idUsuarioResenya == userIdLogueado) {
+                botonEliminar = `
+                    <button onclick="eliminarResenya(${idResenya}, ${id})" 
+                            style="background: none; border: none; color: #d9534f; cursor: pointer; font-size: 0.85rem; margin-top: 8px; display: flex; align-items: center; gap: 5px; padding: 0;">
+                        <i class="fa-solid fa-trash-can"></i> Eliminar mi reseña
+                    </button>`;
+            }
 
             return `
                 <div class="resenya-card" style="background: white; border-radius: 15px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #eee;">
-                    <div class="resenya-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
                         <div>
                             <div style="font-weight: bold; color: #4a3728; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
                                 <i class="fa-solid fa-circle-user" style="color: #ae4010; font-size: 1.3rem;"></i>
-                                ${autor}
+                                ${nombreAutor}
                             </div>
-                            <div class="stars" style="color: #ae4010; margin-top: 4px; font-size: 0.9rem;">
+                            <div style="color: #ae4010; margin-top: 4px; font-size: 0.9rem;">
                                 ${"★".repeat(r.puntuacion || 0)}${"☆".repeat(5 - (r.puntuacion || 0))}
                             </div>
                         </div>
-                        <span class="resenya-date" style="font-size: 0.8rem; color: #9c8c7e; background: #fdf6ed; padding: 4px 10px; border-radius: 10px;">
-                            <i class="fa-regular fa-calendar-days"></i> ${fechaTexto}
-                        </span>
+                        <div style="text-align: right;">
+                            <span style="font-size: 0.8rem; color: #9c8c7e; background: #fdf6ed; padding: 4px 10px; border-radius: 10px; display: inline-block;">
+                                <i class="fa-regular fa-calendar-days"></i> ${fechaTexto}
+                            </span>
+                            ${botonEliminar}
+                        </div>
                     </div>
-                    <p class="resenya-text" style="color: #5c4432; line-height: 1.5; margin: 0; font-style: italic;">
+                    <p style="color: #5c4432; line-height: 1.5; margin: 0; font-style: italic;">
                         "${r.comentario}"
                     </p>
-                </div>
-            `;
+                </div>`;
         }).join("");
 
     } catch (error) {
         console.error("Error al cargar reseñas:", error);
-        contenedor.innerHTML = "<p>Error al conectar con el servidor para cargar opiniones.</p>";
     }
 }
 
 /**
- * Maneja el envío del formulario.
+ * Elimina una reseña
+ */
+async function eliminarResenya(idResenya, idProducto) {
+    // Verificación de seguridad
+    if (!idResenya) {
+        console.error("Error: ID de reseña no válido.");
+        return;
+    }
+
+    if (!confirm("¿Estás seguro de que deseas eliminar tu reseña?")) return;
+
+    try {
+        const response = await fetch(`/api/resenyas/${idResenya}`, { method: 'DELETE' });
+        
+        if (response.ok) {
+            alert("Reseña eliminada.");
+            cargarResenyas(idProducto); 
+        } else {
+            const errorData = await response.json().catch(() => ({}));
+            alert(errorData.message || "No se pudo eliminar la reseña.");
+        }
+    } catch (error) {
+        console.error("Error al eliminar:", error);
+        alert("Error de conexión al intentar eliminar.");
+    }
+}
+
+/**
+ * Maneja el envío del formulario evitando duplicados.
  */
 function configurarFormulario(idProducto) {
     const form = document.getElementById("form-resenya");
     if (!form) return;
 
-    form.addEventListener("submit", async (e) => {
+    form.onsubmit = async (e) => {
         e.preventDefault();
-
-        const idNumerico = parseInt(idProducto);
-        if (isNaN(idNumerico)) {
-            alert("Error: No se pudo identificar el producto.");
-            return;
-        }
+        
+        const botonEnvio = form.querySelector('button[type="submit"]');
+        if (botonEnvio) botonEnvio.disabled = true;
 
         const data = {
-            productoId: idNumerico,
+            productoId: parseInt(idProducto),
             puntuacion: parseInt(form.puntuacion.value),
             comentario: form.comentario.value
         };
@@ -110,29 +145,29 @@ function configurarFormulario(idProducto) {
         try {
             const response = await fetch('/api/resenyas', {
                 method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
 
             if (response.ok) {
                 alert("¡Gracias por tu opinión!");
                 form.reset();
-                cargarResenyas(idNumerico); // Recarga la lista para ver la nueva reseña
-            } else if (response.status === 403) {
-                alert("🚫 No puedes reseñar este mueble porque no aparece en tu historial de compras.");
-            } else if (response.status === 401) {
-                alert("Debes iniciar sesión primero para comentar.");
-                window.location.href = "login.html";
+                cargarResenyas(idProducto); 
             } else {
-                const error = await response.json();
-                alert("Error: " + (error.message || "No se pudo procesar tu reseña."));
+                const error = await response.json().catch(() => ({}));
+                alert(error.message || "Error al publicar. Verifica que hayas comprado el producto.");
             }
-
         } catch (error) {
             console.error("Error en el envío:", error);
-            alert("Error de conexión al intentar enviar la reseña.");
+            alert("Error de conexión.");
+        } finally {
+            if (botonEnvio) botonEnvio.disabled = false;
         }
-    });
+    };
 }
+
+/**
+ * CRÍTICO: Exponer la función al objeto window.
+ * Esto soluciona el problema de que el clic no haga nada si usas scripts de tipo módulo.
+ */
+window.eliminarResenya = eliminarResenya;

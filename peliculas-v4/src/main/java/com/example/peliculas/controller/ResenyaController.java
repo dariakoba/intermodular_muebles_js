@@ -82,4 +82,41 @@ public class ResenyaController {
                     .body("{\"message\": \"Error al procesar la reseña en la base de datos.\"}");
         }
     }
+    
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable int id, HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("userId");
+        
+        // 1. Validar sesión
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("{\"message\": \"Debe iniciar sesión para borrar su reseña.\"}");
+        }
+
+        // 2. Ejecutar el borrado condicionado al usuario
+        // Solo borrará si el ID de la reseña coincide Y el usuario es el dueño
+        String sqlDelete = "DELETE FROM resenas WHERE id_resena = ? AND id_usuario = ?";
+
+        try (Connection con = ds.getConnection(); 
+             PreparedStatement ps = con.prepareStatement(sqlDelete)) {
+            
+            ps.setInt(1, id);
+            ps.setInt(2, userId);
+            
+            int filasAfectadas = ps.executeUpdate();
+
+            if (filasAfectadas > 0) {
+                return ResponseEntity.ok("{\"message\": \"Reseña eliminada correctamente.\"}");
+            } else {
+                // Si no borró nada, o la reseña no existe o no es de ese usuario
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body("{\"message\": \"No tienes permiso para borrar esta reseña o ya no existe.\"}");
+            }
+
+        } catch (SQLException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("{\"message\": \"Error al eliminar la reseña en la base de datos.\"}");
+        }
+    }
 }

@@ -273,142 +273,206 @@ box-shadow: 0 8px 22px rgba(92,68,50,0.20);
 .btn-carrito:active { transform: translateY(0); }
 
 
-/* --- ESTILOS PARA RESEÑAS --- */
+/* =========================
+   ESTILOS BONITOS RESEÑAS
+========================= */
 
 .resenyas-container {
-    max-width: 900px;
-    margin: 60px auto;
-    padding: 20px;
+    max-width: 950px;
+    margin: 70px auto;
+    padding: 30px;
     font-family: 'Arial', sans-serif;
 }
 
+/* TÍTULO */
+
 .resenyas-title {
-    color: #4a3728;
-    font-size: 2.2rem;
-    font-weight: bold;
-    margin-bottom: 30px;
-    border-left: 5px solid #ae4010;
-    padding-left: 15px;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #3f2d20;
+    margin-bottom: 40px;
+    position: relative;
+    padding-left: 20px;
+    letter-spacing: 0.5px;
 }
 
-/* Listado de Reseñas */
+.resenyas-title::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 6px;
+    height: 85%;
+    background: linear-gradient(to bottom, #ae4010, #d67a45);
+    border-radius: 10px;
+}
+
+/* =========================
+   TARJETAS DE RESEÑAS
+========================= */
+
 .resenya-card {
-    background: white;
-    border-radius: 15px;
-    padding: 25px;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    transition: transform 0.2s ease;
+    background: #ffffff;
+    border: 1px solid #f0e6dc;
+    border-radius: 20px;
+    padding: 28px;
+    margin-bottom: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.resenya-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    background: #ae4010;
 }
 
 .resenya-card:hover {
-    transform: translateY(-3px);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.08);
 }
+
+/* HEADER */
 
 .resenya-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 18px;
+    gap: 15px;
 }
 
 .stars {
-    color: #ae4010; /* Color naranja tierra para estrellas */
-    font-size: 1.2rem;
-    letter-spacing: 2px;
+    color: #d47a2d;
+    font-size: 1.3rem;
+    letter-spacing: 3px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.08);
 }
 
 .resenya-date {
-    font-size: 0.85rem;
-    color: #9c8c7e;
+    font-size: 0.9rem;
+    color: #9a8a7a;
+    background: #faf5ef;
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-weight: 500;
 }
 
+/* TEXTO */
+
 .resenya-text {
-    color: #5c4432;
-    line-height: 1.6;
     font-size: 1.05rem;
+    line-height: 1.8;
+    color: #5b4332;
     margin: 0;
 }
 
-/* Formulario de Reseña */
+/* =========================
+   FORMULARIO
+========================= */
+
 .form-resenya-box {
-    background-color: #fdf6ed;
-    border: 2px solid #e9e6e3;
-    border-radius: 25px;
-    padding: 40px;
-    margin-top: 50px;
+    margin-top: 60px;
+    background: linear-gradient(180deg, #fffaf5, #fdf6ed);
+    border: 1px solid #eee2d5;
+    border-radius: 28px;
+    padding: 45px;
+    box-shadow: 0 12px 35px rgba(0,0,0,0.04);
 }
 
 .form-resenya-box h4 {
-    color: #4a3728;
-    font-size: 1.5rem;
-    margin-bottom: 25px;
+    font-size: 1.7rem;
+    color: #3f2d20;
+    margin-bottom: 30px;
+    font-weight: 700;
 }
 
+/* FORM GROUP */
+
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 24px;
 }
 
 .form-group label {
     display: block;
+    margin-bottom: 10px;
     color: #4a3728;
-    font-weight: bold;
-    margin-bottom: 8px;
-    font-size: 0.9rem;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.3px;
 }
 
-.form-group select, 
+.form-group select,
 .form-group textarea {
     width: 100%;
-    padding: 12px 15px;
-    border: 1px solid #d9ccbc;
-    border-radius: 10px;
+    padding: 14px 16px;
+    border: 1px solid #dccbbb;
+    border-radius: 14px;
     background: white;
-    color: #4a3728;
     font-size: 1rem;
+    color: #4a3728;
+    transition: all 0.3s ease;
     outline: none;
-    transition: border-color 0.3s;
 }
 
 .form-group textarea {
-    height: 120px;
+    min-height: 140px;
     resize: vertical;
+    line-height: 1.6;
 }
 
-.form-group select:focus, 
+.form-group select:focus,
 .form-group textarea:focus {
     border-color: #ae4010;
+    box-shadow: 0 0 0 4px rgba(174, 64, 16, 0.08);
 }
 
-/* Botón de envío estilizado */
+/* =========================
+   BOTÓN
+========================= */
+
 .btn-submit-resenya {
-    background-color: #4a3728;
+    background: linear-gradient(135deg, #4a3728, #6b4f3d);
     color: white;
     border: none;
-    padding: 12px 30px;
-    border-radius: 25px;
-    font-weight: bold;
+    padding: 14px 34px;
+    border-radius: 40px;
+    font-size: 0.95rem;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 10px;
+    transition: all 0.3s ease;
 }
 
 .btn-submit-resenya:hover {
-    background-color: #ae4010;
-    transform: scale(1.05);
-    box-shadow: 0 5px 15px rgba(174, 64, 16, 0.3);
+    background: linear-gradient(135deg, #ae4010, #d67a45);
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 10px 25px rgba(174, 64, 16, 0.25);
 }
 
-/* Mensajes de feedback */
+/* =========================
+   SIN RESEÑAS
+========================= */
+
 .resenya-empty {
     text-align: center;
-    padding: 40px;
-    color: #9c8c7e;
+    padding: 50px;
+    color: #9a8a7a;
     font-style: italic;
+    font-size: 1rem;
+    background: #faf7f2;
+    border: 1px dashed #d8c7b8;
+    border-radius: 18px;
 }
 /* ════════════════════════════
 RESPONSIVE
