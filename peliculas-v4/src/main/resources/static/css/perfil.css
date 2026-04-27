@@ -1,12 +1,8 @@
-/* =========================
-   PERFIL - ESTILO BEIGE
-   ========================= */
 
 body {
   background: #f7f3ee;
 }
 
-/* Contenedor principal */
 .perfil-container {
   max-width: 900px;
   margin: 40px auto;
@@ -23,9 +19,7 @@ body {
   color: #2b2b2b;
 }
 
-/* =========================
-   CARDS
-   ========================= */
+
 
 .card {
   background: #fffdf8;
@@ -56,9 +50,7 @@ body {
   color: #444;
 }
 
-/* =========================
-   TABLA PEDIDOS
-   ========================= */
+
 
 table {
   width: 100%;
@@ -89,9 +81,7 @@ tbody tr:hover {
   background: #f3ede5;
 }
 
-/* =========================
-   ESTADOS PEDIDO
-   ========================= */
+
 
 .estado {
   padding: 4px 10px;
@@ -102,7 +92,6 @@ tbody tr:hover {
   text-transform: capitalize;
 }
 
-/* beige status palette */
 .estado.pendiente {
   background: #f7e7c6;
   color: #7a5c1b;
@@ -123,9 +112,7 @@ tbody tr:hover {
   color: #7a2f2f;
 }
 
-/* =========================
-   RESPONSIVE
-   ========================= */
+
 
 @media (max-width: 768px) {
   .perfil-container {
@@ -138,9 +125,7 @@ tbody tr:hover {
   }
 }
 
-/* =========================
-   BOTONES PRO
-   ========================= */
+
 
 button {
   cursor: pointer;
@@ -155,7 +140,6 @@ button {
   gap: 6px;
 }
 
-/* EDITAR */
 .btn-edit {
   background: transparent;
   color: #c7b299;
@@ -168,7 +152,6 @@ button {
   transform: scale(1.05);
 }
 
-/* GUARDAR */
 .btn-save {
   background: linear-gradient(135deg, #c7b299, #a38f78);
   color: white;
@@ -183,7 +166,6 @@ button {
   box-shadow: 0 8px 18px rgba(0,0,0,0.15);
 }
 
-/* CANCELAR */
 .btn-cancel {
   background: #f1ece6;
   color: #555;
@@ -197,9 +179,6 @@ button {
   transform: translateY(-2px);
 }
 
-/* =========================
-   INPUTS OBLIGATORIOS
-   ========================= */
 
 .form-group label::after {
   content: " *";
@@ -207,7 +186,6 @@ button {
   font-weight: bold;
 }
 
-/* INPUT BONITO */
 .form-group input {
   width: 100%;
   padding: 11px;
@@ -218,13 +196,11 @@ button {
   transition: all 0.2s ease;
 }
 
-/* FOCUS */
 .form-group input:focus {
   border-color: #c7b299;
   box-shadow: 0 0 0 3px rgba(199,178,153,0.2);
 }
 
-/* ERROR VISUAL */
 .form-group input:invalid {
   border-color: #e07a7a;
   background: #fff5f5;

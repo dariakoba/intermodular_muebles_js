@@ -13,7 +13,7 @@ import com.example.peliculas.dto.ProductoCatNomDetalle;
 import com.example.peliculas.dto.ProductoDetalle;
 import com.example.peliculas.dto.ProductoResumen;
 
-public class ProductoRepository extends BaseRepository<Producto> {
+public class ProductoRepository extends SoftDeleteRepository<Producto> {
 
 	
 	public ProductoRepository(Connection con) {
@@ -116,7 +116,7 @@ public class ProductoRepository extends BaseRepository<Producto> {
 				    end as estado,
 				    c.nombre as categoria_nombre
 				from productos p
-				inner join categoria c 
+				left join categoria c 
 		    on c.id_categoria = p.categoria_id;
 				""";
 				

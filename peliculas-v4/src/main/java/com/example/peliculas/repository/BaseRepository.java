@@ -25,7 +25,7 @@ public abstract class BaseRepository<T> {
 	
 	public abstract String getTable();
 	public String getPrimaryKeyName() {
-		return "id";
+		return "id_categoria";
 	}
 	public abstract Integer getPrimaryKey(T instance);
 
@@ -80,24 +80,31 @@ public abstract class BaseRepository<T> {
 	}
 	
 	public boolean delete(int id) {
-		try {
-			String sql = "DELETE FROM  " + getTable() + " WHERE " + getPrimaryKeyName() + " = ?";
-			return DB.delete(con, sql, id) == 1;
-		} catch (SQLException e) {
-			throw new DataAccessException("Error al eliminar registro con id=" + id + " de la tabla " + getTable(), e);
-		}
-	}
-	
-	//softdelete generico
-	public int softDelete(int id) {
+	    // 1. Verificamos que el nombre de la tabla y PK no sean nulos
+	    String table = getTable();
+	    String pk = getPrimaryKeyName();
+	    
+	    if (table == null || pk == null) {
+	        throw new DataAccessException("Error: Tabla o Primary Key no definidas en el repositorio.");
+	    }
+
 	    try {
-	        String sql = "UPDATE " + getTable() +
-	                     " SET deleted_at = NOW() WHERE " + getPrimaryKeyName() + " = ?";
-	        return DB.update(con, sql, id);
+	        // 2. Construcción limpia del SQL
+	        String sql = "DELETE FROM " + table + " WHERE " + pk + " = ?";
+	        
+	        // 3. Ejecución. DB.delete debe retornar el número de filas afectadas.
+	        int rowsAffected = DB.delete(con, sql, id); 
+	        
+	        return rowsAffected > 0; // Es mejor > 0 que == 1 por seguridad
+	        
 	    } catch (SQLException e) {
-	        throw new DataAccessException("Error al desactivar en " + getTable(), e);
+	        // 4. Captura específica de errores de SQL (como claves foráneas)
+	        throw new DataAccessException("No se pudo eliminar el ID " + id + " de " + table + ". " +
+	                                     "Es probable que este registro esté vinculado a otras tablas.", e);
 	    }
 	}
+	
+	
 	
 	
 	private String buildInsertSql() {

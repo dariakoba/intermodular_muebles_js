@@ -5,7 +5,6 @@ const successDiv = document.getElementById("success");
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  // Tomar valores y quitar espacios
   const data = {
     nombre: document.getElementById("nombre").value.trim(),
     apellidos: document.getElementById("apellidos").value.trim(),

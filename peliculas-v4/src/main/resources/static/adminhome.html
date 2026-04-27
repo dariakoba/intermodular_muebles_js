@@ -8,20 +8,21 @@
 <!-- CSS propio -->
 <link rel="stylesheet" href="/css/adminhome.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 </head>
 <body>
 
 <!-- Header / Navbar -->
+<!-- Header / Navbar -->
 <header class="navbar">
-    <a href="home.html" class="logo-link">
-        <div class="logo-container">
-            <div class="logo-circle">
-                <img src="/images/logo.png" alt="DNA Logo" class="logo-image">
-            </div>
-            <span class="brand-name">DNA</span>
-        </div>
-    </a>
+	<a href="home.html" class="logo-link">
+		<div class="logo-container">
+			<div class="logo-circle">
+				<img src="/images/logo.png" alt="DNA Logo" class="logo-image">
+			</div>
+			<span class="brand-name">DNA</span>
+		</div>
+	</a>
 
     <nav class="nav-links">
         <a href="index.html">Home</a>
@@ -33,19 +34,25 @@
 
 	<div class="icons">
 	         
+	<nav class="nav-links">
+		<a href="adminhome.html">Home</a>
+		<a href="/admin/usuarios/index.html">Usuarios</a>
+		<a href="/admin/productos/index.html">Productos</a>
+		<a href="pedidoAdmin.html">Pedidos</a>
+		<a href="../categorias/index.html">Categorías</a>
 
-	            <div class="person-menu-wrapper">
-	                <a href="perfil.html" style="text-decoration: none; color: inherit;">
-	                    <span id="person-icon" class="material-symbols-outlined">person</span>
-	                </a>
-	                <div class="person-menu">
-	                    <a href="perfil.html">Ver cuenta</a>
-	                    <a href="logout.html">Cerrar sesión</a>
-	                </div>
-	            </div>
+	</nav>
+
+	<div class="icons">
+	    <div class="person-menu-wrapper">
+	        <span id="person-icon" class="material-symbols-outlined" style="cursor: pointer;">person</span>
+
+	        <div class="person-menu">
+	            <a href="#" id="logoutBtn">Cerrar sesión</a>
 	        </div>
+	    </div>
+	</div>
 </header>
-
 <!-- Contenido principal -->
 <main class="admin-container">
     <section class="admin-welcome">
@@ -78,23 +85,49 @@
 </main>
 
 <script>
-document.addEventListener("DOMContentLoaded", async () => {
-    // Verificar que sea admin
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (!user || user.rol !== "admin") {
-        // Redirigir si no es admin
-        window.location.href = "login.html";
-        return;
-    }
+	document.addEventListener("DOMContentLoaded", () => {
+	    const icon = document.getElementById("person-icon");
+	    const menu = document.querySelector(".person-menu");
+	    const logoutBtn = document.getElementById("logoutBtn");
 
-    // Logout
-    const logoutBtn = document.getElementById("logoutBtn");
-    logoutBtn.addEventListener("click", async () => {
-        await fetch("/api/logout", { method: "POST", credentials: "include" });
-        localStorage.removeItem("user");
-        window.location.href = "login.html";
-    });
-});
+	    if (icon && menu) {
+	        icon.addEventListener("click", (e) => {
+	            e.stopPropagation();
+	            menu.classList.toggle("show");
+	        });
+
+	        document.addEventListener("click", () => {
+	            menu.classList.remove("show");
+	        });
+	    }
+
+	    if (logoutBtn) {
+	        logoutBtn.addEventListener("click", async (e) => {
+	            e.preventDefault();
+
+	            if (!confirm("¿Estás seguro de que quieres cerrar sesión?")) return;
+
+	            try {
+	                const res = await fetch("/logout", {   
+	                    method: "POST",
+	                    credentials: "include"
+	                });
+
+	                localStorage.clear();
+	                sessionStorage.clear();
+
+	                window.location.href = "/../../login.html";
+
+	            } catch (err) {
+	                console.error("Error al cerrar sesión:", err);
+	                // En caso de error de red, forzamos la salida al login
+	                window.location.href = "/../../login.html";
+	            }
+	        });
+	    }
+	});
+	
+
 </script>
 
 </body>

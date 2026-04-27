@@ -32,18 +32,16 @@ public class UserController {
         this.ds = ds;
     }
 
-    // Lista todos los usuarios como DTO (sin contraseña)
     @GetMapping
     public List<UserResponse> indexResponses() {
         try (Connection con = ds.getConnection()) {
             UserRepository repo = new UserRepository(con);
-            return repo.findResponses(); // Lista de UserResponse
+            return repo.findResponses(); 
         } catch (SQLException e) {
             throw new DataAccessException(e);
         }
     }
 
-    // Obtiene un usuario por id como DTO (sin contraseña)
     @GetMapping("/response/{id}")
     public UserResponse showResponse(@PathVariable int id) {
         try (Connection con = ds.getConnection()) {
@@ -54,7 +52,6 @@ public class UserController {
         }
     }
 
-    // Obtiene un usuario por id como entidad completa (incluye contraseña)
     @GetMapping("/{id}")
     public User show(@PathVariable int id) {
         try (Connection con = ds.getConnection()) {
@@ -67,7 +64,6 @@ public class UserController {
     
     @PutMapping("/update-me")
     public UserResponse updateMe(@RequestBody User data, HttpSession session) {
-        // Extraemos el ID de la sesión
         Integer userId = (Integer) session.getAttribute("userId");
         
         if (userId == null) {
@@ -77,36 +73,31 @@ public class UserController {
         try (Connection con = ds.getConnection()) {
             UserRepository repo = new UserRepository(con);
             
-            // 1. Buscamos el usuario actual en la base de datos
             User user = repo.find(userId);
             if (user == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
             }
 
-            // 2. Validamos que no vengan campos vacíos
             if (data.getNombre() == null || data.getNombre().isBlank() ||
                 data.getEmail() == null || data.getEmail().isBlank()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nombre y Email son obligatorios");
             }
 
-            // 3. Actualizamos solo los campos permitidos
             user.setNombre(data.getNombre());
-            user.setApellidos(data.getApellidos()); // Asegúrate de que User tenga este campo
+            user.setApellidos(data.getApellidos()); 
             user.setEmail(data.getEmail());
             user.setTelefono(data.getTelefono());
             user.setDireccion(data.getDireccion());
 
-            // 4. Guardamos en la base de datos
             repo.update(user);
             
-            // 5. Devolvemos el DTO actualizado (sin contraseña)
             return repo.findResponseById(userId);
 
         } catch (SQLException e) {
             throw new DataAccessException(e);
         }
     }
-    
+    /*
     @PostMapping("/upload-photo")
     public UserResponse uploadPhoto(@RequestParam("file") MultipartFile file, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
@@ -116,20 +107,16 @@ public class UserController {
             UserRepository repo = new UserRepository(con);
             User user = repo.find(userId);
 
-            // 1. Definimos la ruta relativa a la carpeta static
             String fileName = "user_" + userId + ".jpg";
             // Usamos una ruta que apunte a tu nueva carpeta
             Path root = Paths.get("src/main/resources/static/images/fotoperfil");
             
-            // Creamos la carpeta si por algún motivo no existe
             if (!Files.exists(root)) {
                 Files.createDirectories(root);
             }
 
-            // 2. Guardamos el archivo
             Files.copy(file.getInputStream(), root.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
 
-            // 3. La URL que guardamos en BD debe ser la que el navegador usará:
             user.setFotoUrl("/images/fotoperfil/" + fileName);
             repo.update(user);
 
@@ -139,4 +126,5 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al guardar la imagen");
         }
     }
+    */
 }

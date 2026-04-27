@@ -84,31 +84,43 @@ document.addEventListener("DOMContentLoaded", () => {
       fecha_alta: usuarioOriginal.fecha_alta
     };
 
-    // 🔐 CONTRASEÑA: solo incluir si hay valor
+    // solo incluir si hay valor
     const passValue = password.value.trim();
     if (passValue !== "") {
-      usuario.password_hash = passValue; // backend hará hash
+      usuario.password_hash = passValue; 
     }
 
-    try {
-      const res = await fetch(`/api/admin/usuarios/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(usuario)
-      });
+	try {
+	  const res = await fetch(`/api/admin/usuarios/${id}`, {
+	    method: "PUT",
+	    headers: { "Content-Type": "application/json" },
+	    body: JSON.stringify(usuario)
+	  });
 
-      if (res.ok) {
-        window.location.href = "index.html";
-      } else {
-        const error = await res.text();
-        console.error(error);
-        alert("Error: " + error);
-      }
 	  
-    } catch (err) {
-      console.error(err);
-      alert("Error de conexión");
-    }
+	  let data;
+	  let msg = "Error desconocido";
+
+	  try {
+	    data = await res.json();
+	    msg = data.message || msg;
+	  } catch {
+	    msg = await res.text();
+	  }
+
+	  
+	  if (!res.ok) {
+	    alert("❌ No se puede actualizar: " + msg);
+	    return;
+	  }
+
+	  alert("Usuario actualizado correctamente");
+	  window.location.href = "index.html";
+
+	} catch (err) {
+	  console.error(err);
+	  alert("Error de conexión");
+	}
   });
 
   cargarUsuario();

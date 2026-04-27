@@ -18,7 +18,7 @@ function render(categorias) {
     const tbody = document.querySelector("#tabla-productos tbody");
     tbody.innerHTML = categorias.map(p => `
         <tr>
-            <td><input type="checkbox" class="check-fila" data-id="${p.id_producto}"></td>
+            <td><input type="checkbox" class="check-fila" data-id="${p.id_categoria}"></td>
 			<td>${e(p.id_categoria)}</td>
             <td>${e(p.nombre)}</td>
 			<td>${e(p.estado)}</td>
@@ -27,9 +27,19 @@ function render(categorias) {
                 <a href="show.html?id=${p.id_categoria}" class="btn-ver">Ver</a>
                 <a href="edit.html?id=${p.id_categoria}" class="btn-editar">Editar</a>
 				
-				<button class="btn-desactivar" onclick="borrarProducto(${p.id_categoria})">
-				     Desactivar
-				 </button>
+			
+				 
+				 
+				 ${
+			 		    p.estado === "activo"
+			 		        ? `<button class="btn-desactivar" onclick="desactivarCategoria(${p.id_categoria})">
+			 		                Desactivar
+			 		           </button>`
+			 		        : `<button class="btn-activar" onclick="activarCategoria(${p.id_categoria})">
+			 		                Activar
+			 		           </button>`
+				 }
+				 
             </td>
         </tr>
     `).join("");
@@ -42,7 +52,7 @@ async function desactivarCategoria(id) {
         await api.put(`/api/admin/categorias/${id}/desactivar`);
 
         // Recargar lista completa
-        const productos = await api.get("/api/admin/categorias");
+        const categorias = await api.get("/api/admin/categorias");
         render(categorias);
 
     } catch (err) {
@@ -51,6 +61,21 @@ async function desactivarCategoria(id) {
     }
 }
 
+async function activarCategoria(id) {
+   // if (!confirm("¿Seguro que quieres eliminar esta categoria?")) return;
+
+    try {
+        await api.put(`/api/admin/categorias/${id}/activar`);
+
+        // Recargar lista completa
+        const categorias = await api.get("/api/admin/categorias");
+        render(categorias);
+
+    } catch (err) {
+        console.error(err);
+        alert("Error al activarr producto");
+    }
+}
 
 /*
 async function borrarProducto(id) {
@@ -72,16 +97,13 @@ async function borrarProducto(id) {
 
 function bindEvents() {
     const tabla = document.getElementById("tabla-productos");
-    //bind(tabla, "click", onAction);
 
-    // Seleccionar todo
     document.getElementById("check-all").addEventListener("change", (ev) => {
         document.querySelectorAll(".check-fila").forEach(cb => {
             cb.checked = ev.target.checked;
         });
     });
 
-    // Eliminar seleccionados
     document.getElementById("btn-eliminar-seleccionados").addEventListener("click", async () => {
         const seleccionados = [...document.querySelectorAll(".check-fila:checked")]
             .map(cb => Number(cb.dataset.id));
@@ -94,10 +116,9 @@ function bindEvents() {
         if (!confirm(`¿Eliminar ${seleccionados.length} producto(s)?`)) return;
 
         await Promise.all(seleccionados.map(id =>
-            api.delete(`/api/admin/productos/${id}`)
+            api.delete(`/api/admin/categorias/${id}`)
         ));
 
-        // Eliminar filas del DOM
         seleccionados.forEach(id => {
             const cb = document.querySelector(`.check-fila[data-id="${id}"]`);
             if (cb) cb.closest("tr").remove();
@@ -123,4 +144,5 @@ async function onAction(e) {
     }
 }
 */
-window.desactivarProducto = desactivarProducto;
+window.desactivarCategoria = desactivarCategoria;
+window.activarCategoria = activarCategoria;

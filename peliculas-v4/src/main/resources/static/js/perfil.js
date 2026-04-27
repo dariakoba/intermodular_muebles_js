@@ -1,8 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
-    // =========================
-    // 👤 1. CARGAR DATOS USUARIO
-    // =========================
     try {
         const res = await fetch("/api/me");
 
@@ -13,19 +10,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         const user = await res.json();
 
-        // Rellenamos los campos de texto
         document.getElementById("nombre").textContent = user.nombre;
         document.getElementById("email").textContent = user.email;
         document.getElementById("telefono").textContent = user.telefono ?? "-";
         document.getElementById("direccion").textContent = user.direccion ?? "No definida";
         document.getElementById("puntos").textContent = (user.puntos ?? 0) + " puntos";
 
-        // ✅ CORRECCIÓN: Cargar la foto de perfil al iniciar
-		// --- Dentro del bloque donde cargas los datos del usuario ---
+        
 		const imgPerfil = document.getElementById("img-perfil");
 
-		// Si el usuario tiene fotoUrl en la BD, la usamos. 
-		// Si no, usamos tu nueva ruta por defecto.
+
 		if (user.fotoUrl) {
 		    imgPerfil.src = user.fotoUrl;
 		} else {
@@ -37,9 +31,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         window.location.href = "/login.html";
     }
 
-    // =========================
-    // 📦 2. CARGAR PEDIDOS
-    // =========================
+
     try {
         const res = await fetch("/api/carrito/mis");
         const tbody = document.getElementById("pedidos-body");
@@ -79,9 +71,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("pedidos-body").innerHTML = `<tr><td colspan="4">Error de conexión.</td></tr>`;
     }
 
-    // =========================
-    // ✏️ 3. LÓGICA DE EDICIÓN
-    // =========================
+
     const btnEdit = document.getElementById("btn-edit");
     const btnCancel = document.getElementById("btn-cancel");
     const btnSave = document.getElementById("btn-save");
@@ -136,9 +126,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 
-    // =========================
-    // 📸 4. SUBIDA DE FOTO
-    // =========================
+
     const fileInput = document.getElementById('file-input');
     if (fileInput) {
         fileInput.addEventListener('change', async function(e) {
@@ -156,8 +144,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 if (response.ok) {
                     const data = await response.json();
-                    // ✅ MEJORA: Añadimos un "timestamp" (?t=...) para forzar al navegador 
-                    // a recargar la imagen y que no use la vieja de la caché.
+  
                     document.getElementById('img-perfil').src = data.fotoUrl + "?t=" + new Date().getTime();
                     alert("Foto actualizada correctamente");
                 } else {

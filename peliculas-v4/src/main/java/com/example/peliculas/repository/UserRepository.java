@@ -1,6 +1,8 @@
 package com.example.peliculas.repository;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
@@ -118,7 +120,7 @@ public class UserRepository extends BaseRepository<User> {
 	    return new String[] { 
 	        "id", "password_hash", "rol", "telefono", "estado", 
 	        "nombre", "apellidos", "direccion", "email", "puntos", 
-	        "salario", "fecha_alta", "foto_url" // <-- Añadir aquí
+	        "salario", "fecha_alta"
 	    };
 	}
 
@@ -128,7 +130,6 @@ public class UserRepository extends BaseRepository<User> {
 	        u.getPasswordHash(), u.getRol(), u.getTelefono(), u.getEstado(),
 	        u.getNombre(), u.getApellidos(), u.getDireccion(), u.getEmail(),
 	        u.getPuntos(), u.getSalario(), LocalDate.now(), 
-	        u.getFotoUrl() // <-- Añadir aquí
 	    };
 	}
 
@@ -138,7 +139,6 @@ public class UserRepository extends BaseRepository<User> {
 	        u.getPasswordHash(), u.getRol(), u.getTelefono(), u.getEstado(),
 	        u.getNombre(), u.getApellidos(), u.getDireccion(), u.getEmail(),
 	        u.getPuntos(), u.getSalario(), u.getFechaAlta(),
-	        u.getFotoUrl(), // <-- Añadir aquí
 	        u.getId()       // El ID siempre al final para el WHERE
 	    };
 	}
@@ -158,16 +158,22 @@ public class UserRepository extends BaseRepository<User> {
             throw new DataAccessException("Error al actualizar la dirección en la compra", e);
         }
     }
+	public int countAdmins() throws SQLException {
+	    // Usamos el nombre de la tabla que ya tienes definido en getTable()
+	    String sql = "SELECT COUNT(*) FROM " + getTable() + " WHERE rol = 'admin'";
+	    
+	    try (PreparedStatement ps = con.prepareStatement(sql);
+	         ResultSet rs = ps.executeQuery()) {
+	        
+	        if (rs.next()) {
+	            return rs.getInt(1);
+	        }
+	        return 0;
+	    } catch (SQLException e) {
+	        throw new SQLException("Error al contar los administradores", e);
+	    }
+	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 }

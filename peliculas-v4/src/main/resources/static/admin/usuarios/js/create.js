@@ -12,14 +12,32 @@ document.getElementById("form-usuario").addEventListener("submit", async (e) => 
     estado: "activo"
   };
 
-  const res = await fetch("/api/admin/usuarios", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(usuario)
-  });
+  try {
+    const res = await fetch("/api/admin/usuarios", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(usuario)
+    });
 
-  if (res.ok) {
+    let data;
+
+    try {
+      data = await res.json();
+    } catch {
+      data = await res.text();
+    }
+
+    if (!res.ok) {
+      const msg = typeof data === "object" ? data.message : data;
+      alert("❌ Error: " + msg);
+      return;
+    }
+
+    alert(" Usuario creado correctamente");
     window.location.href = "index.html";
+
+  } catch (err) {
+    console.error(err);
+    alert("Error de conexión");
   }
-  
 });

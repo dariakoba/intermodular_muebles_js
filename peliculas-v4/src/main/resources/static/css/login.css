@@ -7,7 +7,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  position: relative; /* para posicionar im�genes decorativas */
+  position: relative; 
 }
 
 /* Contenedor del login */
@@ -17,7 +17,7 @@ body {
   align-items: center;
   width: 100%;
   padding: 20px;
-  z-index: 10; /* que est� encima de las im�genes */
+  z-index: 10; 
 }
 
 /* Caja blanca del formulario */
@@ -71,7 +71,7 @@ body {
 
 /* Botón login */
 .btn-login {
-  background: #5c4432; /* marrón original */
+  background: #5c4432; 
   color: white;
   padding: 14px 28px;
   border: none;
@@ -84,36 +84,33 @@ body {
 }
 
 .btn-login:hover {
-  background: #ae4010; /* color hover que pediste */
+  background: #ae4010; 
 }
 
-/* Enlace de contrase�a olvidada */
 .forgot-pass {
   margin-top: 15px;
   font-size: 14px;
   text-align: center;
 }
 
-/* Enlace de contraseña olvidada */
 .forgot-pass a {
-  color: #5c4432; /* color inicial del enlace */
+  color: #5c4432; 
   text-decoration: none;
   transition: 0.2s;
 }
 
 .forgot-pass a:hover {
-  color: #ae4010; /* mismo color que el hover del botón */
+  color: #ae4010; 
 }
-/* ------------------ IM�GENES DECORATIVAS ------------------ */
 
-/* Imagen circular superior izquierda */
+
 .decor-img-top {
   position: absolute;
-  top: -50px; /* ajusta seg�n convenga */
+  top: -50px; 
   left: 50px;
-  width: 200px; /* m�s grande para que la imagen se vea bien */
+  width: 200px; 
   height: 200px;
-  border-radius: 50%; /* c�rculo perfecto */
+  border-radius: 50%; 
   overflow: hidden;
   z-index: 1;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
@@ -123,19 +120,17 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 50%; /* asegura que la imagen sea circular */
+  border-radius: 50%; 
 }
 
-/* ------------------ IM�GENES DECORATIVAS ------------------ */
 
-/* Imagen circular superior izquierda */
 .decor-img-top {
   position: absolute;
-  top: 30px; /* ajusta seg�n convenga */
+  top: 30px; 
   left: 50px;
-  width: 500px; /* m�s grande para que la imagen se vea bien */
+  width: 500px; 
   height: 500px;
-  border-radius: 50%; /* c�rculo perfecto */
+  border-radius: 50%; 
   overflow: hidden;
   z-index: 1;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
@@ -145,17 +140,16 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 50%; /* asegura que la imagen sea circular */
+  border-radius: 50%; 
 }
 
-/* Imagen circular inferior izquierda */
 .decor-img-bottom {
   position: absolute;
-  bottom: 40px; /* separado del borde inferior */
+  bottom: 40px; 
   right: 50px;
-  width: 500px; /* grande para buen efecto visual */
+  width: 500px; 
   height: 500px;
-  border-radius: 50%; /* c�rculo perfecto */
+  border-radius: 50%; 
   overflow: hidden;
   z-index: 1;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
@@ -165,10 +159,9 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 50%; /* asegura que la imagen sea circular */
+  border-radius: 50%; 
 }
 
-/* Responsive para pantallas peque�as */
 @media (max-width: 768px) {
   .decor-img-top {
     width: 150px;

@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Admin – Productos</title>
+<title>Admin – Categorías</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 
@@ -197,7 +197,7 @@ tbody td {
   justify-content: center;
 }
 
-.btn-ver, .btn-editar, .btn-desactivar {
+.btn-ver, .btn-editar, .btn-desactivar, .btn-activar {
   padding: 4px 10px;
   font-size: 0.75rem;
   font-weight: 700;
@@ -215,6 +215,7 @@ tbody td {
 .btn-ver { background: #e8f4f5; color: #2a9aa6; }
 .btn-editar { background: #fef3e2; color: #c07a00; }
 .btn-desactivar { background: #fdecea; color: #c0392b; }
+.btn-activar { background: #fdecea; color: #c0392b; }
 
 .btn-ver:hover, .btn-editar:hover, .btn-dsactivar:hover {
   opacity: 0.85;
@@ -263,7 +264,6 @@ tbody td {
   </nav>
 
   <div class="icons">
-    <span class="material-symbols-outlined">shopping_cart</span>
     <div class="person-menu-wrapper">
       <span class="material-symbols-outlined">person</span>
       <div class="person-menu">
@@ -276,10 +276,10 @@ tbody td {
 
 <main class="admin-wrapper">
   <div class="admin-header">
-    <h1>Productos</h1>
+    <h1>Categorías</h1>
     <div class="admin-actions">
       <button id="btn-eliminar-seleccionados">Eliminar seleccionados</button>
-      <a href="/admin/productos/create.html" class="btn-nuevo">Nuevo producto</a>
+      <a href="/admin/categorias/create.html" class="btn-nuevo">Nueva Categoria</a>
     </div>
   </div>
 
@@ -290,12 +290,11 @@ tbody td {
           <th><input type="checkbox" id="check-all"></th>
           <th>ID</th>
           <th>Nombre</th>
-       
+       	  <th>Estado</th>
           <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
-        <!-- Aquí tu JS va a renderizar las filas -->
       </tbody>
     </table>
   </div>
