@@ -29,9 +29,10 @@ public class Pedido {
     @JsonProperty("idUsuario")
     private Integer idUsuario;
     
-    // --- NUEVO: AÑADIMOS EMAIL Y TELÉFONO ---
+    // --- NUEVO: AÑADIMOS EMAIL, TELÉFONO Y DIRECCIÓN ---
     private String email;
     private String telefono;
+    private String direccion; // <-- NUEVO AÑADIDO
     
     public Pedido() {}
 
@@ -41,6 +42,9 @@ public class Pedido {
 
     public String getTelefono() { return telefono; }
     public void setTelefono(String telefono) { this.telefono = telefono; }
+    
+    public String getDireccion() { return direccion; } // <-- NUEVO AÑADIDO
+    public void setDireccion(String direccion) { this.direccion = direccion; } // <-- NUEVO AÑADIDO
     // ----------------------------------------
 
     public Integer getIdUsuario() { return idUsuario; }

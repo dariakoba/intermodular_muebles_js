@@ -23,6 +23,7 @@ public class PedidoMapper implements RowMapper<Pedido> {
         }
 
         try { p.setEmail(rs.getString("email")); } catch (SQLException e) {}
+        try { p.setDireccion(rs.getString("direccion")); } catch (Exception e) {}
         try { p.setTelefono(rs.getString("telefono")); } catch (SQLException e) {}
 
         try {

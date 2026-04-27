@@ -30,6 +30,9 @@
             </div>
 
             <form id="form-tarjeta">
+                
+                <input type="text" id="direccion-envio" placeholder="Dirección completa de envío (Calle, Ciudad, CP)" required style="border-left: 4px solid rgb(159, 80, 0);">
+
                 <input type="text" id="nombre-titular" placeholder="Nombre completo" required>
                 
                 <select id="metodo-pago" onchange="cambiarMetodoPago()">
@@ -147,6 +150,9 @@
                     precio: item.precio || 0
                 }));
 
+                // ---> NUEVO: Capturamos la dirección introducida <---
+                const direccionIngresada = document.getElementById('direccion-envio').value.trim();
+
                 try {
                     const respuesta = await fetch('/api/carrito/comprar', {
                         method: 'POST',
@@ -155,7 +161,12 @@
                             'Content-Type': 'application/json', 
                             'Accept': 'application/json' 
                         },
-                        body: JSON.stringify({ pedido: objetoPedido, productos: listaProductos }) 
+                        // ---> NUEVO: Añadimos 'direccion' al JSON <---
+                        body: JSON.stringify({ 
+                            direccion: direccionIngresada, 
+                            pedido: objetoPedido, 
+                            productos: listaProductos 
+                        }) 
                     });
 
                     if (respuesta.ok) {
