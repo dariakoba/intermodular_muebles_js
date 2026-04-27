@@ -14,36 +14,55 @@ public class ResenyaRepository extends BaseRepository<Resenya> {
     }
 
     @Override
-    public String getTable() { return "resenyas"; }
+    public String getTable() { 
+        return "resenas"; // Nombre de la tabla en tu SQL
+    }
 
     @Override
-    public Integer getPrimaryKey(Resenya instance) { return instance.getIdResenya(); }
+    public Integer getPrimaryKey(Resenya instance) { 
+        return instance.getIdResenya(); 
+    }
 
     @Override
-    public void setPrimaryKey(Resenya instance, int id) { instance.setIdResenya(id); }
+    public void setPrimaryKey(Resenya instance, int id) { 
+        instance.setIdResenya(id); 
+    }
 
     @Override
     public String[] getColumnNames() {
-        return new String[] {"id", "id_usuario", "id_producto", "puntuacion", "comentario", "fecha_publicacion"};
+        // Nombres de las columnas en la base de datos MySQL
+        return new String[] {"id_usuario", "id_producto", "puntuacion", "comentario", "fecha"};
     }
 
     @Override
     public Object[] getInsertValues(Resenya r) {
-        return new Object[] { r.getUsuarioId(), r.getProductoId(), r.getPuntuacion(), r.getComentario(), r.getFechaPublicacion() };
+        // Usamos los nombres exactos de tus getters de la entidad Resenya
+        return new Object[] { 
+            r.getUsuarioId(), 
+            r.getProductoId(), 
+            r.getPuntuacion(), 
+            r.getComentario(), 
+            r.getFechaPublicacion() 
+        };
     }
 
     @Override
     public Object[] getUpdateValues(Resenya r) {
-        return new Object[] { r.getUsuarioId(), r.getProductoId(), r.getPuntuacion(), r.getComentario(), r.getFechaPublicacion(), r.getIdResenya() };
+        return new Object[] { 
+            r.getUsuarioId(), 
+            r.getProductoId(), 
+            r.getPuntuacion(), 
+            r.getComentario(), 
+            r.getFechaPublicacion(), 
+            r.getIdResenya() 
+        };
     }
 
     public List<Resenya> findByProducto(int idProducto) {
-        String sql = "SELECT * FROM resenyas WHERE id_producto = ?";
+        String sql = "SELECT * FROM resenas WHERE id_producto = ?";
         try {
-          
             return DB.queryMany(con, sql, mapper, idProducto);
         } catch (SQLException e) {
-            
             throw translate(e);
         }
     }

@@ -2,9 +2,15 @@ package com.example.peliculas.entity;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Resenya {
     private Integer idResenya; 
+    
+    @JsonProperty("usuarioId")
     private int usuarioId;
+    
+    @JsonProperty("productoId")
     private int productoId;
     private int puntuacion;
     private String comentario;
