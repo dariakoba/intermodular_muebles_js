@@ -14,21 +14,20 @@
 	<style>
 	        .badge {
 	            padding: 6px 12px;
-	            border-radius: 15px;
-	            color: white !important;
+	            border-radius: 5px; 
 	            font-size: 11px;
 	            font-weight: bold;
 	            text-transform: uppercase;
 	            display: inline-block;
-	            box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
+                border: none; 
 	        }
-	        .bg-pendiente { background-color: #C58B39 !important; } 
-	        .bg-pagado    { background-color: #507AA8 !important; } 
-	        .bg-proceso   { background-color: #8B6D9C !important; } 
-	        .bg-enviando  { background-color: #4A978E !important; } 
-	        .bg-recibido  { background-color: #629664 !important; } 
-	        .bg-devuelto  { background-color: #546372 !important; } 
-	        .bg-cancelado { background-color: #B75D5D !important; } 
+	        .bg-pendiente { background-color: rgba(197, 139, 57, 0.15) !important; color: #C58B39 !important; } 
+	        .bg-pagado    { background-color: rgba(80, 122, 168, 0.15) !important; color: #507AA8 !important; } 
+	        .bg-proceso   { background-color: rgba(139, 109, 156, 0.15) !important; color: #8B6D9C !important; } 
+	        .bg-enviando  { background-color: rgba(74, 151, 142, 0.15) !important; color: #4A978E !important; } 
+	        .bg-recibido  { background-color: rgba(98, 150, 100, 0.15) !important; color: #629664 !important; } 
+	        .bg-devuelto  { background-color: rgba(84, 99, 114, 0.15) !important; color: #546372 !important; } 
+	        .bg-cancelado { background-color: rgba(183, 93, 93, 0.15) !important; color: #B75D5D !important; } 
 	    </style>
 </head>
 <body>
@@ -44,7 +43,7 @@
             <a href="adminhome.html">Home</a>
             <a href="admin/usuarios/index.html">Usuarios</a>
             <a href="admin/productos/index.html">Productos</a>
-            <a href="pedidos.html">Pedidos</a>
+            <a href="pedidos.html" style="color: #1abc9c;">Pedidos</a>
         </nav>
         <div class="icons">
             <div class="person-menu-wrapper">
@@ -71,6 +70,8 @@
                     <i class="fa-solid fa-xmark"></i>
                 </button>
 
+                <button class="btn-nuevo" style="background: #c0392b;" onclick="abrirModalBorrarSeleccionados()">ELIMINAR SELECCIONADOS</button>
+
                 <button class="btn-nuevo" onclick="cargarPedidos()"><i class="fa-solid fa-rotate"></i> ACTUALIZAR</button>
             </div>
         </div>
@@ -79,6 +80,7 @@
             <table id="tablaPedidos">
                 <thead>
                     <tr>
+                        <th style="width: 40px; text-align: center;"><input type="checkbox" id="check-all" onclick="toggleAll(this)"></th>
                         <th style="text-align: center;">ID</th>
                         <th>Fecha</th>
                         <th>Cliente</th>
@@ -119,8 +121,12 @@
             <div id="det-productos" style="max-height: 180px; overflow-y: auto; background: #f9f9f9; padding: 10px; border-radius: 6px; border: 1px solid #eee; margin-bottom: 15px;">
             </div>
 
+            <div id="caja-descuento-admin" style="text-align: right; font-size: 1.1rem; color: #e74c3c; margin-bottom: 5px; display: none;">
+                <strong>Descuento (Puntos DNA): -<span id="det-descuento"></span>€</strong>
+            </div>
+
             <div style="text-align: right; font-size: 1.3rem;">
-                <strong>TOTAL: <span id="det-total" style="color: #1abc9c;"></span></strong>
+                <strong>TOTAL PAGADO: <span id="det-total" style="color: #1abc9c;"></span></strong>
             </div>
 
             <div class="modal-botones">
@@ -144,7 +150,7 @@
     <div id="modalBorrar" class="modal-overlay">
         <div class="modal-box" style="border-top: 5px solid #e74c3c;">
             <h2 style="color: #e74c3c; border-bottom: none;"><i class="fa-solid fa-triangle-exclamation"></i> Atención</h2>
-            <p style="margin-top: 10px;">Vas a eliminar permanentemente el pedido <strong>#<span id="modal-borrar-id"></span></strong>.</p>
+            <p style="margin-top: 10px;">Vas a eliminar permanentemente los pedidos: <strong>#<span id="modal-borrar-id"></span></strong>.</p>
             <p style="font-size: 13px; color: #7f8c8d; margin-top: 5px;">Esta acción no se puede deshacer.</p>
             <input type="text" id="input-borrar" placeholder="Escribe BORRAR" style="text-align: center; text-transform: uppercase; font-weight: bold; margin-top: 20px;">
             <p id="error-borrar" style="color: #e74c3c; font-size: 12px; display: none; margin-bottom: 10px;">Debes escribir la palabra exacta.</p>
@@ -159,7 +165,7 @@
     <script>
         let pedidosOriginales = [];
         let pedidoEditandoId = null;
-        let pedidoBorrandoId = null;
+        let pedidosBorrandoIds = []; 
         let ordenIdAscendente = false;
 
         const flujoEstados = {
@@ -193,7 +199,7 @@
             if (!tbody) return;
 
             if (lista.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 40px; color: #7f8c8d; font-size: 1.1rem;"><strong>No hay pedidos en esta fecha</strong></td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding: 40px; color: #7f8c8d; font-size: 1.1rem;"><strong>No hay pedidos en esta fecha</strong></td></tr>`;
                 return;
             }
 
@@ -210,15 +216,16 @@
 
                 return `
                     <tr>
+                        <td style="text-align: center;"><input type="checkbox" class="check-pedido" value="${p.idPedido}"></td>
                         <td style="text-align: center; color: #5c4432;">${p.idPedido}</td>
                         <td>${fecha}</td>
                         <td>${p.clienteNombre || 'Usuario'}</td>
                         <td>
-                            <div style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color:#1abc9c; font-weight: bold;" title="${productosFormateados}">
+                            <div style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color:#333;" title="${productosFormateados}">
                                 ${productosFormateados}
                             </div>
                         </td>
-                        <td style="font-weight:bold;">${(p.total || 0).toFixed(2)}€</td>
+                        <td style="color:#333;">${(p.total || 0).toFixed(2)}€</td>
                         <td><span class="badge ${claseEstado}">${estado}</span></td>
                         <td>
                             <div class="acciones">
@@ -231,9 +238,6 @@
                                 <button class="btn-desactivar" onclick="cancelarPedido(${p.idPedido}, '${estadoLower}')" ${bloqueadoCancelacion ? 'disabled title="No se puede cancelar en este estado"' : 'title="Cancelar Pedido"'}>
                                     <i class="fa-solid fa-ban"></i>
                                 </button>
-                                <button class="btn-eliminar" onclick="abrirModalBorrar(${p.idPedido})" title="Borrar Físicamente">
-                                    <i class="fa-solid fa-trash-can"></i>
-                                </button>
                             </div>
                         </td>
                     </tr>
@@ -241,9 +245,16 @@
             }).join('');
         }
 
+        function toggleAll(source) {
+            const checkboxes = document.querySelectorAll('.check-pedido');
+            checkboxes.forEach(cb => cb.checked = source.checked);
+        }
+
         function verDetalles(id) {
             const p = pedidosOriginales.find(p => p.idPedido === id);
             if (!p) return;
+            
+            console.log("DATOS DEL PEDIDO CARGADOS:", p); // Chivato invisible para depurar
 
             document.getElementById('det-id').innerText = "#" + p.idPedido;
             document.getElementById('det-cliente').innerText = p.clienteNombre || 'Usuario Desconocido';
@@ -258,8 +269,20 @@
             document.getElementById('det-email').innerText = p.email || 'No disponible';
             document.getElementById('det-telefono').innerText = p.telefono || 'No disponible';
 
-            // DATO AÑADIDO: Pintamos la dirección
             document.getElementById('det-direccion').innerText = p.direccion || 'Dirección no registrada en la base de datos';
+
+            // ---> NUEVO: Mostrar el descuento por puntos blindado <---
+            const cajaDescuento = document.getElementById('caja-descuento-admin');
+            const puntosGastados = parseInt(p.puntosUsados) || 0; // Forzamos a que sea un número
+            
+            if (puntosGastados > 0) {
+                const descuentoEnEuros = puntosGastados / 100;
+                document.getElementById('det-descuento').innerText = descuentoEnEuros.toFixed(2);
+                cajaDescuento.style.display = 'block';
+            } else {
+                cajaDescuento.style.display = 'none';
+            }
+            // -----------------------------------------------------------
 
             const divItems = document.getElementById('det-productos');
             if (p.nombreProducto) {
@@ -328,10 +351,16 @@
             }
         }
 
-        // (BORRAR)
-        function abrirModalBorrar(id) {
-            pedidoBorrandoId = id;
-            document.getElementById('modal-borrar-id').innerText = id;
+        function abrirModalBorrarSeleccionados() {
+            const checkboxes = document.querySelectorAll('.check-pedido:checked');
+            if (checkboxes.length === 0) {
+                alert("Por favor, selecciona al menos un pedido para eliminar.");
+                return;
+            }
+            
+            pedidosBorrandoIds = Array.from(checkboxes).map(cb => cb.value);
+            
+            document.getElementById('modal-borrar-id').innerText = pedidosBorrandoIds.join(', ');
             document.getElementById('input-borrar').value = ''; 
             document.getElementById('error-borrar').style.display = 'none'; 
             document.getElementById('modalBorrar').style.display = 'flex';
@@ -340,20 +369,22 @@
 
         function cerrarModalBorrar() {
             document.getElementById('modalBorrar').style.display = 'none';
-            pedidoBorrandoId = null;
+            pedidosBorrandoIds = [];
         }
 
         async function confirmarBorradoFuerte() {
             const textoEscrito = document.getElementById('input-borrar').value.trim().toUpperCase();
             if (textoEscrito === "BORRAR") {
                 try {
-                    const res = await fetch(`/api/carrito/admin/eliminar/${pedidoBorrandoId}`, { method: 'DELETE' });
-                    if (res.ok) {
-                        cerrarModalBorrar();
-                        cargarPedidos(); 
-                    } else {
-                        alert("El servidor no pudo eliminar el pedido.");
+                    for (let id of pedidosBorrandoIds) {
+                        await fetch(`/api/carrito/admin/eliminar/${id}`, { method: 'DELETE' });
                     }
+                    cerrarModalBorrar();
+                    cargarPedidos(); 
+                    
+                    const checkAll = document.getElementById('check-all');
+                    if(checkAll) checkAll.checked = false;
+                    
                 } catch (e) {
                     alert("Error de red al intentar eliminar.");
                 }
@@ -363,7 +394,6 @@
             }
         }
 
-        
         function filtrarPorFecha(fechaSeleccionada) {
             const btnLimpiar = document.getElementById('btn-limpiar-fecha');
 

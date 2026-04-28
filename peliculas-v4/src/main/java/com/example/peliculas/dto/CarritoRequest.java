@@ -5,24 +5,43 @@ import java.util.Map;
 import com.example.peliculas.entity.Pedido;
 
 public class CarritoRequest {
-    public Pedido pedido;
-    public List<Map<String, Object>> productos;
+    
+    private Pedido pedido;
+    private List<Map<String, Object>> productos;
+    private String direccion;
+    private int puntosUsados;
 
-    public List<Map<String, Object>> getProductos() {
-        return productos;
-    }
+    // --- Getters y Setters de TODO ---
 
-    public Pedido getPedido() {
-        return pedido;
+    public Pedido getPedido() { 
+        return pedido; 
     }
     
-    private String direccion;
-
-    public String getDireccion() {
-        return direccion;
+    public void setPedido(Pedido pedido) { 
+        this.pedido = pedido; 
     }
 
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
+    public List<Map<String, Object>> getProductos() { 
+        return productos; 
+    }
+    
+    public void setProductos(List<Map<String, Object>> productos) { 
+        this.productos = productos; 
+    }
+
+    public String getDireccion() { 
+        return direccion; 
+    }
+
+    public void setDireccion(String direccion) { 
+        this.direccion = direccion; 
+    }
+    
+    public int getPuntosUsados() { 
+        return puntosUsados; 
+    }
+
+    public void setPuntosUsados(int puntosUsados) { 
+        this.puntosUsados = puntosUsados; 
     }
 }

@@ -174,6 +174,21 @@ public class UserRepository extends BaseRepository<User> {
 	    }
 	}
 	
+	//andrea
+	// MÉTODO NUEVO: Para actualizar los puntos al comprar
+    public void actualizarPuntos(int idUsuario, int puntosGastados, int puntosGanados) {
+        String sql = "UPDATE usuarios SET puntos = (puntos - ?) + ? WHERE id = ?";
+        
+        try (java.sql.PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, puntosGastados);
+            ps.setInt(2, puntosGanados);
+            ps.setInt(3, idUsuario);
+            
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException("Error al actualizar los puntos", e);
+        }
+    }
 	
 
 }

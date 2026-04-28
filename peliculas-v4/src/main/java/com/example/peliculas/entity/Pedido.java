@@ -32,19 +32,26 @@ public class Pedido {
     // --- NUEVO: AÑADIMOS EMAIL, TELÉFONO Y DIRECCIÓN ---
     private String email;
     private String telefono;
-    private String direccion; // <-- NUEVO AÑADIDO
+    private String direccion; 
+    
+    // ---> NUEVO: AÑADIMOS LOS PUNTOS USADOS <---
+    @JsonProperty("puntosUsados")
+    private Integer puntosUsados = 0; 
     
     public Pedido() {}
 
     // Getters y Setters
+    public Integer getPuntosUsados() { return puntosUsados; }
+    public void setPuntosUsados(Integer puntosUsados) { this.puntosUsados = puntosUsados; }
+
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
     public String getTelefono() { return telefono; }
     public void setTelefono(String telefono) { this.telefono = telefono; }
     
-    public String getDireccion() { return direccion; } // <-- NUEVO AÑADIDO
-    public void setDireccion(String direccion) { this.direccion = direccion; } // <-- NUEVO AÑADIDO
+    public String getDireccion() { return direccion; } 
+    public void setDireccion(String direccion) { this.direccion = direccion; } 
     // ----------------------------------------
 
     public Integer getIdUsuario() { return idUsuario; }

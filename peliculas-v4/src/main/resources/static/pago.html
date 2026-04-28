@@ -8,8 +8,14 @@
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 40px; background: #f4f4f4; display: flex; justify-content: center; }
         .form-box { background: white; padding: 30px; border-radius: 8px; width: 100%; max-width: 450px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); text-align: center; }
         h1 { color: #333; margin-bottom: 10px; }
-        .total-pago { font-size: 1.2rem; margin-bottom: 25px; padding: 10px; background: #e8f4fd; border-radius: 4px; color: rgb(128, 64, 0); font-weight: bold; }
-        input, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 15px; }
+        .total-pago { font-size: 1.2rem; margin-bottom: 10px; padding: 10px; background: #e8f4fd; border-radius: 4px; color: rgb(128, 64, 0); font-weight: bold; }
+        
+        /* NUEVO: Caja de puntos DNA */
+        #caja-puntos { display: none; background: #e8f5e9; padding: 15px; border-radius: 4px; margin-bottom: 20px; border: 1px solid #c8e6c9; text-align: left; }
+        .pts-text { margin: 0 0 10px 0; color: #2e7d32; font-size: 0.95rem;}
+        .pts-checkbox { cursor: pointer; font-size: 14px; font-weight: bold; color: #1b5e20; }
+        
+        input[type="text"], select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 15px; }
         .row { display: flex; gap: 10px; }
         button { background: rgb(159, 80, 0); color: white; padding: 14px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; font-weight: bold; margin-top: 15px; transition: 0.3s; }
         button:hover { background: #333; }
@@ -25,14 +31,21 @@
     <div class="form-box">
         <div id="contenido-pago">
             <h1>Finalizar Pedido</h1>
+            
             <div class="total-pago">
                 Total a pagar: <strong id="monto-total">0.00€</strong>
+            </div>
+
+            <div id="caja-puntos">
+                <p class="pts-text">🎁 Tienes <strong><span id="pts-disponibles"></span> puntos DNA</strong> (equivale a -<span id="pts-euros"></span>€)</p>
+                <label class="pts-checkbox">
+                    <input type="checkbox" id="check-usar-puntos" onchange="aplicarPuntos(this)"> ¡Quiero usar mis puntos!
+                </label>
             </div>
 
             <form id="form-tarjeta">
                 
                 <input type="text" id="direccion-envio" placeholder="Dirección completa de envío (Calle, Ciudad, CP)" required style="border-left: 4px solid rgb(159, 80, 0);">
-
                 <input type="text" id="nombre-titular" placeholder="Nombre completo" required>
                 
                 <select id="metodo-pago" onchange="cambiarMetodoPago()">
@@ -62,29 +75,19 @@
             <div class="check-icon">✔</div>
             <h2>¡Pedido Registrado!</h2>
             <p id="texto-exito">Tu pago ha sido procesado correctamente.</p>
+            <p style="color: #2e7d32; font-weight: bold; font-size: 0.9rem; margin-top: 10px;">¡Has ganado <span id="pts-ganados-exito"></span> puntos con esta compra!</p>
             <a href="index.html" class="btn-volver">Volver a la tienda</a>
         </div>
     </div>
 
     <script>
-        function formatearTarjeta(input) {
-            input.value = input.value.replace(/\D/g, '').substring(0, 16);
-        }
-
-        function formatearCVV(input) {
-            input.value = input.value.replace(/\D/g, '').substring(0, 3);
-        }
-
+        function formatearTarjeta(input) { input.value = input.value.replace(/\D/g, '').substring(0, 16); }
+        function formatearCVV(input) { input.value = input.value.replace(/\D/g, '').substring(0, 3); }
         function formatearFecha(input) {
             let valor = input.value.replace(/\D/g, '');
-            
             valor = valor.substring(0, 4);
-
-            if (valor.length > 2) {
-                input.value = valor.substring(0, 2) + '/' + valor.substring(2, 4);
-            } else {
-                input.value = valor;
-            }
+            if (valor.length > 2) { input.value = valor.substring(0, 2) + '/' + valor.substring(2, 4); } 
+            else { input.value = valor; }
         }
 
         function cambiarMetodoPago() {
@@ -93,18 +96,34 @@
             const divTransfer = document.getElementById('datos-transferencia');
             
             if (metodo === 'Transferencia') {
-                divTarjeta.style.display = 'none';
-                divTransfer.style.display = 'block';
+                divTarjeta.style.display = 'none'; divTransfer.style.display = 'block';
                 document.getElementById('input-tarjeta').removeAttribute('required');
                 document.getElementById('input-fecha').removeAttribute('required');
                 document.getElementById('input-cvv').removeAttribute('required');
             } else {
-                divTarjeta.style.display = 'block';
-                divTransfer.style.display = 'none';
+                divTarjeta.style.display = 'block'; divTransfer.style.display = 'none';
                 document.getElementById('input-tarjeta').setAttribute('required', 'true');
                 document.getElementById('input-fecha').setAttribute('required', 'true');
                 document.getElementById('input-cvv').setAttribute('required', 'true');
             }
+        }
+
+        // --- VARIABLES GLOBALES PARA LA MATEMÁTICA DE PUNTOS ---
+        let totalOriginal = 0;
+        let totalFinal = 0;
+        let puntosDisponibles = 0;
+        let descuentoEuros = 0;
+        let puntosAUsar = 0;
+
+        function aplicarPuntos(checkbox) {
+            if (checkbox.checked) {
+                totalFinal = totalOriginal - descuentoEuros;
+                puntosAUsar = puntosDisponibles;
+            } else {
+                totalFinal = totalOriginal;
+                puntosAUsar = 0;
+            }
+            document.getElementById('monto-total').innerText = totalFinal.toFixed(2) + "€";
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -115,13 +134,43 @@
                 return;
             }
 
-            const totalVenta = carrito.reduce((acc, prod) => {
-                const precio = parseFloat(prod.precio) || 0;
-                const cantidad = parseInt(prod.cantidad) || 1;
-                return acc + (precio * cantidad);
-            }, 0);
+            // Calculamos el total original del carrito
+            totalOriginal = carrito.reduce((acc, prod) => acc + ((parseFloat(prod.precio) || 0) * (parseInt(prod.cantidad) || 1)), 0);
+            totalFinal = totalOriginal;
+            document.getElementById('monto-total').innerText = totalFinal.toFixed(2) + "€";
 
-            document.getElementById('monto-total').innerText = totalVenta.toFixed(2) + "€";
+            try {
+                const usuarioData = localStorage.getItem('user') || sessionStorage.getItem('user');
+                if (usuarioData) {
+                    const usuario = JSON.parse(usuarioData);
+
+                    if (usuario.direccion && usuario.direccion.trim() !== "") {
+                        document.getElementById('direccion-envio').value = usuario.direccion;
+                    }
+                    if (usuario.nombre) {
+                        const apellidos = usuario.apellidos ? " " + usuario.apellidos : "";
+                        document.getElementById('nombre-titular').value = usuario.nombre + apellidos;
+                    }
+
+                    // --- LÓGICA DE MOSTRAR PUNTOS ---
+                    if (usuario.puntos && parseInt(usuario.puntos) > 0) {
+                        puntosDisponibles = parseInt(usuario.puntos);
+                        descuentoEuros = puntosDisponibles / 100;
+
+                        // Por si acaso tiene más descuento que lo que cuesta el carrito, lo limitamos
+                        if (descuentoEuros > totalOriginal) {
+                            descuentoEuros = totalOriginal;
+                            puntosDisponibles = totalOriginal * 100;
+                        }
+
+                        document.getElementById('caja-puntos').style.display = 'block';
+                        document.getElementById('pts-disponibles').innerText = puntosDisponibles;
+                        document.getElementById('pts-euros').innerText = descuentoEuros.toFixed(2);
+                    }
+                }
+            } catch (e) {
+                console.log("No se pudo autocompletar los datos");
+            }
 
             const form = document.getElementById('form-tarjeta');
             
@@ -138,7 +187,7 @@
                 const objetoPedido = {
                     fecha: new Date().toISOString().split('T')[0],
                     clienteNombre: document.getElementById('nombre-titular').value.trim(),
-                    total: totalVenta,
+                    total: totalFinal, // Enviamos el total ya con la rebaja hecha
                     metodoPago: metodoElegido, 
                     estadoPago: estadoSimulado, 
                     activo: 1
@@ -150,42 +199,47 @@
                     precio: item.precio || 0
                 }));
 
-                // ---> NUEVO: Capturamos la dirección introducida <---
                 const direccionIngresada = document.getElementById('direccion-envio').value.trim();
 
                 try {
                     const respuesta = await fetch('/api/carrito/comprar', {
                         method: 'POST',
                         credentials: 'include', 
-                        headers: { 
-                            'Content-Type': 'application/json', 
-                            'Accept': 'application/json' 
-                        },
-                        // ---> NUEVO: Añadimos 'direccion' al JSON <---
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                         body: JSON.stringify({ 
                             direccion: direccionIngresada, 
                             pedido: objetoPedido, 
-                            productos: listaProductos 
+                            productos: listaProductos,
+                            puntosUsados: puntosAUsar // <--- NUEVO DATO ENVIADO AL JAVA
                         }) 
                     });
 
                     if (respuesta.ok) {
                         localStorage.removeItem('carrito'); 
+                        
+                        // --- ACTUALIZAR MEMORIA CON NUEVOS PUNTOS ---
+                        let memoriaUsuario = localStorage.getItem('user');
+                        let puntosGanados = Math.floor(totalFinal * 5); // 5 puntos por cada euro
+                        
+                        if(memoriaUsuario) {
+                            let u = JSON.parse(memoriaUsuario);
+                            u.direccion = direccionIngresada;
+                            u.puntos = (parseInt(u.puntos || 0) - puntosAUsar) + puntosGanados;
+                            localStorage.setItem('user', JSON.stringify(u));
+                        }
+
                         document.getElementById('contenido-pago').style.display = 'none';
                         
                         if(metodoElegido === 'Transferencia') {
                             document.getElementById('texto-exito').innerText = "Tu pedido está pendiente. Realiza la transferencia para que lo procesemos.";
                         }
                         
+                        document.getElementById('pts-ganados-exito').innerText = puntosGanados;
                         document.getElementById('mensaje-exito').style.display = 'block';
                     } else {
-                        if (respuesta.status === 401) {
-                            alert("Por favor, inicia sesión para poder comprar.");
-                        } else {
-                            alert("Error en el servidor al intentar registrar la compra.");
-                        }
-                        btn.innerText = "CONFIRMAR PEDIDO";
-                        btn.disabled = false;
+                        if (respuesta.status === 401) alert("Por favor, inicia sesión para poder comprar.");
+                        else alert("Error en el servidor al registrar la compra.");
+                        btn.innerText = "CONFIRMAR PEDIDO"; btn.disabled = false;
                     }
                 } catch (error) {
                     alert("No se pudo conectar con el servidor. Revisa si Spring Boot está encendido.");

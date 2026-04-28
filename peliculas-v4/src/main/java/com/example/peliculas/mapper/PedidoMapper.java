@@ -16,6 +16,7 @@ public class PedidoMapper implements RowMapper<Pedido> {
         p.setMetodoPago(rs.getString("metodo_pago"));
         p.setEstadoPago(rs.getString("estado_pago"));
         p.setIdUsuario(rs.getInt("id_usuario"));
+        p.setPuntosUsados(rs.getInt("puntos_usados"));
         
         java.sql.Timestamp ts = rs.getTimestamp("fecha");
         if (ts != null) {

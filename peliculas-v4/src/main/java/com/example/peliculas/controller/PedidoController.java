@@ -17,7 +17,7 @@ import com.example.peliculas.db.DB;
 import com.example.peliculas.dto.CarritoRequest;
 import com.example.peliculas.entity.Pedido;
 import com.example.peliculas.repository.PedidoRepository;
-import com.example.peliculas.repository.UserRepository; // <-- NUEVO IMPORT AÑADIDO
+import com.example.peliculas.repository.UserRepository; 
 import com.example.peliculas.exception.DataAccessException;
 
 import jakarta.servlet.http.HttpSession;
@@ -32,36 +32,63 @@ public class PedidoController {
         this.ds = ds;
     }
 
-    // --- SECCIÓN CLIENTE: REALIZAR COMPRA ---
-    
     @PostMapping("/comprar")
     public ResponseEntity<?> realizarCompra(@RequestBody CarritoRequest request, HttpSession session) {
-        // 1. Pillamos el ID del usuario de la sesión
         Integer userId = (Integer) session.getAttribute("userId");
         if (userId == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\": \"Inicia sesión para comprar\"}");
         }
 
+        // =========================================================
+        // 🔥 LA SOLUCIÓN DEFINITIVA: CÁLCULO EN EL SERVIDOR 🔥
+        // =========================================================
+        
+        // 1. Calculamos cuánto valen los muebles originalmente (sin descuento)
+        float totalOriginal = 0f;
+        for (Map<String, Object> item : request.getProductos()) {
+            float precio = Float.parseFloat(item.get("precio").toString());
+            int cant = Integer.parseInt(item.get("cantidad").toString());
+            totalOriginal += (precio * cant);
+        }
+
+        // 2. Vemos cuánto ha pagado realmente
+        float totalPagado = request.getPedido().getTotal();
+
+        // 3. Calculamos la diferencia matemáticamente (¡A prueba de fallos!)
+        int puntosAUsar = 0;
+        if (totalOriginal > totalPagado + 0.05f) { // El +0.05 es para ignorar céntimos sueltos
+            float descuento = totalOriginal - totalPagado;
+            puntosAUsar = Math.round(descuento * 100);
+        }
+
+        System.out.println(">>> VALOR ORIGINAL MUEBLES: " + totalOriginal + "€");
+        System.out.println(">>> TOTAL PAGADO: " + totalPagado + "€");
+        System.out.println(">>> PUNTOS CALCULADOS POR JAVA: " + puntosAUsar);
+        // =========================================================
+
         try (Connection con = ds.getConnection()) {
             
-            // ---> NUEVO: Actualizamos la dirección del usuario <---
+            UserRepository userRepo = new UserRepository(con);
+            
             if (request.getDireccion() != null && !request.getDireccion().isEmpty()) {
-                UserRepository userRepo = new UserRepository(con);
                 userRepo.actualizarDireccion(userId, request.getDireccion());
             }
+
+            int puntosGanados = (int) (totalPagado * 5);
+            userRepo.actualizarPuntos(userId, puntosAUsar, puntosGanados);
             
             PedidoRepository pedidoRepo = new PedidoRepository(con);
             
-            // 2. Preparamos el pedido principal
             Pedido p = request.getPedido();
             p.setIdUsuario(userId);
             p.setFecha(LocalDate.now());
+            
+            // ¡LE INYECTAMOS EL CÁLCULO SEGURO AL PEDIDO!
+            p.setPuntosUsados(puntosAUsar);
 
-            // 3. Insertamos el pedido (esto nos devuelve el ID generado)
             Pedido nuevoPedido = pedidoRepo.insert(p);
             int idGenerado = nuevoPedido.getIdPedido();
 
-            // 4. Recorremos los productos del carrito y guardamos cada detalle
             for (Map<String, Object> item : request.getProductos()) {
                 int idProd = Integer.parseInt(item.get("id_producto").toString());
                 int cant = Integer.parseInt(item.get("cantidad").toString());
@@ -77,8 +104,6 @@ public class PedidoController {
             return ResponseEntity.status(500).body("{\"message\": \"Error al procesar: " + e.getMessage() + "\"}");
         }
     }
-
-    // --- SECCIÓN ADMIN: GESTIÓN DE PEDIDOS ---
 
     @GetMapping("/admin/lista")
     public List<Pedido> listarParaAdmin() {
@@ -101,18 +126,14 @@ public class PedidoController {
         }
     }
 
-    
     @PutMapping("/admin/estado/{id}")
     public ResponseEntity<?> cambiarEstado(@PathVariable int id, @RequestBody Map<String, String> body) {
         try (Connection con = ds.getConnection()) {
             PedidoRepository repo = new PedidoRepository(con);
             String nuevoEstado = body.get("estado");
-            
             repo.actualizarEstado(id, nuevoEstado);
-            
-            return ResponseEntity.ok("{\"message\": \"Estado actualizado correctamente\"}");
+            return ResponseEntity.ok("{\"message\": \"Estado actualizado\"}");
         } catch (SQLException e) {
-            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Error al cambiar estado\"}");
         }
     }
@@ -131,7 +152,7 @@ public class PedidoController {
                 return u;
             });
         } catch (SQLException e) {
-            throw new DataAccessException("Error al acceder a la tabla de usuarios", e);
+            throw new DataAccessException("Error", e);
         }
     }
 
@@ -144,27 +165,15 @@ public class PedidoController {
         }
     }
     
-    // --- SECCIÓN CLIENTE: MIS PEDIDOS (DARIA) ---
     @GetMapping("/mis")
     public List<Pedido> misPedidos(HttpSession session) {
-        // 1. Extraemos el ID del usuario directamente de la sesión
         Integer userId = (Integer) session.getAttribute("userId");
-
-        // 2. Si no hay sesión, lanzamos error 401 (Unauthorized)
-        if (userId == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Debes iniciar sesión");
-        }
-
-        // 3. Abrimos la conexión y ejecutamos la lógica
+        if (userId == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Debes iniciar sesión");
         try (Connection con = ds.getConnection()) {
             PedidoRepository pedidoRepo = new PedidoRepository(con);
-            
-            // Llamamos al método correcto del repositorio (findByUsuarioId)
             return pedidoRepo.findByUsuarioId(userId);
-
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new DataAccessException("Error al obtener el historial de pedidos", e);
+            throw new DataAccessException("Error", e);
         }
     }
 }

@@ -36,7 +36,8 @@ public class PedidoRepository extends BaseRepository<Pedido> {
 
     @Override
     public String[] getColumnNames() {
-        return new String[] { "fecha", "cliente_nombre", "total", "metodo_pago", "estado_pago", "activo", "id_usuario" };
+        // ---> NUEVO: Añadido puntos_usados al final <---
+        return new String[] { "fecha", "cliente_nombre", "total", "metodo_pago", "estado_pago", "activo", "id_usuario", "puntos_usados" };
     }
 
     @Override
@@ -48,7 +49,8 @@ public class PedidoRepository extends BaseRepository<Pedido> {
             p.getMetodoPago(), 
             p.getEstadoPago(),
             1, // activo
-            p.getIdUsuario() 
+            p.getIdUsuario(),
+            p.getPuntosUsados() // ---> NUEVO <---
         };
     }
 
@@ -62,6 +64,7 @@ public class PedidoRepository extends BaseRepository<Pedido> {
             p.getEstadoPago(),
             1, // activo
             p.getIdUsuario(),
+            p.getPuntosUsados(), // ---> NUEVO <---
             p.getIdPedido() 
         };
     }
@@ -74,7 +77,6 @@ public class PedidoRepository extends BaseRepository<Pedido> {
 
     @Override
     public List<Pedido> findAll() {
-        // ---> NUEVO: Hemos añadido u.direccion al SELECT <---
         String sql = "SELECT p.*, u.email, u.telefono, u.direccion, " +
                      "GROUP_CONCAT(CONCAT(d.cantidad, 'x ', m.nombre, ' : ', d.precio_unitario, '€') SEPARATOR '|') as nombre_producto " +
                      "FROM pedidos p " +
