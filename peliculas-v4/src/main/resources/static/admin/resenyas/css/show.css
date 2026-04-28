@@ -1,0 +1,116 @@
+/* Variables de color para mantener consistencia con el resto del Admin */
+:root {
+    --primary-color: #1abc9c;
+    --secondary-color: #2c3e50;
+    --bg-color: #f4f7f6;
+    --white: #ffffff;
+    --text-color: #333;
+    --border-color: #e0e0e0;
+    --accent-color: #f39c12; /* Para las estrellas */
+}
+
+body {
+    font-family: 'Lato', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    width: 90%;
+    max-width: 600px;
+    background-color: var(--white);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: var(--secondary-color);
+    font-size: 1.8rem;
+    margin-bottom: 25px;
+    text-align: center;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 10px;
+}
+
+/* Estilos para el contenedor de datos que genera el JS */
+.usuario-detalle {
+    margin-bottom: 30px;
+}
+
+/* Estilo para cada fila de información (Etiqueta: Valor) */
+.info-row {
+    display: flex;
+    justify-content: b;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: 700;
+    color: var(--secondary-color);
+    width: 35%;
+}
+
+.info-value {
+    width: 65%;
+    color: #555;
+}
+
+/* Estilo especial para el comentario (puedes añadirlo en tu JS) */
+.comentario-box {
+    background: #f9f9f9;
+    padding: 15px;
+    border-left: 4px solid var(--primary-color);
+    border-radius: 4px;
+    margin-top: 10px;
+    font-style: italic;
+}
+
+/* Estrellas */
+.estrellas {
+    color: var(--accent-color);
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+}
+
+/* Botón Volver */
+.btn-volver {
+    display: inline-block;
+    text-decoration: none;
+    color: var(--white);
+    background-color: var(--secondary-color);
+    padding: 10px 20px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    text-align: center;
+}
+
+.btn-volver:hover {
+    background-color: var(--primary-color);
+    transform: translateX(-5px);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .info-row {
+        flex-direction: column;
+    }
+    .info-label {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+    .info-value {
+        width: 100%;
+    }
+}

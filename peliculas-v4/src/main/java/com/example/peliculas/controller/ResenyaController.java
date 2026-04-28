@@ -59,10 +59,14 @@ public class ResenyaController {
 
     @GetMapping("/admin/resenyas/{id}")
     public ResponseEntity<?> getByIdAdmin(@PathVariable int id) {
-        String sql = "SELECT r.*, u.nombre AS nombre_usuario, p.nombre AS nombre_producto " +
+        // CORRECCIÓN: Añadimos u.email AS email_usuario a la consulta
+        String sql = "SELECT r.*, " +
+                     "u.nombre AS nombre_usuario, " +
+                     "u.email AS email_usuario, " +
+                     "p.nombre AS nombre_producto " +
                      "FROM resenas r " +
-                     "JOIN usuarios u ON r.id_usuario = u.id " +
-                     "JOIN productos p ON r.id_producto = p.id_producto " +
+                     "LEFT JOIN usuarios u ON r.id_usuario = u.id " +
+                     "LEFT JOIN productos p ON r.id_producto = p.id_producto " +
                      "WHERE r.id_resena = ?";
 
         try (Connection con = ds.getConnection();
@@ -70,6 +74,7 @@ public class ResenyaController {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
+                    // El Mapper ya sabe leer "email_usuario" si lo incluimos en el SQL
                     return ResponseEntity.ok(new ResenyaMapper().mapRow(rs));
                 }
                 return ResponseEntity.notFound().build();
