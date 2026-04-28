@@ -28,6 +28,7 @@ async function cargarResenyas(id) {
         if (!response.ok) throw new Error("No se pudieron cargar las reseñas");
 
         const resenyas = await response.json();
+        console.log("Reseñas recibidas:", resenyas); // Para depuración
 
         if (!resenyas || resenyas.length === 0) {
             contenedor.innerHTML = `
@@ -39,11 +40,13 @@ async function cargarResenyas(id) {
         }
 
         contenedor.innerHTML = resenyas.map(r => {
-            // CORRECCIÓN: Aseguramos capturar el ID de la reseña bajo cualquier nombre común de base de datos
-            const idResenya = r.idResenya || r.id_resena || r.id;
-            const idUsuarioResenya = r.usuarioId || r.id_usuario;
-            const nombreAutor = r.nombreUsuario || r.nombre_usuario || "Usuario";
-            const fechaOriginal = r.fechaPublicacion || r.fecha || r.fecha_publicacion;
+            // MAPEO INTELIGENTE DE CAMPOS (Blindaje contra nombres de BD variables)
+            const idResenya = r.idResenya || r.id_resena || r.id_resenya || r.id || r._id;
+            const idUsuarioResenya = r.usuarioId || r.id_usuario || r.usuario_id || r.idUsuario;
+            const nombreAutor = r.nombreUsuario || r.nombre_usuario || r.nombre || "Usuario";
+            const fechaOriginal = r.fechaPublicacion || r.fecha || r.fecha_publicacion || r.createdAt;
+            const puntuacion = r.puntuacion || r.rating || 0;
+            const comentario = r.comentario || r.contenido || r.mensaje || "";
 
             let fechaTexto = "Reciente";
             if (fechaOriginal) {
@@ -56,15 +59,18 @@ async function cargarResenyas(id) {
             }
 
             let botonEliminar = "";
-            // Comparamos con == por si uno es string y el otro number en sessionStorage
+            // Comparación no estricta (==) por si userIdLogueado es string y el otro number
             if (userIdLogueado && idUsuarioResenya && idUsuarioResenya == userIdLogueado) {
-                botonEliminar = `
-                    <button onclick="eliminarResenya(${idResenya}, ${id})" 
-                            style="background: none; border: none; color: #d9534f; cursor: pointer; font-size: 0.85rem; margin-top: 8px; display: flex; align-items: center; gap: 5px; padding: 0;">
-                        <i class="fa-solid fa-trash-can"></i> Eliminar mi reseña
-                    </button>`;
+                if (idResenya) {
+                    // --- CAMBIO AQUÍ: Se eliminó 'style' y se añadió 'class' ---
+                    botonEliminar = `
+                        <button onclick="eliminarResenya(${idResenya}, ${id})" class="btn-eliminar-resenya">
+                            <i class="fa-solid fa-trash-can"></i> Eliminar mi reseña
+                        </button>`;
+                }
             }
 
+            // Generación de la tarjeta (mantenemos los estilos en línea de la tarjeta para no romper tu diseño actual)
             return `
                 <div class="resenya-card" style="background: white; border-radius: 15px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #eee;">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
@@ -74,18 +80,18 @@ async function cargarResenyas(id) {
                                 ${nombreAutor}
                             </div>
                             <div style="color: #ae4010; margin-top: 4px; font-size: 0.9rem;">
-                                ${"★".repeat(r.puntuacion || 0)}${"☆".repeat(5 - (r.puntuacion || 0))}
+                                ${"★".repeat(puntuacion)}${"☆".repeat(5 - puntuacion)}
                             </div>
                         </div>
-                        <div style="text-align: right;">
-                            <span style="font-size: 0.8rem; color: #9c8c7e; background: #fdf6ed; padding: 4px 10px; border-radius: 10px; display: inline-block;">
-                                <i class="fa-regular fa-calendar-days"></i> ${fechaTexto}
-                            </span>
-                            ${botonEliminar}
-                        </div>
+						<div class="resenya-actions">
+						    <span class="resenya-fecha">
+						        <i class="fa-regular fa-calendar-days"></i> ${fechaTexto}
+						    </span>
+						    ${botonEliminar}
+						</div>
                     </div>
                     <p style="color: #5c4432; line-height: 1.5; margin: 0; font-style: italic;">
-                        "${r.comentario}"
+                        "${comentario}"
                     </p>
                 </div>`;
         }).join("");
@@ -99,9 +105,9 @@ async function cargarResenyas(id) {
  * Elimina una reseña
  */
 async function eliminarResenya(idResenya, idProducto) {
-    // Verificación de seguridad
-    if (!idResenya) {
-        console.error("Error: ID de reseña no válido.");
+    if (!idResenya || idResenya === "undefined") {
+        console.error("Error: ID de reseña no válido detectado:", idResenya);
+        alert("No se pudo obtener el identificador de la reseña.");
         return;
     }
 
@@ -124,7 +130,7 @@ async function eliminarResenya(idResenya, idProducto) {
 }
 
 /**
- * Maneja el envío del formulario evitando duplicados.
+ * Maneja el envío del formulario.
  */
 function configurarFormulario(idProducto) {
     const form = document.getElementById("form-resenya");
@@ -166,8 +172,6 @@ function configurarFormulario(idProducto) {
     };
 }
 
-/**
- * CRÍTICO: Exponer la función al objeto window.
- * Esto soluciona el problema de que el clic no haga nada si usas scripts de tipo módulo.
- */
+// EXPOSICIÓN GLOBAL (CRÍTICO PARA onclick)
+// Esto asegura que aunque el script sea de tipo módulo, el HTML pueda llamar a la función.
 window.eliminarResenya = eliminarResenya;
