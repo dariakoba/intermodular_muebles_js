@@ -15,4 +15,14 @@ public class CarritoRequest {
     public Pedido getPedido() {
         return pedido;
     }
+    
+    private String direccion;
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
 }

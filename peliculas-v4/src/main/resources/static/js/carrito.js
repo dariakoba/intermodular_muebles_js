@@ -82,9 +82,17 @@ function vaciarCarrito() {
 }
 
 function finalizarCompra() {
+    const usuarioLogueado = localStorage.getItem('user') || sessionStorage.getItem('user');
+
+    if (!usuarioLogueado) {
+        alert("Debe tener una cuenta para finalizar el pedido.");
+        window.location.href = 'login.html'; 
+        return; 
+    }
+
     const carrito = obtenerCarrito();
     if (carrito.length === 0) {
-        alert("El carrito está vacío. ¡Añade algo primero!");
+        alert("El carrito está vacío. ");
         return;
     }
     window.location.href = "pago.html";

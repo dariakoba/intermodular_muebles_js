@@ -17,6 +17,7 @@ import com.example.peliculas.db.DB;
 import com.example.peliculas.dto.CarritoRequest;
 import com.example.peliculas.entity.Pedido;
 import com.example.peliculas.repository.PedidoRepository;
+import com.example.peliculas.repository.UserRepository; // <-- NUEVO IMPORT AÑADIDO
 import com.example.peliculas.exception.DataAccessException;
 
 import jakarta.servlet.http.HttpSession;
@@ -42,6 +43,13 @@ public class PedidoController {
         }
 
         try (Connection con = ds.getConnection()) {
+            
+            // ---> NUEVO: Actualizamos la dirección del usuario <---
+            if (request.getDireccion() != null && !request.getDireccion().isEmpty()) {
+                UserRepository userRepo = new UserRepository(con);
+                userRepo.actualizarDireccion(userId, request.getDireccion());
+            }
+            
             PedidoRepository pedidoRepo = new PedidoRepository(con);
             
             // 2. Preparamos el pedido principal
@@ -55,8 +63,8 @@ public class PedidoController {
 
             // 4. Recorremos los productos del carrito y guardamos cada detalle
             for (Map<String, Object> item : request.getProductos()) {
-            	int idProd = Integer.parseInt(item.get("id_producto").toString());
-            	int cant = Integer.parseInt(item.get("cantidad").toString());
+                int idProd = Integer.parseInt(item.get("id_producto").toString());
+                int cant = Integer.parseInt(item.get("cantidad").toString());
                 float precio = Float.parseFloat(item.get("precio").toString());
                 
                 pedidoRepo.guardarDetalle(idGenerado, idProd, cant, precio);

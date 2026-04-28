@@ -74,8 +74,8 @@ public class PedidoRepository extends BaseRepository<Pedido> {
 
     @Override
     public List<Pedido> findAll() {
-        // CORREGIDO: m.id_producto en lugar de m.id
-        String sql = "SELECT p.*, u.email, u.telefono, " +
+        // ---> NUEVO: Hemos añadido u.direccion al SELECT <---
+        String sql = "SELECT p.*, u.email, u.telefono, u.direccion, " +
                      "GROUP_CONCAT(CONCAT(d.cantidad, 'x ', m.nombre, ' : ', d.precio_unitario, '€') SEPARATOR '|') as nombre_producto " +
                      "FROM pedidos p " +
                      "LEFT JOIN usuarios u ON p.id_usuario = u.id " +
@@ -92,7 +92,6 @@ public class PedidoRepository extends BaseRepository<Pedido> {
     }
 
     public List<Pedido> findByUsuarioId(Integer userId) {
-        // CORREGIDO: Nos aseguramos de que el JOIN sea correcto aquí también.
         String sql =
             "SELECT p.*, m.nombre as nombre_producto " +
             "FROM pedidos p " +

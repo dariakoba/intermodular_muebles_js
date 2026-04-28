@@ -43,11 +43,7 @@ public class UserRepository extends BaseRepository<User> {
 	public Integer getPrimaryKey(User u) {
 		return u.getId();
 	}
-	
-	
-
-
-	
+		
 	
 
 	@Override
@@ -146,6 +142,22 @@ public class UserRepository extends BaseRepository<User> {
 	        u.getId()       // El ID siempre al final para el WHERE
 	    };
 	}
+	
+	// MÉTODO NUEVO: Para actualizar solo la dirección durante la compra
+    public void actualizarDireccion(int idUsuario, String nuevaDireccion) {
+        String sql = "UPDATE usuarios SET direccion = ? WHERE id = ?";
+        
+        try (java.sql.PreparedStatement ps = con.prepareStatement(sql)) {
+            
+            ps.setString(1, nuevaDireccion); 
+            ps.setInt(2, idUsuario);         
+            
+            ps.executeUpdate(); // Ejecuta la actualización en MySQL
+            
+        } catch (SQLException e) {
+            throw new DataAccessException("Error al actualizar la dirección en la compra", e);
+        }
+    }
 	public int countAdmins() throws SQLException {
 	    // Usamos el nombre de la tabla que ya tienes definido en getTable()
 	    String sql = "SELECT COUNT(*) FROM " + getTable() + " WHERE rol = 'admin'";
@@ -163,14 +175,5 @@ public class UserRepository extends BaseRepository<User> {
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 }
