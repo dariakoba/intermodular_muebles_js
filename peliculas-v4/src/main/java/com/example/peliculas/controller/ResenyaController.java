@@ -2,6 +2,7 @@ package com.example.peliculas.controller;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import javax.sql.DataSource;
 
@@ -17,7 +18,7 @@ import com.example.peliculas.mapper.ResenyaMapper;
 import jakarta.servlet.http.HttpSession;
 
 @RestController
-@RequestMapping("/api/resenyas")
+@RequestMapping("/api")
 public class ResenyaController {
 
     private final DataSource ds;
@@ -26,97 +27,68 @@ public class ResenyaController {
         this.ds = ds;
     }
 
-    @GetMapping("/producto/{id}")
-    public List<Resenya> getByProducto(@PathVariable int id) {
-        try (Connection con = ds.getConnection()) {
-            ResenyaRepository repo = new ResenyaRepository(con, new ResenyaMapper());
-            return repo.findByProducto(id);
-        } catch (SQLException e) {
-            throw new DataAccessException("Error al obtener reseñas", e);
-        }
-    }
+    // --- ENDPOINTS ADMIN ---
 
-    @PostMapping
-    public ResponseEntity<?> create(@RequestBody Resenya resenya, HttpSession session) {
-        // 1. Validar sesión
-        Integer userId = (Integer) session.getAttribute("userId");
-        
-     // DEPURACIÓN: Mira tu consola de Java al enviar la reseña
-        System.out.println("ID Usuario Sesión: " + userId);
-        System.out.println("ID Producto Recibido: " + resenya.getProductoId());
-        
-        if (userId == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("{\"message\": \"Debe iniciar sesión para dejar una reseña.\"}");
-        }
+    @GetMapping("/admin/resenyas")
+    public ResponseEntity<?> getAllAdmin() {
+        // IMPORTANTE: fíjate en u.email AS email_usuario
+        String sql = "SELECT r.*, " +
+                     "u.nombre AS nombre_usuario, " +
+                     "u.email AS email_usuario, " +
+                     "p.nombre AS nombre_producto " +
+                     "FROM resenas r " +
+                     "LEFT JOIN usuarios u ON r.id_usuario = u.id " +
+                     "LEFT JOIN productos p ON r.id_producto = p.id_producto " +
+                     "ORDER BY r.fecha DESC";
 
-        try (Connection con = ds.getConnection()) {
-            // 2. Comprobar si el usuario ha comprado el producto (Verificación de compra)
-            // Usamos id_usuario e id_producto que son los nombres en tu tabla 'pedidos'
-            String sqlCheck = "SELECT COUNT(*) FROM pedidos WHERE id_usuario = ? AND id_producto = ? AND activo = 1";
-            
-            try (PreparedStatement ps = con.prepareStatement(sqlCheck)) {
-                ps.setInt(1, userId);
-                ps.setInt(2, resenya.getProductoId()); // Ahora coincide con tu entidad
-                
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next() && rs.getInt(1) == 0) {
-                        return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                                .body("{\"message\": \"Solo puedes reseñar muebles que hayas comprado.\"}");
-                    }
-                }
+        try (Connection con = ds.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            List<Resenya> lista = new ArrayList<>();
+            ResenyaMapper mapper = new ResenyaMapper();
+
+            while (rs.next()) {
+                lista.add(mapper.mapRow(rs));
             }
-
-            // 3. Si la validación es correcta, insertar
-            ResenyaRepository repo = new ResenyaRepository(con, new ResenyaMapper());
-            
-            // Seteamos los datos que faltan desde el servidor por seguridad
-            resenya.setUsuarioId(userId);
-            resenya.setFechaPublicacion(LocalDate.now());
-            
-            Resenya nueva = repo.insert(resenya); 
-            return ResponseEntity.status(HttpStatus.CREATED).body(nueva);
-
+            return ResponseEntity.ok(lista);
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("{\"message\": \"Error al procesar la reseña en la base de datos.\"}");
+            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
         }
     }
-    
-    
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable int id, HttpSession session) {
-        Integer userId = (Integer) session.getAttribute("userId");
-        
-        // 1. Validar sesión
-        if (userId == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("{\"message\": \"Debe iniciar sesión para borrar su reseña.\"}");
-        }
 
-        // 2. Ejecutar el borrado condicionado al usuario
-        // Solo borrará si el ID de la reseña coincide Y el usuario es el dueño
-        String sqlDelete = "DELETE FROM resenas WHERE id_resena = ? AND id_usuario = ?";
+    @GetMapping("/admin/resenyas/{id}")
+    public ResponseEntity<?> getByIdAdmin(@PathVariable int id) {
+        String sql = "SELECT r.*, u.nombre AS nombre_usuario, p.nombre AS nombre_producto " +
+                     "FROM resenas r " +
+                     "JOIN usuarios u ON r.id_usuario = u.id " +
+                     "JOIN productos p ON r.id_producto = p.id_producto " +
+                     "WHERE r.id_resena = ?";
 
-        try (Connection con = ds.getConnection(); 
-             PreparedStatement ps = con.prepareStatement(sqlDelete)) {
-            
+        try (Connection con = ds.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, id);
-            ps.setInt(2, userId);
-            
-            int filasAfectadas = ps.executeUpdate();
-
-            if (filasAfectadas > 0) {
-                return ResponseEntity.ok("{\"message\": \"Reseña eliminada correctamente.\"}");
-            } else {
-                // Si no borró nada, o la reseña no existe o no es de ese usuario
-                return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                        .body("{\"message\": \"No tienes permiso para borrar esta reseña o ya no existe.\"}");
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return ResponseEntity.ok(new ResenyaMapper().mapRow(rs));
+                }
+                return ResponseEntity.notFound().build();
             }
-
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("{\"message\": \"Error al eliminar la reseña en la base de datos.\"}");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/admin/resenyas/{id}")
+    public ResponseEntity<?> deleteAdmin(@PathVariable int id) {
+        String sql = "DELETE FROM resenas WHERE id_resena = ?";
+        try (Connection con = ds.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            int rows = ps.executeUpdate();
+            return rows > 0 ? ResponseEntity.ok("{\"success\": true}") : ResponseEntity.notFound().build();
+        } catch (SQLException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 }
