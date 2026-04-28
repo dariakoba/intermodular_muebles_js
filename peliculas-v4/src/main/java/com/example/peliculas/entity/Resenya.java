@@ -2,14 +2,24 @@ package com.example.peliculas.entity;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Resenya {
     private Integer idResenya; 
+    
+    @JsonProperty("usuarioId")
     private int usuarioId;
+    
+    @JsonProperty("productoId")
     private int productoId;
     private int puntuacion;
     private String comentario;
     private LocalDate fechaPublicacion;
+ // Dentro de la clase Resenya
+    private String nombreUsuario; 
 
+    public String getNombreUsuario() { return nombreUsuario; }
+    public void setNombreUsuario(String nombreUsuario) { this.nombreUsuario = nombreUsuario; }
     public Resenya() {}
 
     // Getters y Setters

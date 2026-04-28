@@ -36,19 +36,28 @@ function renderizarTabla(usuarios) {
                 <td>${u.rol}</td>
                 <td>${u.telefono ?? ""}</td>
                 <td>
-                    <span class="${estado === 'activo' ? 'estado-activo' : 'estado-inactivo'}">
+                    <span class="badge ${estado === 'activo' ? 'bg-recibido' : 'bg-cancelado'}">
                         ${estado}
                     </span>
                 </td>
-                <td class="acciones">
-                    <a href="show.html?id=${u.id}" class="btn-ver">Ver</a>
-                    <a href="edit.html?id=${u.id}" class="btn-editar">Editar</a>
-                    <button
-                        class="${estado === 'activo' ? 'btn-desactivar' : 'btn-activar'}"
-                        onclick="toggleUsuario(${u.id}, '${estado}')"
-                        ${isMe ? "disabled" : ""}>
-                        ${estado === 'activo' ? 'Desactivar' : 'Activar'}
-                    </button>
+                <td>
+                    <div class="acciones">
+                        <a href="show.html?id=${u.id}" class="btn-ver" title="Ver detalles">
+                            <i class="fa-solid fa-eye"></i>
+                        </a>
+
+                        <a href="edit.html?id=${u.id}" class="btn-editar" title="Editar usuario">
+                            <i class="fa-solid fa-pen"></i>
+                        </a>
+
+                        <button
+                            class="${estado === 'activo' ? 'btn-desactivar' : 'btn-activar'}"
+                            onclick="toggleUsuario(${u.id}, '${estado}')"
+                            title="${estado === 'activo' ? 'Desactivar usuario' : 'Activar usuario'}"
+                            ${isMe ? "disabled" : ""}>
+                            <i class="fa-solid ${estado === 'activo' ? 'fa-user-slash' : 'fa-user-check'}"></i>
+                        </button>
+                    </div>
                 </td>
             </tr>
         `;

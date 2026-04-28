@@ -8,14 +8,19 @@ public class ResenyaMapper implements RowMapper<Resenya> {
     @Override
     public Resenya mapRow(ResultSet rs) throws SQLException {
         Resenya r = new Resenya();
-        r.setIdResenya(rs.getInt("id_resenya"));
-        r.setUsuarioId(rs.getInt("usuario_id"));
-        r.setProductoId(rs.getInt("producto_id"));
+        
+        // Ajustado a los nombres reales de la tabla 'resenas'
+        r.setIdResenya(rs.getInt("id_resena")); 
+        r.setUsuarioId(rs.getInt("id_usuario"));
+        r.setProductoId(rs.getInt("id_producto"));
         r.setPuntuacion(rs.getInt("puntuacion"));
         r.setComentario(rs.getString("comentario"));
-        if (rs.getDate("fecha_publicacion") != null) {
-            r.setFechaPublicacion(rs.getDate("fecha_publicacion").toLocalDate());
+        r.setNombreUsuario(rs.getString("nombre_autor"));
+        // Cambiado de 'fecha_publicacion' a 'fecha'
+        if (rs.getDate("fecha") != null) {
+            r.setFechaPublicacion(rs.getDate("fecha").toLocalDate());
         }
+        
         return r;
     }
 }

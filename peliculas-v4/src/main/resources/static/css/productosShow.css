@@ -272,6 +272,299 @@ box-shadow: 0 8px 22px rgba(92,68,50,0.20);
 }
 .btn-carrito:active { transform: translateY(0); }
 
+
+/* =========================
+   ESTILOS BONITOS RESEÑAS
+========================= */
+
+.resenyas-container {
+    max-width: 950px;
+    margin: 70px auto;
+    padding: 30px;
+    font-family: 'Arial', sans-serif;
+}
+
+/* TÍTULO */
+
+.resenyas-title {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #3f2d20;
+    margin-bottom: 40px;
+    position: relative;
+    padding-left: 20px;
+    letter-spacing: 0.5px;
+}
+
+.resenyas-title::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 6px;
+    height: 85%;
+    background: linear-gradient(to bottom, #ae4010, #d67a45);
+    border-radius: 10px;
+}
+
+/* =========================
+   TARJETAS DE RESEÑAS
+========================= */
+
+.resenya-card {
+    background: #ffffff;
+    border: 1px solid #f0e6dc;
+    border-radius: 20px;
+    padding: 28px;
+    margin-bottom: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.resenya-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    background: #ae4010;
+}
+
+.resenya-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+}
+
+/* HEADER */
+
+.resenya-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    gap: 15px;
+}
+
+.stars {
+    color: #d47a2d;
+    font-size: 1.3rem;
+    letter-spacing: 3px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+
+.resenya-date {
+    font-size: 0.9rem;
+    color: #9a8a7a;
+    background: #faf5ef;
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-weight: 500;
+}
+
+/* TEXTO */
+
+.resenya-text {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: #5b4332;
+    margin: 0;
+}
+
+//* BOTÓN ELIMINAR RESEÑA */
+.btn-eliminar-resenya {
+    background: linear-gradient(135deg, #fff5f5, #ffeaea);
+    border: 1px solid #f5b5b2;
+    color: #c0392b;
+    cursor: pointer;
+    font-size: 0.85rem;
+    margin-top: 10px;
+    padding: 8px 14px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 8px rgba(192, 57, 43, 0.08);
+}
+
+.btn-eliminar-resenya:hover {
+    background: #c0392b;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(192, 57, 43, 0.18);
+}
+
+.btn-eliminar-resenya:active {
+    transform: scale(0.97);
+}
+
+.btn-eliminar-resenya i {
+    font-size: 0.9rem;
+}
+
+/* =========================
+   FORMULARIO
+========================= */
+
+.form-resenya-box {
+    margin-top: 60px;
+    background: linear-gradient(180deg, #fffaf5, #fdf6ed);
+    border: 1px solid #eee2d5;
+    border-radius: 28px;
+    padding: 45px;
+    box-shadow: 0 12px 35px rgba(0,0,0,0.04);
+}
+
+.form-resenya-box h4 {
+    font-size: 1.7rem;
+    color: #3f2d20;
+    margin-bottom: 30px;
+    font-weight: 700;
+}
+
+/* FORM GROUP */
+
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 10px;
+    color: #4a3728;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.3px;
+}
+
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid #dccbbb;
+    border-radius: 14px;
+    background: white;
+    font-size: 1rem;
+    color: #4a3728;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.form-group textarea {
+    min-height: 140px;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #ae4010;
+    box-shadow: 0 0 0 4px rgba(174, 64, 16, 0.08);
+}
+
+/* =========================
+   BOTÓN
+========================= */
+
+.btn-submit-resenya {
+    background: linear-gradient(135deg, #4a3728, #6b4f3d);
+    color: white;
+    border: none;
+    padding: 14px 34px;
+    border-radius: 40px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-submit-resenya:hover {
+    background: linear-gradient(135deg, #ae4010, #d67a45);
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 10px 25px rgba(174, 64, 16, 0.25);
+}
+
+/* =========================
+   SIN RESEÑAS
+========================= */
+
+.resenya-empty {
+    text-align: center;
+    padding: 50px;
+    color: #9a8a7a;
+    font-style: italic;
+    font-size: 1rem;
+    background: #faf7f2;
+    border: 1px dashed #d8c7b8;
+    border-radius: 18px;
+}
+
+/* CONTENEDOR FECHA + BOTÓN */
+.resenya-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+/* FECHA */
+.resenya-fecha {
+    font-size: 0.82rem;
+    color: #8a7768;
+    background: #fdf6ed;
+    padding: 6px 14px;
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid #f3e5d5;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(174, 64, 16, 0.04);
+}
+
+/* BOTÓN ELIMINAR */
+.btn-eliminar-resenya {
+    background: white;
+    border: 1px solid #f1c7c3;
+    color: #c0392b;
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 9px 16px;
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 600;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 10px rgba(192, 57, 43, 0.05);
+    min-width: 170px;
+}
+
+.btn-eliminar-resenya:hover {
+    background: #c0392b;
+    color: white;
+    border-color: #c0392b;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(192, 57, 43, 0.18);
+}
+
+.btn-eliminar-resenya:active {
+    transform: scale(0.98);
+}
+
+.btn-eliminar-resenya i {
+    font-size: 0.9rem;
+}
 /* ════════════════════════════
 RESPONSIVE
 ════════════════════════════ */
