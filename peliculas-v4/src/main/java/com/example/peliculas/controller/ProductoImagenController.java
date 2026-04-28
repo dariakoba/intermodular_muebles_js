@@ -5,10 +5,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 import javax.sql.DataSource;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,11 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.peliculas.dto.ProductoCatNomDetalle;
 import com.example.peliculas.entity.Producto;
+import com.example.peliculas.helper.StorageHelper;
+
 import com.example.peliculas.exception.DataAccessException;
 import com.example.peliculas.repository.ProductoRepository;
 
-import com.example.peliculas.helper.StorageHelper;
-import com.example.peliculas.validation.ImageValidator;
 
 
 @RestController
@@ -34,8 +30,8 @@ public class ProductoImagenController {
 	 private final DataSource ds;
 	 private final StorageHelper storage;
 
-	  public ProductoImagenController(DataSource ds) {
-	        this.ds = ds;
+	  public ProductoImagenController(DataSource ds, StorageHelper storage) {
+			super(ds);
 			this.storage = storage;
 
 	    }
