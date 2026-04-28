@@ -106,7 +106,7 @@ nav.menu a:hover { color: #1abc9c; transform: translateY(-2px); }
 /* --- Botones de Acción Superior --- */
 .admin-actions { display: flex; gap: 12px; align-items: center; }
 
-.btn-nuevo, #btn-eliminar-seleccionados {
+#btn-eliminar-seleccionados {
     padding: 10px 20px;
     font-weight: 700;
     text-transform: uppercase;
@@ -114,11 +114,15 @@ nav.menu a:hover { color: #1abc9c; transform: translateY(-2px); }
     cursor: pointer;
     border: none;
     transition: all 0.3s ease;
+    background: #c0392b; 
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(192,57,43,0.2);
 }
 
-.btn-nuevo { background: #1abc9c; color: #fff; text-decoration: none; }
-#btn-eliminar-seleccionados { background: #c0392b; color: #fff; }
-.btn-nuevo:hover, #btn-eliminar-seleccionados:hover { transform: translateY(-2px); opacity: 0.9; }
+#btn-eliminar-seleccionados:hover { 
+    transform: translateY(-2px); 
+    background: #a93226;
+}
 
 /* --- Tabla (CENTRADOS TODOS LOS CAMPOS) --- */
 .tabla-wrapper {
@@ -132,7 +136,7 @@ nav.menu a:hover { color: #1abc9c; transform: translateY(-2px); }
 table { 
   width: 100%; 
   border-collapse: collapse; 
-  table-layout: auto; /* Permite que las columnas se ajusten orgánicamente */
+  table-layout: auto; 
 }
 
 thead th {
@@ -142,37 +146,43 @@ thead th {
   background: #1a1a1a;
   color: #fff;
   border-bottom: 2px solid #1abc9c;
-  text-align: center; /* CENTRADO DE CABECERAS */
+  text-align: center;
 }
 
 tbody td { 
   padding: 14px 10px; 
   vertical-align: middle; 
-  text-align: center; /* CENTRADO DE CONTENIDO */
+  text-align: center; 
   color: #333;
+  font-size: 0.95rem;
 }
 
-/* --- BADGES DE ESTADO --- */
-.badge {
-    padding: 4px 12px;
-    border-radius: 15px;
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    display: inline-block;
+/* Estilo específico para el comentario (para que no rompa la tabla) */
+tbody td.comentario-celda {
+    max-width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-style: italic;
+    color: #666;
 }
-.bg-recibido { background: #eafaf1; color: #1e8449; } /* Activo */
-.bg-cancelado { background: #fdecea; color: #c0392b; } /* Inactivo */
+
+/* Estilo para las estrellas */
+.puntuacion-estrellas {
+    color: #f39c12;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+}
 
 /* --- BOTONES DE ACCIÓN (ICONOS CENTRADOS) --- */
 .acciones {
     display: flex;
     gap: 8px;
-    justify-content: center; /* CENTRADO HORIZONTAL */
-    align-items: center;    /* CENTRADO VERTICAL */
+    justify-content: center; 
+    align-items: center;    
 }
 
-.btn-ver, .btn-editar, .btn-activar, .btn-desactivar {
+.btn-ver, .btn-desactivar {
     width: 34px;
     height: 34px;
     display: flex;
@@ -186,31 +196,19 @@ tbody td {
     text-decoration: none;
 }
 
+/* Ver (Ojo) */
 .btn-ver { background: #e8f4f5; color: #1abc9c; }
 .btn-ver:hover { background: #1abc9c; color: #fff; }
 
-.btn-editar { background: #fef3e2; color: #f39c12; }
-.btn-editar:hover { background: #f39c12; color: #fff; }
-
-.btn-activar { background: #eafaf1; color: #2ecc71; }
-.btn-activar:hover { background: #2ecc71; color: #fff; }
-
+/* Borrar (Papelera) - Usamos la clase btn-desactivar para mantener coherencia de color */
 .btn-desactivar { background: #fdecea; color: #c0392b; }
 .btn-desactivar:hover { background: #c0392b; color: #fff; }
 
-/* --- Ajustes Finales --- */
-button:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-    filter: grayscale(1);
-}
-
-/* Forzamos que la columna de acciones no se estire de más */
+/* Ajustes Finales */
 th:last-child, td:last-child { 
-  width: 150px; 
+  width: 120px; 
 }
 
-/* Columna de checkbox centrada */
 th:first-child, td:first-child { 
   width: 60px; 
 }
@@ -221,4 +219,4 @@ th:first-child, td:first-child {
   .admin-filters { flex-direction: column; margin: 15px 0; }
   .search-box { max-width: 100%; }
   .topbar { padding: 0 20px; }
-}g
+}
