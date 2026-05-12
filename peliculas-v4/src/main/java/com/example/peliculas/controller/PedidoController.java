@@ -166,14 +166,19 @@ public class PedidoController {
     }
     
     @GetMapping("/mis")
-    public List<Pedido> misPedidos(HttpSession session) {
+    public List<Pedido> misPedidos(HttpSession session) throws SQLException {
         Integer userId = (Integer) session.getAttribute("userId");
-        if (userId == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Debes iniciar sesión");
+
+        System.out.println("USER ID SESSION = " + userId);
+
         try (Connection con = ds.getConnection()) {
             PedidoRepository pedidoRepo = new PedidoRepository(con);
-            return pedidoRepo.findByUsuarioId(userId);
-        } catch (SQLException e) {
-            throw new DataAccessException("Error", e);
+
+            List<Pedido> pedidos = pedidoRepo.findByUsuarioId(userId);
+
+            System.out.println("PEDIDOS = " + pedidos.size());
+
+            return pedidos;
         }
     }
 }

@@ -6,11 +6,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Resenya {
     private Integer idResenya; 
     
-    @JsonProperty("usuarioId")
+    @JsonProperty("id_usuario") // Añadimos soporte para snake_case
     private int usuarioId;
     
-    @JsonProperty("productoId")
+    @JsonProperty("id_producto") // Añadimos soporte para snake_case
     private int productoId;
+
+    // ... (restos de campos)
+
+    // Asegúrate de que los setters también tengan la anotación si el problema persiste
+   
     
     private int puntuacion;
     private String comentario;
@@ -39,11 +44,14 @@ public class Resenya {
     public void setIdResenya(Integer idResenya) { this.idResenya = idResenya; }
 
     public int getUsuarioId() { return usuarioId; }
-    public void setUsuarioId(int usuarioId) { this.usuarioId = usuarioId; }
+    
 
     public int getProductoId() { return productoId; }
+    @JsonProperty("id_producto")
     public void setProductoId(int productoId) { this.productoId = productoId; }
-
+    
+    @JsonProperty("id_usuario")
+    public void setUsuarioId(int usuarioId) { this.usuarioId = usuarioId; }
     public int getPuntuacion() { return puntuacion; }
     public void setPuntuacion(int puntuacion) { this.puntuacion = puntuacion; }
 

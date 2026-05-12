@@ -5,7 +5,12 @@
 document.addEventListener("DOMContentLoaded", () => {
     const urlParams = new URLSearchParams(window.location.search);
     const idDesdeUrl = urlParams.get('id');
+	const fileInput = document.getElementById("file");
 
+	if (fileInput) {
+	    fileInput.addEventListener("change", showLocalPreview);
+	}
+	
     if (idDesdeUrl) {
         cargarResenyas(idDesdeUrl);
         configurarFormulario(idDesdeUrl);
@@ -16,6 +21,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /**
  * Carga las reseñas y gestiona la visualización del botón de eliminar.
+ */
+/**
+ * Carga las reseñas y sus imágenes asociadas.
  */
 async function cargarResenyas(id) {
     const contenedor = document.getElementById("contenedor-resenyas");
@@ -28,7 +36,6 @@ async function cargarResenyas(id) {
         if (!response.ok) throw new Error("No se pudieron cargar las reseñas");
 
         const resenyas = await response.json();
-        console.log("Reseñas recibidas:", resenyas); // Para depuración
 
         if (!resenyas || resenyas.length === 0) {
             contenedor.innerHTML = `
@@ -39,15 +46,38 @@ async function cargarResenyas(id) {
             return;
         }
 
-        contenedor.innerHTML = resenyas.map(r => {
-            // MAPEO INTELIGENTE DE CAMPOS (Blindaje contra nombres de BD variables)
-            const idResenya = r.idResenya || r.id_resena || r.id_resenya || r.id || r._id;
-            const idUsuarioResenya = r.usuarioId || r.id_usuario || r.usuario_id || r.idUsuario;
-            const nombreAutor = r.nombreUsuario || r.nombre_usuario || r.nombre || "Usuario";
-            const fechaOriginal = r.fechaPublicacion || r.fecha || r.fecha_publicacion || r.createdAt;
-            const puntuacion = r.puntuacion || r.rating || 0;
-            const comentario = r.comentario || r.contenido || r.mensaje || "";
+        // --- CAMBIO CLAVE: Promise.all para esperar las imágenes de cada reseña ---
+        const tarjetasHTML = await Promise.all(resenyas.map(async (r) => {
+            const idResenya = r.idResenya || r.id_resena || r.id_resenya || r.id;
+            const idUsuarioResenya = r.usuarioId || r.id_usuario;
+            const nombreAutor = r.nombreUsuario || r.nombre_usuario || "Usuario";
+            const fechaOriginal = r.fechaPublicacion || r.fecha;
+            const puntuacion = r.puntuacion || 0;
+            const comentario = r.comentario || "";
 
+            // 1. Obtener imágenes de esta reseña específica
+            let imagenesHTML = "";
+            try {
+                const imgResponse = await fetch(`/api/resenyas/${idResenya}/imagenes`);
+                if (imgResponse.ok) {
+                    const imagenes = await imgResponse.json();
+                    if (imagenes && imagenes.length > 0) {
+                        imagenesHTML = `
+                            <div class="resenya-imagenes" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px;">
+                                ${imagenes.map(img => `
+                                    <img src="${img.url}" 
+                                         alt="Foto de reseña" 
+                                         style="width: 120px; height: 90px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; cursor: pointer;"
+                                         onclick="window.location.href='imagen.html?url=${img.url}'">
+                                `).join("")}
+                            </div>`;
+                    }
+                }
+            } catch (err) {
+                console.warn(`No se pudieron cargar imágenes para reseña ${idResenya}`);
+            }
+
+            // 2. Formatear fecha
             let fechaTexto = "Reciente";
             if (fechaOriginal) {
                 const d = new Date(fechaOriginal);
@@ -58,19 +88,15 @@ async function cargarResenyas(id) {
                 }
             }
 
+            // 3. Botón eliminar
             let botonEliminar = "";
-            // Comparación no estricta (==) por si userIdLogueado es string y el otro number
             if (userIdLogueado && idUsuarioResenya && idUsuarioResenya == userIdLogueado) {
-                if (idResenya) {
-                    // --- CAMBIO AQUÍ: Se eliminó 'style' y se añadió 'class' ---
-                    botonEliminar = `
-                        <button onclick="eliminarResenya(${idResenya}, ${id})" class="btn-eliminar-resenya">
-                            <i class="fa-solid fa-trash-can"></i> Eliminar mi reseña
-                        </button>`;
-                }
+                botonEliminar = `
+                    <button onclick="eliminarResenya(${idResenya}, ${id})" class="btn-eliminar-resenya">
+                        <i class="fa-solid fa-trash-can"></i> Eliminar mi reseña
+                    </button>`;
             }
 
-            // Generación de la tarjeta (mantenemos los estilos en línea de la tarjeta para no romper tu diseño actual)
             return `
                 <div class="resenya-card" style="background: white; border-radius: 15px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #eee;">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
@@ -83,18 +109,21 @@ async function cargarResenyas(id) {
                                 ${"★".repeat(puntuacion)}${"☆".repeat(5 - puntuacion)}
                             </div>
                         </div>
-						<div class="resenya-actions">
-						    <span class="resenya-fecha">
-						        <i class="fa-regular fa-calendar-days"></i> ${fechaTexto}
-						    </span>
-						    ${botonEliminar}
-						</div>
+                        <div class="resenya-actions">
+                            <span class="resenya-fecha">
+                                <i class="fa-regular fa-calendar-days"></i> ${fechaTexto}
+                            </span>
+                            ${botonEliminar}
+                        </div>
                     </div>
                     <p style="color: #5c4432; line-height: 1.5; margin: 0; font-style: italic;">
                         "${comentario}"
                     </p>
+                    ${imagenesHTML} 
                 </div>`;
-        }).join("");
+        }));
+
+        contenedor.innerHTML = tarjetasHTML.join("");
 
     } catch (error) {
         console.error("Error al cargar reseñas:", error);
@@ -132,6 +161,12 @@ async function eliminarResenya(idResenya, idProducto) {
 /**
  * Maneja el envío del formulario.
  */
+/**
+ * Maneja el envío del formulario con creación de reseña y subida de imagen.
+ */
+/**
+ * Maneja el envío del formulario.
+ */
 function configurarFormulario(idProducto) {
     const form = document.getElementById("form-resenya");
     if (!form) return;
@@ -142,34 +177,96 @@ function configurarFormulario(idProducto) {
         const botonEnvio = form.querySelector('button[type="submit"]');
         if (botonEnvio) botonEnvio.disabled = true;
 
-        const data = {
-            productoId: parseInt(idProducto),
-            puntuacion: parseInt(form.puntuacion.value),
-            comentario: form.comentario.value
-        };
-
         try {
+            // 1. DATOS - Usamos los nombres exactos que espera tu Entity/DTO
+			// En resenya.js, dentro de configurarFormulario:
+			const data = {
+			    id_producto: parseInt(idProducto), // Asegúrate que sea id_producto para que Java lo entienda
+			    puntuacion: parseInt(form.puntuacion.value),
+			    comentario: form.comentario.value
+			    // quitamos usuarioId de aquí, es más seguro
+			};
+
+            // 2. CREAR RESEÑA
             const response = await fetch('/api/resenyas', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
+			
 
-            if (response.ok) {
-                alert("¡Gracias por tu opinión!");
-                form.reset();
-                cargarResenyas(idProducto); 
-            } else {
-                const error = await response.json().catch(() => ({}));
-                alert(error.message || "Error al publicar. Verifica que hayas comprado el producto.");
+			if (!response.ok) {
+			    const mensaje = await response.text(); // 👈 aquí coges el texto del backend
+			    alert(mensaje); // 👈 aquí lo muestras
+			    return;
+			}
+            
+            
+            const resenaCreada = await response.json();
+            
+            // 3. ID - Usamos id_resenya (con 'y' y snake_case) según tu log de consola
+            const idNuevaResena = resenaCreada.id_resenya;
+
+            if (!idNuevaResena) {
+                console.error("Respuesta incompleta del servidor:", resenaCreada);
+                throw new Error("El servidor no devolvió el id_resenya");
             }
+
+            // 4. SUBIR IMAGEN (Solo si hay archivo seleccionado)
+            const fileInput = document.getElementById("file");
+            if (fileInput && fileInput.files[0]) {
+                const formData = new FormData();
+                formData.append("file", fileInput.files[0]);
+
+                // CORRECCIÓN: URL con 'y' para que coincida con la whitelist del backend
+                const uploadRes = await fetch("/api/uploads/resenyas", {
+                    method: "POST",
+                    body: formData
+                });
+
+                if (!uploadRes.ok) throw new Error("Error al subir el archivo físico.");
+                
+                const uploadData = await uploadRes.json();
+
+                // 5. VINCULAR IMAGEN
+                const linkRes = await fetch(`/api/resenyas/${idNuevaResena}/imagenes`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ url: uploadData.url })
+                });
+
+                if (!linkRes.ok) throw new Error("Error al vincular la imagen en la base de datos.");
+            }
+
+            alert("¡Reseña publicada con éxito!");
+            window.location.reload();
+
         } catch (error) {
-            console.error("Error en el envío:", error);
-            alert("Error de conexión.");
+            console.error("Flujo interrumpido:", error);
+            alert("Hubo un problema: " + error.message);
         } finally {
             if (botonEnvio) botonEnvio.disabled = false;
         }
     };
+}
+
+/**
+ * Función de preview segura
+ */
+function showLocalPreview() {
+    const fileInput = document.getElementById("file");
+    const preview = document.getElementById("preview");
+    if (!preview) return; // Protección contra null
+
+    const file = fileInput.files[0];
+    if (!file) {
+        preview.style.display = "none";
+        preview.src = "";
+        return;
+    }
+
+    preview.src = URL.createObjectURL(file);
+    preview.style.display = "block";
 }
 
 // EXPOSICIÓN GLOBAL (CRÍTICO PARA onclick)

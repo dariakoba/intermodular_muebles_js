@@ -1,0 +1,98 @@
+package com.example.peliculas.controller;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import javax.sql.DataSource;
+
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import com.example.peliculas.dto.UserResponse;
+import com.example.peliculas.dto.auth.LoginRequest;
+
+import com.example.peliculas.dto.auth.RegisterRequest;
+import com.example.peliculas.entity.User;
+import com.example.peliculas.exception.DataAccessException;
+import com.example.peliculas.exception.DuplicateKeyException;
+import com.example.peliculas.repository.UserRepository;
+
+// import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+@RestController
+public class AuthController extends BaseController {
+
+	private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+	
+	public AuthController(DataSource ds) {
+		super(ds);
+	}
+
+	@PostMapping("/api/login")
+	public UserResponse login(@Valid @RequestBody LoginRequest req, HttpSession session) {
+
+		try (Connection con = ds.getConnection()) {
+
+			UserRepository repo = new UserRepository(con);
+			User user = repo.findByEmail(req.email());
+
+			if (user != null && encoder.matches(req.password(), user.getPassword())) {
+				session.setAttribute("userId", user.getId());
+				session.setAttribute("role", user.getRole());
+				return new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getRole());
+			}
+
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credenciales incorrectas");
+			
+		} catch (SQLException e) {
+			throw new DataAccessException(e);
+		}
+	}
+
+	// REGISTER
+	@PostMapping("/api/register")
+	@ResponseStatus(HttpStatus.CREATED)
+	public void register(@Valid @RequestBody RegisterRequest req) {
+
+		try (Connection con = ds.getConnection()) {
+			System.out.println(encoder.encode(req.password()));
+			UserRepository repo = new UserRepository(con);
+			User user = new User(null, req.name(), req.email(), encoder.encode(req.password()), "USER");
+			repo.insert(user);
+			
+		} catch (DuplicateKeyException e) {
+		    throw new ResponseStatusException(HttpStatus.CONFLICT, "Email ya registrado");
+		} catch (SQLException e) {
+			throw new DataAccessException(e);
+		}
+	}
+
+	// LOGOUT
+	@PostMapping("/api/logout")
+	public void logout(HttpSession session) {
+		session.invalidate();
+	}
+
+	// CURRENT USER
+	@GetMapping("/api/me")
+	public UserResponse me(HttpSession session) {
+
+		Integer userId = (Integer) session.getAttribute("userId");
+
+		if (userId == null) {
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "No autenticado");
+		}
+
+		try (Connection con = ds.getConnection()) {
+			UserRepository repo = new UserRepository(con);
+			return repo.findResponseById(userId);
+			
+		} catch (SQLException e) {
+			throw new DataAccessException(e);
+		}
+	}
+}

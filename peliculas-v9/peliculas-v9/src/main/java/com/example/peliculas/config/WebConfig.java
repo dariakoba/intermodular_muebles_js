@@ -1,7 +1,9 @@
 package com.example.peliculas.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.example.peliculas.interceptor.AuthInterceptor;
@@ -12,6 +14,9 @@ public class WebConfig implements WebMvcConfigurer {
 
     private final AuthInterceptor authInterceptor;
     private final RoleInterceptor roleInterceptor;
+    
+    @Value("${upload.dir}")
+    private String uploadDir;
 
     public WebConfig(AuthInterceptor authInterceptor,
                      RoleInterceptor roleInterceptor) {
@@ -21,7 +26,6 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Override
-    
     public void addInterceptors(InterceptorRegistry registry) {
 
         registry.addInterceptor(authInterceptor)
@@ -32,8 +36,7 @@ public class WebConfig implements WebMvcConfigurer {
     }
     
     @Override
-    public void addResourceHandlers(org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry registry) {
-
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/uploads/**")
                 .addResourceLocations("file:uploads/");
     }
