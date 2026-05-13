@@ -2,7 +2,7 @@ package com.example.peliculas.controller;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,14 +16,11 @@ import org.springframework.http.HttpStatus;
 import com.example.peliculas.db.DB;
 import com.example.peliculas.dto.CarritoRequest;
 import com.example.peliculas.entity.Pedido;
-import com.example.peliculas.entity.User;
 import com.example.peliculas.repository.PedidoRepository;
-import com.example.peliculas.repository.UserRepository;
-
-import jakarta.servlet.http.HttpSession;
-
+import com.example.peliculas.repository.UserRepository; 
 import com.example.peliculas.exception.DataAccessException;
 
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/api/carrito")
@@ -35,42 +32,84 @@ public class PedidoController {
         this.ds = ds;
     }
 
-    // --- SECCIÓN CLIENTE: REALIZAR COMPRA ---
-    
     @PostMapping("/comprar")
-    public ResponseEntity<?> realizarCompra(@RequestBody CarritoRequest request) {
-        if (request == null || request.pedido == null) {
-            return ResponseEntity.badRequest().body("{\"message\": \"El pedido está vacío\"}");
+    public ResponseEntity<?> realizarCompra(@RequestBody CarritoRequest request, HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("userId");
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\": \"Inicia sesión para comprar\"}");
         }
 
+        // =========================================================
+        // 🔥 LA SOLUCIÓN DEFINITIVA: CÁLCULO EN EL SERVIDOR 🔥
+        // =========================================================
+        
+        // 1. Calculamos cuánto valen los muebles originalmente (sin descuento)
+        float totalOriginal = 0f;
+        for (Map<String, Object> item : request.getProductos()) {
+            float precio = Float.parseFloat(item.get("precio").toString());
+            int cant = Integer.parseInt(item.get("cantidad").toString());
+            totalOriginal += (precio * cant);
+        }
+
+        // 2. Vemos cuánto ha pagado realmente
+        float totalPagado = request.getPedido().getTotal();
+
+        // 3. Calculamos la diferencia matemáticamente (¡A prueba de fallos!)
+        int puntosAUsar = 0;
+        if (totalOriginal > totalPagado + 0.05f) { // El +0.05 es para ignorar céntimos sueltos
+            float descuento = totalOriginal - totalPagado;
+            puntosAUsar = Math.round(descuento * 100);
+        }
+
+        System.out.println(">>> VALOR ORIGINAL MUEBLES: " + totalOriginal + "€");
+        System.out.println(">>> TOTAL PAGADO: " + totalPagado + "€");
+        System.out.println(">>> PUNTOS CALCULADOS POR JAVA: " + puntosAUsar);
+        // =========================================================
+
         try (Connection con = ds.getConnection()) {
-            PedidoRepository pedidoRepo = new PedidoRepository(con);
             
-            // Forzamos ID null para evitar error de clave duplicada
-            request.pedido.setIdPedido(null);
+            UserRepository userRepo = new UserRepository(con);
             
-            if (request.pedido.getClienteNombre() == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                                     .body("{\"message\": \"Error: El nombre del cliente es nulo\"}");
+            if (request.getDireccion() != null && !request.getDireccion().isEmpty()) {
+                userRepo.actualizarDireccion(userId, request.getDireccion());
             }
 
-            Pedido nuevoPedido = pedidoRepo.insert(request.pedido);
-            return ResponseEntity.ok("{\"message\": \"Compra realizada\", \"id\": " + nuevoPedido.getIdPedido() + "}");
+            int puntosGanados = (int) (totalPagado * 5);
+            userRepo.actualizarPuntos(userId, puntosAUsar, puntosGanados);
+            
+            PedidoRepository pedidoRepo = new PedidoRepository(con);
+            
+            Pedido p = request.getPedido();
+            p.setIdUsuario(userId);
+            p.setFecha(LocalDate.now());
+            
+            // ¡LE INYECTAMOS EL CÁLCULO SEGURO AL PEDIDO!
+            p.setPuntosUsados(puntosAUsar);
+
+            Pedido nuevoPedido = pedidoRepo.insert(p);
+            int idGenerado = nuevoPedido.getIdPedido();
+
+            for (Map<String, Object> item : request.getProductos()) {
+                int idProd = Integer.parseInt(item.get("id_producto").toString());
+                int cant = Integer.parseInt(item.get("cantidad").toString());
+                float precio = Float.parseFloat(item.get("precio").toString());
+                
+                pedidoRepo.guardarDetalle(idGenerado, idProd, cant, precio);
+            }
+
+            return ResponseEntity.ok("{\"message\": \"Compra realizada con éxito\"}");
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                                 .body("{\"message\": \"Error SQL: " + e.getMessage() + "\"}");
+            return ResponseEntity.status(500).body("{\"message\": \"Error al procesar: " + e.getMessage() + "\"}");
         }
     }
-
-    // --- SECCIÓN ADMIN: GESTIÓN DE PEDIDOS (Rutas desbloqueadas) ---
 
     @GetMapping("/admin/lista")
     public List<Pedido> listarParaAdmin() {
         try (Connection con = ds.getConnection()) {
             PedidoRepository repo = new PedidoRepository(con);
-            return repo.findAll(); // Asegúrate de que findAll() tenga el ORDER BY id_pedido DESC
+            return repo.findAll(); 
         } catch (SQLException e) {
             throw new DataAccessException("Error al listar pedidos", e);
         }
@@ -87,6 +126,17 @@ public class PedidoController {
         }
     }
 
+    @PutMapping("/admin/estado/{id}")
+    public ResponseEntity<?> cambiarEstado(@PathVariable int id, @RequestBody Map<String, String> body) {
+        try (Connection con = ds.getConnection()) {
+            PedidoRepository repo = new PedidoRepository(con);
+            String nuevoEstado = body.get("estado");
+            repo.actualizarEstado(id, nuevoEstado);
+            return ResponseEntity.ok("{\"message\": \"Estado actualizado\"}");
+        } catch (SQLException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Error al cambiar estado\"}");
+        }
+    }
 
     @GetMapping("/admin/usuarios")
     public List<Map<String, Object>> listarUsuariosCompañera() {
@@ -102,10 +152,9 @@ public class PedidoController {
                 return u;
             });
         } catch (SQLException e) {
-            throw new DataAccessException("Error al acceder a la tabla de usuarios", e);
+            throw new DataAccessException("Error", e);
         }
     }
-
 
     @GetMapping("/{id}")
     public Pedido verPedido(@PathVariable int id) {
@@ -116,30 +165,20 @@ public class PedidoController {
         }
     }
     
-    
-    //añadido por daria, no borrar porfiiiis
     @GetMapping("/mis")
-    public List<Pedido> misPedidos(HttpSession session) {
-        // 1. Extraemos el ID del usuario directamente de la sesión
+    public List<Pedido> misPedidos(HttpSession session) throws SQLException {
         Integer userId = (Integer) session.getAttribute("userId");
 
-        // 2. Si no hay sesión, lanzamos error 401 (Unauthorized)
-        if (userId == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Debes iniciar sesión");
-        }
+        System.out.println("USER ID SESSION = " + userId);
 
-        // 3. Abrimos la conexión y ejecutamos la lógica
         try (Connection con = ds.getConnection()) {
-            // Inicializamos el repositorio con la conexión actual
             PedidoRepository pedidoRepo = new PedidoRepository(con);
-            
-            // Llamamos al método que acabas de escribir
-            return pedidoRepo.findByUserId(userId);
 
-        } catch (SQLException e) {
-            // Si hay un error de base de datos, lanzamos una excepción de acceso a datos
-            e.printStackTrace();
-            throw new DataAccessException("Error al obtener el historial de pedidos", e);
+            List<Pedido> pedidos = pedidoRepo.findByUsuarioId(userId);
+
+            System.out.println("PEDIDOS = " + pedidos.size());
+
+            return pedidos;
         }
     }
 }

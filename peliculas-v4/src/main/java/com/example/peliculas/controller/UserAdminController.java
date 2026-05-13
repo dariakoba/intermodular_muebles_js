@@ -3,12 +3,17 @@ package com.example.peliculas.controller;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.peliculas.dto.UserRequest;
 import com.example.peliculas.entity.User;
@@ -84,7 +89,7 @@ public class UserAdminController {
                 String hashed = encoder.encode(user.getPasswordHash());
                 user.setPasswordHash(hashed);
             } else {
-                // Opcional: mantener la contraseña antigua si no envían nueva
+                // mantener la contraseña antigua si no envían nueva
                 User oldUser = repo.find(id);
                 user.setPasswordHash(oldUser.getPasswordHash());
             }
@@ -96,31 +101,63 @@ public class UserAdminController {
     }
 
     @DeleteMapping("/{id}")
-    public void destroy(@PathVariable int id) {
+    @ResponseBody 
+    public Map<String, Object> destroy(@PathVariable int id) {
+        Map<String, Object> response = new HashMap<>();
+        
         try (Connection con = ds.getConnection()) {
             UserRepository repo = new UserRepository(con);
-            repo.delete(id);
-        } catch (SQLException e) {
-            throw new DataAccessException(e);
-        }
-    }
-    
-    @PutMapping("/{id}/estado")
-    public User toggleEstado(@PathVariable int id) {
-        try (Connection con = ds.getConnection()) {
-            UserRepository repo = new UserRepository(con);
-
+            
             User user = repo.find(id);
-
-            if ("activo".equals(user.getEstado())) {
-                user.setEstado("inactivo");
-            } else {
-                user.setEstado("activo");
+            if (user == null) {
+                response.put("success", false);
+                response.put("message", "El usuario ya no existe en la base de datos.");
+                return response;
             }
 
-            repo.update(user);
-            return user;
+            repo.delete(id);
+            
+            
+            response.put("success", true);
+            response.put("message", "Usuario eliminado correctamente.");
+            
+        } catch (Exception e) {
+            response.put("success", false);
 
+            Throwable cause = e.getCause();
+
+            if (e instanceof java.sql.SQLIntegrityConstraintViolationException ||
+                (e.getMessage() != null && e.getMessage().toLowerCase().contains("foreign"))) {
+
+                response.put("message",
+                    "No se puede borrar: el usuario tiene pedidos o productos asociados.");
+            } else {
+                response.put("message", "Error al borrar: " + e.getMessage());
+            }
+
+            e.printStackTrace();
+        
+        }
+        
+        return response;
+    }
+    @PutMapping("/{id}/estado")
+    public User toggleEstado(@PathVariable int id, @RequestBody Map<String, String> body) {
+        try (Connection con = ds.getConnection()) {
+            UserRepository repo = new UserRepository(con);
+            User user = repo.find(id);
+            
+            if (user == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
+            }
+
+            String nuevoEstado = body.get("estado");
+            user.setEstado(nuevoEstado);
+
+            
+            repo.update(user); 
+            
+            return user;
         } catch (SQLException e) {
             throw new DataAccessException(e);
         }

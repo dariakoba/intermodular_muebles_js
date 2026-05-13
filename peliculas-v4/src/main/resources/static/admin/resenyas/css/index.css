@@ -1,0 +1,222 @@
+/* --- Estilos base y Reset --- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Lato', sans-serif;
+  background: #fdfbf6;
+  color: #222;
+  min-height: 100vh;
+}
+
+/* --- Topbar --- */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  height: 64px;
+  background: linear-gradient(90deg, #1a1a1a, #2c2c2c);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #fff;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+.logo img { height: 40px; object-fit: contain; }
+
+nav.menu { display: flex; gap: 28px; }
+nav.menu a {
+  color: #ddd;
+  text-decoration: none;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+nav.menu a:hover { color: #1abc9c; transform: translateY(-2px); }
+
+/* --- Admin Wrapper & Header --- */
+.admin-wrapper {
+  max-width: 1200px;
+  margin: 48px auto;
+  padding: 0 24px;
+}
+
+.admin-header {
+    display: flex;
+    align-items: center; 
+    justify-content: space-between;
+    margin-bottom: 24px;
+    gap: 20px;
+}
+
+.admin-header h1 {
+    font-size: 2.4rem; 
+    font-weight: 700;
+    color: #333;
+}
+
+.admin-filters {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1; 
+    justify-content: center;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 2px 12px;
+    max-width: 300px;
+    flex: 1;
+    height: 42px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.search-box input {
+    border: none !important;
+    outline: none !important;
+    width: 100%;
+    font-size: 14px;
+    background: transparent;
+}
+
+.select-filters select {
+    padding: 0 10px;
+    height: 42px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    background: #fff;
+}
+
+/* --- Botones de Acción Superior --- */
+.admin-actions { display: flex; gap: 12px; align-items: center; }
+
+#btn-eliminar-seleccionados {
+    padding: 10px 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+    background: #c0392b; 
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(192,57,43,0.2);
+}
+
+#btn-eliminar-seleccionados:hover { 
+    transform: translateY(-2px); 
+    background: #a93226;
+}
+
+/* --- Tabla (CENTRADOS TODOS LOS CAMPOS) --- */
+.tabla-wrapper {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  margin-top: 12px;
+}
+
+table { 
+  width: 100%; 
+  border-collapse: collapse; 
+  table-layout: auto; 
+}
+
+thead th {
+  padding: 14px 12px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  background: #1a1a1a;
+  color: #fff;
+  border-bottom: 2px solid #1abc9c;
+  text-align: center;
+}
+
+tbody td { 
+  padding: 14px 10px; 
+  vertical-align: middle; 
+  text-align: center; 
+  color: #333;
+  font-size: 0.95rem;
+}
+
+/* Estilo específico para el comentario (para que no rompa la tabla) */
+tbody td.comentario-celda {
+    max-width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-style: italic;
+    color: #666;
+}
+
+/* Estilo para las estrellas */
+.puntuacion-estrellas {
+    color: #f39c12;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+}
+
+/* --- BOTONES DE ACCIÓN (ICONOS CENTRADOS) --- */
+.acciones {
+    display: flex;
+    gap: 8px;
+    justify-content: center; 
+    align-items: center;    
+}
+
+.btn-ver, .btn-desactivar {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 1rem;
+    text-decoration: none;
+}
+
+/* Ver (Ojo) */
+.btn-ver { background: #e8f4f5; color: #1abc9c; }
+.btn-ver:hover { background: #1abc9c; color: #fff; }
+
+/* Borrar (Papelera) - Usamos la clase btn-desactivar para mantener coherencia de color */
+.btn-desactivar { background: #fdecea; color: #c0392b; }
+.btn-desactivar:hover { background: #c0392b; color: #fff; }
+
+/* Ajustes Finales */
+th:last-child, td:last-child { 
+  width: 120px; 
+}
+
+th:first-child, td:first-child { 
+  width: 60px; 
+}
+
+/* --- Responsive --- */
+@media (max-width: 992px) {
+  .admin-header { flex-direction: column; align-items: stretch; }
+  .admin-filters { flex-direction: column; margin: 15px 0; }
+  .search-box { max-width: 100%; }
+  .topbar { padding: 0 20px; }
+}

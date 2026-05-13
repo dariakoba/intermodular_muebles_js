@@ -66,6 +66,7 @@ public class User {
         this.salario = 0f;
         this.fechaAlta = java.time.LocalDate.now();
     }
+
 	public int getId() {
 		return id;
 	}

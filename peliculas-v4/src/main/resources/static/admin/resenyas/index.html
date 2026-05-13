@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reseñas | DNA Admin</title>
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+
+<header class="topbar">
+    <a href="../../adminhome.html" class="logo">
+        <img src="/images/logo.png" alt="Logo"> DNA
+    </a>
+    <nav class="menu">
+        <a href="../../adminhome.html">Home</a>
+        <a href="../usuarios/index.html">Usuarios</a>
+        <a href="../productos/index.html">Productos</a>
+        <a href="../pedidoAdmin.html">Pedidos</a>
+        <a href="index.html" style="color: #1abc9c;">Reseñas</a>
+    </nav>
+    <div class="icons person-menu-wrapper">
+        <span class="material-symbols-outlined">account_circle</span>
+        <div class="person-menu">
+            <a href="#">Perfil</a>
+            <a href="#" id="logoutBtn">Salir</a>
+        </div>
+    </div>
+</header>
+
+<div class="admin-wrapper">
+    <div class="admin-header">
+        <h1>Reseñas</h1>
+        <div class="admin-filters">
+            <div class="search-box">
+                <span class="material-symbols-outlined">search</span>
+                <input type="text" id="inputBuscar" placeholder="Buscar producto o usuario...">
+            </div>
+            <div class="select-filters">
+                <select id="filterPuntos">
+                    <option value="">Puntuación</option>
+                    <option value="5">5 Estrellas</option>
+                    <option value="4">4 Estrellas</option>
+                    <option value="3">3 Estrellas</option>
+                    <option value="2">2 Estrellas</option>
+                    <option value="1">1 Estrella</option>
+                </select>
+            </div>
+        </div>
+        <div class="admin-actions">
+            <button id="btn-eliminar-seleccionados">Eliminar Seleccionadas</button>
+        </div>
+    </div>
+
+    <div class="tabla-wrapper">
+        <table id="tablaResenyas">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="checkAll"></th>
+                    <th>ID</th>
+                    <th>Producto</th>
+                    <th>Usuario</th>
+                    <th>Puntuación</th>
+                    <th>Comentario</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<script src="js/index.js"></script>
+<script src="js/destroy.js"></script>
+</body>
+</html>

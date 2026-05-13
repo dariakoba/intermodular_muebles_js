@@ -30,4 +30,11 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(roleInterceptor)
                 .addPathPatterns("/admin/**", "/api/admin/**");
     }
+    
+    @Override
+    public void addResourceHandlers(org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry registry) {
+
+        registry.addResourceHandler("/uploads/**")
+                .addResourceLocations("file:uploads/");
+    }
 }

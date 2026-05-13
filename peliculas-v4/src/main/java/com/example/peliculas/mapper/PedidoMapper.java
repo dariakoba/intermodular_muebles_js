@@ -6,25 +6,33 @@ import com.example.peliculas.entity.Pedido;
 
 public class PedidoMapper implements RowMapper<Pedido> {
 
-	@Override
-	public Pedido mapRow(ResultSet rs) throws SQLException {
-	    Pedido p = new Pedido();
-	    p.setIdPedido(rs.getInt("id_pedido"));
-	    p.setClienteNombre(rs.getString("cliente_nombre"));
-	    p.setTotal(rs.getFloat("total"));
-	    p.setMetodoPago(rs.getString("metodo_pago"));
-	    p.setEstadoPago(rs.getString("estado_pago"));
-	    
-	    if (rs.getDate("fecha") != null) {
-	        p.setFecha(rs.getDate("fecha").toLocalDate());
-	    }
+    @Override
+    public Pedido mapRow(ResultSet rs) throws SQLException {
+        Pedido p = new Pedido();
+        
+        p.setIdPedido(rs.getInt("id_pedido"));
+        p.setClienteNombre(rs.getString("cliente_nombre"));
+        p.setTotal(rs.getFloat("total"));
+        p.setMetodoPago(rs.getString("metodo_pago"));
+        p.setEstadoPago(rs.getString("estado_pago"));
+        p.setIdUsuario(rs.getInt("id_usuario"));
+        p.setPuntosUsados(rs.getInt("puntos_usados"));
+        
+        java.sql.Timestamp ts = rs.getTimestamp("fecha");
+        if (ts != null) {
+            p.setFecha(ts.toLocalDateTime().toLocalDate());
+        }
 
-	    try {
-	        String n = rs.getString("nombre_producto");
-	        p.setNombreProducto(n != null ? n : "Producto no encontrado");
-	    } catch (Exception e) {
-	        p.setNombreProducto("Mueble DNA");
-	    }
-	    return p;
-	}
+        try { p.setEmail(rs.getString("email")); } catch (SQLException e) {}
+        try { p.setDireccion(rs.getString("direccion")); } catch (Exception e) {}
+        try { p.setTelefono(rs.getString("telefono")); } catch (SQLException e) {}
+
+        try {
+            p.setNombreProducto(rs.getString("nombre_producto"));
+        } catch (SQLException e) {
+            p.setNombreProducto(null);
+        }
+        
+        return p;
+    }
 }

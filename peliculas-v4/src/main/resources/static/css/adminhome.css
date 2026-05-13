@@ -16,97 +16,97 @@ body {
 
 /* --- HEADER / NAVBAR --- */
 .navbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 40px;
-  height: 64px;
-  background: linear-gradient(90deg, #1a1a1a, #2c2c2c);
-  position: fixed; /* siempre arriba */
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 0 40px;
+height: 64px;
+background: linear-gradient(90deg, #1a1a1a, #2c2c2c);
+position: fixed; /* siempre arriba */
+top: 0;
+left: 0;
+right: 0;
+z-index: 100;
+box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
 /* --- LOGO --- */
 .logo-link, .logo {
-  display: flex;           
-  align-items: center;     
-  gap: 10px;               
-  color: #fff;
-  text-decoration: none;
-  font-family: 'Playfair Display', serif;
-  font-size: 1.6rem;
-  font-weight: 700;
+display: flex;
+align-items: center;
+gap: 10px;
+color: #fff;
+text-decoration: none;
+font-family: 'Playfair Display', serif;
+font-size: 1.6rem;
+font-weight: 700;
 }
 
 .logo-circle {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  overflow: hidden;
+width: 40px;
+height: 40px;
+border-radius: 50%;
+overflow: hidden;
 }
 .logo-image {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+width: 100%;
+height: 100%;
+object-fit: contain;
 }
 
 /* --- NAV LINKS --- */
 .nav-links {
-  display: flex;
-  gap: 28px;
+display: flex;
+gap: 28px;
 }
 .nav-links a {
-  color: #ddd;
-  text-decoration: none;
-  font-size: 0.9rem;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  transition: all 0.3s ease;
+color: #ddd;
+text-decoration: none;
+font-size: 0.9rem;
+letter-spacing: 1px;
+text-transform: uppercase;
+transition: all 0.3s ease;
 }
 .nav-links a:hover {
-  color: #1abc9c;
-  transform: translateY(-2px);
+color: #1abc9c;
+transform: translateY(-2px);
 }
 
 /* --- ICONS --- */
 .nav-icons {
-  display: flex;
-  align-items: center;
-  gap: 18px;
+display: flex;
+align-items: center;
+gap: 18px;
 }
 .nav-icons i {
-  color: #fff;
-  font-size: 20px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+color: #fff;
+font-size: 20px;
+cursor: pointer;
+transition: all 0.3s ease;
 }
-.nav-icons i:hover { 
-  color: #1abc9c; 
-  transform: scale(1.2);
+.nav-icons i:hover {
+color: #1abc9c;
+transform: scale(1.2);
 }
 
 /* --- LOGOUT BUTTON --- */
 .btn-logout {
-  background: #c0392b;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 6px 12px;
-  font-weight: 700;
-  cursor: pointer;
-  text-transform: uppercase;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.3s ease;
+background: #c0392b;
+color: #fff;
+border: none;
+border-radius: 6px;
+padding: 6px 12px;
+font-weight: 700;
+cursor: pointer;
+text-transform: uppercase;
+display: flex;
+align-items: center;
+gap: 6px;
+transition: all 0.3s ease;
 }
 .btn-logout:hover {
-  background: #a93226;
-  transform: translateY(-1px);
+background: #a93226;
+transform: translateY(-1px);
 }
 
 /* --- MAIN ADMIN CONTAINER --- */
@@ -202,4 +202,73 @@ body {
     gap: 16px;
     margin-top: 8px;
   }
+}
+.icons {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+/* ICONOS GENERALES */
+.icons .material-symbols-outlined {
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.icons .material-symbols-outlined:hover {
+  color: #1abc9c;
+  transform: scale(1.15);
+}
+.material-symbols-outlined {
+    cursor: pointer;
+    color: #fff;
+    font-size: 26px;
+    transition: 0.2s;
+}
+
+.material-symbols-outlined:hover {
+    color: #1abc9c;
+    transform: scale(1.1);
+}
+
+/* 🔥 WRAPPER CLAVE */
+.person-menu-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+/* 🔥 MENÚ */
+.person-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%; /* IMPORTANTE: justo debajo del icono */
+    background: white;
+    border-radius: 8px;
+    padding: 8px 0;
+    min-width: 160px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    z-index: 999;
+}
+
+/* 🔥 MANTENER HOVER EN TODO EL BLOQUE */
+.person-menu-wrapper:hover .person-menu {
+    display: block;
+}
+
+/* links */
+.logout-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #333;
+    text-decoration: none;
+    padding: 10px 12px;
+    white-space: nowrap;
+}
+
+.logout-link:hover {
+    background: #f2f2f2;
 }

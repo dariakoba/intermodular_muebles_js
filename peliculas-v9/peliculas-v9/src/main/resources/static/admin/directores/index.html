@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrar directores</title>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+<body>
+
+    <div class="container py-4">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h3 mb-0">Directores</h1>
+
+            <a href="/admin/directores/create.html" class="btn btn-primary">
+                Nuevo director
+            </a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th style="width: 80px;">ID</th>
+                        <th style="width: 110px;">Imagen</th>
+                        <th>Nombre</th>
+                        <th>País</th>
+                        <th style="width: 180px;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-directores">
+                    <!-- JS -->
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script type="module" src="/js/admin/directores/index.js"></script>
+</body>
+</html>

@@ -22,7 +22,8 @@ public class UserMapper implements RowMapper<User> {
                 rs.getInt("puntos"),
                 //rs.getInt("nivel_acceso"),
                 rs.getFloat("salario"),
-                rs.getDate("fecha_alta").toLocalDate() // <-- nueva línea
+                rs.getDate("fecha_alta").toLocalDate() 
+                
         );
     }
 }

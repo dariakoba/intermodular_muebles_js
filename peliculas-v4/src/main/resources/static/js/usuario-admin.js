@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     if (password && password.trim() !== "") {
-      usuario.password_hash = password.trim(); // 🔹 solo si tiene valor
+      usuario.password_hash = password.trim(); 
     } else if (!id) {
       errorDiv.textContent = "La contraseña es obligatoria al crear un usuario";
       errorDiv.style.display = "block";
@@ -137,6 +137,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // cargar la tabla al inicio
   cargarUsuarios();
 });

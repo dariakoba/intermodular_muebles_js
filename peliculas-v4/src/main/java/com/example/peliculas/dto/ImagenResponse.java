@@ -1,6 +1,8 @@
 package com.example.peliculas.dto;
 
-public record ImagenResponse (
-	int id,
-	String url
+
+public record ImagenResponse(
+    Integer id,
+    String url
 ){}
+
