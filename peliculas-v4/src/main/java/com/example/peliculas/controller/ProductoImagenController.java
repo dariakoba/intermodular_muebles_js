@@ -26,7 +26,7 @@ import com.example.peliculas.repository.ProductoRepository;
 
 @RestController
 @RequestMapping("/api/admin/productos/{productoId}/imagenes")
-public class ProductoImagenController {
+public class ProductoImagenController extends BaseController {
 	 private final DataSource ds;
 	 private final StorageHelper storage;
 
