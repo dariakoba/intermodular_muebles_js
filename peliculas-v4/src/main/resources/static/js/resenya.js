@@ -48,10 +48,11 @@ async function cargarResenyas(id) {
 
         // --- CAMBIO CLAVE: Promise.all para esperar las imágenes de cada reseña ---
         const tarjetasHTML = await Promise.all(resenyas.map(async (r) => {
+			console.log("RESEÑA:", r);
             const idResenya = r.idResenya || r.id_resena || r.id_resenya || r.id;
             const idUsuarioResenya = r.usuarioId || r.id_usuario;
             const nombreAutor = r.nombreUsuario || r.nombre_usuario || "Usuario";
-            const fechaOriginal = r.fechaPublicacion || r.fecha;
+            const fechaOriginal = r.fecha_publicacion;
             const puntuacion = r.puntuacion || 0;
             const comentario = r.comentario || "";
 
@@ -78,15 +79,27 @@ async function cargarResenyas(id) {
             }
 
             // 2. Formatear fecha
-            let fechaTexto = "Reciente";
-            if (fechaOriginal) {
-                const d = new Date(fechaOriginal);
-                if (!isNaN(d.getTime())) {
-                    fechaTexto = d.toLocaleDateString('es-ES', { 
-                        day: '2-digit', month: 'long', year: 'numeric' 
-                    });
-                }
-            }
+			// 2. Formatear fecha REAL
+			// 2. Formatear fecha REAL
+			let fechaTexto = "Fecha no disponible";
+
+			if (fechaOriginal) {
+
+			    const fechaParseada = fechaOriginal.toString().replace(' ', 'T');
+
+			    const d = new Date(fechaParseada);
+
+			    if (!isNaN(d.getTime())) {
+
+			        fechaTexto = d.toLocaleString('es-ES', {
+			            day: '2-digit',
+			            month: 'long',
+			            year: 'numeric',
+			            hour: '2-digit',
+			            minute: '2-digit'
+			        });
+			    }
+			}
 
             // 3. Botón eliminar
             let botonEliminar = "";

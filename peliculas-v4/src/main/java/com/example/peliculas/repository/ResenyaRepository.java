@@ -30,19 +30,21 @@ public class ResenyaRepository extends BaseRepository<Resenya> {
 
     @Override
     public String[] getColumnNames() {
-        // Nombres de las columnas en la base de datos MySQL
-        return new String[] {"id_usuario", "id_producto", "puntuacion", "comentario", "fecha"};
+        return new String[] {
+            "id_usuario",
+            "id_producto",
+            "puntuacion",
+            "comentario"
+        };
     }
 
     @Override
     public Object[] getInsertValues(Resenya r) {
-        // Usamos los nombres exactos de tus getters de la entidad Resenya
         return new Object[] { 
             r.getUsuarioId(), 
             r.getProductoId(), 
             r.getPuntuacion(), 
-            r.getComentario(), 
-            r.getFechaPublicacion() 
+            r.getComentario()
         };
     }
 

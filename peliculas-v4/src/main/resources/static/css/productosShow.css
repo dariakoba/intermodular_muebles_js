@@ -263,9 +263,11 @@ body {
     margin-bottom: 40px;
     position: relative;
     padding-left: 20px;
+	margin-top: 60px;
 }
 .resenyas-title::before {
     content: "";
+	
     position: absolute;
     left: 0; top: 5px;
     width: 6px; height: 85%;
