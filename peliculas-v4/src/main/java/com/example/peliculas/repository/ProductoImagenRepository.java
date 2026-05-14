@@ -13,23 +13,31 @@ import com.example.peliculas.mapper.RowMapper;
 
 public class ProductoImagenRepository extends BaseRepository<ProductoImagen> {
 	
-	protected ProductoImagenRepository(Connection con) {
+	public ProductoImagenRepository(Connection con) {
 		super(con, new ProductoImagenMapper() );
 		// TODO Auto-generated constructor stub
 	}
-	protected ProductoImagenRepository(Connection con, RowMapper<ProductoImagen> mapper) {
+	public ProductoImagenRepository(Connection con, RowMapper<ProductoImagen> mapper) {
 		super(con, mapper);
 		// TODO Auto-generated constructor stub
 	}
+	
+	
+	
+	@Override
+	public Integer getPrimaryKey(ProductoImagen instance) {
+		// TODO Auto-generated method stub
+		return instance.getId();
+	}
+	
+	
 	@Override
 	public String getTable() {
 		// TODO Auto-generated method stub
 		return "producto_imagenes";
 	}
-	@Override
-	public Integer getPrimaryKey(ProductoImagen pi) {
-		// TODO Auto-generated method stub
-		return pi.getId();
+	public String getPrimaryKeyName() {
+		return "id";
 	}
 	@Override
 	public void setPrimaryKey(ProductoImagen pi, int id) {
@@ -71,6 +79,7 @@ public class ProductoImagenRepository extends BaseRepository<ProductoImagen> {
 			throw new DataAccessException("Error Obteniendo las imágenes del producto");
 		}
 	}
+	
 	
 	
 }

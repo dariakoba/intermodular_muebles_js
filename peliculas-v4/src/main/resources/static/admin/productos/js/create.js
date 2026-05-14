@@ -8,8 +8,28 @@ app.run(async () => {
 
     await cargarCategorias();
 
-    bind(document.getElementById("form-create"), "submit", guardar);
+	const form = document.getElementById("form-create");
+	const inputFile = document.getElementById("imagen");
+
+	bind(form, "submit", guardar);
+	bind(inputFile, "change", previewImagen);
 });
+
+function previewImagen() {
+    const file = document.getElementById("imagen").files[0];
+    const preview = document.getElementById("preview");
+
+	if (!file) {
+		preview.style.display = "none";
+		preview.src = "";
+		return;
+	}
+
+    preview.src = URL.createObjectURL(file);
+    preview.style.display = "block";
+}
+
+
 
 async function cargarCategorias() {
     const categorias = await api.get("/api/admin/categorias");
@@ -24,26 +44,40 @@ async function cargarCategorias() {
     });
 }
 
+
+
+
 async function guardar(e) {
     e.preventDefault();
-	const estadoVal = document.getElementById("estado").value;
-	const catVal = document.getElementById("categoria").value;
 
-    const producto = {
-        nombre:      document.getElementById("nombre").value,
-        color:       document.getElementById("color").value,
-        precio:      parseFloat(document.getElementById("precio").value),
-        stock:       parseInt(document.getElementById("stock").value),
+    const producto = await api.post("/api/admin/productos", {
+        nombre: document.getElementById("nombre").value,
+        color: document.getElementById("color").value,
+        precio: parseFloat(document.getElementById("precio").value),
+        stock: parseInt(document.getElementById("stock").value),
         descripcion: document.getElementById("descripcion").value,
+        categoriaId: document.getElementById("categoria").value
+            ? parseInt(document.getElementById("categoria").value)
+            : null,
+        deletedAt: document.getElementById("estado").value === "inactivo"
+            ? new Date().toISOString()
+            : null
+    });
+	
+	console.log(producto);
 
-		categoria_id: catVal ? parseInt(catVal) : null,
-		
+    const file = document.getElementById("imagen").files[0];
 
-		deleted_at:   estadoVal === "inactivo" ? new Date().toISOString() : null
+    if (file) {
+        const fd = new FormData();
+        fd.append("file", file);
 
-    };
-
-    await api.post("/api/admin/productos", producto);
+        await api.post(`/api/admin/productos/${producto.id_producto}/imagenes`, fd);
+    }
 
     location.href = "index.html";
 }
+
+
+
+

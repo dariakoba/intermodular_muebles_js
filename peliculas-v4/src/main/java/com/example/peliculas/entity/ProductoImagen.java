@@ -5,7 +5,7 @@ public class ProductoImagen {
 	private Integer productoId;
 	private String url;
 	public ProductoImagen(Integer id, Integer productoId, String url) {
-		super();
+		
 		this.id = id;
 		this.productoId = productoId;
 		this.url = url;

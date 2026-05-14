@@ -110,6 +110,31 @@ nav.menu a:hover { color: #1abc9c; }
   flex-direction: column;
 }
 
+.imagenes-section {
+  margin-bottom: 24px;
+}
+
+.imagenes {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.imagenes img {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.imagenes img:hover {
+  transform: scale(1.05);
+}
+
 .label {
   font-size: 0.75rem;
   text-transform: uppercase;
@@ -204,6 +229,11 @@ nav.menu a:hover { color: #1abc9c; }
   <div class="product-card">
 
     <div class="product-title" id="nombre">Producto</div>
+	
+	<div class="imagenes-section">
+	  <div class="label">Imágenes del producto</div>
+	  <div class="imagenes" id="imagenes"></div>
+	</div>
 
     <div class="product-grid">
       <div class="product-item">

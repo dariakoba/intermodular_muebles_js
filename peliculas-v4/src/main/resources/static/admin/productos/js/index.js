@@ -21,11 +21,11 @@ function render(productos) {
             <td><input type="checkbox" class="check-fila" data-id="${p.id_producto}"></td>
 			<td>${e(p.id_producto)}</td>
             <td>${e(p.nombre)}</td>
-            <td>${e(p.color)}</td>
+           
             <td>${e(p.precio)}€</td>
             <td>${e(p.stock)}</td>
 			<td>${e(p.estado)}</td>
-            <td>${e(p.categoria_nombre || "-")}</td>
+            <td>${e(p.categoria || "-")}</td>
             <td class="acciones">
                 <a href="show.html?id=${p.id_producto}" class="btn-ver">Ver</a>
                 <a href="edit.html?id=${p.id_producto}" class="btn-editar">Editar</a>

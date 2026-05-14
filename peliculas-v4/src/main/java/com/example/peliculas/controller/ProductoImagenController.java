@@ -1,11 +1,13 @@
 package com.example.peliculas.controller;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,14 +15,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.peliculas.dto.ProductoCatNomDetalle;
 import com.example.peliculas.entity.Producto;
+import com.example.peliculas.entity.ProductoImagen;
 import com.example.peliculas.helper.StorageHelper;
 
 import com.example.peliculas.exception.DataAccessException;
+import com.example.peliculas.repository.ProductoImagenRepository;
 import com.example.peliculas.repository.ProductoRepository;
+import com.example.peliculas.validation.ImageValidator;
 
 
 
@@ -36,89 +45,55 @@ public class ProductoImagenController {
 
 	    }
 	    
-	    @GetMapping
-	    public List<ProductoCatNomDetalle> index() throws SQLException {
-	        try (Connection con = ds.getConnection()) {
-	            ProductoRepository repo = new ProductoRepository(con);
-	            return repo.findDetalleCategoria();
-	        } catch (SQLException e) {
-	            throw new DataAccessException(e);
-	        }
-	    }
 	    
-	    @PutMapping("/{id}/desactivar")
-	    public void desactivar(@PathVariable int id) {
-	        try (Connection con = ds.getConnection()) {
-	            ProductoRepository repo = new ProductoRepository(con);
-	            repo.softDelete(id);
-	        } catch (SQLException e) {
-	            throw new DataAccessException(e);
-	        }
-	    }
-	    
-	    @PutMapping("/{id}/activar")
-	    public void activar(@PathVariable int id) {
-	        try (Connection con = ds.getConnection()) {
-	            ProductoRepository repo = new ProductoRepository(con);
-	            repo.softDeleteActivar(id);
-	        } catch (SQLException e) {
-	            throw new DataAccessException(e);
-	        }
-	    }
-	    /*
-	     * antiguo sin nombre categoria
-	    @GetMapping
-	    public List<Producto> index() throws SQLException {
-	        try (Connection con = ds.getConnection()) {
-	            ProductoRepository repo = new ProductoRepository(con);
-	            return repo.findAll();
-	        } catch (SQLException e) {
-	            throw new DataAccessException(e);
-	        }
-	    }
-		*/
-		
-	    @GetMapping("/{id}")
-	    public Producto show(@PathVariable int id) {
-	        try (Connection con = ds.getConnection()) {
-	            ProductoRepository repo = new ProductoRepository(con);
-	            return repo.find(id);
-	        } catch (SQLException e) {
-	            throw new DataAccessException(e);
-	        }
-	    }
+	  
+		// CREATE
+		@PostMapping
+		@ResponseStatus(HttpStatus.CREATED)
+		public ProductoImagen store(@PathVariable int productoId, @RequestParam("file") MultipartFile file) {
 
-	    @PostMapping
-	    public Producto store(@RequestBody Producto producto) {
-	        try (Connection con = ds.getConnection()) {
-	            ProductoRepository repo = new ProductoRepository(con);
-	            repo.insert(producto);
-	            return producto;
-	        } catch (SQLException e) {
-	            throw new DataAccessException(e);
-	        }
-	    }
+			try (Connection con = ds.getConnection()) {
 
-	    @PutMapping("/{id}")
-	    public Producto update(@PathVariable int id, @RequestBody Producto producto) {
-	        System.out.println(producto);
-	        try (Connection con = ds.getConnection()) {
-	            ProductoRepository repo = new ProductoRepository(con);
-	            producto.setIdProducto(id);
-	            repo.update(producto);
-	            return producto;
-	        } catch (SQLException e) {
-	            throw new DataAccessException(e);
-	        }
-	    }
+				// validar existencia
+				new ProductoRepository(con).findOrThrow(productoId);
+				
+				ImageValidator.validate(file);
 
-	    @DeleteMapping("/{id}")
-	    public void destroy(@PathVariable int id) {
-	        try (Connection con = ds.getConnection()) {
-	            ProductoRepository repo = new ProductoRepository(con);
-	            repo.delete(id);
-	        } catch (SQLException e) {
-	            throw new DataAccessException(e);
-	        }
-	    }
+				String url = storage.save(file, "productos");
+
+				ProductoImagenRepository repo = new ProductoImagenRepository(con);
+
+				ProductoImagen img = new ProductoImagen(null, productoId, url);
+
+				return repo.insert(img);
+
+			} catch (SQLException e) {
+				throw new DataAccessException(e);
+			} catch (IOException e) {
+				throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}
+
+	 
+		//delete
+		@DeleteMapping("/{id}")
+		public void delete(@PathVariable int id) {
+
+			try (Connection con = ds.getConnection()) {
+
+				ProductoImagenRepository repo = new ProductoImagenRepository(con);
+
+				// opcional: obtener url antes de borrar(porsiacaso)
+				ProductoImagen img = repo.find(id);
+
+				repo.delete(id);
+
+				if (img != null && img.getUrl() != null) {
+					storage.deleteByUrl(img.getUrl());
+				}
+
+			} catch (SQLException e) {
+				throw new DataAccessException(e);
+			}
+		}
 }
