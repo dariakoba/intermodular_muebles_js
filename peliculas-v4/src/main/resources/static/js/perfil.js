@@ -163,3 +163,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 });
+
+function openModal(url) {
+    const modal = document.getElementById("imageModal");
+    const img = document.getElementById("modalImg");
+
+    img.src = url;
+    modal.style.display = "flex";
+}
+
+function closeModal() {
+    document.getElementById("imageModal").style.display = "none";
+}

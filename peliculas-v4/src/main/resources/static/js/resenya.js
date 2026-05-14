@@ -69,7 +69,7 @@ async function cargarResenyas(id) {
                                     <img src="${img.url}" 
                                          alt="Foto de reseña" 
                                          style="width: 120px; height: 90px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; cursor: pointer;"
-                                         onclick="window.location.href='imagen.html?url=${img.url}'">
+                                         onclick="mostrarImagen('${img.url}')">
                                 `).join("")}
                             </div>`;
                     }
@@ -282,6 +282,21 @@ function showLocalPreview() {
     preview.style.display = "block";
 }
 
+function mostrarImagen(url) {
+    const modal = document.getElementById("imageModal");
+    const img = document.getElementById("modalImg");
+
+    img.src = url;
+    modal.style.display = "flex";
+}
+
+function cerrarImagen() {
+    document.getElementById("imageModal").style.display = "none";
+}
+
+// IMPORTANTE
+window.mostrarImagen = mostrarImagen;
+window.cerrarImagen = cerrarImagen;
 // EXPOSICIÓN GLOBAL (CRÍTICO PARA onclick)
 // Esto asegura que aunque el script sea de tipo módulo, el HTML pueda llamar a la función.
 window.eliminarResenya = eliminarResenya;
