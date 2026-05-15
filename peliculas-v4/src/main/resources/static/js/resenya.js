@@ -193,11 +193,17 @@ function configurarFormulario(idProducto) {
         try {
             // 1. DATOS - Usamos los nombres exactos que espera tu Entity/DTO
 			// En resenya.js, dentro de configurarFormulario:
+			const comentario = form.comentario.value.trim();
+
+			if (!comentario) {
+			    alert("Debes escribir una reseña.");
+			    return;
+			}
+
 			const data = {
-			    id_producto: parseInt(idProducto), // Asegúrate que sea id_producto para que Java lo entienda
+			    id_producto: parseInt(idProducto),
 			    puntuacion: parseInt(form.puntuacion.value),
-			    comentario: form.comentario.value
-			    // quitamos usuarioId de aquí, es más seguro
+			    comentario: comentario
 			};
 
             // 2. CREAR RESEÑA
@@ -226,30 +232,49 @@ function configurarFormulario(idProducto) {
             }
 
             // 4. SUBIR IMAGEN (Solo si hay archivo seleccionado)
-            const fileInput = document.getElementById("file");
-            if (fileInput && fileInput.files[0]) {
-                const formData = new FormData();
-                formData.append("file", fileInput.files[0]);
+			// 4. SUBIR HASTA 5 IMÁGENES
+			const fileInput = document.getElementById("file");
 
-                // CORRECCIÓN: URL con 'y' para que coincida con la whitelist del backend
-                const uploadRes = await fetch("/api/uploads/resenyas", {
-                    method: "POST",
-                    body: formData
-                });
+			if (fileInput && fileInput.files.length > 0) {
 
-                if (!uploadRes.ok) throw new Error("Error al subir el archivo físico.");
-                
-                const uploadData = await uploadRes.json();
+			    const files = Array.from(fileInput.files);
 
-                // 5. VINCULAR IMAGEN
-                const linkRes = await fetch(`/api/resenyas/${idNuevaResena}/imagenes`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ url: uploadData.url })
-                });
+			    if (files.length > 5) {
+			        alert("Solo puedes subir máximo 5 imágenes.");
+			        return;
+			    }
 
-                if (!linkRes.ok) throw new Error("Error al vincular la imagen en la base de datos.");
-            }
+			    for (const file of files) {
+
+			        const formData = new FormData();
+			        formData.append("file", file);
+
+			        const uploadRes = await fetch("/api/uploads/resenyas", {
+			            method: "POST",
+			            body: formData
+			        });
+
+			        if (!uploadRes.ok) {
+			            throw new Error("Error al subir una imagen.");
+			        }
+
+			        const uploadData = await uploadRes.json();
+
+			        const linkRes = await fetch(`/api/resenyas/${idNuevaResena}/imagenes`, {
+			            method: "POST",
+			            headers: {
+			                "Content-Type": "application/json"
+			            },
+			            body: JSON.stringify({
+			                url: uploadData.url
+			            })
+			        });
+
+			        if (!linkRes.ok) {
+			            throw new Error("Error al guardar imagen en BD.");
+			        }
+			    }
+			}
 
             alert("¡Reseña publicada con éxito!");
             window.location.reload();
@@ -267,19 +292,37 @@ function configurarFormulario(idProducto) {
  * Función de preview segura
  */
 function showLocalPreview() {
-    const fileInput = document.getElementById("file");
-    const preview = document.getElementById("preview");
-    if (!preview) return; // Protección contra null
 
-    const file = fileInput.files[0];
-    if (!file) {
-        preview.style.display = "none";
-        preview.src = "";
+    const fileInput = document.getElementById("file");
+    const previewContainer = document.getElementById("preview-container");
+
+    previewContainer.innerHTML = "";
+
+    const files = fileInput.files;
+
+    if (!files || files.length === 0) return;
+
+    if (files.length > 5) {
+        alert("Solo puedes subir máximo 5 imágenes.");
+        fileInput.value = "";
         return;
     }
 
-    preview.src = URL.createObjectURL(file);
-    preview.style.display = "block";
+    Array.from(files).forEach(file => {
+
+        const img = document.createElement("img");
+
+        img.src = URL.createObjectURL(file);
+
+        img.style.width = "120px";
+        img.style.height = "90px";
+        img.style.objectFit = "cover";
+        img.style.borderRadius = "10px";
+        img.style.border = "2px solid #ae4010";
+        img.style.marginTop = "10px";
+
+        previewContainer.appendChild(img);
+    });
 }
 
 function mostrarImagen(url) {
