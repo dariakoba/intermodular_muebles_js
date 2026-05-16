@@ -36,6 +36,7 @@ public class ProductoImagenRepository extends BaseRepository<ProductoImagen> {
 		// TODO Auto-generated method stub
 		return "producto_imagenes";
 	}
+	@Override
 	public String getPrimaryKeyName() {
 		return "id";
 	}

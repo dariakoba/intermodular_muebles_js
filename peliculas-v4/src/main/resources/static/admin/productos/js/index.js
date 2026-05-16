@@ -24,24 +24,45 @@ function render(productos) {
            
             <td>${e(p.precio)}€</td>
             <td>${e(p.stock)}</td>
-			<td>${e(p.estado)}</td>
-            <td>${e(p.categoria || "-")}</td>
-            <td class="acciones">
-                <a href="show.html?id=${p.id_producto}" class="btn-ver">Ver</a>
-                <a href="edit.html?id=${p.id_producto}" class="btn-editar">Editar</a>
-				
-				
-				
-				${
-				    p.estado === "activo"
-				        ? `<button class="btn-desactivar" onclick="desactivarProducto(${p.id_producto})">
-				                Desactivar
-				           </button>`
-				        : `<button class="btn-activar" onclick="activarProducto(${p.id_producto})">
-				                Activar
-				           </button>`
-				}
-            </td>
+			<td>
+			  ${
+			    p.estado === "activo"
+			      ? `<span class="badge badge-activo">Activo</span>`
+			      : `<span class="badge badge-inactivo">Inactivo</span>`
+			  }
+			</td>            <td>${e(p.categoria || "-")}</td>
+			<td>
+			  <div class="acciones">
+
+			    <a href="show.html?id=${p.id_producto}" class="btn-ver" title="Ver detalles">
+						<i class="fa-solid fa-eye"></i>
+			    </a>
+
+			    <a href="edit.html?id=${p.id_producto}" class="btn-editar" title="Editar producto">
+					<i class="fa-solid fa-pen"></i>
+			    </a>
+
+			    ${
+			      p.estado === "activo"
+			        ? `
+			          <button class="btn-desactivar"
+			                  onclick="desactivarProducto(${p.id_producto})"
+			                  title="Desactivar producto">
+			            <span class="material-symbols-outlined">block</span>
+			          </button>
+			        `
+			        : `
+			          <button class="btn-activar"
+			                  onclick="activarProducto(${p.id_producto})"
+			                  title="Activar producto">
+			            <span class="material-symbols-outlined">check_circle</span>
+			          </button>
+			        `
+			    }
+
+			  </div>
+			</td>
+			
         </tr>
     `).join("");
 }
@@ -73,24 +94,7 @@ async function activarProducto(id) {
         alert("Error al activar producto");
     }
 }
-/*
-borrado de producto
-async function borrarProducto(id) {
-    if (!confirm("¿Seguro que quieres eliminar este producto?")) return;
 
-    try {
-        await api.delete(`/api/admin/productos/${id}`);
-
-        // Recargar lista completa
-        const productos = await api.get("/api/admin/productos");
-        render(productos);
-
-    } catch (err) {
-        console.error(err);
-        alert("Error al eliminar producto");
-    }
-}
-*/
 function bindEvents() {
     const tabla = document.getElementById("tabla-productos");
     //bind(tabla, "click", onAction);
@@ -129,20 +133,6 @@ function bindEvents() {
     });
 }
 
-/*
-async function onAction(e) {
-    const el = e.target.closest("[data-action]");
-    if (!el) return;
 
-    const action = el.dataset.action;
-    const id = Number(el.dataset.id);
-
-    if (action === "eliminar") {
-        if (!confirm("¿Eliminar este producto?")) return;
-        await api.delete(`/api/admin/productos/${id}`);
-        el.closest("tr").remove();
-    }
-}
-*/
 window.desactivarProducto = desactivarProducto;
 window.activarProducto = activarProducto;

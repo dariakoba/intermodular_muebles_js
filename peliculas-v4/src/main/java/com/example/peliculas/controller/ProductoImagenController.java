@@ -93,6 +93,8 @@ public class ProductoImagenController {
 				}
 
 			} catch (SQLException e) {
+				e.printStackTrace();
+			 
 				throw new DataAccessException(e);
 			}
 		}

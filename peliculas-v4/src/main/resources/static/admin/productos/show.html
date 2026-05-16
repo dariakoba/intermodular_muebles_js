@@ -159,6 +159,58 @@ nav.menu a:hover { color: #1abc9c; }
   line-height: 1.5;
 }
 
+
+/* imagen sección */
+.imagen-principal-wrapper {
+    margin-bottom: 20px;
+}
+
+#imagen-principal {
+    width: 300px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.galeria {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.galeria img {
+    border-radius: 8px;
+}
+
+/* MODAL */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.85);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-img {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 12px;
+}
+
+.cerrar-modal {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: white;
+    font-size: 40px;
+    cursor: pointer;
+}
+
 /* BOTONES */
 .actions {
   margin-top: 30px;
@@ -230,10 +282,7 @@ nav.menu a:hover { color: #1abc9c; }
 
     <div class="product-title" id="nombre">Producto</div>
 	
-	<div class="imagenes-section">
-	  <div class="label">Imágenes del producto</div>
-	  <div class="imagenes" id="imagenes"></div>
-	</div>
+	
 
     <div class="product-grid">
       <div class="product-item">
@@ -272,6 +321,14 @@ nav.menu a:hover { color: #1abc9c; }
       <div class="label">Descripción</div>
       <div class="value" id="descripcion"></div>
     </div>
+	</br>
+	<!-- IMAGEN PRINCIPAL -->
+	<div class="imagen-principal-wrapper">
+		<div class="label">Imagenes</div>
+	  	<img id="imagen-principal" style="display:none;">
+	</div>
+
+	
     
    
     <div class="actions">
@@ -281,6 +338,14 @@ nav.menu a:hover { color: #1abc9c; }
 
   </div>
 </div>
-<script src="js/show.js"></script>
-</body>
+<!-- GALERÍA -->
+	<div class="galeria" id="galeria"></div>
+	<div id="modal" class="modal">
+
+	    <span id="cerrar-modal" class="cerrar-modal">&times;</span>
+
+	    <img id="modal-img" class="modal-img">
+
+	</div>
+<script type="module" src="js/show.js"></script></body>
 </html>
