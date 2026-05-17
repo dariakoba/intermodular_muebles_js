@@ -12,7 +12,7 @@ public class ProductoImagenMapper implements RowMapper<ProductoImagen>{
 		// TODO Auto-generated method stub
 		return new ProductoImagen(
 				rs.getInt("id"),
-				rs.getInt("director_id"), 
+				rs.getInt("producto_id"), 
 				rs.getString("url")
 		);
 	}

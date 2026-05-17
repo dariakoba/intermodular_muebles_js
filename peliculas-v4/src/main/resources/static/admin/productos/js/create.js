@@ -75,7 +75,7 @@ async function guardar(e) {
         await api.post(`/api/admin/productos/${producto.id_producto}/imagenes`, fd);
     }
 
-    location.href = "index.html";
+    //location.href = "index.html";
 }
 
 
