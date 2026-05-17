@@ -1,6 +1,8 @@
 package com.example.peliculas.dto;
 
 import com.example.peliculas.entity.Categoria;
+import java.util.List;
+
 
 public record ProductoDetalle(
         int idProducto,
@@ -9,7 +11,8 @@ public record ProductoDetalle(
         float precio,
         int stock,
         String descripcion,
-        String categoriaId
+        int categoriaId,
+    	List<ImagenResponse> imagenes
 ) {}
 
 

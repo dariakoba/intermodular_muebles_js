@@ -4,12 +4,18 @@ import java.sql.SQLException;
 import java.util.List;
 import javax.sql.DataSource;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
 
+import com.example.peliculas.dto.ImagenResponse;
 import com.example.peliculas.dto.ProductoCatNomDetalle;
+import com.example.peliculas.dto.ProductoDetalle;
+import com.example.peliculas.dto.ProductoRequest;
+import com.example.peliculas.dto.ProductoResumen;
 import com.example.peliculas.entity.Categoria;
 import com.example.peliculas.entity.Producto;
 import com.example.peliculas.exception.DataAccessException;
 import com.example.peliculas.repository.CategoriaRepository;
+import com.example.peliculas.repository.ProductoImagenRepository;
 import com.example.peliculas.repository.ProductoRepository;
 
 @RestController
@@ -22,15 +28,18 @@ public class ProductoAdminController {
         this.ds = ds;
     }
     
-    @GetMapping
-    public List<ProductoCatNomDetalle> index() throws SQLException {
-        try (Connection con = ds.getConnection()) {
-            ProductoRepository repo = new ProductoRepository(con);
-            return repo.findDetalleCategoria();
-        } catch (SQLException e) {
-            throw new DataAccessException(e);
-        }
-    }
+	// INDEX 
+	@GetMapping
+	public List<ProductoResumen> index() {
+
+		try (Connection con = ds.getConnection();) {
+			ProductoRepository repo = new ProductoRepository(con);
+			return repo.findAllResumenNoImagen();
+
+		} catch (SQLException e) {
+			throw new DataAccessException(e);
+		}
+	}
     
     @PutMapping("/{id}/desactivar")
     public void desactivar(@PathVariable int id) {
@@ -62,7 +71,7 @@ public class ProductoAdminController {
             throw new DataAccessException(e);
         }
     }
-	*/
+	
 	
     @GetMapping("/{id}")
     public Producto show(@PathVariable int id) {
@@ -73,13 +82,46 @@ public class ProductoAdminController {
             throw new DataAccessException(e);
         }
     }
+	*/
+    
+	// SHOW
+	@GetMapping("/{id}")
+	public ProductoDetalle show(@PathVariable int id) {
 
+		try (Connection con = ds.getConnection();) {
+			ProductoRepository repo = new ProductoRepository(con);
+			ProductoImagenRepository imgRepo = new ProductoImagenRepository(con);
+
+			Producto p = repo.findOrThrow(id);
+			List<ImagenResponse> imagenes = imgRepo.findByProductoId(id);
+			
+			return new ProductoDetalle(
+				p.getIdProducto(), 
+				p.getNombre(), 
+				p.getColor(),
+				p.getPrecio(),
+				p.getStock(),
+				p.getDescripcion(),
+				p.getCategoriaId(),
+				imagenes
+			);
+
+		} catch (SQLException e) {
+			throw new DataAccessException(e);
+		}
+	}
+
+
+	//crear producto 
     @PostMapping
-    public Producto store(@RequestBody Producto producto) {
+	@ResponseStatus(HttpStatus.CREATED)
+    public Producto store(@RequestBody ProductoRequest req) {
         try (Connection con = ds.getConnection()) {
-            ProductoRepository repo = new ProductoRepository(con);
-            repo.insert(producto);
-            return producto;
+			ProductoRepository repo = new ProductoRepository(con);
+			Producto p = new Producto(null, req.nombre(), req.color(), req.precio(), req.stock()
+					, req.descripcion(), req.categoriaId(), req.deletedAt());
+			return repo.insert(p);
+
         } catch (SQLException e) {
             throw new DataAccessException(e);
         }

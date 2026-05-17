@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <title>Admin – Productos</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -132,62 +133,97 @@ main.admin-wrapper {
 #btn-eliminar-seleccionados { background: #c0392b; color: #fff; box-shadow: 0 4px 12px rgba(192,57,43,0.3); }
 #btn-eliminar-seleccionados:hover { background: #a93226; transform: translateY(-2px); }
 
+.badge {
+  padding: 4px 12px;
+  border-radius: 15px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  display: inline-block;
+}
+
+.badge-activo {
+  background: #eafaf1;
+  color: #1e8449;
+}
+
+.badge-inactivo {
+  background: #fdecea;
+  color: #c0392b;
+}
+
+
+
+/* --- BOTONES DE ACCIÓN (ICONOS CENTRADOS) --- */
+.acciones {
+    display: flex;
+    gap: 8px;
+    justify-content: center; /* CENTRADO HORIZONTAL */
+    align-items: center;    /* CENTRADO VERTICAL */
+}
+.acciones i {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.btn-ver, .btn-editar, .btn-activar, .btn-desactivar {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+	
+    transition: all 0.2s ease;
+    font-size: 1rem;
+    text-decoration: none;
+}
+
+.btn-ver { background: #e8f4f5; color: #1abc9c; }
+.btn-ver:hover { background: #1abc9c; color: #fff; }
+
+.btn-editar { background: #fef3e2; color: #f39c12; }
+.btn-editar:hover { background: #f39c12; color: #fff; }
+
+.btn-activar { background: #eafaf1; color: #2ecc71; }
+.btn-activar:hover { background: #2ecc71; color: #fff; }
+
+.btn-desactivar { background: #fdecea; color: #c0392b; }
+.btn-desactivar:hover { background: #c0392b; color: #fff; }
+
+
+/* --- Tabla (CENTRADOS TODOS LOS CAMPOS) --- */
 .tabla-wrapper {
   background: #fff;
   border-radius: 12px;
-  overflow: auto;
+  overflow: hidden;
   box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-  transition: transform 0.2s;
   margin-top: 12px;
 }
-.tabla-wrapper:hover { transform: translateY(-2px); }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: auto;
+table { 
+  width: 100%; 
+  border-collapse: collapse; 
+  table-layout: auto; /* Permite que las columnas se ajusten orgánicamente */
 }
 
 thead th {
   padding: 14px 12px;
-  font-size: 0.88rem;
-  font-weight: 700;
-  letter-spacing: 1.5px;
+  font-size: 0.85rem;
   text-transform: uppercase;
-  text-align: left;
   background: #1a1a1a;
   color: #fff;
   border-bottom: 2px solid #1abc9c;
+  text-align: center; /* CENTRADO DE CABECERAS */
 }
 
-th:first-child, td:first-child {
-  width: 40px;
-  text-align: center;
-}
-
-tbody tr {
-  border-bottom: 1px solid #f0ede8;
-  transition: background 0.25s;
-  cursor: pointer;
-}
-
-thead th:last-child {
-  width: 180px;
-}
-
-tbody tr:last-child {
-  border-bottom: none;
-}
-
-tbody tr:hover {
-  background: #f7f7f7;
-}
-
-tbody td {
-  padding: 12px 10px;
-  font-size: 0.94rem;
+tbody td { 
+  padding: 14px 10px; 
+  vertical-align: middle; 
+  text-align: center; /* CENTRADO DE CONTENIDO */
   color: #333;
-  vertical-align: middle;
 }
 
 /* --- Botones Ver, Editar, Borrar --- */
@@ -212,15 +248,17 @@ tbody td {
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
-.btn-ver { background: #e8f4f5; color: #2a9aa6; }
-.btn-editar { background: #fef3e2; color: #c07a00; }
-.btn-desactivar { background: #fdecea; color: #c0392b; }
-.btn-activar { background: #fdecea; color: #c0392b; }
+.btn-ver { background: #e8f4f5; color: #1abc9c; }
+.btn-ver:hover { background: #1abc9c; color: #fff; }
 
-.btn-ver:hover, .btn-editar:hover, .btn-dsactivar:hover, .btn-activar:hover {
-  opacity: 0.85;
-  transform: translateY(-1px);
-}
+.btn-editar { background: #fef3e2; color: #f39c12; }
+.btn-editar:hover { background: #f39c12; color: #fff; }
+
+.btn-activar { background: #eafaf1; color: #2ecc71; }
+.btn-activar:hover { background: #2ecc71; color: #fff; }
+
+.btn-desactivar { background: #fdecea; color: #c0392b; }
+.btn-desactivar:hover { background: #c0392b; color: #fff; }
 
 /* --- Responsive --- */
 @media (max-width: 992px) {
@@ -291,7 +329,7 @@ tbody td {
           <th><input type="checkbox" id="check-all"></th>
           <th>ID</th>
           <th>Nombre</th>
-          <th>Color</th>
+          
           <th>Precio</th>
           <th>Stock</th>
 		  <th>Estado</th>
