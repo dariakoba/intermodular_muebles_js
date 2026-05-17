@@ -9,9 +9,7 @@
 
 <style>
 	/* --- RESET --- */
-	*,
-	*::before,
-	*::after {
+	*, *::before, *::after {
 	  box-sizing: border-box;
 	  margin: 0;
 	  padding: 0;
@@ -23,17 +21,18 @@
 	  background: #fdfbf6;
 	  color: #222;
 	  min-height: 100vh;
-	  margin: 0;          /* importante eliminar margen por defecto */
+	  padding-top: 64px;
 	}
 
-	.topbar {
+	/* --- NAVBAR --- */
+	.navbar {
 	  display: flex;
 	  align-items: center;
 	  justify-content: space-between;
 	  padding: 0 40px;
 	  height: 64px;
 	  background: linear-gradient(90deg, #1a1a1a, #2c2c2c);
-	  position: fixed;       /* fijamos completamente arriba */
+	  position: fixed;
 	  top: 0;
 	  left: 0;
 	  right: 0;
@@ -41,79 +40,94 @@
 	  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 	}
 
-	body .edit-container {
-	  margin-top: 80px; /* deja espacio suficiente para header fijo */
-	}
-
-	.topbar .logo {
+	/* --- LOGO --- */
+	.logo-link {
 	  display: flex;
 	  align-items: center;
-	  gap: 12px;
-	  color: #fff;
-	  font-family: 'Playfair Display', serif;
-	  font-size: 1.6rem;
-	  font-weight: 700;
-	  letter-spacing: 2px;
 	  text-decoration: none;
 	}
 
-	.topbar .logo img {
+	.logo-container {
+	  display: flex;
+	  align-items: center;
+	  gap: 10px;
+	}
+
+	.logo-circle {
+	  width: 40px;
 	  height: 40px;
+	  border-radius: 50%;
+	  overflow: hidden;
+	}
+
+	.logo-image {
+	  width: 100%;
+	  height: 100%;
 	  object-fit: contain;
 	}
 
-	.menu {
-	  display: flex;
-	  gap: 28px;
+	.brand-name {
+	  color: #fff;
+	  font-size: 1.4rem;
+	  font-weight: 700;
+	  letter-spacing: 1px;
 	}
 
-	.menu a {
+	/* --- NAV LINKS --- */
+	.nav-links {
+	  display: flex;
+	  gap: 28px;
+	  position: absolute;
+	  left: 50%;
+	  transform: translateX(-50%);
+	}
+
+	.nav-links a {
 	  color: #ddd;
 	  text-decoration: none;
 	  font-size: 0.9rem;
 	  letter-spacing: 1px;
 	  text-transform: uppercase;
-	  transition: all 0.3s ease;
 	}
 
-	.menu a:hover {
+	.nav-links a:hover {
 	  color: #1abc9c;
 	  transform: translateY(-2px);
 	}
 
+	/* --- ICONOS --- */
 	.icons {
 	  display: flex;
 	  align-items: center;
 	  gap: 18px;
+	}
+
+	.material-symbols-outlined {
+	  font-size: 26px;
 	  color: #fff;
-	  position: relative;
 	  cursor: pointer;
+	  transition: 0.2s;
 	}
 
-	.icons .material-symbols-outlined {
-	  font-size: 28px;
-	  transition: color 0.3s ease, transform 0.2s ease;
-	}
-
-	.icons:hover .material-symbols-outlined {
+	#person-icon:hover {
 	  color: #1abc9c;
-	  transform: scale(1.2);
+	  transform: scale(1.1);
 	}
 
-	/* --- PERSON MENU --- */
-	.person-menu-wrapper { position: relative; }
+	/* --- DROPDOWN --- */
+	.person-menu-wrapper {
+	  position: relative;
+	}
 
 	.person-menu {
 	  display: none;
 	  position: absolute;
 	  right: 0;
-	  top: 44px;
+	  top: 100%;
 	  background: #fff;
 	  border-radius: 8px;
 	  min-width: 160px;
-	  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-	  overflow: hidden;
-	  z-index: 50;
+	  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 	}
 
 	.person-menu-wrapper:hover .person-menu {
@@ -122,31 +136,15 @@
 
 	.person-menu a {
 	  display: block;
-	  padding: 12px 18px;
-	  font-size: 0.88rem;
+	  padding: 10px 12px;
 	  color: #333;
 	  text-decoration: none;
-	  transition: background 0.2s;
 	}
 
 	.person-menu a:hover {
-	  background: #f0f0f0;
+	  background: #f2f2f2;
 	}
 
-/* TOPBAR */
-.topbar {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:0 40px;
-  height:64px;
-  position:fixed;
-  top:0;
-  left:0;
-  right:0;
-  background:linear-gradient(90deg,#1a1a1a,#2c2c2c);
-  color:white;
-}
 
 /* CONTAINER */
 .edit-container {
@@ -265,27 +263,41 @@ input, select, textarea {
 
 <body>
 	
-	<header class="topbar">
-	  <a href="home.html" class="logo">
-	    <img src="/images/logo.png" alt="Logo">
-	    DNA
-	  </a>
+	<!-- Header / Navbar -->
+		<header class="navbar">
+			<a href="home.html" class="logo-link">
+				<div class="logo-container">
+					<div class="logo-circle">
+						<img src="/images/logo.png" alt="DNA Logo" class="logo-image">
+					</div>
+					<span class="brand-name">DNA</span>
+				</div>
+			</a>
 
-	  <nav class="menu">
-	    <a href="../../adminhome.html">Home</a>
-	    <a href="index.html">Usuarios</a>
-	    <a href="../productos/index.html">Productos</a>
-	    <a href="../pedidos/index.html">Pedidos</a>
-	  </nav>
 
-	  <div class="icons person-menu-wrapper">
-	    <span class="material-symbols-outlined">account_circle</span>
-	    <div class="person-menu">
-	      <a href="#">Perfil</a>
-	      <a href="#" id="logoutBtn">Salir</a>
-	    </div>
-	  </div>
-	</header>
+			<nav class="nav-links">
+				<a href="/adminhome.html">Home</a>
+				<a href="/admin/usuarios/index.html">Usuarios</a>
+				<a href="/admin/productos/index.html">Productos</a>
+				<a href="pedidoAdmin.html">Pedidos</a>
+				<a href="/admin/categorias/index.html">Categorías</a>
+				<a href="/admin/resenyas/index.html">Reseñas</a>
+
+
+		    </nav>
+
+			
+
+			<div class="icons">
+			    <div class="person-menu-wrapper">
+			        <span id="person-icon" class="material-symbols-outlined" style="cursor: pointer;">person</span>
+
+			        <div class="person-menu">
+			            <a href="#" id="logoutBtn">Cerrar sesión</a>
+			        </div>
+			    </div>
+			</div>
+		</header>
 
 	
 	<main class="edit-container">
@@ -340,6 +352,50 @@ input, select, textarea {
 	</div>
 	
 	<script type="module" src="js/edit.js"></script>
+	<script>
+		document.addEventListener("DOMContentLoaded", () => {
+		    const icon = document.getElementById("person-icon");
+		    const menu = document.querySelector(".person-menu");
+		    const logoutBtn = document.getElementById("logoutBtn");
 
+		    if (icon && menu) {
+		        icon.addEventListener("click", (e) => {
+		            e.stopPropagation();
+		            menu.classList.toggle("show");
+		        });
+
+		        document.addEventListener("click", () => {
+		            menu.classList.remove("show");
+		        });
+		    }
+
+		    if (logoutBtn) {
+		        logoutBtn.addEventListener("click", async (e) => {
+		            e.preventDefault();
+
+		            if (!confirm("¿Estás seguro de que quieres cerrar sesión?")) return;
+
+		            try {
+		                const res = await fetch("/logout", {   
+		                    method: "POST",
+		                    credentials: "include"
+		                });
+
+		                localStorage.clear();
+		                sessionStorage.clear();
+
+		                window.location.href = "/../../login.html";
+
+		            } catch (err) {
+		                console.error("Error al cerrar sesión:", err);
+		                // En caso de error de red, forzamos la salida al login
+		                window.location.href = "/../../login.html";
+		            }
+		        });
+		    }
+		});
+		
+
+	</script>
 </body>
 </html>

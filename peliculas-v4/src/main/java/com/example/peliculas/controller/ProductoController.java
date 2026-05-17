@@ -11,12 +11,8 @@ import javax.sql.DataSource;
 
 import org.springframework.web.bind.annotation.*;
 
-import com.example.peliculas.dto.ProductoDetalle;
-import com.example.peliculas.dto.ProductoResumen;
 import com.example.peliculas.dto.ProductoResumenImagen;
-import com.example.peliculas.entity.Producto;
 import com.example.peliculas.exception.DataAccessException;
-import com.example.peliculas.repository.CategoriaRepository;
 import com.example.peliculas.repository.ProductoRepository;
 
 @RestController

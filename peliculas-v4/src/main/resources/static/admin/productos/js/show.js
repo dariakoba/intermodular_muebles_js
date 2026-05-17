@@ -19,7 +19,7 @@ app.run(async () => {
     document.getElementById("categoria").textContent = p.categoria_id;
 
     document.getElementById("color").textContent = p.color;
-
+	
     document.getElementById("precio").textContent =
         p.precio + " €";
 
@@ -28,9 +28,17 @@ app.run(async () => {
 
     document.getElementById("descripcion").textContent =
         p.descripcion;
+		
+		
 
-    document.getElementById("estado").textContent =
-        p.deleted_at ? "Inactivo" : "Activo";
+	let estado;
+		if (!p.deleted_at){
+			estado = 'Activo';
+		} else {
+			estado='Inactivo';
+		}
+	document.getElementById("estado").textContent = estado;
+		
 
     document.getElementById("btn-editar").href =
         `edit.html?id=${id}`;

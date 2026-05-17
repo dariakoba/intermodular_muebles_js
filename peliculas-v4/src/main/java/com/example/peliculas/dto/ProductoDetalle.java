@@ -1,6 +1,6 @@
 package com.example.peliculas.dto;
 
-import com.example.peliculas.entity.Categoria;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -12,6 +12,8 @@ public record ProductoDetalle(
         int stock,
         String descripcion,
         int categoriaId,
+        LocalDateTime deletedAt,
+
     	List<ImagenResponse> imagenes
 ) {}
 
