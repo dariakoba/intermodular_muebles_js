@@ -7,14 +7,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 
 import com.example.peliculas.dto.ImagenResponse;
-import com.example.peliculas.dto.ProductoCatNomDetalle;
 import com.example.peliculas.dto.ProductoDetalle;
 import com.example.peliculas.dto.ProductoRequest;
 import com.example.peliculas.dto.ProductoResumen;
-import com.example.peliculas.entity.Categoria;
 import com.example.peliculas.entity.Producto;
 import com.example.peliculas.exception.DataAccessException;
-import com.example.peliculas.repository.CategoriaRepository;
 import com.example.peliculas.repository.ProductoImagenRepository;
 import com.example.peliculas.repository.ProductoRepository;
 
@@ -60,29 +57,7 @@ public class ProductoAdminController {
             throw new DataAccessException(e);
         }
     }
-    /*
-     * antiguo sin nombre categoria
-    @GetMapping
-    public List<Producto> index() throws SQLException {
-        try (Connection con = ds.getConnection()) {
-            ProductoRepository repo = new ProductoRepository(con);
-            return repo.findAll();
-        } catch (SQLException e) {
-            throw new DataAccessException(e);
-        }
-    }
-	
-	
-    @GetMapping("/{id}")
-    public Producto show(@PathVariable int id) {
-        try (Connection con = ds.getConnection()) {
-            ProductoRepository repo = new ProductoRepository(con);
-            return repo.find(id);
-        } catch (SQLException e) {
-            throw new DataAccessException(e);
-        }
-    }
-	*/
+  
     
 	// SHOW
 	@GetMapping("/{id}")
@@ -103,6 +78,7 @@ public class ProductoAdminController {
 				p.getStock(),
 				p.getDescripcion(),
 				p.getCategoriaId(),
+				p.getDeletedAt(),
 				imagenes
 			);
 

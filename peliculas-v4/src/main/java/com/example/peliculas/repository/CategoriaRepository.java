@@ -9,11 +9,9 @@ import com.example.peliculas.exception.DataAccessException;
 import com.example.peliculas.mapper.RowMapper;
 import com.example.peliculas.mapper.CategoriaMapper;
 
-import com.example.peliculas.dto.ProductoResumen;
 import com.example.peliculas.db.DB;
 import com.example.peliculas.dto.CategoriaDetalle;
-import com.example.peliculas.dto.ProductoCatNomDetalle;
-import com.example.peliculas.dto.ProductoDetalle;
+
 
 public class CategoriaRepository extends SoftDeleteRepository<Categoria> {
 
@@ -78,7 +76,12 @@ public class CategoriaRepository extends SoftDeleteRepository<Categoria> {
 			throw new DataAccessException("Error al buscar el listado detallado de categorias", e);
 		}
 	}
+	
+	public boolean tieneProductos(int idCategoria) throws SQLException {
+	    String sql = "SELECT COUNT(*) FROM productos WHERE categoria_id = ?";
 
+	    return DB.queryOne(con, sql, rs -> rs.getInt(1) > 0, idCategoria);
+	}
 
 	
 
