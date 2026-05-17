@@ -9,8 +9,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 
 </head>
-<body>
 
+
+<body>
+<div id="imageModal" class="modal" onclick="cerrarImagen()">
+    <img id="modalImg">
+</div>
 <!-- HEADER (igual que tu topbar) -->
 <div class="topbar">
 <div class="logo">
@@ -80,11 +84,7 @@ Comprar ahora
 </div>
 </div>
 <section class="resenyas-container">
-            <h2 class="resenyas-title">Opiniones de nuestros clientes</h2>
             
-            <div id="contenedor-resenyas">
-                <p class="resenya-empty">Cargando opiniones...</p>
-            </div>
 
             <div class="form-resenya-box">
                 <h4>Comparte tu experiencia</h4>
@@ -109,7 +109,7 @@ Comprar ahora
 					    <label>Añadir fotos de tu mueble</label>
 					    
 					    <!-- Input oculto -->
-					    <input type="file" id="file" class="input-file-custom" accept="image/*" onchange="showLocalPreview()">
+					    <input type="file" id="file" class="input-file-custom" accept="image/*" multiple onchange="showLocalPreview()">
 					    
 					    <!-- Botón visual -->
 					    <label for="file" class="label-file-custom">
@@ -117,12 +117,20 @@ Comprar ahora
 					        Seleccionar imagen del dispositivo
 					    </label>
 
-					    <img id="preview" src="" alt="Preview" style="display:none; margin: 20px auto 0; width:200px; border-radius:15px; border:2px solid var(--naranja);">
+						<div id="preview-container"
+						     style="display:flex; gap:10px; flex-wrap:wrap; margin-top:15px;">
+						</div>
 					</div>
                     <button type="submit" class="btn-submit-resenya">
                         Publicar Reseña <i class="fa-solid fa-paper-plane"></i>
                     </button>
                 </form>
+            </div>
+			
+			<h2 class="resenyas-title">Opiniones de nuestros clientes</h2>
+			            
+			<div id="contenedor-resenyas">
+				<p class="resenya-empty">Cargando opiniones...</p>
             </div>
         </section>
 </div>

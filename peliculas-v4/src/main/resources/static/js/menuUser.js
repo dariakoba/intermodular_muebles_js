@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         sessionStorage.removeItem("userId");
         menu.innerHTML = `
             <a href="login.html" style="display:block; padding:12px; text-decoration:none; color:#4a3728; font-weight:bold;">Iniciar sesión</a>
-            <a href="registro.html" style="display:block; padding:12px; text-decoration:none; color:#5c4432;">Crear cuenta</a>
+            <a href="register.html" style="display:block; padding:12px; text-decoration:none; color:#5c4432;">Registrarse</a>
         `;
     }
 });

@@ -1,10 +1,15 @@
 async function logout() {
   try {
-    await fetch("/logout", {
-      method: "POST"
+    await fetch("/api/logout", {
+      method: "POST",
+      credentials: "include"
     });
 
-    window.location.href = "/login.html";
+    sessionStorage.clear();
+    localStorage.clear();
+
+    window.location.href = "/index.html";
+
   } catch (err) {
     console.error("Error al cerrar sesión:", err);
   }
