@@ -11,7 +11,7 @@ public class CarritoRequest {
     private String direccion;
     private int puntosUsados;
 
-    // --- Getters y Setters de TODO ---
+    // Getters y Setters  
 
     public Pedido getPedido() { 
         return pedido; 

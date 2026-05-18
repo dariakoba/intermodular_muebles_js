@@ -36,7 +36,6 @@ public class PedidoRepository extends BaseRepository<Pedido> {
 
     @Override
     public String[] getColumnNames() {
-        // ---> NUEVO: Añadido puntos_usados al final <---
         return new String[] { "fecha", "cliente_nombre", "total", "metodo_pago", "estado_pago", "activo", "id_usuario", "puntos_usados" };
     }
 
@@ -64,7 +63,7 @@ public class PedidoRepository extends BaseRepository<Pedido> {
             p.getEstadoPago(),
             1, // activo
             p.getIdUsuario(),
-            p.getPuntosUsados(), // ---> NUEVO <---
+            p.getPuntosUsados(), 
             p.getIdPedido() 
         };
     }

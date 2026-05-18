@@ -161,7 +161,6 @@
         </div>
     </div>
 
-
     <script>
         let pedidosOriginales = [];
         let pedidoEditandoId = null;
@@ -254,7 +253,7 @@
             const p = pedidosOriginales.find(p => p.idPedido === id);
             if (!p) return;
             
-            console.log("DATOS DEL PEDIDO CARGADOS:", p); // Chivato invisible para depurar
+            console.log("DATOS DEL PEDIDO CARGADOS:", p);
 
             document.getElementById('det-id').innerText = "#" + p.idPedido;
             document.getElementById('det-cliente').innerText = p.clienteNombre || 'Usuario Desconocido';
@@ -271,9 +270,8 @@
 
             document.getElementById('det-direccion').innerText = p.direccion || 'Dirección no registrada en la base de datos';
 
-            // ---> NUEVO: Mostrar el descuento por puntos blindado <---
             const cajaDescuento = document.getElementById('caja-descuento-admin');
-            const puntosGastados = parseInt(p.puntosUsados) || 0; // Forzamos a que sea un número
+            const puntosGastados = parseInt(p.puntosUsados) || 0;
             
             if (puntosGastados > 0) {
                 const descuentoEnEuros = puntosGastados / 100;
@@ -282,7 +280,6 @@
             } else {
                 cajaDescuento.style.display = 'none';
             }
-            // -----------------------------------------------------------
 
             const divItems = document.getElementById('det-productos');
             if (p.nombreProducto) {
@@ -451,7 +448,30 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', cargarPedidos);
+        // --- INICIALIZADOR PRINCIPAL ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Cargamos la tabla de pedidos
+            cargarPedidos();
+
+            // 2. Lógica mágica del botón de Salir
+            const btnSalir = document.getElementById('logoutBtn');
+            if (btnSalir) {
+                btnSalir.addEventListener('click', async (e) => {
+                    e.preventDefault(); 
+                    
+                    // Destruimos rastro del usuario y su carrito
+                    localStorage.removeItem('user');
+                    sessionStorage.removeItem('user');
+                    localStorage.removeItem('carrito'); 
+                    
+                    // Avisamos al servidor (si tienes configurado el /api/logout)
+                    try { await fetch('/api/logout', { method: 'POST' }); } catch (e) {}
+                    
+                    // Nos vamos a la portada
+                    window.location.href = 'index.html'; 
+                });
+            }
+        });
     </script>
 </body>
 </html>
