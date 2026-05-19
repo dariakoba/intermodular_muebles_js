@@ -8,7 +8,7 @@ function renderizarTabla(resenyas) {
     resenyas.forEach(r => {
         const id = r.id_resenya;
         const producto = r.nombre_producto || 'Mueble';
-        const idUsuario = r.usuario_id || r.usuarioId || "---";
+        const idUsuario = r.id_usuario ?? "---";
         const email = r.email_usuario || "Sin email";
         const comentario = r.comentario || '';
         const puntuacion = Number(r.puntuacion || 0);
@@ -128,3 +128,4 @@ document.addEventListener("DOMContentLoaded", () => {
     const selectPuntos = document.getElementById("filterPuntos");
     if (selectPuntos) selectPuntos.addEventListener("change", aplicarFiltros);
 });
+
