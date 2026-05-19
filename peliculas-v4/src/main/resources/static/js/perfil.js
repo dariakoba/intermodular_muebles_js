@@ -17,12 +17,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("direccion").textContent = user.direccion ?? "No definida";
         document.getElementById("puntos").textContent = (user.puntos ?? 0) + " puntos";
 
-        const imgPerfil = document.getElementById("img-perfil");
-        if (user.fotoUrl) {
-            imgPerfil.src = user.fotoUrl;
-        } else {
-            imgPerfil.src = "/images/fotoperfil/default-avatar.png"; 
-        }
+        
 
     } catch (err) {
         console.error("Error usuario:", err);
@@ -132,46 +127,5 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
-
-    // 4. LÓGICA DE SUBIDA DE FOTO
-    const fileInput = document.getElementById('file-input');
-    if (fileInput) {
-        fileInput.addEventListener('change', async function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            const formData = new FormData();
-            formData.append('file', file);
-
-            try {
-                const response = await fetch('/api/users/upload-photo', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    document.getElementById('img-perfil').src = data.fotoUrl + "?t=" + new Date().getTime();
-                    alert("Foto actualizada correctamente");
-                } else {
-                    alert("Error al subir la foto");
-                }
-            } catch (error) {
-                console.error("Error subida:", error);
-                alert("Error de conexión al subir la foto");
-            }
-        });
-    }
 });
-
-function openModal(url) {
-    const modal = document.getElementById("imageModal");
-    const img = document.getElementById("modalImg");
-
-    img.src = url;
-    modal.style.display = "flex";
-}
-
-function closeModal() {
-    document.getElementById("imageModal").style.display = "none";
-}
+    
