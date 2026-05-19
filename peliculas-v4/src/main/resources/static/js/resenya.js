@@ -11,12 +11,10 @@ document.addEventListener("DOMContentLoaded", () => {
 	    fileInput.addEventListener("change", showLocalPreview);
 	}
 	
-    if (idDesdeUrl) {
-        cargarResenyas(idDesdeUrl);
-        configurarFormulario(idDesdeUrl);
-    } else {
-        console.error("No se encontró el ID del producto en la URL (?id=X)");
-    }
+	if (idDesdeUrl) {
+	    cargarResenyas(idDesdeUrl);
+	    configurarFormulario(idDesdeUrl);
+	}
 });
 
 /**

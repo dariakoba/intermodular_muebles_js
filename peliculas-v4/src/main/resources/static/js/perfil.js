@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
-
+	let userData = null;
     // 1. CARGAR DATOS DEL USUARIO
     try {
         const res = await fetch("/api/me");
@@ -11,7 +11,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         const user = await res.json();
 
-        document.getElementById("nombre").textContent = user.nombre;
+		userData = user;
+		
+        document.getElementById("nombre").textContent = user.nombre + " " + (user.apellidos ?? "");
         document.getElementById("email").textContent = user.email;
         document.getElementById("telefono").textContent = user.telefono ?? "-";
         document.getElementById("direccion").textContent = user.direccion ?? "No definida";
@@ -75,7 +77,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (btnEdit) {
         btnEdit.addEventListener("click", () => {
-            document.getElementById("input-nombre").value = document.getElementById("nombre").textContent;
+			document.getElementById("input-nombre").value = userData.nombre;
+			document.getElementById("input-apellidos").value = userData.apellidos ?? "";
             document.getElementById("input-email").value = document.getElementById("email").textContent;
             document.getElementById("input-telefono").value = document.getElementById("telefono").textContent;
             document.getElementById("input-direccion").value = document.getElementById("direccion").textContent;
@@ -94,38 +97,77 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
-    if (btnSave) {
-        btnSave.addEventListener("click", async () => {
-            const updatedUser = {
-                nombre: document.getElementById("input-nombre").value.trim(),
-                email: document.getElementById("input-email").value.trim(),
-                telefono: document.getElementById("input-telefono").value.trim(),
-                direccion: document.getElementById("input-direccion").value.trim()
-            };
+	if (btnSave) {
+	    btnSave.addEventListener("click", async () => {
 
-            if (Object.values(updatedUser).some(val => !val)) {
-                alert("Por favor, rellena todos los campos.");
-                return;
-            }
+	        const updatedUser = {
+	            nombre: document.getElementById("input-nombre").value.trim(),
+	            apellidos: document.getElementById("input-apellidos").value.trim(),
+	            email: document.getElementById("input-email").value.trim(),
+	            telefono: document.getElementById("input-telefono").value.trim(),
+	            direccion: document.getElementById("input-direccion").value.trim()
+	        };
 
-            try {
-                const res = await fetch("/api/users/update-me", {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(updatedUser)
-                });
+	        // VALIDACIONES
+	        if (!updatedUser.nombre || updatedUser.nombre.length < 2) {
+	            alert("El nombre debe tener al menos 2 caracteres.");
+	            return;
+	        }
 
-                if (res.ok) {
-                    alert("¡Datos actualizados!");
-                    location.reload();
-                } else {
-                    alert("Error al actualizar.");
-                }
-            } catch (err) {
-                alert("Error de conexión.");
-            }
-        });
-    }
+	        if (!updatedUser.apellidos || updatedUser.apellidos.length < 2) {
+	            alert("Los apellidos deben tener al menos 2 caracteres.");
+	            return;
+	        }
+
+	        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+	        if (!emailRegex.test(updatedUser.email)) {
+	            alert("Introduce un email válido.");
+	            return;
+	        }
+
+	        const telefonoRegex = /^[0-9]{9}$/;
+
+	        if (!telefonoRegex.test(updatedUser.telefono)) {
+	            alert("El teléfono debe tener 9 números.");
+	            return;
+	        }
+
+	        if (!updatedUser.direccion || updatedUser.direccion.length < 5) {
+	            alert("Introduce una dirección válida.");
+	            return;
+	        }
+
+	        // CONFIRMACIÓN
+	        const confirmar = confirm(
+	            "¿Estás segura de que quieres guardar los cambios?"
+	        );
+
+	        if (!confirmar) return;
+
+	        try {
+
+	            const res = await fetch("/api/users/update-me", {
+	                method: "PUT",
+	                headers: {
+	                    "Content-Type": "application/json"
+	                },
+	                body: JSON.stringify(updatedUser)
+	            });
+
+	            if (res.ok) {
+	                alert("¡Datos actualizados!");
+	                location.reload();
+	            } else {
+	                alert("Error al actualizar.");
+	            }
+
+	        } catch (err) {
+	            console.error(err);
+	            alert("Error de conexión.");
+	        }
+	    });
+	}
 
 });
     
