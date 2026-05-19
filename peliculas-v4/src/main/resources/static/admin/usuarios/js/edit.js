@@ -29,6 +29,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const u = await res.json();
 
       usuarioOriginal = u;
+	  const currentUserRes = await fetch("/api/me");
+	  const currentUser = await currentUserRes.json();
+	  const isMe = currentUser.id === u.id;
 
       nombre.value = u.nombre || "";
       apellidos.value = u.apellidos || "";
@@ -38,6 +41,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       rol.value = normalizar(u.rol) || "cliente";
       estado.value = normalizar(u.estado) || "activo";
+	  
+	  if (isMe) {
+	    rol.disabled = true;
+	    estado.disabled = true;
+		rol.style.backgroundColor = "#eee";
+		estado.style.backgroundColor = "#eee";
+	  }
 
       if (puntos) puntos.value = u.puntos ?? "";
       if (salario) salario.value = u.salario ?? "";
@@ -63,6 +73,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+	
+	if (isMe) {
+	  const originalRol = normalizar(usuarioOriginal.rol);
+	  const originalEstado = normalizar(usuarioOriginal.estado);
+
+	  if (rol.value !== originalRol || estado.value !== originalEstado) {
+	    alert("No puedes cambiar tu propio rol o estado");
+	    return;
+	  }
+	}
 
     const usuario = {
       nombre: nombre.value.trim() || usuarioOriginal.nombre,
@@ -70,8 +90,8 @@ document.addEventListener("DOMContentLoaded", () => {
       email: email.value.trim() || usuarioOriginal.email,
       telefono: telefono.value.trim() || usuarioOriginal.telefono,
       direccion: direccion.value.trim() || usuarioOriginal.direccion,
-      rol: normalizar(rol.value) || normalizar(usuarioOriginal.rol),
-      estado: normalizar(estado.value) || normalizar(usuarioOriginal.estado),
+	  rol: isMe ? usuarioOriginal.rol : normalizar(rol.value),
+	  estado: isMe ? usuarioOriginal.estado : normalizar(estado.value),
 
       puntos: rol.value === "cliente"
         ? (puntos.value !== "" ? parseInt(puntos.value) : usuarioOriginal.puntos)
