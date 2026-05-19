@@ -5,79 +5,148 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pasarela de Pago - DNA Muebles</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 40px; background: #f4f4f4; display: flex; justify-content: center; }
-        .form-box { background: white; padding: 30px; border-radius: 8px; width: 100%; max-width: 450px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); text-align: center; }
-        h1 { color: #333; margin-bottom: 10px; }
-        .total-pago { font-size: 1.2rem; margin-bottom: 10px; padding: 10px; background: #e8f4fd; border-radius: 4px; color: rgb(128, 64, 0); font-weight: bold; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; background: #d9ccbc!important;; color: #333; }
         
-        /* NUEVO: Caja de puntos DNA */
-        #caja-puntos { display: none; background: #e8f5e9; padding: 15px; border-radius: 4px; margin-bottom: 20px; border: 1px solid #c8e6c9; text-align: left; }
+        /* Contenedor principal a dos columnas */
+        .checkout-wrapper { display: flex; flex-wrap: wrap; gap: 30px; max-width: 1100px; margin: 20px auto; align-items: flex-start; }
+        
+        /* Columna Izquierda (Formulario) en color crema suave */
+        .checkout-form { flex: 1 1 600px; background: #faf6f0; padding: 35px; border-radius: 10px; box-shadow: 0 4px 20px rgba(139, 90, 43, 0.08); border: 1px solid #eaddcd; }
+        .checkout-form h2 { margin-top: 0; color: #4a3b32; font-size: 1.4rem; border-bottom: 2px solid #eaddcd; padding-bottom: 10px; margin-bottom: 20px; }
+        .form-section { margin-bottom: 35px; }
+        
+        /* Columna Derecha (Resumen) en un beige un poquito más tostado */
+        .checkout-summary { flex: 1 1 350px; background: #f3eae1; padding: 30px; border-radius: 10px; border: 1px solid #dfd3c3; box-shadow: 0 4px 20px rgba(139, 90, 43, 0.08); position: sticky; top: 20px; }
+        .checkout-summary h2 { margin-top: 0; color: #4a3b32; font-size: 1.3rem; margin-bottom: 20px; }
+        
+        /* Estilos de inputs */
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; color: #5c4d42; }
+        input[type="text"], select { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #cbd2d6; background-color: #fffdfb; border-radius: 6px; box-sizing: border-box; font-size: 15px; transition: 0.3s; }
+        input[type="text"]:focus, select:focus { border-color: rgb(159, 80, 0); outline: none; box-shadow: 0 0 5px rgba(159, 80, 0, 0.2); }
+        .row { display: flex; gap: 15px; }
+        .row > div { flex: 1; }
+
+        /* Lista de productos en resumen */
+        .resumen-lista { max-height: 250px; overflow-y: auto; margin-bottom: 20px; padding-right: 5px; }
+        .resumen-item { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.95rem; border-bottom: 1px dashed #cbbdaf; padding-bottom: 8px; }
+        .resumen-item .item-nombre { color: #5c4d42; }
+        .resumen-item .item-precio { font-weight: bold; color: #333; }
+
+        /* Cajita de puntos verde pastel sutil */
+        #caja-puntos { display: none; background: #edf5ee; padding: 15px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #cce2cf; }
         .pts-text { margin: 0 0 10px 0; color: #2e7d32; font-size: 0.95rem;}
-        .pts-checkbox { cursor: pointer; font-size: 14px; font-weight: bold; color: #1b5e20; }
+        .pts-checkbox { cursor: pointer; font-size: 14px; font-weight: bold; color: #1b5e20; display: flex; align-items: center; gap: 8px;}
         
-        input[type="text"], select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 15px; }
-        .row { display: flex; gap: 10px; }
-        button { background: rgb(159, 80, 0); color: white; padding: 14px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; font-weight: bold; margin-top: 15px; transition: 0.3s; }
-        button:hover { background: #333; }
+        /* Totales */
+        .desglose-linea { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 1rem; color: #5c4d42; }
+        .descuento-linea { color: #d94536; font-weight: bold; display: none; }
+        .total-final { display: flex; justify-content: space-between; font-size: 1.4rem; font-weight: bold; color: rgb(159, 80, 0); margin-top: 15px; padding-top: 15px; border-top: 2px solid #cbbdaf; }
+        
+        button { background: rgb(159, 80, 0); color: white; padding: 16px; border: none; border-radius: 6px; cursor: pointer; width: 100%; font-size: 16px; font-weight: bold; margin-top: 20px; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; }
+        button:hover { background: #3c2f24; }
         button:disabled { background: #ccc; cursor: not-allowed; }
-        #mensaje-exito { display: none; padding: 20px; }
-        .check-icon { font-size: 60px; color: #27ae60; margin-bottom: 15px; }
-        .btn-volver { display: inline-block; margin-top: 20px; padding: 10px 20px; background: #27ae60; color: white; text-decoration: none; border-radius: 4px; }
-        #datos-tarjeta { transition: 0.3s; }
+
+        /* Tarjeta interna */
+        #datos-tarjeta { background: #fbf9f5; padding: 20px; border-radius: 6px; border: 1px solid #eaddcd; margin-top: 15px; }
+
+        /* Mensaje de Éxito */
+        #mensaje-exito { display: none; background: #faf6f0; padding: 40px; border-radius: 10px; text-align: center; max-width: 500px; margin: 40px auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid #eaddcd; }
+        .check-icon { font-size: 70px; color: #27ae60; margin-bottom: 15px; }
+        .btn-volver { display: inline-block; margin-top: 20px; padding: 12px 25px; background: #27ae60; color: white; text-decoration: none; border-radius: 6px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div class="form-box">
-        <div id="contenido-pago">
-            <h1>Finalizar Pedido</h1>
-            
-            <div class="total-pago">
-                Total a pagar: <strong id="monto-total">0.00€</strong>
-            </div>
+    <div id="contenido-pago" class="checkout-wrapper">
+        
+        <div class="checkout-form">
+            <form id="form-compra">
+                
+                <div class="form-section">
+                    <h2>1. Datos Personales y de Envío</h2>
+                    <label for="nombre-titular">Nombre Completo</label>
+                    <input type="text" id="nombre-titular" placeholder="Ej. Andrea Gómez" required>
+                    
+                    <label for="direccion-envio">Dirección de Envío</label>
+                    <input type="text" id="direccion-envio" placeholder="Calle, Número, Piso, Ciudad, Código Postal" required>
+                </div>
 
-            <div id="caja-puntos">
-                <p class="pts-text">🎁 Tienes <strong><span id="pts-disponibles"></span> puntos DNA</strong> (equivale a -<span id="pts-euros"></span>€)</p>
-                <label class="pts-checkbox">
-                    <input type="checkbox" id="check-usar-puntos" onchange="aplicarPuntos(this)"> ¡Quiero usar mis puntos!
-                </label>
-            </div>
+                <div class="form-section">
+                    <h2>2. Método de Pago</h2>
+                    <label for="metodo-pago">Selecciona cómo quieres pagar</label>
+                    <select id="metodo-pago" onchange="cambiarMetodoPago()">
+                        <option value="Tarjeta">Tarjeta de Crédito / Débito</option>
+                        <option value="Transferencia">Transferencia Bancaria</option>
+                    </select>
+                    
+                    <div id="datos-tarjeta">
+                        <label>Número de la tarjeta</label>
+                        <input type="text" placeholder="1234 5678 9101 1121" id="input-tarjeta" oninput="formatearTarjeta(this)" required>
+                        
+                        <div class="row">
+                            <div>
+                                <label>Fecha de Expiración</label>
+                                <input type="text" placeholder="MM/AA" id="input-fecha" oninput="formatearFecha(this)" required>
+                            </div>
+                            <div>
+                                <label>Código CVV</label>
+                                <input type="text" placeholder="123" id="input-cvv" oninput="formatearCVV(this)" required>
+                            </div>
+                        </div>
+                    </div>
 
-            <form id="form-tarjeta">
-                
-                <input type="text" id="direccion-envio" placeholder="Dirección completa de envío (Calle, Ciudad, CP)" required style="border-left: 4px solid rgb(159, 80, 0);">
-                <input type="text" id="nombre-titular" placeholder="Nombre completo" required>
-                
-                <select id="metodo-pago" onchange="cambiarMetodoPago()">
-                    <option value="Tarjeta">Tarjeta de Crédito / Débito</option>
-                    <option value="Transferencia">Transferencia Bancaria</option>
-                </select>
-                
-                <div id="datos-tarjeta">
-                    <input type="text" placeholder="Número de tarjeta (16 dígitos)" required id="input-tarjeta" oninput="formatearTarjeta(this)">
-                    <div class="row">
-                        <input type="text" placeholder="MM/AA" required id="input-fecha" oninput="formatearFecha(this)">
-                        <input type="text" placeholder="CVV" required id="input-cvv" oninput="formatearCVV(this)">
+                    <div id="datos-transferencia" style="display: none; background: #f5ede4; padding: 20px; border-radius: 6px; border: 1px dashed #cbbdaf; margin-top: 15px; font-size: 14px; color: #5c4d42;">
+                        <p style="margin-top:0;"><strong>Instrucciones para transferencia:</strong></p>
+                        <p>Por favor, transfiere el importe total a la siguiente cuenta:</p>
+                        <p style="font-size: 1.1rem; color: #333;"><strong>IBAN:</strong> ES91 1234 5678 9012 3456</p>
+                        <p style="margin-bottom:0;"><em>* Tu pedido se procesará en cuanto confirmemos la recepción del pago.</em></p>
                     </div>
                 </div>
 
-                <div id="datos-transferencia" style="display: none; background: #fdfbf6; padding: 15px; border: 1px dashed #ccc; margin-top: 10px; text-align: left; font-size: 13px; color: #555;">
-                    <p>Por favor, transfiere el importe total a la siguiente cuenta:</p>
-                    <p><strong>IBAN:</strong> ES91 1234 5678 9012 3456</p>
-                    <p><em>El pedido no se enviará hasta que confirmemos el pago.</em></p>
-                </div>
-
-                <button type="submit" id="btn-pagar">CONFIRMAR PEDIDO</button>
             </form>
         </div>
 
-        <div id="mensaje-exito">
-            <div class="check-icon">✔</div>
-            <h2>¡Pedido Registrado!</h2>
-            <p id="texto-exito">Tu pago ha sido procesado correctamente.</p>
-            <p style="color: #2e7d32; font-weight: bold; font-size: 0.9rem; margin-top: 10px;">¡Has ganado <span id="pts-ganados-exito"></span> puntos con esta compra!</p>
-            <a href="index.html" class="btn-volver">Volver a la tienda</a>
+        <div class="checkout-summary">
+            <h2>Resumen de tu pedido</h2>
+            
+            <div class="resumen-lista" id="lista-productos-html"></div>
+
+            <div class="desglose-linea">
+                <span>Subtotal:</span>
+                <strong id="monto-subtotal">0.00€</strong>
+            </div>
+
+            <div id="caja-puntos">
+                <p class="pts-text">🎁 Tienes <strong><span id="pts-disponibles"></span> pts</strong> (-<span id="pts-euros"></span>€)</p>
+                <label class="pts-checkbox">
+                    <input type="checkbox" id="check-usar-puntos" onchange="aplicarPuntos(this)">
+                    ¡Quiero usar mis puntos DNA!
+                </label>
+            </div>
+
+            <div class="desglose-linea descuento-linea" id="linea-descuento">
+                <span>Descuento Puntos:</span>
+                <span id="monto-descuento">-0.00€</span>
+            </div>
+
+            <div class="total-final">
+                <span>TOTAL:</span>
+                <span id="monto-total">0.00€</span>
+            </div>
+
+            <button type="button" id="btn-pagar" onclick="document.getElementById('form-compra').requestSubmit();">FINALIZAR COMPRA</button>
         </div>
+
+    </div>
+
+    <div id="mensaje-exito">
+        <div class="check-icon">✔</div>
+        <h2 style="color: #4a3b32;">¡Pedido Registrado con Éxito!</h2>
+        <p id="texto-exito" style="color: #5c4d42; font-size: 1.1rem;">Tu pago ha sido procesado correctamente.</p>
+        <div style="background: #edf5ee; border: 1px solid #cce2cf; padding: 15px; border-radius: 6px; margin: 20px 0;">
+            <p style="color: #2e7d32; font-weight: bold; font-size: 1.1rem; margin: 0;">🎉 ¡Has ganado <span id="pts-ganados-exito"></span> puntos DNA con esta compra!</p>
+        </div>
+        <a href="index.html" class="btn-volver">Volver a la tienda</a>
     </div>
 
     <script>
@@ -108,7 +177,6 @@
             }
         }
 
-        // --- VARIABLES GLOBALES PARA LA MATEMÁTICA DE PUNTOS ---
         let totalOriginal = 0;
         let totalFinal = 0;
         let puntosDisponibles = 0;
@@ -116,12 +184,16 @@
         let puntosAUsar = 0;
 
         function aplicarPuntos(checkbox) {
+            const lineaDescuento = document.getElementById('linea-descuento');
             if (checkbox.checked) {
                 totalFinal = totalOriginal - descuentoEuros;
                 puntosAUsar = puntosDisponibles;
+                lineaDescuento.style.display = 'flex';
+                document.getElementById('monto-descuento').innerText = `-${descuentoEuros.toFixed(2)}€`;
             } else {
                 totalFinal = totalOriginal;
                 puntosAUsar = 0;
+                lineaDescuento.style.display = 'none';
             }
             document.getElementById('monto-total').innerText = totalFinal.toFixed(2) + "€";
         }
@@ -134,15 +206,29 @@
                 return;
             }
 
-            // Calculamos el total original del carrito
-            totalOriginal = carrito.reduce((acc, prod) => acc + ((parseFloat(prod.precio) || 0) * (parseInt(prod.cantidad) || 1)), 0);
+            const listaHtml = document.getElementById('lista-productos-html');
+            listaHtml.innerHTML = '';
+            
+            carrito.forEach(prod => {
+                const precioTotalObj = (parseFloat(prod.precio) || 0) * (parseInt(prod.cantidad) || 1);
+                totalOriginal += precioTotalObj;
+                
+                listaHtml.innerHTML += `
+                    <div class="resumen-item">
+                        <span class="item-nombre">${prod.cantidad}x ${prod.nombre}</span>
+                        <span class="item-precio">${precioTotalObj.toFixed(2)}€</span>
+                    </div>
+                `;
+            });
+
             totalFinal = totalOriginal;
+            document.getElementById('monto-subtotal').innerText = totalOriginal.toFixed(2) + "€";
             document.getElementById('monto-total').innerText = totalFinal.toFixed(2) + "€";
 
             try {
-                const usuarioData = localStorage.getItem('user') || sessionStorage.getItem('user');
-                if (usuarioData) {
-                    const usuario = JSON.parse(usuarioData);
+                const userObj = localStorage.getItem('user') || sessionStorage.getItem('user');
+                if (userObj) {
+                    const usuario = JSON.parse(userObj);
 
                     if (usuario.direccion && usuario.direccion.trim() !== "") {
                         document.getElementById('direccion-envio').value = usuario.direccion;
@@ -152,12 +238,10 @@
                         document.getElementById('nombre-titular').value = usuario.nombre + apellidos;
                     }
 
-                    // --- LÓGICA DE MOSTRAR PUNTOS ---
                     if (usuario.puntos && parseInt(usuario.puntos) > 0) {
                         puntosDisponibles = parseInt(usuario.puntos);
                         descuentoEuros = puntosDisponibles / 100;
 
-                        // Por si acaso tiene más descuento que lo que cuesta el carrito, lo limitamos
                         if (descuentoEuros > totalOriginal) {
                             descuentoEuros = totalOriginal;
                             puntosDisponibles = totalOriginal * 100;
@@ -169,81 +253,68 @@
                     }
                 }
             } catch (e) {
-                console.log("No se pudo autocompletar los datos");
+                console.log("No se pudo autocompletar");
             }
 
-            const form = document.getElementById('form-tarjeta');
-            
-            form.addEventListener('submit', async (e) => {
+            document.getElementById('form-compra').addEventListener('submit', async (e) => {
                 e.preventDefault(); 
 
                 const btn = document.getElementById('btn-pagar');
-                btn.innerText = "Procesando...";
+                btn.innerText = "PROCESANDO PAGO...";
                 btn.disabled = true;
 
                 const metodoElegido = document.getElementById('metodo-pago').value;
                 const estadoSimulado = metodoElegido === 'Tarjeta' ? 'Pagado' : 'Pendiente de pago';
 
-                const objetoPedido = {
-                    fecha: new Date().toISOString().split('T')[0],
-                    clienteNombre: document.getElementById('nombre-titular').value.trim(),
-                    total: totalFinal, // Enviamos el total ya con la rebaja hecha
-                    metodoPago: metodoElegido, 
-                    estadoPago: estadoSimulado, 
-                    activo: 1
+                const payload = {
+                    direccion: document.getElementById('direccion-envio').value.trim(),
+                    puntosUsados: puntosAUsar,
+                    pedido: {
+                        clienteNombre: document.getElementById('nombre-titular').value.trim(),
+                        total: totalFinal, 
+                        metodoPago: metodoElegido, 
+                        estadoPago: estadoSimulado, 
+                        activo: 1,
+                        puntosUsados: puntosAUsar 
+                    },
+                    productos: carrito.map(i => ({ id_producto: i.id_producto || i.id, cantidad: i.cantidad || 1, precio: i.precio || 0 }))
                 };
-
-                const listaProductos = carrito.map(item => ({
-                    id_producto: item.id_producto || item.id,
-                    cantidad: item.cantidad || 1,
-                    precio: item.precio || 0
-                }));
-
-                const direccionIngresada = document.getElementById('direccion-envio').value.trim();
 
                 try {
                     const respuesta = await fetch('/api/carrito/comprar', {
                         method: 'POST',
-                        credentials: 'include', 
-                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                        body: JSON.stringify({ 
-                            direccion: direccionIngresada, 
-                            pedido: objetoPedido, 
-                            productos: listaProductos,
-                            puntosUsados: puntosAUsar // <--- NUEVO DATO ENVIADO AL JAVA
-                        }) 
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload) 
                     });
 
                     if (respuesta.ok) {
-                        localStorage.removeItem('carrito'); 
+                        localStorage.removeItem('carrito');
                         
-                        // --- ACTUALIZAR MEMORIA CON NUEVOS PUNTOS ---
                         let memoriaUsuario = localStorage.getItem('user');
-                        let puntosGanados = Math.floor(totalFinal * 5); // 5 puntos por cada euro
+                        let puntosGanados = Math.floor(totalFinal * 5);
                         
                         if(memoriaUsuario) {
                             let u = JSON.parse(memoriaUsuario);
-                            u.direccion = direccionIngresada;
+                            u.direccion = document.getElementById('direccion-envio').value.trim();
                             u.puntos = (parseInt(u.puntos || 0) - puntosAUsar) + puntosGanados;
                             localStorage.setItem('user', JSON.stringify(u));
                         }
 
                         document.getElementById('contenido-pago').style.display = 'none';
-                        
                         if(metodoElegido === 'Transferencia') {
-                            document.getElementById('texto-exito').innerText = "Tu pedido está pendiente. Realiza la transferencia para que lo procesemos.";
+                            document.getElementById('texto-exito').innerText = "Tu pedido está pendiente. Realiza la transferencia bancaria para que lo procesemos lo antes posible.";
                         }
-                        
                         document.getElementById('pts-ganados-exito').innerText = puntosGanados;
                         document.getElementById('mensaje-exito').style.display = 'block';
+
                     } else {
                         if (respuesta.status === 401) alert("Por favor, inicia sesión para poder comprar.");
-                        else alert("Error en el servidor al registrar la compra.");
-                        btn.innerText = "CONFIRMAR PEDIDO"; btn.disabled = false;
+                        else alert("Error en el servidor al procesar la compra.");
+                        btn.innerText = "FINALIZAR COMPRA"; btn.disabled = false;
                     }
                 } catch (error) {
-                    alert("No se pudo conectar con el servidor. Revisa si Spring Boot está encendido.");
-                    btn.disabled = false;
+                    alert("Fallo de conexión con el servidor.");
+                    btn.innerText = "FINALIZAR COMPRA"; btn.disabled = false;
                 }
             });
         });

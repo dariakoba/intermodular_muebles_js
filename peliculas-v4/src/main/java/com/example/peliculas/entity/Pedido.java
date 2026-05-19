@@ -29,7 +29,6 @@ public class Pedido {
     @JsonProperty("idUsuario")
     private Integer idUsuario;
     
-    // --- NUEVO: AÑADIMOS EMAIL, TELÉFONO Y DIRECCIÓN ---
     private String email;
     private String telefono;
     private String direccion; 
