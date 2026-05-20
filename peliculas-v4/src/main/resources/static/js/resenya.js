@@ -150,8 +150,19 @@ async function cargarResenyas(id) {
 
 		if (avgElement) {
 		    avgElement.innerHTML = `
-		        ⭐ ${media.toFixed(1)} / 5
-		        <span style="color:#999; font-size:0.9rem;">
+		        <span style="
+		            color:#5c4432;
+		            font-weight: 700;
+		            font-size: 1.2rem;
+		        ">
+		            ⭐ ${media.toFixed(1)} / 5
+		        </span>
+		        <span style="
+		            color:#5c4432;
+		            font-size: 0.95rem;
+		            opacity: 0.9;
+		            margin-left: 6px;
+		        ">
 		            (${count} opiniones)
 		        </span>
 		    `;
