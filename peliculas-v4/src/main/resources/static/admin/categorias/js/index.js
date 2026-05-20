@@ -63,7 +63,7 @@ function render(categorias) {
         </tr>
     `).join("");
 }
-
+/*
 async function desactivarCategoria(id) {
    // if (!confirm("¿Seguro que quieres eliminar esta categoria?")) return;
 
@@ -79,6 +79,20 @@ async function desactivarCategoria(id) {
         alert("Error al desactivarr producto");
     }
 }
+*/
+async function desactivarCategoria(id) {
+    try {
+        await api.put(`/api/admin/categorias/${id}/desactivar`);
+
+        const categorias = await api.get("/api/admin/categorias");
+        render(categorias);
+
+    } catch (err) {
+        console.error(err);
+        alert("No se puede desactivar una categoría con productos asociados.");
+    }
+}
+
 
 async function activarCategoria(id) {
    // if (!confirm("¿Seguro que quieres eliminar esta categoria?")) return;
@@ -112,11 +126,11 @@ function bindEvents() {
             .map(cb => Number(cb.dataset.id));
 
         if (seleccionados.length === 0) {
-            alert("No has seleccionado ningún producto.");
+            alert("No has seleccionado ningúna categoría.");
             return;
         }
 
-        if (!confirm(`¿Eliminar ${seleccionados.length} producto(s)?`)) return;
+        if (!confirm(`¿Eliminar ${seleccionados.length} categoría(s)?`)) return;
 
 		try {
 
@@ -139,17 +153,7 @@ function bindEvents() {
 
 		    alert("No se puede eliminar una categoría con productos asociados.");
 		}
-		/*
-        await Promise.all(seleccionados.map(id =>
-            api.delete(`/api/admin/categorias/${id}`)
-        ));
 		
-
-        seleccionados.forEach(id => {
-            const cb = document.querySelector(`.check-fila[data-id="${id}"]`);
-            if (cb) cb.closest("tr").remove();
-        });
-		*/
 
         // Resetear check-all
         document.getElementById("check-all").checked = false;
