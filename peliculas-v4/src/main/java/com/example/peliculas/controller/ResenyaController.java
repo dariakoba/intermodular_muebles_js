@@ -154,15 +154,22 @@ public class ResenyaController {
     }
      
     private boolean haCompradoProducto(Connection con, int userId, int productoId) throws SQLException {
-        // Ajustado a tu tabla 'pedidos' real
-        String sql = "SELECT 1 FROM pedidos WHERE id_usuario = ? AND id_producto = ? LIMIT 1";
-        
+
+        String sql = """
+            SELECT 1
+            FROM pedidos p
+            JOIN detalles_pedidos dp ON dp.id_pedido = p.id_pedido
+            WHERE p.id_usuario = ?
+            AND dp.id_producto = ?
+            LIMIT 1
+        """;
+
         try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, userId);
             ps.setInt(2, productoId);
-            
+
             try (ResultSet rs = ps.executeQuery()) {
-                return rs.next(); // True si existe el registro de compra
+                return rs.next();
             }
         }
     }
