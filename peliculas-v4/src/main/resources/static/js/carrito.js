@@ -8,18 +8,26 @@ function obtenerCarrito() {
 function renderizarCarrito() {
     if (!contenedorCarrito) return;
     const carrito = obtenerCarrito();
+    
+    // Capturamos los dos botones
     const btnVaciar = document.getElementById('btn-vaciar-control');
+    const btnFinalizar = document.getElementById('btn-finalizar-compra');
     
     // Si el carrito está vacío
     if (carrito.length === 0) {
         contenedorCarrito.innerHTML = `<div class="vacio-msg">Tu carrito está vacío.</div>`;
         if (totalHTML) totalHTML.innerText = "0.00€";
-        if (btnVaciar) btnVaciar.style.display = 'none'; 
+        
+        // APAGAMOS LOS BOTONES
+        if (btnVaciar) btnVaciar.disabled = true;
+        if (btnFinalizar) btnFinalizar.disabled = true; 
+        
         return;
     }
 
-    // Si hay productos, mostramos el botón de vaciar
-    if (btnVaciar) btnVaciar.style.display = 'block';
+    // Si hay productos, ENCENDEMOS LOS BOTONES
+    if (btnVaciar) btnVaciar.disabled = false;
+    if (btnFinalizar) btnFinalizar.disabled = false;
 
     let total = 0;
 
@@ -29,9 +37,9 @@ function renderizarCarrito() {
         total += subtotal;
         
         return `
-            <div class="carrito-item" style="display: flex; align-items: center; justify-content: space-between; padding: 15px; border-bottom: 1px solid #eee; background: white; margin-bottom: 10px; border-radius: 8px;">
+            <div class="carrito-item">
                 <div class="producto-info">
-                    <h3 style="margin: 0;">${prod.nombre}</h3>
+                    <h3 style="margin: 0; color: #333;">${prod.nombre}</h3>
                     <p style="color: #666; margin: 5px 0;">${parseFloat(prod.precio).toFixed(2)}€ c/u</p>
                 </div>
                 
@@ -43,9 +51,9 @@ function renderizarCarrito() {
                                onchange="actualizarCantidad(${index}, this.value)">
                     </div>
                     
-                    <p style="min-width: 70px; text-align: right;"><b>${subtotal.toFixed(2)}€</b></p>
+                    <p style="min-width: 70px; text-align: right; font-weight: bold; font-size: 18px; color: #ae4010;">${subtotal.toFixed(2)}€</p>
                     
-                    <button onclick="eliminarDelCarrito(${index})" style="color: #e74c3c; cursor: pointer; border: none; background: none; font-size: 1.2rem;" title="Eliminar">
+                    <button class="btn-eliminar-item" onclick="eliminarDelCarrito(${index})" title="Eliminar">
                         <i class="fa-solid fa-trash"></i>
                     </button>
                 </div>
@@ -56,7 +64,8 @@ function renderizarCarrito() {
     if (totalHTML) totalHTML.innerText = total.toFixed(2) + "€";
 }
 
-// FUNCIONALIDADES
+// --- LAS FUNCIONES PERDIDAS (¡Vitales para que funcionen los clics!) ---
+
 function actualizarCantidad(index, nuevaCant) {
     let carrito = obtenerCarrito();
     let cant = parseInt(nuevaCant);
@@ -81,21 +90,27 @@ function vaciarCarrito() {
     }
 }
 
+// --- EL BOTÓN DE FINALIZAR COMPRA ---
 function finalizarCompra() {
+    // 1. Buscamos al usuario en la memoria
     const usuarioLogueado = localStorage.getItem('user') || sessionStorage.getItem('user');
 
-    if (!usuarioLogueado) {
-        alert("Debe tener una cuenta para finalizar el pedido.");
+    // 2. Comprobación antibalas: Si no hay usuario, o quedó un rastro de texto inválido
+    if (!usuarioLogueado || usuarioLogueado === "null" || usuarioLogueado === "undefined" || usuarioLogueado === "") {
+        // LE MANDAMOS DIRECTO A INICIAR SESIÓN
         window.location.href = 'login.html'; 
-        return; 
+        return; // Cortamos aquí para que no siga ejecutando nada más
     }
 
+    // 3. Si SÍ hay usuario, comprobamos que el carrito no esté vacío
     const carrito = obtenerCarrito();
     if (carrito.length === 0) {
-        alert("El carrito está vacío. ");
-        return;
+        return; 
     }
+    
+    // 4. Si hay usuario y hay muebles, ¡a la pasarela de pago!
     window.location.href = "pago.html";
 }
 
+// Inicializamos la vista del carrito con normalidad para todo el mundo
 document.addEventListener('DOMContentLoaded', renderizarCarrito);

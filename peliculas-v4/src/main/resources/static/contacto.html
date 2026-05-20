@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DNA - Contacto</title>
     <link rel="stylesheet" href="css/home.css">
-    <link rel="stylesheet" href="css/contacto.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/contacto.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 </head>
 <body>
@@ -25,23 +26,22 @@
 	    </nav>
 
 		<div class="icons">
-		            <a href="carrito.html" style="text-decoration: none; color: inherit;">
-		                <span class="material-symbols-outlined">shopping_cart</span>
-		            </a>
+            <a href="carrito.html" style="text-decoration: none; color: inherit;">
+                <span class="material-symbols-outlined">shopping_cart</span>
+            </a>
 
-		            <div class="person-menu-wrapper">
-		                <a href="perfil.html" style="text-decoration: none; color: inherit;">
-		                    <span id="person-icon" class="material-symbols-outlined">person</span>
-		                </a>
-		                <div class="person-menu">
-		                    <a href="perfil.html">Ver cuenta</a>
-		                    <a href="logout.html">Cerrar sesión</a>
-		                </div>
-		            </div>
-		        </div>
+            <div class="person-menu-wrapper">
+                <a href="perfil.html" style="text-decoration: none; color: inherit;">
+                    <span id="person-icon" class="material-symbols-outlined">person</span>
+                </a>
+                <div class="person-menu">
+                    <a href="perfil.html">Ver cuenta</a>
+                    <a href="logout.html">Cerrar sesión</a>
+                </div>
+            </div>
+        </div>
 
-	    </div>
-		</header>
+	</header>
 
     <main class="contacto-container">
         <section class="contacto-header">
@@ -73,12 +73,12 @@
                 <div class="info-card">
                     <i class="fa-solid fa-location-dot"></i>
                     <h3>Nuestra Tienda</h3>
-                    <p>Calle Random 12, 46001 Valencia, España</p>
+                    <p>Calle Random 12, Valencia, España</p>
                 </div>
                 <div class="info-card">
                     <i class="fa-solid fa-phone"></i>
                     <h3>Llámanos</h3>
-                    <p>+34 600 000 000</p>
+                    <p>+34 676 676 767</p>
                 </div>
                 <div class="info-card">
                     <i class="fa-solid fa-clock"></i>
@@ -93,9 +93,47 @@
         </section>
     </main>
 
-    <footer class="main-footer">
-        <p>&copy; 2026 DNA Mobiliario - Todos los derechos reservados.</p>
+    <footer class="main-footer" id="contacto">
+        <div class="footer-container">
+            <div class="footer-section">
+                <div class="logo">
+                    <img src="images/login/logo.png" alt="logo">
+                    <span>DNA</span>
+                </div>
+                <p class="footer-description">
+                    Diseños exclusivos para transformar cada rincón de tu hogar. Calidad, estilo y confort en un solo lugar.
+                </p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Explorar</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="productos.html">Catálogo</a></li>
+                    <li><a href="contacto.html">Atención al cliente</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contacto</h3>
+                <p><i class="fa-solid fa-location-dot"></i> Calle Random 12, Valencia</p>
+                <p><i class="fa-solid fa-phone"></i> +34 676 676 767</p>
+                <p><i class="fa-solid fa-envelope"></i> info@dna-mobiliario.com</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#"><i class="fa-brands fa-pinterest"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 DNA Mobiliario - Todos los derechos reservados.</p>
+        </div>
     </footer>
+
+    <script src="/js/menuUser.js"></script>
+    <script src="/js/logout.js"></script>
 
 </body>
 </html>

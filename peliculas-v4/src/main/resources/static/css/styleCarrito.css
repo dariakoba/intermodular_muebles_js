@@ -257,3 +257,12 @@ hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
     color: #ae4010; 
 }
 
+/* Estilo mágico para botones desactivados */
+button:disabled {
+    background-color: #d1d5db !important; /* Gris claro */
+    color: #9ca3af !important; /* Letra gris oscuro */
+    border-color: #d1d5db !important;
+    cursor: not-allowed !important; /* El ratón muestra el símbolo de prohibido */
+    box-shadow: none !important;
+}
+

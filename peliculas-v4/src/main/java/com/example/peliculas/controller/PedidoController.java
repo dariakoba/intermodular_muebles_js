@@ -9,7 +9,6 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
@@ -39,11 +38,6 @@ public class PedidoController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\": \"Inicia sesión para comprar\"}");
         }
 
-        // =========================================================
-        // 🔥 LA SOLUCIÓN DEFINITIVA: CÁLCULO EN EL SERVIDOR 🔥
-        // =========================================================
-        
-        // 1. Calculamos cuánto valen los muebles originalmente (sin descuento)
         float totalOriginal = 0f;
         for (Map<String, Object> item : request.getProductos()) {
             float precio = Float.parseFloat(item.get("precio").toString());
@@ -51,20 +45,12 @@ public class PedidoController {
             totalOriginal += (precio * cant);
         }
 
-        // 2. Vemos cuánto ha pagado realmente
         float totalPagado = request.getPedido().getTotal();
-
-        // 3. Calculamos la diferencia matemáticamente (¡A prueba de fallos!)
         int puntosAUsar = 0;
-        if (totalOriginal > totalPagado + 0.05f) { // El +0.05 es para ignorar céntimos sueltos
+        if (totalOriginal > totalPagado + 0.05f) { 
             float descuento = totalOriginal - totalPagado;
             puntosAUsar = Math.round(descuento * 100);
         }
-
-        System.out.println(">>> VALOR ORIGINAL MUEBLES: " + totalOriginal + "€");
-        System.out.println(">>> TOTAL PAGADO: " + totalPagado + "€");
-        System.out.println(">>> PUNTOS CALCULADOS POR JAVA: " + puntosAUsar);
-        // =========================================================
 
         try (Connection con = ds.getConnection()) {
             
@@ -82,8 +68,6 @@ public class PedidoController {
             Pedido p = request.getPedido();
             p.setIdUsuario(userId);
             p.setFecha(LocalDate.now());
-            
-            // ¡LE INYECTAMOS EL CÁLCULO SEGURO AL PEDIDO!
             p.setPuntosUsados(puntosAUsar);
 
             Pedido nuevoPedido = pedidoRepo.insert(p);
@@ -138,6 +122,28 @@ public class PedidoController {
         }
     }
 
+    // --- AQUÍ ESTÁ EL NUEVO MÉTODO PARA GUARDAR LA EDICIÓN COMPLETA DEL MODAL ---
+    @PutMapping("/admin/editar/{id}")
+    public ResponseEntity<?> editarPedidoCompleto(@PathVariable int id, @RequestBody Map<String, String> payload) {
+        try (Connection con = ds.getConnection()) {
+            PedidoRepository repo = new PedidoRepository(con);
+            
+            String estado = payload.get("estado");
+            String clienteNombre = payload.get("clienteNombre");
+            String fecha = payload.get("fecha");
+            String email = payload.get("email");
+            String telefono = payload.get("telefono");
+            String direccion = payload.get("direccion");
+            
+            repo.actualizarPedidoCompleto(id, estado, clienteNombre, fecha, email, telefono, direccion);
+            
+            return ResponseEntity.ok("{\"message\": \"Pedido actualizado completamente\"}");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("{\"message\": \"Error al editar pedido\"}");
+        }
+    }
+
     @GetMapping("/admin/usuarios")
     public List<Map<String, Object>> listarUsuariosCompañera() {
         String sql = "SELECT id, nombre, apellidos, email, rol, estado FROM usuarios";
@@ -168,17 +174,9 @@ public class PedidoController {
     @GetMapping("/mis")
     public List<Pedido> misPedidos(HttpSession session) throws SQLException {
         Integer userId = (Integer) session.getAttribute("userId");
-
-        System.out.println("USER ID SESSION = " + userId);
-
         try (Connection con = ds.getConnection()) {
             PedidoRepository pedidoRepo = new PedidoRepository(con);
-
-            List<Pedido> pedidos = pedidoRepo.findByUsuarioId(userId);
-
-            System.out.println("PEDIDOS = " + pedidos.size());
-
-            return pedidos;
+            return pedidoRepo.findByUsuarioId(userId);
         }
     }
 }

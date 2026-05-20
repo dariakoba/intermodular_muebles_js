@@ -12,23 +12,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 
 	<style>
-	        .badge {
-	            padding: 6px 12px;
-	            border-radius: 5px; 
-	            font-size: 11px;
-	            font-weight: bold;
-	            text-transform: uppercase;
-	            display: inline-block;
-                border: none; 
-	        }
-	        .bg-pendiente { background-color: rgba(197, 139, 57, 0.15) !important; color: #C58B39 !important; } 
-	        .bg-pagado    { background-color: rgba(80, 122, 168, 0.15) !important; color: #507AA8 !important; } 
-	        .bg-proceso   { background-color: rgba(139, 109, 156, 0.15) !important; color: #8B6D9C !important; } 
-	        .bg-enviando  { background-color: rgba(74, 151, 142, 0.15) !important; color: #4A978E !important; } 
-	        .bg-recibido  { background-color: rgba(98, 150, 100, 0.15) !important; color: #629664 !important; } 
-	        .bg-devuelto  { background-color: rgba(84, 99, 114, 0.15) !important; color: #546372 !important; } 
-	        .bg-cancelado { background-color: rgba(183, 93, 93, 0.15) !important; color: #B75D5D !important; } 
-	    </style>
+        .badge {
+            padding: 6px 12px;
+            border-radius: 5px; 
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            display: inline-block;
+            border: none; 
+        }
+        .bg-pendiente { background-color: rgba(197, 139, 57, 0.15) !important; color: #C58B39 !important; } 
+        .bg-pagado    { background-color: rgba(80, 122, 168, 0.15) !important; color: #507AA8 !important; } 
+        .bg-proceso   { background-color: rgba(139, 109, 156, 0.15) !important; color: #8B6D9C !important; } 
+        .bg-enviando  { background-color: rgba(74, 151, 142, 0.15) !important; color: #4A978E !important; } 
+        .bg-recibido  { background-color: rgba(98, 150, 100, 0.15) !important; color: #629664 !important; } 
+        .bg-devuelto  { background-color: rgba(84, 99, 114, 0.15) !important; color: #546372 !important; } 
+        .bg-cancelado { background-color: rgba(183, 93, 93, 0.15) !important; color: #B75D5D !important; } 
+    </style>
 </head>
 <body>
 
@@ -135,14 +135,42 @@
         </div>
     </div>
 
-    <div id="modalEstado" class="modal-overlay">
-        <div class="modal-box">
-            <h2>Cambiar Estado</h2>
-            <p>Pedido #<span id="modal-id-pedido"></span></p>
-            <select id="select-estado"></select>
-            <div class="modal-botones">
-                <button class="btn-nuevo" style="background: #95a5a6;" onclick="cerrarModal()">Cancelar</button>
-                <button class="btn-nuevo" onclick="guardarEstado()">Guardar</button>
+    <div id="modalEditarPedido" class="modal-overlay">
+        <div class="modal-box" style="width: 550px; text-align: left;">
+            <h2 style="margin-bottom: 15px; border-bottom: 2px solid #eee; padding-bottom: 10px;">
+                Editar Pedido #<span id="edit-id-pedido"></span>
+            </h2>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div>
+                    <label style="font-weight: bold; font-size: 14px; color: #555;">Cliente:</label>
+                    <input type="text" id="edit-cliente" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
+                </div>
+                <div>
+                    <label style="font-weight: bold; font-size: 14px; color: #555;">Fecha:</label>
+                    <input type="date" id="edit-fecha" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
+                </div>
+                <div>
+                    <label style="font-weight: bold; font-size: 14px; color: #555;">Email:</label>
+                    <input type="email" id="edit-email" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
+                </div>
+                <div>
+                    <label style="font-weight: bold; font-size: 14px; color: #555;">Teléfono:</label>
+                    <input type="text" id="edit-telefono" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
+                </div>
+                <div style="grid-column: span 2;">
+                    <label style="font-weight: bold; font-size: 14px; color: #555;">Dirección de envío:</label>
+                    <input type="text" id="edit-direccion" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
+                </div>
+                <div style="grid-column: span 2; background: #fdfbf6; padding: 10px; border-radius: 5px; border: 1px dashed #ccc;">
+                    <label style="font-weight: bold; font-size: 14px; color: #333;">Estado del Pedido:</label>
+                    <select id="edit-estado" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; margin-top: 5px;"></select>
+                </div>
+            </div>
+
+            <div class="modal-botones" style="margin-top: 20px; display: flex; justify-content: flex-end; gap: 10px;">
+                <button class="btn-nuevo" style="background: #95a5a6;" onclick="cerrarModalEditar()">Cancelar</button>
+                <button class="btn-nuevo" style="background: #1abc9c;" onclick="guardarEdicionCompleta()">Guardar Cambios</button>
             </div>
         </div>
     </div>
@@ -231,7 +259,7 @@
                                 <button class="btn-ver" onclick="verDetalles(${p.idPedido})" title="Ver Factura completa">
                                     <i class="fa-solid fa-eye"></i>
                                 </button>
-                                <button class="btn-editar" onclick="abrirModal(${p.idPedido}, '${estado}')" ${bloqueadoEdicion ? 'disabled title="Estado finalizado"' : 'title="Cambiar Estado"'}>
+                                <button class="btn-editar" onclick="abrirModal(${p.idPedido})" ${bloqueadoEdicion ? 'disabled title="Estado finalizado"' : 'title="Editar Pedido"'}>
                                     <i class="fa-solid fa-pen"></i>
                                 </button>
                                 <button class="btn-desactivar" onclick="cancelarPedido(${p.idPedido}, '${estadoLower}')" ${bloqueadoCancelacion ? 'disabled title="No se puede cancelar en este estado"' : 'title="Cancelar Pedido"'}>
@@ -253,8 +281,6 @@
             const p = pedidosOriginales.find(p => p.idPedido === id);
             if (!p) return;
             
-            console.log("DATOS DEL PEDIDO CARGADOS:", p);
-
             document.getElementById('det-id').innerText = "#" + p.idPedido;
             document.getElementById('det-cliente').innerText = p.clienteNombre || 'Usuario Desconocido';
             document.getElementById('det-fecha').innerText = p.fecha ? new Date(p.fecha).toLocaleDateString() : '---';
@@ -267,7 +293,6 @@
 
             document.getElementById('det-email').innerText = p.email || 'No disponible';
             document.getElementById('det-telefono').innerText = p.telefono || 'No disponible';
-
             document.getElementById('det-direccion').innerText = p.direccion || 'Dirección no registrada en la base de datos';
 
             const cajaDescuento = document.getElementById('caja-descuento-admin');
@@ -297,13 +322,37 @@
             document.getElementById('modalDetalles').style.display = 'none';
         }
 
-        function abrirModal(id, estadoActual) {
+        // LÓGICA DE EDICIÓN ACTUALIZADA
+        function abrirModal(id) {
             pedidoEditandoId = id;
-            document.getElementById('modal-id-pedido').innerText = id;
-            const select = document.getElementById('select-estado');
+            
+            const p = pedidosOriginales.find(pedido => pedido.idPedido === id);
+            if (!p) return;
+
+            document.getElementById('edit-id-pedido').innerText = id;
+            document.getElementById('edit-cliente').value = p.clienteNombre || '';
+            document.getElementById('edit-email').value = p.email || '';
+            document.getElementById('edit-telefono').value = p.telefono || '';
+            document.getElementById('edit-direccion').value = p.direccion || '';
+            
+            // Lógica de fecha limitando al día actual
+            const inputFecha = document.getElementById('edit-fecha');
+            const hoy = new Date().toISOString().split('T')[0];
+            inputFecha.setAttribute('max', hoy);
+            
+            if (p.fecha) {
+                inputFecha.value = new Date(p.fecha).toISOString().split('T')[0];
+            } else {
+                inputFecha.value = '';
+            }
+
+            // Lógica de los estados
+            const estadoActual = p.estadoPago || 'Pendiente de pago';
+            const select = document.getElementById('edit-estado');
             select.innerHTML = ''; 
             const estadoKey = estadoActual.toLowerCase();
             const opcionesPermitidas = flujoEstados[estadoKey] || [estadoActual]; 
+            
             opcionesPermitidas.forEach(estado => {
                 const option = document.createElement('option');
                 option.value = estado;
@@ -311,18 +360,49 @@
                 if (estado.toLowerCase() === estadoKey) option.selected = true; 
                 select.appendChild(option);
             });
-            document.getElementById('modalEstado').style.display = 'flex';
+
+            document.getElementById('modalEditarPedido').style.display = 'flex';
         }
 
-        function cerrarModal() {
-            document.getElementById('modalEstado').style.display = 'none';
+        function cerrarModalEditar() {
+            document.getElementById('modalEditarPedido').style.display = 'none';
             pedidoEditandoId = null;
         }
 
-        async function guardarEstado() {
-            const nuevoEstado = document.getElementById('select-estado').value;
-            await realizarCambioEstado(pedidoEditandoId, nuevoEstado);
-            cerrarModal();
+        async function guardarEdicionCompleta() {
+            const fechaInput = document.getElementById('edit-fecha').value;
+            const hoy = new Date().toISOString().split('T')[0];
+            
+            if (fechaInput > hoy) {
+                alert("Error: No puedes guardar una fecha en el futuro.");
+                return;
+            }
+
+            const payload = {
+                estado: document.getElementById('edit-estado').value,
+                clienteNombre: document.getElementById('edit-cliente').value.trim(),
+                fecha: fechaInput,
+                email: document.getElementById('edit-email').value.trim(),
+                telefono: document.getElementById('edit-telefono').value.trim(),
+                direccion: document.getElementById('edit-direccion').value.trim()
+            };
+
+            try {
+                const res = await fetch(`/api/carrito/admin/editar/${pedidoEditandoId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                if (res.ok) {
+                    cerrarModalEditar();
+                    cargarPedidos(); 
+                } else {
+                    alert("El servidor no pudo guardar los cambios. Asegúrate de que el backend está preparado para la ruta /admin/editar/{id}.");
+                }
+            } catch (e) {
+                console.error("Error actualizando pedido", e);
+            }
         }
 
         async function cancelarPedido(id, estadoActual) {
@@ -335,6 +415,7 @@
             }
         }
 
+        // Se mantiene para cuando cancelamos un pedido directamente desde la X de la tabla
         async function realizarCambioEstado(id, estado) {
             try {
                 const res = await fetch(`/api/carrito/admin/estado/${id}`, {
@@ -448,26 +529,17 @@
             }
         }
 
-        // --- INICIALIZADOR PRINCIPAL ---
         document.addEventListener('DOMContentLoaded', () => {
-            // 1. Cargamos la tabla de pedidos
             cargarPedidos();
 
-            // 2. Lógica mágica del botón de Salir
             const btnSalir = document.getElementById('logoutBtn');
             if (btnSalir) {
                 btnSalir.addEventListener('click', async (e) => {
                     e.preventDefault(); 
-                    
-                    // Destruimos rastro del usuario y su carrito
                     localStorage.removeItem('user');
                     sessionStorage.removeItem('user');
                     localStorage.removeItem('carrito'); 
-                    
-                    // Avisamos al servidor (si tienes configurado el /api/logout)
                     try { await fetch('/api/logout', { method: 'POST' }); } catch (e) {}
-                    
-                    // Nos vamos a la portada
                     window.location.href = 'index.html'; 
                 });
             }

@@ -49,7 +49,7 @@ public class PedidoRepository extends BaseRepository<Pedido> {
             p.getEstadoPago(),
             1, // activo
             p.getIdUsuario(),
-            p.getPuntosUsados() // ---> NUEVO <---
+            p.getPuntosUsados()
         };
     }
 
@@ -77,7 +77,7 @@ public class PedidoRepository extends BaseRepository<Pedido> {
     @Override
     public List<Pedido> findAll() {
         String sql = "SELECT p.*, u.email, u.telefono, u.direccion, " +
-                     "GROUP_CONCAT(CONCAT(d.cantidad, 'x ', m.nombre, ' : ', d.precio_unitario, '€') SEPARATOR '|') as nombre_producto " +
+                     "GROUP_CONCAT(CONCAT(d.cantidad, 'x ', m.nombre, ' : ', (d.cantidad * d.precio_unitario), '€') SEPARATOR '|') as nombre_producto " +
                      "FROM pedidos p " +
                      "LEFT JOIN usuarios u ON p.id_usuario = u.id " +
                      "LEFT JOIN detalles_pedidos d ON p.id_pedido = d.id_pedido " +
@@ -93,12 +93,15 @@ public class PedidoRepository extends BaseRepository<Pedido> {
     }
 
     public List<Pedido> findByUsuarioId(Integer userId) {
-        String sql =
-            "SELECT p.*, m.nombre as nombre_producto " +
+        String sql = 
+            "SELECT p.*, " +
+            "GROUP_CONCAT(CONCAT(d.cantidad, 'x ', m.nombre, ' : ', (d.cantidad * d.precio_unitario), '€') SEPARATOR '|') as nombre_producto " +
             "FROM pedidos p " +
-            "LEFT JOIN productos m ON p.id_producto = m.id_producto " +
+            "LEFT JOIN detalles_pedidos d ON p.id_pedido = d.id_pedido " +
+            "LEFT JOIN productos m ON d.id_producto = m.id_producto " +
             "WHERE p.id_usuario = ? AND p.activo = 1 " +
-            "ORDER BY p.fecha DESC";
+            "GROUP BY p.id_pedido " +
+            "ORDER BY p.fecha DESC, p.id_pedido DESC";
 
         try {
             return DB.queryMany(con, sql, mapper, userId);
@@ -114,6 +117,43 @@ public class PedidoRepository extends BaseRepository<Pedido> {
             ps.setString(1, nuevoEstado);
             ps.setInt(2, idPedido);
             ps.executeUpdate();
+        }
+    }
+
+    // --- AQUÍ ESTÁ EL NUEVO MÉTODO QUE GUARDA TODOS LOS DATOS EDITADOS ---
+    public void actualizarPedidoCompleto(int idPedido, String estado, String clienteNombre, String fecha, String email, String telefono, String direccion) throws SQLException {
+        // 1. Actualizamos los datos propios del pedido
+        String sqlPedido = "UPDATE pedidos SET estado_pago = ?, cliente_nombre = ?, fecha = ? WHERE id_pedido = ?";
+        try (java.sql.PreparedStatement ps = con.prepareStatement(sqlPedido)) {
+            ps.setString(1, estado);
+            ps.setString(2, clienteNombre);
+            ps.setDate(3, java.sql.Date.valueOf(fecha)); 
+            ps.setInt(4, idPedido);
+            ps.executeUpdate();
+        }
+
+        // 2. Averiguamos de qué usuario es este pedido (CON EL FALLITO CORREGIDO AQUÍ)
+        String sqlGetUserId = "SELECT id_usuario FROM pedidos WHERE id_pedido = ?";
+        int idUsuario = -1;
+        try (java.sql.PreparedStatement ps = con.prepareStatement(sqlGetUserId)) {
+            ps.setInt(1, idPedido); // Le decimos a SQL de qué pedido buscar
+            try (java.sql.ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    idUsuario = rs.getInt(1);
+                }
+            }
+        }
+
+        // 3. Actualizamos los datos del usuario asociado al pedido
+        if (idUsuario != -1) {
+            String sqlUser = "UPDATE usuarios SET direccion = ?, telefono = ?, email = ? WHERE id = ?";
+            try (java.sql.PreparedStatement ps = con.prepareStatement(sqlUser)) {
+                ps.setString(1, direccion);
+                ps.setString(2, telefono);
+                ps.setString(3, email);
+                ps.setInt(4, idUsuario);
+                ps.executeUpdate();
+            }
         }
     }
 }

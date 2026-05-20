@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         if (!res.ok) {
             window.location.href = "/login.html";
-            return; // Aquí sí dejamos el return porque si no hay usuario, no tiene sentido seguir
+            return; 
         }
 
         const user = await res.json();
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
 
-    // 2. CARGAR PEDIDOS (CORREGIDO: Sin 'return' que bloquee el resto)
+    // 2. CARGAR PEDIDOS (CON NUEVO DISEÑO Y PRECIOS SEPARADOS ALINEADOS A LA DERECHA)
     try {
         const res = await fetch("/api/carrito/mis");
         const tbody = document.getElementById("pedidos-body");
@@ -47,18 +47,62 @@ document.addEventListener("DOMContentLoaded", async () => {
                 let html = "";
                 pedidos.forEach(p => {
                     const estadoClase = p.estadoPago ? p.estadoPago.toLowerCase() : "pendiente";
+                    const fechaLimpia = p.fecha ? p.fecha.split('T')[0] : "---";
+                    
+                    // Formateamos los productos para el mini-ticket separando nombre y precio
+                    let productosLista = "";
+                    if (p.nombreProducto && p.nombreProducto.trim() !== "") {
+                        productosLista = p.nombreProducto.split('|').map(item => {
+                            // Aquí separamos el texto usando los " : " que nos manda Java
+                            let partes = item.split(' : ');
+                            let nombreMueble = partes[0];
+                            let precioMueble = partes.length > 1 ? partes[1] : '';
+
+                            // Dibujamos la fila, empujando el precio a la derecha
+                            return `
+                            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0eae1; font-size: 14.5px; color: #5c4432;">
+                                <span><i class="fa-solid fa-box-open" style="color: #c5a992; margin-right: 8px;"></i> ${nombreMueble}</span>
+                                <span style="font-weight: bold; color: #887a69;">${precioMueble}</span>
+                            </div>
+                            `;
+                        }).join('');
+                    } else {
+                        productosLista = `
+                            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0eae1; font-size: 14.5px; color: #5c4432;">
+                                <span><i class="fa-solid fa-box-open" style="color: #c5a992; margin-right: 8px;"></i> Productos del pedido (Sin detallar)</span>
+                            </div>`;
+                    }
+
                     html += `
-                        <tr>
-                            <td>#${p.idPedido}</td>
-                            <td>${p.fecha || "---"}</td>
-                            <td>
-                                <strong>${p.total.toFixed(2)} €</strong>
-                                <br>
-                                <small style="color: #887a69; display: block; margin-top: 4px;">
-                                    ${p.nombreProducto || "Mueble DNA"}
-                                </small>
+                        <tr onclick="toggleDetalles(${p.idPedido})" style="cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#fdfbf6'" onmouseout="this.style.background='transparent'">
+                            <td style="font-weight: 600;">#${p.idPedido}</td>
+                            <td>${fechaLimpia}</td>
+                            <td><strong>${p.total.toFixed(2)} €</strong></td>
+                            <td style="display: flex; align-items: center; justify-content: space-between;">
+                                <span class="estado ${estadoClase}">${p.estadoPago}</span>
+                                <span class="material-symbols-outlined" style="font-size: 22px; color: #887a69; transition: transform 0.2s;" id="icon-${p.idPedido}">expand_more</span>
                             </td>
-                            <td><span class="estado ${estadoClase}">${p.estadoPago}</span></td>
+                        </tr>
+                        
+                        <tr id="detalles-${p.idPedido}" style="display: none; background-color: #f7f3ee;">
+                            <td colspan="4" style="padding: 0;">
+                                <div style="padding: 20px 40px; border-top: 1px solid #eaddcd; border-bottom: 2px solid #eaddcd; box-shadow: inset 0 3px 10px rgba(0,0,0,0.02);">
+                                    
+                                    <div style="background: white; padding: 20px; border-radius: 8px; border: 1px solid #eaddcd; max-width: 600px; margin: 0 auto;">
+                                        <h4 style="margin: 0 0 15px 0; color: #4a3b32; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #eee; padding-bottom: 10px;">
+                                            Resumen del Pedido #${p.idPedido}
+                                        </h4>
+                                        
+                                        ${productosLista}
+                                        
+                                        <div style="display: flex; justify-content: space-between; padding-top: 15px; margin-top: 5px; font-weight: bold; color: rgb(159, 80, 0); font-size: 18px;">
+                                            <span>TOTAL PAGADO:</span>
+                                            <span>${p.total.toFixed(2)} €</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </td>
                         </tr>`;
                 });
                 tbody.innerHTML = html;
@@ -71,7 +115,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
 
-    // 3. LÓGICA DE EDICIÓN DE PERFIL (Ahora siempre se ejecutará)
+    // 3. LÓGICA DE EDICIÓN DE PERFIL 
     const btnEdit = document.getElementById("btn-edit");
     const btnCancel = document.getElementById("btn-cancel");
     const btnSave = document.getElementById("btn-save");
@@ -164,6 +208,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 });
 
+// --- FUNCIONES GLOBALES ---
 function openModal(url) {
     const modal = document.getElementById("imageModal");
     const img = document.getElementById("modalImg");
@@ -175,3 +220,17 @@ function openModal(url) {
 function closeModal() {
     document.getElementById("imageModal").style.display = "none";
 }
+
+// NUEVA FUNCIÓN: Abre el ticket y gira la flecha
+window.toggleDetalles = function(idPedido) {
+    const filaDetalles = document.getElementById(`detalles-${idPedido}`);
+    const icono = document.getElementById(`icon-${idPedido}`);
+
+    if (filaDetalles.style.display === "none") {
+        filaDetalles.style.display = "table-row";
+        icono.style.transform = "rotate(180deg)"; // Anima la flecha girándola
+    } else {
+        filaDetalles.style.display = "none";
+        icono.style.transform = "rotate(0deg)"; // Vuelve la flecha a su sitio
+    }
+};

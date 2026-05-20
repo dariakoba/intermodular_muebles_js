@@ -5,17 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pasarela de Pago - DNA Muebles</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; background: #d9ccbc!important;; color: #333; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; background: #f5efe6; color: #333; }
         
         /* Contenedor principal a dos columnas */
         .checkout-wrapper { display: flex; flex-wrap: wrap; gap: 30px; max-width: 1100px; margin: 20px auto; align-items: flex-start; }
         
-        /* Columna Izquierda (Formulario) en color crema suave */
+        /* Columna Izquierda (Formulario) */
         .checkout-form { flex: 1 1 600px; background: #faf6f0; padding: 35px; border-radius: 10px; box-shadow: 0 4px 20px rgba(139, 90, 43, 0.08); border: 1px solid #eaddcd; }
         .checkout-form h2 { margin-top: 0; color: #4a3b32; font-size: 1.4rem; border-bottom: 2px solid #eaddcd; padding-bottom: 10px; margin-bottom: 20px; }
         .form-section { margin-bottom: 35px; }
         
-        /* Columna Derecha (Resumen) en un beige un poquito más tostado */
+        /* Columna Derecha (Resumen) */
         .checkout-summary { flex: 1 1 350px; background: #f3eae1; padding: 30px; border-radius: 10px; border: 1px solid #dfd3c3; box-shadow: 0 4px 20px rgba(139, 90, 43, 0.08); position: sticky; top: 20px; }
         .checkout-summary h2 { margin-top: 0; color: #4a3b32; font-size: 1.3rem; margin-bottom: 20px; }
         
@@ -32,7 +32,7 @@
         .resumen-item .item-nombre { color: #5c4d42; }
         .resumen-item .item-precio { font-weight: bold; color: #333; }
 
-        /* Cajita de puntos verde pastel sutil */
+        /* Cajita de usar puntos */
         #caja-puntos { display: none; background: #edf5ee; padding: 15px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #cce2cf; }
         .pts-text { margin: 0 0 10px 0; color: #2e7d32; font-size: 0.95rem;}
         .pts-checkbox { cursor: pointer; font-size: 14px; font-weight: bold; color: #1b5e20; display: flex; align-items: center; gap: 8px;}
@@ -42,6 +42,10 @@
         .descuento-linea { color: #d94536; font-weight: bold; display: none; }
         .total-final { display: flex; justify-content: space-between; font-size: 1.4rem; font-weight: bold; color: rgb(159, 80, 0); margin-top: 15px; padding-top: 15px; border-top: 2px solid #cbbdaf; }
         
+        /* NUEVO: Cajita de previsión de puntos a ganar */
+        .caja-prevision-puntos { background: #fdfaf6; border: 1px dashed #d6caba; padding: 12px; border-radius: 6px; margin-top: 15px; text-align: center; color: #6b5a4d; font-size: 0.95rem; }
+        .caja-prevision-puntos span { color: rgb(159, 80, 0); font-weight: bold; font-size: 1.1rem; }
+
         button { background: rgb(159, 80, 0); color: white; padding: 16px; border: none; border-radius: 6px; cursor: pointer; width: 100%; font-size: 16px; font-weight: bold; margin-top: 20px; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; }
         button:hover { background: #3c2f24; }
         button:disabled { background: #ccc; cursor: not-allowed; }
@@ -134,6 +138,10 @@
                 <span id="monto-total">0.00€</span>
             </div>
 
+            <div class="caja-prevision-puntos">
+                Acumularás <span id="prevision-puntos">0</span> puntos con este pedido
+            </div>
+
             <button type="button" id="btn-pagar" onclick="document.getElementById('form-compra').requestSubmit();">FINALIZAR COMPRA</button>
         </div>
 
@@ -183,6 +191,12 @@
         let descuentoEuros = 0;
         let puntosAUsar = 0;
 
+        function actualizarPrevisionPuntos() {
+            // Se ganan 5 puntos por cada euro pagado realmente (del totalFinal)
+            let puntosAGanar = Math.floor(totalFinal * 5);
+            document.getElementById('prevision-puntos').innerText = puntosAGanar;
+        }
+
         function aplicarPuntos(checkbox) {
             const lineaDescuento = document.getElementById('linea-descuento');
             if (checkbox.checked) {
@@ -196,6 +210,9 @@
                 lineaDescuento.style.display = 'none';
             }
             document.getElementById('monto-total').innerText = totalFinal.toFixed(2) + "€";
+            
+            // Recalculamos los puntos que va a ganar porque el precio ha cambiado
+            actualizarPrevisionPuntos();
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -224,6 +241,9 @@
             totalFinal = totalOriginal;
             document.getElementById('monto-subtotal').innerText = totalOriginal.toFixed(2) + "€";
             document.getElementById('monto-total').innerText = totalFinal.toFixed(2) + "€";
+            
+            // Calculamos los puntos iniciales que va a ganar
+            actualizarPrevisionPuntos();
 
             try {
                 const userObj = localStorage.getItem('user') || sessionStorage.getItem('user');
@@ -321,3 +341,5 @@
     </script>
 </body>
 </html>
+
+```
