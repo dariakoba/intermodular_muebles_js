@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const salario = document.getElementById("salario");
 
   let usuarioOriginal = {};
+  let isMe = false;
 
   function normalizar(valor) {
     return (valor || "").toString().trim().toLowerCase();
@@ -31,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
       usuarioOriginal = u;
 	  const currentUserRes = await fetch("/api/me");
 	  const currentUser = await currentUserRes.json();
-	  const isMe = currentUser.id === u.id;
+	  isMe = currentUser.id === u.id;
 
       nombre.value = u.nombre || "";
       apellidos.value = u.apellidos || "";
