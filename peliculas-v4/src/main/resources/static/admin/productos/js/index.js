@@ -25,12 +25,11 @@ function render(productos) {
             <td>${e(p.precio)}€</td>
             <td>${e(p.stock)}</td>
 			<td>
-			  ${
-			    p.estado === "activo"
-			      ? `<span class="badge badge-activo">Activo</span>`
-			      : `<span class="badge badge-inactivo">Inactivo</span>`
-			  }
-			</td>            <td>${e(p.categoria || "-")}</td>
+			                    <span class="badge ${p.estado === 'activo' ? 'bg-recibido' : 'bg-cancelado'}">
+			                        ${p.estado}
+			                    </span>
+			                </td>
+			           <td>${e(p.categoria || "-")}</td>
 			<td>
 			  <div class="acciones">
 

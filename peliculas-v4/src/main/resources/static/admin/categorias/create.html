@@ -7,92 +7,142 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+	/* --- RESET --- */
+	*, *::before, *::after {
+	  box-sizing: border-box;
+	  margin: 0;
+	  padding: 0;
+	}
 
-  body {
-    font-family: 'Lato', sans-serif;
-    background: #fdfbf6;
-    color: #222;
-    min-height: 100vh;
-  }
+	/* --- BODY --- */
+	body {
+	  font-family: 'Lato', sans-serif;
+	  background: #fdfbf6;
+	  color: #222;
+	  min-height: 100vh;
+	  padding-top: 64px;
+	}
 
-  .topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 40px;
-    height: 64px;
-    background: linear-gradient(90deg, #1a1a1a, #2c2c2c);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-  }
+	/* --- NAVBAR --- */
+	.navbar {
+	  display: flex;
+	  align-items: center;
+	  justify-content: space-between;
+	  padding: 0 40px;
+	  height: 64px;
+	  background: linear-gradient(90deg, #1a1a1a, #2c2c2c);
+	  position: fixed;
+	  top: 0;
+	  left: 0;
+	  right: 0;
+	  z-index: 100;
+	  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+	}
 
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    color: #fff;
-    font-family: 'Playfair Display', serif;
-    font-size: 1.6rem;
-    font-weight: 700;
-    letter-spacing: 2px;
-  }
+	/* --- LOGO --- */
+	.logo-link {
+	  display: flex;
+	  align-items: center;
+	  text-decoration: none;
+	}
 
-  .logo img { height: 40px; object-fit: contain; }
+	.logo-container {
+	  display: flex;
+	  align-items: center;
+	  gap: 10px;
+	}
 
-  nav.menu { display: flex; gap: 28px; }
+	.logo-circle {
+	  width: 40px;
+	  height: 40px;
+	  border-radius: 50%;
+	  overflow: hidden;
+	}
 
-  nav.menu a {
-    color: #ddd;
-    text-decoration: none;
-    font-size: 0.9rem;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    transition: all 0.3s ease;
-  }
+	.logo-image {
+	  width: 100%;
+	  height: 100%;
+	  object-fit: contain;
+	}
 
-  nav.menu a:hover { color: #1abc9c; transform: translateY(-2px); }
+	.brand-name {
+	  color: #fff;
+	  font-size: 1.4rem;
+	  font-weight: 700;
+	  letter-spacing: 1px;
+	}
 
-  .icons { display: flex; align-items: center; gap: 18px; color: #fff; }
+	/* --- NAV LINKS --- */
+	.nav-links {
+	  display: flex;
+	  gap: 28px;
+	  position: absolute;
+	  left: 50%;
+	  transform: translateX(-50%);
+	}
 
-  .icons .material-symbols-outlined {
-    cursor: pointer;
-    font-size: 24px;
-    transition: color 0.3s ease, transform 0.2s ease;
-  }
+	.nav-links a {
+	  color: #ddd;
+	  text-decoration: none;
+	  font-size: 0.9rem;
+	  letter-spacing: 1px;
+	  text-transform: uppercase;
+	}
 
-  .icons .material-symbols-outlined:hover { color: #1abc9c; transform: scale(1.2); }
+	.nav-links a:hover {
+	  color: #1abc9c;
+	  transform: translateY(-2px);
+	}
 
-  .person-menu-wrapper { position: relative; }
+	/* --- ICONOS --- */
+	.icons {
+	  display: flex;
+	  align-items: center;
+	  gap: 18px;
+	}
 
-  .person-menu {
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 44px;
-    background: #fff;
-    border-radius: 8px;
-    min-width: 160px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-    overflow: hidden;
-    z-index: 50;
-  }
+	.material-symbols-outlined {
+	  font-size: 26px;
+	  color: #fff;
+	  cursor: pointer;
+	  transition: 0.2s;
+	}
 
-  .person-menu-wrapper:hover .person-menu { display: block; }
+	#person-icon:hover {
+	  color: #1abc9c;
+	  transform: scale(1.1);
+	}
 
-  .person-menu a {
-    display: block;
-    padding: 12px 18px;
-    font-size: 0.88rem;
-    color: #333;
-    text-decoration: none;
-    transition: background 0.2s;
-  }
+	/* --- DROPDOWN --- */
+	.person-menu-wrapper {
+	  position: relative;
+	}
 
-  .person-menu a:hover { background: #f0f0f0; }
+	.person-menu {
+	  display: none;
+	  position: absolute;
+	  right: 0;
+	  top: 100%;
+	  background: #fff;
+	  border-radius: 8px;
+	  min-width: 160px;
+	  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+	}
 
+	.person-menu-wrapper:hover .person-menu {
+	  display: block;
+	}
+
+	.person-menu a {
+	  display: block;
+	  padding: 10px 12px;
+	  color: #333;
+	  text-decoration: none;
+	}
+
+	.person-menu a:hover {
+	  background: #f2f2f2;
+	}
   /* --- Formulario --- */
   .admin-wrapper {
     max-width: 680px;
@@ -200,32 +250,53 @@
   }
 
   .btn-cancelar:hover { background: #e0ddd8; transform: translateY(-2px); }
+  
+  .error {
+      color: #e53935;        /* rojo fuerte */
+      font-size: 12px;
+      margin-top: 4px;
+      display: block;        /* importante para que ocupe línea */
+      line-height: 1.2;
+  }
 </style>
 </head>
 <body>
 
-<div class="topbar">
-  <div class="logo">
-    <img src="/images/logo.png" alt="logo">
-    DNA
-  </div>
-  <nav class="menu">
-    <a href="/index.html">Home</a>
-    <a href="/catalogo.html">Catálogo</a>
-    <a href="/productos.html">Productos</a>
-    <a href="/contacto.html">Contacto</a>
-  </nav>
-  <div class="icons">
-    <span class="material-symbols-outlined">shopping_cart</span>
-    <div class="person-menu-wrapper">
-      <span id="person-icon" class="material-symbols-outlined">person</span>
-      <div class="person-menu">
-        <a href="#">Ver cuenta</a>
-        <a href="#">Cerrar sesión</a>
-      </div>
-    </div>
-  </div>
-</div>
+	<!-- Header / Navbar -->
+			<header class="navbar">
+				<a href="home.html" class="logo-link">
+					<div class="logo-container">
+						<div class="logo-circle">
+							<img src="/images/logo.png" alt="DNA Logo" class="logo-image">
+						</div>
+						<span class="brand-name">DNA</span>
+					</div>
+				</a>
+
+
+				<nav class="nav-links">
+					<a href="/adminhome.html">Home</a>
+					<a href="/admin/usuarios/index.html">Usuarios</a>
+					<a href="/admin/productos/index.html">Productos</a>
+					<a href="pedidoAdmin.html">Pedidos</a>
+					<a href="/admin/categorias/index.html">Categorías</a>
+					<a href="/admin/resenyas/index.html">Reseñas</a>
+
+
+			    </nav>
+
+				
+
+				<div class="icons">
+				    <div class="person-menu-wrapper">
+				        <span id="person-icon" class="material-symbols-outlined" style="cursor: pointer;">person</span>
+
+				        <div class="person-menu">
+				            <a href="#" id="logoutBtn">Cerrar sesión</a>
+				        </div>
+				    </div>
+				</div>
+			</header>
 
 <div class="admin-wrapper">
   <div class="admin-header">
@@ -234,16 +305,18 @@
   </div>
 
   <div class="form-card">
-    <form id="form-create">
+    <form id="form-create" novalidate>
 
       <div class="form-group">
         <label for="nombre">Nombre</label>
-        <input id="nombre" type="text" required>
+        <input id="nombre" type="text" >
+		<small class="error" id="error-nombre"></small>
+
       </div>
 
       <div class="form-group">
         <label for="estado">Estado</label>
-        <select id="estado" type="text" required>
+        <select id="estado" type="text" >
         	<option value="activo">Activo</option>
           	<option value="inactivo">Inactivo</option>
           
