@@ -135,6 +135,27 @@ async function cargarResenyas(id) {
         }));
 
         contenedor.innerHTML = tarjetasHTML.join("");
+		// CALCULAR MEDIA
+		let suma = 0;
+		let count = resenyas.length;
+
+		resenyas.forEach(r => {
+		    suma += r.puntuacion || 0;
+		});
+
+		const media = count > 0 ? (suma / count) : 0;
+
+		// MOSTRAR EN HTML
+		const avgElement = document.getElementById("avg-puntuacion");
+
+		if (avgElement) {
+		    avgElement.innerHTML = `
+		        ⭐ ${media.toFixed(1)} / 5
+		        <span style="color:#999; font-size:0.9rem;">
+		            (${count} opiniones)
+		        </span>
+		    `;
+		}
 
     } catch (error) {
         console.error("Error al cargar reseñas:", error);

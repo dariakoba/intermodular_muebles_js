@@ -573,6 +573,14 @@ body {
     max-height: 90%;
     border-radius: 10px;
 }
+
+#avg-puntuacion {
+  margin: 10px 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #ae4010;
+}
+
 /* ════════════════════════════
    RESPONSIVE
    ════════════════════════════ */
