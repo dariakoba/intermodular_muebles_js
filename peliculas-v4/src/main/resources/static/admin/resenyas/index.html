@@ -11,25 +11,41 @@
 </head>
 <body>
 
-<header class="topbar">
-    <a href="../../adminhome.html" class="logo">
-        <img src="/images/logo.png" alt="Logo"> DNA
-    </a>
-    <nav class="menu">
-        <a href="../../adminhome.html">Home</a>
-        <a href="../usuarios/index.html">Usuarios</a>
-        <a href="../productos/index.html">Productos</a>
-        <a href="../pedidoAdmin.html">Pedidos</a>
-        <a href="index.html" style="color: #1abc9c;">Reseñas</a>
-    </nav>
-    <div class="icons person-menu-wrapper">
-        <span class="material-symbols-outlined">account_circle</span>
-        <div class="person-menu">
-            <a href="#">Perfil</a>
-            <a href="#" id="logoutBtn">Salir</a>
-        </div>
-    </div>
-</header>
+	<!-- Header / Navbar -->
+		<header class="navbar">
+			<a href="home.html" class="logo-link">
+				<div class="logo-container">
+					<div class="logo-circle">
+						<img src="/images/logo.png" alt="DNA Logo" class="logo-image">
+					</div>
+					<span class="brand-name">DNA</span>
+				</div>
+			</a>
+
+
+			<nav class="nav-links">
+				<a href="/adminhome.html">Home</a>
+				<a href="/admin/usuarios/index.html">Usuarios</a>
+				<a href="/admin/productos/index.html">Productos</a>
+				<a href="pedidoAdmin.html">Pedidos</a>
+				<a href="/admin/categorias/index.html">Categorías</a>
+				<a href="/admin/resenyas/index.html">Reseñas</a>
+
+
+		    </nav>
+
+			
+
+			<div class="icons">
+			    <div class="person-menu-wrapper">
+			        <span id="person-icon" class="material-symbols-outlined" style="cursor: pointer;">person</span>
+
+			        <div class="person-menu">
+			            <a href="javascript:void(0)" id="logoutBtn">Cerrar sesión</a>
+			        </div>
+			    </div>
+			</div>
+		</header>
 
 <div class="admin-wrapper">
     <div class="admin-header">
@@ -76,5 +92,6 @@
 
 <script src="js/index.js"></script>
 <script src="js/destroy.js"></script>
+<script src="/js/logout.js"></script>
 </body>
 </html>

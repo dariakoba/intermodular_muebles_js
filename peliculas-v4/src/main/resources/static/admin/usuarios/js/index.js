@@ -22,6 +22,7 @@ function renderizarTabla(usuarios) {
     usuarios.forEach(u => {
         const estado = (u.estado ?? "").toLowerCase();
         const isMe = currentUser && currentUser.id === u.id;
+		
 
         html += `
             <tr class="${isMe ? 'fila-yo' : ''}">

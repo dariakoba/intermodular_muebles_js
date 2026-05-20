@@ -10,10 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.peliculas.dto.CategoriaDetalle;
 import com.example.peliculas.entity.Categoria;
-import com.example.peliculas.entity.Producto;
+import com.example.peliculas.exception.CategoriaConProductosException;
 import com.example.peliculas.exception.DataAccessException;
 import com.example.peliculas.repository.CategoriaRepository;
-import com.example.peliculas.repository.ProductoRepository;
 
 @RestController
 @RequestMapping("/api/admin/categorias")
@@ -87,7 +86,23 @@ public class CategoriaAdminController {
             throw new DataAccessException(e);
         }
     }
+    @DeleteMapping("/{id}")
+    public void destroy(@PathVariable int id) {
+        try (Connection con = ds.getConnection()) {
 
+            CategoriaRepository repo = new CategoriaRepository(con);
+
+            if (repo.tieneProductos(id)) {
+                throw new CategoriaConProductosException();
+            }
+
+            repo.delete(id);
+
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+    }
+    /*
     @DeleteMapping("/{id}")
     public void destroy(@PathVariable int id) {
         try (Connection con = ds.getConnection()) {
@@ -97,4 +112,5 @@ public class CategoriaAdminController {
             throw new DataAccessException(e);
         }
     }
+    */
 }

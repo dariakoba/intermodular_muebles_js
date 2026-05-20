@@ -177,3 +177,37 @@ body {
     left: 20px;
   }
 }
+
+.btn-back {
+  display: inline-block;
+  width: 100%;
+  margin-top: 12px;
+
+  padding: 10px 20px;   /* 👈 un poco más pequeño que login */
+  border-radius: 25px;
+
+  text-align: center;
+  text-decoration: none;
+
+  font-size: 16px;      /* 👈 más discreto */
+  font-weight: 600;     /* 👈 no tan fuerte como el login */
+
+  color: #5c4432;
+  background: rgba(255,255,255,0.6);
+  border: 1px solid rgba(92, 68, 50, 0.3);
+
+  backdrop-filter: blur(6px);
+  transition: all 0.25s ease;
+  box-sizing: border-box;
+}
+
+.btn-back:hover {
+  background: #5c4432;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(92, 68, 50, 0.2);
+}
+
+.btn-back:active {
+  transform: scale(0.98);
+}

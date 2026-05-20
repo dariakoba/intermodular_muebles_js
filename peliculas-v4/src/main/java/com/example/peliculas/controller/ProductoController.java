@@ -11,11 +11,8 @@ import javax.sql.DataSource;
 
 import org.springframework.web.bind.annotation.*;
 
-import com.example.peliculas.dto.ProductoDetalle;
-import com.example.peliculas.dto.ProductoResumen;
-import com.example.peliculas.entity.Producto;
+import com.example.peliculas.dto.ProductoResumenImagen;
 import com.example.peliculas.exception.DataAccessException;
-import com.example.peliculas.repository.CategoriaRepository;
 import com.example.peliculas.repository.ProductoRepository;
 
 @RestController
@@ -39,7 +36,7 @@ public class ProductoController {
     */
     
     @GetMapping("/{id}")
-    public ProductoDetalle show(@PathVariable int id) {
+    public ProductoResumenImagen show(@PathVariable int id) {
         try (Connection con = ds.getConnection()) {
             ProductoRepository repo = new ProductoRepository(con);
             return repo.findByDetalleId(id);
@@ -62,7 +59,7 @@ public class ProductoController {
     
     //pruebas
     @GetMapping
-    public List<ProductoResumen> index(
+    public List<ProductoResumenImagen> index(
         @RequestParam(required = false) String categoria,
         @RequestParam(required = false) Float precioMin,
         @RequestParam(required = false) Float precioMax,
@@ -70,7 +67,7 @@ public class ProductoController {
     ) {
         try (Connection con = ds.getConnection()) {
             ProductoRepository repo = new ProductoRepository(con);
-            Stream<ProductoResumen> stream = repo.findResumen().stream();
+            Stream<ProductoResumenImagen> stream = repo.findAllResumen().stream();
 
             // Filtro categoría
             if (categoria != null && !categoria.isBlank()) {
@@ -85,11 +82,11 @@ public class ProductoController {
                 stream = stream.filter(p -> p.precio() <= precioMax);
             }
 
-            Comparator<ProductoResumen> comparator = switch (orden) {
-            case "nombre-desc" -> Comparator.comparing(ProductoResumen::nombre).reversed();
-            case "precio-asc"  -> Comparator.comparing(ProductoResumen::precio);
-            case "precio-desc" -> Comparator.comparing(ProductoResumen::precio).reversed();
-            default            -> Comparator.comparing(ProductoResumen::nombre);
+            Comparator<ProductoResumenImagen> comparator = switch (orden) {
+            case "nombre-desc" -> Comparator.comparing(ProductoResumenImagen::nombre).reversed();
+            case "precio-asc"  -> Comparator.comparing(ProductoResumenImagen::precio);
+            case "precio-desc" -> Comparator.comparing(ProductoResumenImagen::precio).reversed();
+            default            -> Comparator.comparing(ProductoResumenImagen::nombre);
             };
 
             return stream.sorted(comparator).collect(Collectors.toList());

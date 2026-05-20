@@ -8,68 +8,143 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+	/* --- RESET --- */
+	*, *::before, *::after {
+	  box-sizing: border-box;
+	  margin: 0;
+	  padding: 0;
+	}
 
-body {
-  font-family: 'Lato', sans-serif;
-  background: #fdfbf6;
-  color: #222;
-  min-height: 100vh;
-}
+	/* --- BODY --- */
+	body {
+	  font-family: 'Lato', sans-serif;
+	  background: #fdfbf6;
+	  color: #222;
+	  min-height: 100vh;
+	  padding-top: 64px;
+	}
 
-/* --- Topbar (MISMO) --- */
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 40px;
-  height: 64px;
-  background: linear-gradient(90deg, #1a1a1a, #2c2c2c);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-}
+	/* --- NAVBAR --- */
+	.navbar {
+	  display: flex;
+	  align-items: center;
+	  justify-content: space-between;
+	  padding: 0 40px;
+	  height: 64px;
+	  background: linear-gradient(90deg, #1a1a1a, #2c2c2c);
+	  position: fixed;
+	  top: 0;
+	  left: 0;
+	  right: 0;
+	  z-index: 100;
+	  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+	}
 
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  color: #fff;
-  font-family: 'Playfair Display', serif;
-  font-size: 1.6rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-}
+	/* --- LOGO --- */
+	.logo-link {
+	  display: flex;
+	  align-items: center;
+	  text-decoration: none;
+	}
 
-.logo img { height: 40px; }
+	.logo-container {
+	  display: flex;
+	  align-items: center;
+	  gap: 10px;
+	}
 
-nav.menu { display: flex; gap: 28px; }
+	.logo-circle {
+	  width: 40px;
+	  height: 40px;
+	  border-radius: 50%;
+	  overflow: hidden;
+	}
 
-nav.menu a {
-  color: #ddd;
-  text-decoration: none;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  transition: 0.3s;
-}
+	.logo-image {
+	  width: 100%;
+	  height: 100%;
+	  object-fit: contain;
+	}
 
-nav.menu a:hover { color: #1abc9c; }
+	.brand-name {
+	  color: #fff;
+	  font-size: 1.4rem;
+	  font-weight: 700;
+	  letter-spacing: 1px;
+	}
 
-.icons {
-  display: flex;
-  gap: 18px;
-  color: #fff;
-}
+	/* --- NAV LINKS --- */
+	.nav-links {
+	  display: flex;
+	  gap: 28px;
+	  position: absolute;
+	  left: 50%;
+	  transform: translateX(-50%);
+	}
 
-.icons span {
-  cursor: pointer;
-  transition: 0.3s;
-}
+	.nav-links a {
+	  color: #ddd;
+	  text-decoration: none;
+	  font-size: 0.9rem;
+	  letter-spacing: 1px;
+	  text-transform: uppercase;
+	}
 
-.icons span:hover {
-  color: #1abc9c;
-}
+	.nav-links a:hover {
+	  color: #1abc9c;
+	  transform: translateY(-2px);
+	}
+
+	/* --- ICONOS --- */
+	.icons {
+	  display: flex;
+	  align-items: center;
+	  gap: 18px;
+	}
+
+	.material-symbols-outlined {
+	  font-size: 26px;
+	  color: #fff;
+	  cursor: pointer;
+	  transition: 0.2s;
+	}
+
+	#person-icon:hover {
+	  color: #1abc9c;
+	  transform: scale(1.1);
+	}
+
+	/* --- DROPDOWN --- */
+	.person-menu-wrapper {
+	  position: relative;
+	}
+
+	.person-menu {
+	  display: none;
+	  position: absolute;
+	  right: 0;
+	  top: 100%;
+	  background: #fff;
+	  border-radius: 8px;
+	  min-width: 160px;
+	  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+	}
+
+	.person-menu-wrapper:hover .person-menu {
+	  display: block;
+	}
+
+	.person-menu a {
+	  display: block;
+	  padding: 10px 12px;
+	  color: #333;
+	  text-decoration: none;
+	}
+
+	.person-menu a:hover {
+	  background: #f2f2f2;
+	}
+
 
 /* --- CONTENIDO --- */
 .admin-wrapper {
@@ -110,6 +185,31 @@ nav.menu a:hover { color: #1abc9c; }
   flex-direction: column;
 }
 
+.imagenes-section {
+  margin-bottom: 24px;
+}
+
+.imagenes {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.imagenes img {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.imagenes img:hover {
+  transform: scale(1.05);
+}
+
 .label {
   font-size: 0.75rem;
   text-transform: uppercase;
@@ -132,6 +232,58 @@ nav.menu a:hover { color: #1abc9c; }
 .descripcion .value {
   font-weight: 400;
   line-height: 1.5;
+}
+
+
+/* imagen sección */
+.imagen-principal-wrapper {
+    margin-bottom: 20px;
+}
+
+#imagen-principal {
+    width: 300px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.galeria {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.galeria img {
+    border-radius: 8px;
+}
+
+/* MODAL */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.85);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-img {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 12px;
+}
+
+.cerrar-modal {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: white;
+    font-size: 40px;
+    cursor: pointer;
 }
 
 /* BOTONES */
@@ -179,31 +331,49 @@ nav.menu a:hover { color: #1abc9c; }
 
 <body>
 
-<!-- TOPBAR -->
-<div class="topbar">
-  <div class="logo">
-    <img src="/images/logo.png">
-    DNA
-  </div>
+	<!-- Header / Navbar -->
+	<header class="navbar">
+		<a href="home.html" class="logo-link">
+			<div class="logo-container">
+				<div class="logo-circle">
+					<img src="/images/logo.png" alt="DNA Logo" class="logo-image">
+				</div>
+				<span class="brand-name">DNA</span>
+			</div>
+		</a>
 
-  <nav class="menu">
-    <a href="/adminhome.html">Home</a>
-    <a href="/admin/usuarios/usuarios-admin.html">Usuarios</a>
-    <a href="/admin/productos/index.html">Productos</a>
-    <a href="/contacto.html">Categorías</a>
-  </nav>
 
-  <div class="icons">
-    <span class="material-symbols-outlined">shopping_cart</span>
-    <span class="material-symbols-outlined">person</span>
-  </div>
-</div>
+		<nav class="nav-links">
+			<a href="/adminhome.html">Home</a>
+			<a href="/admin/usuarios/index.html">Usuarios</a>
+			<a href="/admin/productos/index.html">Productos</a>
+			<a href="pedidoAdmin.html">Pedidos</a>
+			<a href="/admin/categorias/index.html">Categorías</a>
+			<a href="/admin/resenyas/index.html">Reseñas</a>
+
+
+	    </nav>
+
+		
+
+		<div class="icons">
+		    <div class="person-menu-wrapper">
+		        <span id="person-icon" class="material-symbols-outlined" style="cursor: pointer;">person</span>
+
+		        <div class="person-menu">
+		            <a href="#" id="logoutBtn">Cerrar sesión</a>
+		        </div>
+		    </div>
+		</div>
+	</header>
 
 <!-- CONTENIDO -->
 <div class="admin-wrapper">
   <div class="product-card">
 
     <div class="product-title" id="nombre">Producto</div>
+	
+	
 
     <div class="product-grid">
       <div class="product-item">
@@ -242,6 +412,14 @@ nav.menu a:hover { color: #1abc9c; }
       <div class="label">Descripción</div>
       <div class="value" id="descripcion"></div>
     </div>
+	</br>
+	<!-- IMAGEN PRINCIPAL -->
+	<div class="imagen-principal-wrapper">
+		<div class="label">Imagenes</div>
+	  	<img id="imagen-principal" style="display:none;">
+	</div>
+
+	
     
    
     <div class="actions">
@@ -251,6 +429,60 @@ nav.menu a:hover { color: #1abc9c; }
 
   </div>
 </div>
-<script src="js/show.js"></script>
+<!-- GALERÍA -->
+	<div class="galeria" id="galeria"></div>
+	<div id="modal" class="modal">
+
+	    <span id="cerrar-modal" class="cerrar-modal">&times;</span>
+
+	    <img id="modal-img" class="modal-img">
+
+	</div>
+<script type="module" src="js/show.js"></script>
+<script>
+	document.addEventListener("DOMContentLoaded", () => {
+	    const icon = document.getElementById("person-icon");
+	    const menu = document.querySelector(".person-menu");
+	    const logoutBtn = document.getElementById("logoutBtn");
+
+	    if (icon && menu) {
+	        icon.addEventListener("click", (e) => {
+	            e.stopPropagation();
+	            menu.classList.toggle("show");
+	        });
+
+	        document.addEventListener("click", () => {
+	            menu.classList.remove("show");
+	        });
+	    }
+
+	    if (logoutBtn) {
+	        logoutBtn.addEventListener("click", async (e) => {
+	            e.preventDefault();
+
+	            if (!confirm("¿Estás seguro de que quieres cerrar sesión?")) return;
+
+	            try {
+	                const res = await fetch("/logout", {   
+	                    method: "POST",
+	                    credentials: "include"
+	                });
+
+	                localStorage.clear();
+	                sessionStorage.clear();
+
+	                window.location.href = "/../../login.html";
+
+	            } catch (err) {
+	                console.error("Error al cerrar sesión:", err);
+	                // En caso de error de red, forzamos la salida al login
+	                window.location.href = "/../../login.html";
+	            }
+	        });
+	    }
+	});
+	
+
+</script>
 </body>
 </html>

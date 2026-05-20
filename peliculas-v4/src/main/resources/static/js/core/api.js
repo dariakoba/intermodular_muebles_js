@@ -1,81 +1,85 @@
 export const api = {
 
-	async request(url, options = {}) {
+    async request(url, options = {}) {
 
-		console.log(url);
-		
-	    const { headers = {}, ...rest } = options;
+        console.log(url);
 
-	    const config = {
-	        credentials: "same-origin",
+        const { headers = {}, ...rest } = options;
 
-	        ...rest,
+        const config = {
+            credentials: "same-origin",
 
-	        headers: {
-	            "Accept": "application/json",
-	            ...headers
-	        }
-	    };
+            ...rest,
 
-	    const response = await fetch(url, config);
+            headers: {
+                "Accept": "application/json",
+                ...headers
+            }
+        };
 
-		let data = null;
+        const response = await fetch(url, config);
 
-		if (response.status !== 204) {
-			try {
-				data = await response.json();
-			} catch {}
-		}
-		
-		if (!response.ok) {
-			const e = new Error(data?.message || "HTTP error");
-			e.status = response.status;
-			e.data = data;
-			throw e;
-		}
+        let data = null;
 
-		return data;
-	},
+        if (response.status !== 204) {
+            try {
+                data = await response.json();
+            } catch {
+                // Puede no ser JSON (ej: texto plano)
+            }
+        }
 
-	async get(url, options = {}) {
-		return this.request(url, options);
-	},
+        if (!response.ok) {
+            const e = new Error(data?.message || "HTTP error");
+            e.status = response.status;
+            e.data = data;
+            throw e;
+        }
 
-	async post(url, data, options = {}) {
+        return data;
+    },
 
-	    const { headers = {}, ...rest } = options;
+    async get(url, options = {}) {
+        return this.request(url, options);
+    },
 
-	    return this.request(url, {
-	        method: "POST",
-			headers: {
-				 "Content-Type": "application/json",
-				 ...headers
-			},
-	        body: JSON.stringify(data),
-	        ...rest
-	        
-	    });
-	},
+    async post(url, data, options = {}) {
+        return this._sendWithBody("POST", url, data, options);
+    },
 
-	async put(url, data, options = {}) {
-		
-		const { headers = {}, ...rest } = options;
-		
-		return this.request(url, {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-				...headers
-			},
-			body: JSON.stringify(data),
-			...rest
-		});
-	},
+    async put(url, data, options = {}) {
+        return this._sendWithBody("PUT", url, data, options);
+    },
 
-	async delete(url, options = {}) {
-		return this.request(url, {
-			method: "DELETE",
-			...options
-		});
-	}
+    async patch(url, data, options = {}) {
+        return this._sendWithBody("PATCH", url, data, options);
+    },
+
+    async delete(url, options = {}) {
+        return this.request(url, {
+            method: "DELETE",
+            ...options
+        });
+    },
+
+    // mÃ©todo interno comÃºn
+    async _sendWithBody(method, url, data, options = {}) {
+
+        const { headers = {}, ...rest } = options;
+
+        const isFormData = data instanceof FormData;
+
+        return this.request(url, {
+            method,
+
+            headers: {
+                ...(isFormData ? {} : { "Content-Type": "application/json" }),
+                ...headers
+            },
+
+            body: isFormData ? data : JSON.stringify(data),
+
+            ...rest
+        });
+    }
 };

@@ -1,12 +1,11 @@
 package com.example.peliculas.dto;
 
-public record ProductoResumen(
+public record ProductoResumenImagen(
 	Integer idProducto,
 	String nombre,
 	float precio,
 	int stock,
-	String estado,
-	String categoria
-	//String imagen
+	String categoria,
+	String imagen
 	
 ) {}

@@ -21,26 +21,45 @@ function render(categorias) {
             <td><input type="checkbox" class="check-fila" data-id="${p.id_categoria}"></td>
 			<td>${e(p.id_categoria)}</td>
             <td>${e(p.nombre)}</td>
-			<td>${e(p.estado)}</td>
+			<td>
+			${
+						    p.estado === "activo"
+						      ? `<span class="badge badge-activo">Activo</span>`
+						      : `<span class="badge badge-inactivo">Inactivo</span>`
+						  }
+			</td>
 
-            <td class="acciones">
-                <a href="show.html?id=${p.id_categoria}" class="btn-ver">Ver</a>
-                <a href="edit.html?id=${p.id_categoria}" class="btn-editar">Editar</a>
-				
-			
-				 
-				 
-				 ${
-			 		    p.estado === "activo"
-			 		        ? `<button class="btn-desactivar" onclick="desactivarCategoria(${p.id_categoria})">
-			 		                Desactivar
-			 		           </button>`
-			 		        : `<button class="btn-activar" onclick="activarCategoria(${p.id_categoria})">
-			 		                Activar
-			 		           </button>`
-				 }
-				 
-            </td>
+			<td>
+						  <div class="acciones">
+
+						    <a href="show.html?id=${p.id_categoria}" class="btn-ver" title="Ver detalles">
+									<i class="fa-solid fa-eye"></i>
+						    </a>
+
+						    <a href="edit.html?id=${p.id_categoria}" class="btn-editar" title="Editar producto">
+								<i class="fa-solid fa-pen"></i>
+						    </a>
+
+						    ${
+						      p.estado === "activo"
+						        ? `
+						          <button class="btn-desactivar"
+						                  onclick="desactivarCategoria(${p.id_categoria})"
+						                  title="Desactivar producto">
+						            <span class="material-symbols-outlined">block</span>
+						          </button>
+						        `
+						        : `
+						          <button class="btn-activar"
+						                  onclick="activarCategoria(${p.id_categoria})"
+						                  title="Activar producto">
+						            <span class="material-symbols-outlined">check_circle</span>
+						          </button>
+						        `
+						    }
+
+						  </div>
+						</td>
         </tr>
     `).join("");
 }
@@ -77,23 +96,7 @@ async function activarCategoria(id) {
     }
 }
 
-/*
-async function borrarProducto(id) {
-    if (!confirm("¿Seguro que quieres eliminar este producto?")) return;
 
-    try {
-        await api.delete(`/api/admin/productos/${id}`);
-
-        // Recargar lista completa
-        const productos = await api.get("/api/admin/productos");
-        render(productos);
-
-    } catch (err) {
-        console.error(err);
-        alert("Error al eliminar producto");
-    }
-}
-*/
 
 function bindEvents() {
     const tabla = document.getElementById("tabla-productos");
@@ -115,34 +118,44 @@ function bindEvents() {
 
         if (!confirm(`¿Eliminar ${seleccionados.length} producto(s)?`)) return;
 
+		try {
+
+		    await Promise.all(
+		        seleccionados.map(id =>
+		            api.delete(`/api/admin/categorias/${id}`)
+		        )
+		    );
+
+		    seleccionados.forEach(id => {
+		        const cb = document.querySelector(`.check-fila[data-id="${id}"]`);
+		        if (cb) cb.closest("tr").remove();
+		    });
+
+		    document.getElementById("check-all").checked = false;
+
+		} catch (err) {
+
+		    console.error(err);
+
+		    alert("No se puede eliminar una categoría con productos asociados.");
+		}
+		/*
         await Promise.all(seleccionados.map(id =>
             api.delete(`/api/admin/categorias/${id}`)
         ));
+		
 
         seleccionados.forEach(id => {
             const cb = document.querySelector(`.check-fila[data-id="${id}"]`);
             if (cb) cb.closest("tr").remove();
         });
+		*/
 
         // Resetear check-all
         document.getElementById("check-all").checked = false;
     });
 }
 
-/*
-async function onAction(e) {
-    const el = e.target.closest("[data-action]");
-    if (!el) return;
 
-    const action = el.dataset.action;
-    const id = Number(el.dataset.id);
-
-    if (action === "eliminar") {
-        if (!confirm("¿Eliminar este producto?")) return;
-        await api.delete(`/api/admin/productos/${id}`);
-        el.closest("tr").remove();
-    }
-}
-*/
 window.desactivarCategoria = desactivarCategoria;
 window.activarCategoria = activarCategoria;

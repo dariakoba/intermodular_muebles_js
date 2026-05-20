@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
-
+	let userData = null;
     // 1. CARGAR DATOS DEL USUARIO
     try {
         const res = await fetch("/api/me");
@@ -11,18 +11,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         const user = await res.json();
 
-        document.getElementById("nombre").textContent = user.nombre;
+		userData = user;
+		
+        document.getElementById("nombre").textContent = user.nombre + " " + (user.apellidos ?? "");
         document.getElementById("email").textContent = user.email;
         document.getElementById("telefono").textContent = user.telefono ?? "-";
         document.getElementById("direccion").textContent = user.direccion ?? "No definida";
         document.getElementById("puntos").textContent = (user.puntos ?? 0) + " puntos";
 
-        const imgPerfil = document.getElementById("img-perfil");
-        if (user.fotoUrl) {
-            imgPerfil.src = user.fotoUrl;
-        } else {
-            imgPerfil.src = "/images/fotoperfil/default-avatar.png"; 
-        }
+        
 
     } catch (err) {
         console.error("Error usuario:", err);
@@ -124,7 +121,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (btnEdit) {
         btnEdit.addEventListener("click", () => {
-            document.getElementById("input-nombre").value = document.getElementById("nombre").textContent;
+			document.getElementById("input-nombre").value = userData.nombre;
+			document.getElementById("input-apellidos").value = userData.apellidos ?? "";
             document.getElementById("input-email").value = document.getElementById("email").textContent;
             document.getElementById("input-telefono").value = document.getElementById("telefono").textContent;
             document.getElementById("input-direccion").value = document.getElementById("direccion").textContent;
@@ -143,70 +141,80 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
-    if (btnSave) {
-        btnSave.addEventListener("click", async () => {
-            const updatedUser = {
-                nombre: document.getElementById("input-nombre").value.trim(),
-                email: document.getElementById("input-email").value.trim(),
-                telefono: document.getElementById("input-telefono").value.trim(),
-                direccion: document.getElementById("input-direccion").value.trim()
-            };
+	if (btnSave) {
+	    btnSave.addEventListener("click", async () => {
 
-            if (Object.values(updatedUser).some(val => !val)) {
-                alert("Por favor, rellena todos los campos.");
-                return;
-            }
+	        const updatedUser = {
+	            nombre: document.getElementById("input-nombre").value.trim(),
+	            apellidos: document.getElementById("input-apellidos").value.trim(),
+	            email: document.getElementById("input-email").value.trim(),
+	            telefono: document.getElementById("input-telefono").value.trim(),
+	            direccion: document.getElementById("input-direccion").value.trim()
+	        };
 
-            try {
-                const res = await fetch("/api/users/update-me", {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(updatedUser)
-                });
+	        // VALIDACIONES
+	        if (!updatedUser.nombre || updatedUser.nombre.length < 2) {
+	            alert("El nombre debe tener al menos 2 caracteres.");
+	            return;
+	        }
 
-                if (res.ok) {
-                    alert("¡Datos actualizados!");
-                    location.reload();
-                } else {
-                    alert("Error al actualizar.");
-                }
-            } catch (err) {
-                alert("Error de conexión.");
-            }
-        });
-    }
+	        if (!updatedUser.apellidos || updatedUser.apellidos.length < 2) {
+	            alert("Los apellidos deben tener al menos 2 caracteres.");
+	            return;
+	        }
 
+	        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    // 4. LÓGICA DE SUBIDA DE FOTO
-    const fileInput = document.getElementById('file-input');
-    if (fileInput) {
-        fileInput.addEventListener('change', async function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
+	        if (!emailRegex.test(updatedUser.email)) {
+	            alert("Introduce un email válido.");
+	            return;
+	        }
 
-            const formData = new FormData();
-            formData.append('file', file);
+	        const telefonoRegex = /^[0-9]{9}$/;
 
-            try {
-                const response = await fetch('/api/users/upload-photo', {
-                    method: 'POST',
-                    body: formData
-                });
+	        if (!telefonoRegex.test(updatedUser.telefono)) {
+	            alert("El teléfono debe tener 9 números.");
+	            return;
+	        }
 
-                if (response.ok) {
-                    const data = await response.json();
-                    document.getElementById('img-perfil').src = data.fotoUrl + "?t=" + new Date().getTime();
-                    alert("Foto actualizada correctamente");
-                } else {
-                    alert("Error al subir la foto");
-                }
-            } catch (error) {
-                console.error("Error subida:", error);
-                alert("Error de conexión al subir la foto");
-            }
-        });
-    }
+	        if (!updatedUser.direccion || updatedUser.direccion.length < 5) {
+	            alert("Introduce una dirección válida.");
+	            return;
+	        }
+
+	        // CONFIRMACIÓN
+	        const confirmar = confirm(
+	            "¿Estás segura de que quieres guardar los cambios?"
+	        );
+
+	        if (!confirmar) return;
+
+	        try {
+
+	            const res = await fetch("/api/users/update-me", {
+	                method: "PUT",
+	                headers: {
+	                    "Content-Type": "application/json"
+	                },
+	                body: JSON.stringify(updatedUser)
+	            });
+
+	            if (res.ok) {
+	                alert("¡Datos actualizados!");
+	                location.reload();
+	            } else {
+	                alert("Error al actualizar.");
+	            }
+
+	        } catch (err) {
+	            console.error(err);
+	            alert("Error de conexión.");
+	        }
+	    });
+	}
+
 });
+
 
 // --- FUNCIONES GLOBALES ---
 function openModal(url) {
@@ -234,3 +242,4 @@ window.toggleDetalles = function(idPedido) {
         icono.style.transform = "rotate(0deg)"; // Vuelve la flecha a su sitio
     }
 };
+
