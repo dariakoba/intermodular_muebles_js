@@ -83,19 +83,17 @@ async function cargarResenyas(id) {
 
 			if (fechaOriginal) {
 
-			    const fechaParseada = fechaOriginal.toString().replace(' ', 'T');
+			    const fecha = new Date(fechaOriginal);
 
-			    const d = new Date(fechaParseada);
+			    if (!isNaN(fecha)) {
 
-			    if (!isNaN(d.getTime())) {
+			        const opciones = {
+			            day: "2-digit",
+			            month: "long",
+			            year: "numeric"
+			        };
 
-			        fechaTexto = d.toLocaleString('es-ES', {
-			            day: '2-digit',
-			            month: 'long',
-			            year: 'numeric',
-			            hour: '2-digit',
-			            minute: '2-digit'
-			        });
+			        fechaTexto = fecha.toLocaleDateString("es-ES", opciones);
 			    }
 			}
 
@@ -235,6 +233,17 @@ function configurarFormulario(idProducto) {
 			    puntuacion: parseInt(form.puntuacion.value),
 			    comentario: comentario
 			};
+			// CONFIRMACIÓN PARA RESEÑAS NEGATIVAS
+			if (data.puntuacion < 3) {
+
+			    const confirmar = confirm(
+			        "Has seleccionado una valoración baja. ¿Estás seguro de que quieres publicar esta reseña?"
+			    );
+
+			    if (!confirmar) {
+			        return;
+			    }
+			}
 
             // 2. CREAR RESEÑA
             const response = await fetch('/api/resenyas', {
