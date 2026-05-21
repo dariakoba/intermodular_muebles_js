@@ -12,6 +12,7 @@ import com.example.peliculas.mapper.ProductoMapper;
 import com.example.peliculas.dto.ProductoCatNomDetalle;
 import com.example.peliculas.dto.ProductoResumen;
 import com.example.peliculas.dto.ProductoResumenImagen;
+import com.example.peliculas.dto.ProductoShowCliente;
 
 public class ProductoRepository extends SoftDeleteRepository<Producto> {
 
@@ -113,36 +114,51 @@ public class ProductoRepository extends SoftDeleteRepository<Producto> {
 	}
 	
 	
-	/*
-	public List<ProductoResumen> findAllResumen() {
+	//clinete
+	public ProductoShowCliente findShowCliente(int id) {
 
-		String sql = """
-				SELECT p.id, p.nombre, p.precio, p.stock, p.categoria_id, p.deleted_at,
-				(
-					SELECT url
-					FROM producto_imagenes pi
-					WHERE pi.producto_id = p.id
-					ORDER BY pi.id ASC
-					LIMIT 1
-				) AS imagen
-				FROM productos p
-				ORDER BY p.nombre
-				""";
+	    String sql = """
+	        SELECT
+	            p.id_producto,
+	            p.nombre,
+	            p.descripcion,
+	            p.precio,
+	            c.nombre AS categoria,
+	            (
+	                SELECT url
+	                FROM producto_imagenes pi
+	                WHERE pi.producto_id = p.id_producto
+	                ORDER BY pi.id ASC
+	                LIMIT 1
+	            ) AS imagen
+	        FROM productos p
+	        LEFT JOIN categoria c
+	            ON c.id_categoria = p.categoria_id
+	        WHERE p.id_producto = ?
+	    """;
 
-		try {
-			return DB.queryMany(con, sql, 
-				rs -> new ProductoResumen(rs.getInt("id_producto"), rs.getString("nombre"), rs.getFloat("precio"), rs.getInt("stock"),
-						rs.getString("categoria_id"), rs.getString("imagen"))
-			);
-		} catch (SQLException e) {
-			throw new DataAccessException("Error obteniendo el resumen de directores");
-		}
+	    try {
+
+	        return DB.queryOne(con, sql, rs ->
+	            new ProductoShowCliente(
+	                rs.getInt("id_producto"),
+	                rs.getString("nombre"),
+	                rs.getString("descripcion"),
+	                rs.getFloat("precio"),
+	                rs.getString("categoria"),
+	                rs.getString("imagen")
+	            )
+	        , id);
+
+	    } catch (SQLException e) {
+
+	        throw new DataAccessException(
+	            "Error al obtener detalle del producto cliente con id=" + id, e
+	        );
+	    }
 	}
-	*/
 	
-	
-	
-	
+	//
 	
 	
 
