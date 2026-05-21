@@ -37,9 +37,43 @@ function bindEvents() {
     bind(form, "submit", guardar);
 }
 
+//validacion
+function limpiarErrores() {
+    document.querySelectorAll(".error").forEach(e => e.textContent = "");
+}
+function error(id, msg) {
+    const el = document.getElementById(id);
+
+    if (!el) {
+        console.warn("No existe el error:", id);
+        return;
+    }
+
+    el.textContent = msg;
+}
+function validar() {
+
+    limpiarErrores();
+
+    let ok = true;
+
+    const nombre = document.getElementById("nombre").value.trim();
+
+
+    // NOMBRE
+    if (nombre.length < 2) {
+        error("error-nombre", "El nombre debe tener al menos 2 caracteres");
+        ok = false;
+    }
+	return ok;
+
+}
+//
+
 async function guardar(e) {
     e.preventDefault();
-	 
+	if (!validar()) return;
+
     const id   = obtenerId();
     const form = e.target;
 	console.log("nombre:",      form.nombre.value);

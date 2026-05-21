@@ -256,6 +256,13 @@
 	  color:white;
 	  cursor:pointer;
 	}
+	.error {
+	    color: #e53935;        /* rojo fuerte */
+	    font-size: 12px;
+	    margin-top: 4px;
+	    display: block;        /* importante para que ocupe línea */
+	    line-height: 1.2;
+	}
 </style>
 <body>
 	<!-- Header / Navbar -->
@@ -296,11 +303,12 @@
 
 	<main class="edit-container">
         <h1>Editar Categoria</h1>
-        <form id="form-producto" class="edit-form">
+        <form id="form-producto" class="edit-form" novalidate>
 
         
             <label class="form-label">Nombre</label>
             <input id="nombre" name="nombre" class="form-control" required>
+			<small class="error" id="error-nombre"></small>
 
       
             <label class="form-label">Estado</label>

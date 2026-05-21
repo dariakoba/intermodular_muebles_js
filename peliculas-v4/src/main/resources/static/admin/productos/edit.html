@@ -258,6 +258,13 @@ input, select, textarea {
   color:white;
   cursor:pointer;
 }
+.error {
+    color: #e53935;        /* rojo fuerte */
+    font-size: 12px;
+    margin-top: 4px;
+    display: block;        /* importante para que ocupe línea */
+    line-height: 1.2;
+}
 </style>
 </head>
 
@@ -304,26 +311,43 @@ input, select, textarea {
 	
 	  <h1>Editar Producto</h1>
 	
-	  <form id="form-producto" class="edit-form">
+	  <form id="form-producto" class="edit-form" novalidate>
 	
 	    <label>Nombre</label>
 	    <input id="nombre" name="nombre">
-	
+		<small class="error" id="error-nombre"></small>
+
 	    <label>Color</label>
-	    <input id="color" name="color">
-	
+		<select id="color" required>
+					<option value="">-- Selecciona un color --</option>
+					  <option value="Rojo">Rojo</option>
+					  <option value="Azul">Azul</option>
+					  <option value="Verde">Verde</option>
+					  <option value="Negro">Negro</option>
+					  <option value="Blanco">Blanco</option>
+					  <option value="Beige">Beige</option>
+					  <option value="Gris">Gris</option>
+					  <option value="Amarillo">Amarillo</option>
+					  <option value="Rosa">Rosa</option>
+					  <option value="Morado">Morado</option>
+		</select>	
+		<small class="error" id="error-color"></small>
+
 	    <label>Precio</label>
 	    <input id="precio" name="precio">
-	
+		<small class="error" id="error-precio"></small>
+
 	    <label>Stock</label>
 	    <input id="stock" name="stock">
-	
+		<small class="error" id="error-stock"></small>
+
 	    <label>Categoría</label>
 	    <select id="categoria"></select>
 	
 	    <label>Descripción</label>
 	    <textarea id="descripcion"></textarea>
-	
+		<small class="error" id="error-descripcion"></small>
+
 	    <label>Estado</label>
 	    <select id="estado">
 	      <option value="activo">Activo</option>
