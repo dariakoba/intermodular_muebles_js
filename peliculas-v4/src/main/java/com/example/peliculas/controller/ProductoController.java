@@ -11,8 +11,11 @@ import javax.sql.DataSource;
 
 import org.springframework.web.bind.annotation.*;
 
+import com.example.peliculas.dto.ImagenResponse;
 import com.example.peliculas.dto.ProductoResumenImagen;
+import com.example.peliculas.dto.ProductoShowCliente;
 import com.example.peliculas.exception.DataAccessException;
+import com.example.peliculas.repository.ProductoImagenRepository;
 import com.example.peliculas.repository.ProductoRepository;
 
 @RestController
@@ -36,15 +39,18 @@ public class ProductoController {
     */
     
     @GetMapping("/{id}")
-    public ProductoResumenImagen show(@PathVariable int id) {
+    public ProductoShowCliente show(@PathVariable int id) {
         try (Connection con = ds.getConnection()) {
             ProductoRepository repo = new ProductoRepository(con);
-            return repo.findByDetalleId(id);
+			ProductoImagenRepository imgRepo = new ProductoImagenRepository(con);
+
+			List<ImagenResponse> imagenes = imgRepo.findByProductoId(id);
+
+            return repo.findShowCliente(id);
         } catch (SQLException e) {
             throw new DataAccessException(e);
         }
     }
-    
     /* anterior show
 	@GetMapping("/{id}")
     public Producto show(@PathVariable int id) {
