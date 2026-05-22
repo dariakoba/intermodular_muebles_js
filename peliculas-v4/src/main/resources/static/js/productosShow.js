@@ -79,16 +79,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 		        galeria.appendChild(el);
 		    });
 
-		    // Flechas
-		    document.getElementById("flecha-izq").onclick = () => {
-		        const nuevo = (indexActual - 1 + imagenes.length) % imagenes.length;
-		        cambiarImagen(nuevo);
-		    };
-		    document.getElementById("flecha-der").onclick = () => {
-		        const nuevo = (indexActual + 1) % imagenes.length;
-		        cambiarImagen(nuevo);
-		    };
-
 		} else {
 		    imgPrincipal.src = `/images/productos/productoSinImagen.jpg`;
 		    document.getElementById("flecha-izq").style.display = "none";
