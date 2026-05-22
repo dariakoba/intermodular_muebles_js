@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Admin – Categorías</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<style>
+
+	/* --- RESET --- */
+	*, *::before, *::after {
+	  box-sizing: border-box;
+	  margin: 0;
+	  padding: 0;
+	}
+
+	/* --- BODY --- */
+	body {
+	  font-family: 'Lato', sans-serif;
+	  background: #fdfbf6;
+	  color: #222;
+	  min-height: 100vh;
+	  padding-top: 64px;
+	}
+
+	/* --- NAVBAR --- */
+	.navbar {
+	  display: flex;
+	  align-items: center;
+	  justify-content: space-between;
+	  padding: 0 40px;
+	  height: 64px;
+	  background: linear-gradient(90deg, #1a1a1a, #2c2c2c);
+	  position: fixed;
+	  top: 0;
+	  left: 0;
+	  right: 0;
+	  z-index: 100;
+	  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+	}
+
+	/* --- LOGO --- */
+	.logo-link {
+	  display: flex;
+	  align-items: center;
+	  text-decoration: none;
+	}
+
+	.logo-container {
+	  display: flex;
+	  align-items: center;
+	  gap: 10px;
+	}
+
+	.logo-circle {
+	  width: 40px;
+	  height: 40px;
+	  border-radius: 50%;
+	  overflow: hidden;
+	}
+
+	.logo-image {
+	  width: 100%;
+	  height: 100%;
+	  object-fit: contain;
+	}
+
+	.brand-name {
+	  color: #fff;
+	  font-size: 1.4rem;
+	  font-weight: 700;
+	  letter-spacing: 1px;
+	}
+
+	/* --- NAV LINKS --- */
+	.nav-links {
+	  display: flex;
+	  gap: 28px;
+	  position: absolute;
+	  left: 50%;
+	  transform: translateX(-50%);
+	}
+
+	.nav-links a {
+	  color: #ddd;
+	  text-decoration: none;
+	  font-size: 0.9rem;
+	  letter-spacing: 1px;
+	  text-transform: uppercase;
+	  transition: 0.3s;
+	}
+
+	.nav-links a:hover {
+	  color: #1abc9c;
+	  transform: translateY(-2px);
+	}
+
+	/* --- ICONO USUARIO --- */
+	.icons {
+	  display: flex;
+	  align-items: center;
+	  gap: 18px;
+	}
+
+	.material-symbols-outlined {
+	  font-size: 26px;
+	  color: #fff;
+	  cursor: pointer;
+	  transition: 0.2s;
+	}
+
+	#person-icon:hover {
+	  color: #1abc9c;
+	  transform: scale(1.1);
+	}
+
+	/* --- DROPDOWN --- */
+	.person-menu-wrapper {
+	  position: relative;
+	}
+
+	.person-menu {
+	  display: none;
+	  position: absolute;
+	  right: 0;
+	  top: 100%;
+	  background: #fff;
+	  border-radius: 8px;
+	  min-width: 160px;
+	  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+	  z-index: 999;
+	}
+
+	.person-menu-wrapper:hover .person-menu {
+	  display: block;
+	}
+
+	.person-menu a {
+	  display: block;
+	  padding: 10px 12px;
+	  color: #333;
+	  text-decoration: none;
+	}
+
+	.person-menu a:hover {
+	  background: #f2f2f2;
+	}
+
+	/* --- MAIN --- */
+	main.admin-wrapper {
+	  max-width: 1100px;
+	  margin: 48px auto;
+	  padding: 0 24px;
+	}
+
+	/* --- HEADER --- */
+	.admin-header {
+	  display: flex;
+	  align-items: center;
+	  justify-content: space-between;
+	  margin-bottom: 16px;
+	  gap: 12px;
+	}
+
+	.admin-header h1 {
+	  font-size: 2.4rem;
+	  font-weight: 700;
+	  color: #333;
+	}
+
+	/* --- BOTONES SUPERIORES --- */
+	.admin-actions {
+	  display: flex;
+	  gap: 12px;
+	  align-items: center;
+	}
+
+	.btn-nuevo,
+	#btn-eliminar-seleccionados {
+	  padding: 10px 20px;
+	  font-weight: 700;
+	  text-transform: uppercase;
+	  border-radius: 6px;
+	  cursor: pointer;
+	  border: none;
+	  transition: all 0.3s ease;
+	}
+
+	.btn-nuevo {
+	  background: #1abc9c;
+	  color: #fff;
+	  text-decoration: none;
+	}
+
+	#btn-eliminar-seleccionados {
+	  background: #c0392b;
+	  color: #fff;
+	}
+
+	.btn-nuevo:hover,
+	#btn-eliminar-seleccionados:hover {
+	  transform: translateY(-2px);
+	  opacity: 0.9;
+	}
+
+	/* --- TABLA --- */
+	.tabla-wrapper {
+	  background: #fff;
+	  border-radius: 12px;
+	  overflow: hidden;
+	  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+	  margin-top: 12px;
+	}
+
+	table {
+	  width: 100%;
+	  border-collapse: collapse;
+	  table-layout: auto;
+	}
+
+	thead th {
+	  padding: 14px 12px;
+	  font-size: 0.85rem;
+	  text-transform: uppercase;
+	  background: #1a1a1a;
+	  color: #fff;
+	  border-bottom: 2px solid #1abc9c;
+	  text-align: center;
+	}
+
+	tbody td {
+	  padding: 14px 10px;
+	  text-align: center;
+	  vertical-align: middle;
+	  color: #333;
+	}
+
+	/* --- BADGES --- */
+	.badge {
+	  padding: 4px 12px;
+	  border-radius: 15px;
+	  font-size: 0.7rem;
+	  font-weight: 700;
+	  text-transform: uppercase;
+	  display: inline-block;
+	}
+
+	.bg-recibido {
+	  background: #eafaf1;
+	  color: #1e8449;
+	}
+
+	.bg-cancelado {
+	  background: #fdecea;
+	  color: #c0392b;
+	}
+
+	/* --- ACCIONES (BOTONES CUADRADOS PERFECTOS) --- */
+	.acciones {
+	  display: flex;
+	  gap: 8px;
+	  justify-content: center;
+	  align-items: center;
+	}
+
+	/* base botones */
+	.btn-ver,
+	.btn-editar,
+	.btn-activar,
+	.btn-desactivar {
+	  width: 38px;
+	  height: 38px;
+	  display: inline-flex;
+	  align-items: center;
+	  justify-content: center;
+	  border-radius: 10px;
+	  border: none;
+	  cursor: pointer;
+	  padding: 0;
+	  text-decoration: none;
+	  transition: all 0.2s ease;
+	}
+
+	/* iconos */
+	.btn-ver i,
+	.btn-editar i,
+	.btn-activar i,
+	.btn-desactivar i,
+	.btn-ver span,
+	.btn-editar span,
+	.btn-activar span,
+	.btn-desactivar span {
+	  font-size: 18px;
+	  color: inherit;
+	}
+
+	/* colores base */
+	.btn-ver { background: #e8f4f5; color: #1abc9c; }
+	.btn-editar { background: #fef3e2; color: #f39c12; }
+	.btn-activar { background: #eafaf1; color: #2ecc71; }
+	.btn-desactivar { background: #fdecea; color: #c0392b; }
+
+	/* hover */
+	.btn-ver:hover { background: #1abc9c; color: #fff; }
+	.btn-editar:hover { background: #f39c12; color: #fff; }
+	.btn-activar:hover { background: #2ecc71; color: #fff; }
+	.btn-desactivar:hover { background: #c0392b; color: #fff; }
+
+	/* fuerza iconos blancos en hover */
+	.btn-ver:hover *,
+	.btn-editar:hover *,
+	.btn-activar:hover *,
+	.btn-desactivar:hover * {
+	  color: #fff !important;
+	}
+
+	
+
+	/* --- RESPONSIVE --- */
+	@media (max-width: 992px) {
+	  .admin-header {
+	    flex-direction: column;
+	    align-items: flex-start;
+	    gap: 12px;
+	  }
+
+	  .admin-actions {
+	    flex-direction: column;
+	    width: 100%;
+	    gap: 8px;
+	  }
+	}
+</style>
+</head>
+
+<body>
+
+	<!-- Header / Navbar -->
+	<header class="navbar">
+		<a href="/adminhome.html" class="logo-link">
+			<div class="logo-container">
+				<div class="logo-circle">
+					<img src="/images/logo.png" alt="DNA Logo" class="logo-image">
+				</div>
+				<span class="brand-name">DNA</span>
+			</div>
+		</a>
+
+
+		<nav class="nav-links">
+			<a href="/adminhome.html">Home</a>
+			<a href="/admin/usuarios/index.html">Usuarios</a>
+			<a href="/admin/productos/index.html">Productos</a>
+			<a href="pedidoAdmin.html">Pedidos</a>
+			<a href="/admin/categorias/index.html">Categorías</a>
+			<a href="/admin/resenyas/index.html">Reseñas</a>
+
+
+	    </nav>
+
+		
+
+		<div class="icons">
+		    <div class="person-menu-wrapper">
+		        <span id="person-icon" class="material-symbols-outlined" style="cursor: pointer;">person</span>
+
+		        <div class="person-menu">
+		            <a href="#" id="logoutBtn">Cerrar sesión</a>
+		        </div>
+		    </div>
+		</div>
+	</header>
+
+<main class="admin-wrapper">
+  <div class="admin-header">
+    <h1>Categorías</h1>
+    <div class="admin-actions">
+      <button id="btn-eliminar-seleccionados">Eliminar seleccionados</button>
+      <a href="/admin/categorias/create.html" class="btn-nuevo">Nueva Categoria</a>
+    </div>
+  </div>
+
+  <div class="tabla-wrapper">
+    <table id="tabla-productos">
+      <thead>
+        <tr>
+          <th><input type="checkbox" id="check-all"></th>
+          <th>ID</th>
+          <th>Nombre</th>
+       	  <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<script type="module" src="js/index.js"></script>
+<script>
+	document.addEventListener("DOMContentLoaded", () => {
+	    const icon = document.getElementById("person-icon");
+	    const menu = document.querySelector(".person-menu");
+	    const logoutBtn = document.getElementById("logoutBtn");
+
+	    if (icon && menu) {
+	        icon.addEventListener("click", (e) => {
+	            e.stopPropagation();
+	            menu.classList.toggle("show");
+	        });
+
+	        document.addEventListener("click", () => {
+	            menu.classList.remove("show");
+	        });
+	    }
+
+	    if (logoutBtn) {
+	        logoutBtn.addEventListener("click", async (e) => {
+	            e.preventDefault();
+
+	            if (!confirm("¿Estás seguro de que quieres cerrar sesión?")) return;
+
+	            try {
+	                const res = await fetch("/logout", {   
+	                    method: "POST",
+	                    credentials: "include"
+	                });
+
+	                localStorage.clear();
+	                sessionStorage.clear();
+
+	                window.location.href = "/../../login.html";
+
+	            } catch (err) {
+	                console.error("Error al cerrar sesión:", err);
+	                // En caso de error de red, forzamos la salida al login
+	                window.location.href = "/../../login.html";
+	            }
+	        });
+	    }
+	});
+	
+
+</script>
+</body>
+</html>

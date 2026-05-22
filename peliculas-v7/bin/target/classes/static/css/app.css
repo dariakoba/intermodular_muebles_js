@@ -1,0 +1,12 @@
+body {
+    padding-top: 40px;
+}
+
+.container {
+    max-width: 800px;
+}
+
+.sinopsis {
+    margin-top: 20px;
+    font-style: italic;
+}

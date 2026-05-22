@@ -1,1 +1,13 @@
-/.metadata/
+# Eclipse
+.metadata/
+.classpath
+.project
+.settings/
+
+# Maven / build
+**/target/
+
+# Java
+*.class
+*.jar
+*.log
