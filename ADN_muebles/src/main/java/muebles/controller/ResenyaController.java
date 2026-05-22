@@ -1,4 +1,4 @@
-package com.example.peliculas.controller;
+package muebles.controller;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -16,14 +16,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.peliculas.dto.ImagenResponse;
-import com.example.peliculas.entity.Resenya;
-import com.example.peliculas.exception.DataAccessException;
-import com.example.peliculas.repository.ResenaImagenRepository;
-import com.example.peliculas.repository.ResenyaRepository;
-import com.example.peliculas.mapper.ResenyaMapper;
-
 import jakarta.servlet.http.HttpSession;
+import muebles.dto.ImagenResponse;
+import muebles.entity.Resenya;
+import muebles.exception.DataAccessException;
+import muebles.mapper.ResenyaMapper;
+import muebles.repository.ResenaImagenRepository;
+import muebles.repository.ResenyaRepository;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -94,16 +94,106 @@ public class ResenyaController {
         }
     }
 
-    @DeleteMapping("/admin/resenyas/{id}")
-    public ResponseEntity<?> deleteAdmin(@PathVariable int id) {
-        String sql = "DELETE FROM resenas WHERE id_resena = ?";
-        try (Connection con = ds.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, id);
-            int rows = ps.executeUpdate();
-            return rows > 0 ? ResponseEntity.ok("{\"success\": true}") : ResponseEntity.notFound().build();
+    @DeleteMapping("/resenyas/{id}")
+    public ResponseEntity<?> deleteResenya(
+            @PathVariable int id,
+            HttpSession session
+    ) {
+
+        Integer usuarioId =
+            (Integer) session.getAttribute("userId");
+
+        if (usuarioId == null) {
+
+            return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body("No autorizado");
+        }
+
+        try (Connection con = ds.getConnection()) {
+
+            // ==========================
+            // VERIFICAR QUE LA RESEÑA ES SUYA
+            // ==========================
+
+            String checkSql = """
+                SELECT id_resena
+                FROM resenas
+                WHERE id_resena = ?
+                AND id_usuario = ?
+            """;
+
+            try (
+                PreparedStatement check =
+                    con.prepareStatement(checkSql)
+            ) {
+
+                check.setInt(1, id);
+                check.setInt(2, usuarioId);
+
+                try (ResultSet rs = check.executeQuery()) {
+
+                    if (!rs.next()) {
+
+                        return ResponseEntity
+                            .status(HttpStatus.FORBIDDEN)
+                            .body("No puedes eliminar esta reseña");
+                    }
+                }
+            }
+
+            // ==========================
+            // ELIMINAR RESEÑA
+            // ==========================
+
+            String deleteSql = """
+                DELETE FROM resenas
+                WHERE id_resena = ?
+                AND id_usuario = ?
+            """;
+
+            try (
+                PreparedStatement ps =
+                    con.prepareStatement(deleteSql)
+            ) {
+
+                ps.setInt(1, id);
+                ps.setInt(2, usuarioId);
+
+                ps.executeUpdate();
+            }
+
+            // ==========================
+            // QUITAR PUNTOS
+            // ==========================
+
+            int puntosAQuitar = 20;
+
+            String puntosSql = """
+                UPDATE usuarios
+                SET puntos = GREATEST(puntos - ?, 0)
+                WHERE id = ?
+            """;
+
+            try (
+                PreparedStatement ps =
+                    con.prepareStatement(puntosSql)
+            ) {
+
+                ps.setInt(1, puntosAQuitar);
+                ps.setInt(2, usuarioId);
+
+                ps.executeUpdate();
+            }
+
+            return ResponseEntity.ok()
+                    .body("Reseña eliminada y puntos descontados.");
+
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+
+            return ResponseEntity
+                .internalServerError()
+                .body(e.getMessage());
         }
     }
     
@@ -285,55 +375,7 @@ public class ResenyaController {
         }
     }
     
-    @DeleteMapping("/resenyas/{id}")
-    public ResponseEntity<?> deleteResenya(
-            @PathVariable int id,
-            HttpSession session
-    ) {
-
-        Integer usuarioId =
-            (Integer) session.getAttribute("userId");
-
-        if (usuarioId == null) {
-
-            return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED)
-                .body("No autorizado");
-        }
-
-        String sql = """
-            DELETE FROM resenas
-            WHERE id_resena = ?
-            AND id_usuario = ?
-        """;
-
-        try (
-            Connection con = ds.getConnection();
-            PreparedStatement ps =
-                con.prepareStatement(sql)
-        ) {
-
-            ps.setInt(1, id);
-            ps.setInt(2, usuarioId);
-
-            int rows = ps.executeUpdate();
-
-            if (rows == 0) {
-
-                return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body("No puedes eliminar esta reseña");
-            }
-
-            return ResponseEntity.ok().build();
-
-        } catch (SQLException e) {
-
-            return ResponseEntity
-                .internalServerError()
-                .body(e.getMessage());
-        }
-    }
+    
     
     @PostMapping("/{folder}")
     public ResponseEntity<?> upload(

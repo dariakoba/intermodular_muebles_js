@@ -1,0 +1,18 @@
+package muebles.mapper;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import muebles.entity.Producto;
+
+public class ProductoMapper implements RowMapper<Producto> {
+	@Override
+    public Producto mapRow(ResultSet rs) throws SQLException {
+        return new Producto(
+        		rs.getInt("id_producto"), rs.getString("nombre")
+        				, rs.getString("color"), rs.getFloat("precio"), rs.getInt("stock"), rs.getString("descripcion")
+        				, rs.getInt("categoria_id"), 
+        				rs.getObject("deleted_at", java.time.LocalDateTime.class)
+        );
+    }
+}
