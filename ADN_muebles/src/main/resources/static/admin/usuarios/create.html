@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Crear Usuario</title>
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/create.css">
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+</head>
+<body>
+
+	<!-- Header / Navbar -->
+			<header class="navbar">
+				<a href="/adminhome.html" class="logo-link">
+					<div class="logo-container">
+						<div class="logo-circle">
+							<img src="/images/logo.png" alt="DNA Logo" class="logo-image">
+						</div>
+						<span class="brand-name">DNA</span>
+					</div>
+				</a>
+
+
+				<nav class="nav-links">
+					<a href="/adminhome.html">Home</a>
+					<a href="/admin/usuarios/index.html">Usuarios</a>
+					<a href="/admin/productos/index.html">Productos</a>
+					<a href="pedidoAdmin.html">Pedidos</a>
+					<a href="/admin/categorias/index.html">Categorías</a>
+					<a href="/admin/resenyas/index.html">Reseñas</a>
+
+
+			    </nav>
+
+				
+
+				<div class="icons">
+				    <div class="person-menu-wrapper">
+				        <span id="person-icon" class="material-symbols-outlined" style="cursor: pointer;">person</span>
+
+				        <div class="person-menu">
+				            <a href="#" id="logoutBtn">Cerrar sesión</a>
+				        </div>
+				    </div>
+				</div>
+			</header>
+
+<main class="create-container">
+  <h1 class="title">Crear Usuario</h1>
+
+  <form id="form-usuario" class="create-form">
+
+    <input id="nombre" placeholder="Nombre" required>
+    <input id="apellidos" placeholder="Apellidos" required>
+    <input id="email" type="email" placeholder="Email" required>
+    <input id="telefono" placeholder="Teléfono">
+    <input id="direccion" placeholder="Dirección">
+
+    <select id="rol">
+      <option value="cliente">Cliente</option>
+      <option value="admin">Admin</option>
+    </select>
+
+    <input id="password" type="password" placeholder="Contraseña" required>
+
+    <div class="buttons">
+      <button type="submit" class="btn-main">Guardar</button>
+      <button type="button" onclick="window.location.href='index.html'" class="btn-cancel">Cancelar</button>
+    </div>
+  </form>
+</main>
+
+<script src="js/create.js"></script>
+<script src="/js/logout.js"></script>
+</body>
+</html>

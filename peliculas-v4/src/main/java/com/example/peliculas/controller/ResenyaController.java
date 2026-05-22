@@ -176,33 +176,87 @@ public class ResenyaController {
     
     @PostMapping("/resenyas")
     public ResponseEntity<?> crearResenya(@RequestBody Resenya resenya, HttpSession session) {
+
         Integer userId = (Integer) session.getAttribute("userId");
-        
+
         if (userId == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Sesión no iniciada");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Sesión no iniciada");
         }
 
         try (Connection con = ds.getConnection()) {
-            // Log para depurar (míralo en la consola de tu IDE)
-            System.out.println("Validando compra - Usuario: " + userId + " Producto: " + resenya.getProductoId());
 
-            boolean comprado = haCompradoProducto(con, userId, resenya.getProductoId());
+            boolean comprado =
+                haCompradoProducto(con, userId, resenya.getProductoId());
 
             if (!comprado) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body("Solo puedes reseñar productos que hayas comprado.");
             }
 
-            // Insertar la reseña
+            // OPCIONAL:
+            // evitar varias reseñas del mismo producto
+            String checkSql = """
+                SELECT 1
+                FROM resenas
+                WHERE id_usuario = ?
+                AND id_producto = ?
+                LIMIT 1
+            """;
+
+            try (PreparedStatement check = con.prepareStatement(checkSql)) {
+
+                check.setInt(1, userId);
+                check.setInt(2, resenya.getProductoId());
+
+                try (ResultSet rs = check.executeQuery()) {
+
+                    if (rs.next()) {
+                        return ResponseEntity
+                            .badRequest()
+                            .body("Ya has publicado una reseña para este producto.");
+                    }
+                }
+            }
+
+            // GUARDAR RESEÑA
             resenya.setUsuarioId(userId);
-            ResenyaRepository repo = new ResenyaRepository(con, new ResenyaMapper());
+
+            ResenyaRepository repo =
+                new ResenyaRepository(con, new ResenyaMapper());
+
             Resenya guardada = repo.insert(resenya);
+
+            // ==========================
+            // DAR PUNTOS
+            // ==========================
+
+            int puntosGanados = 20;
+
+            String puntosSql = """
+                UPDATE usuarios
+                SET puntos = puntos + ?
+                WHERE id = ?
+            """;
+
+            try (PreparedStatement ps =
+                    con.prepareStatement(puntosSql)) {
+
+                ps.setInt(1, puntosGanados);
+                ps.setInt(2, userId);
+
+                ps.executeUpdate();
+            }
 
             return ResponseEntity.ok(guardada);
 
         } catch (SQLException e) {
-            e.printStackTrace(); // Esto te dirá el error exacto en la consola si vuelve a fallar
-            return ResponseEntity.internalServerError().body("Error en BD: " + e.getMessage());
+
+            e.printStackTrace();
+
+            return ResponseEntity
+                .internalServerError()
+                .body("Error en BD: " + e.getMessage());
         }
     }
     
