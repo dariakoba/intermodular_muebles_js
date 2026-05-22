@@ -27,58 +27,77 @@
         <a href="contacto.html">Contacto</a>
     </nav>
 
-	<div class="icons">
-	            <a href="carrito.html" style="text-decoration: none; color: inherit;">
-	                <span class="material-symbols-outlined">shopping_cart</span>
-	            </a>
-
-	            <div class="person-menu-wrapper">
-	                <a href="perfil.html" style="text-decoration: none; color: inherit;">
-	                    <span id="person-icon" class="material-symbols-outlined">person</span>
-	                </a>
-	                <div class="person-menu">
-	                    <a href="perfil.html">Ver cuenta</a>
-	                    <a href="logout.html">Cerrar sesión</a>
-	                </div>
-	            </div>
-	        </div>
-
+    <div class="icons">
+        <a href="carrito.html" style="text-decoration: none; color: inherit;">
+            <span class="material-symbols-outlined">shopping_cart</span>
+        </a>
+        <div class="person-menu-wrapper">
+            <a href="perfil.html" style="text-decoration: none; color: inherit;">
+                <span id="person-icon" class="material-symbols-outlined">person</span>
+            </a>
+            <div class="person-menu">
+                <a href="perfil.html">Ver cuenta</a>
+                <a href="logout.html">Cerrar sesión</a>
+            </div>
+        </div>
     </div>
 
 </header>
 
+<!-- Botón móvil para mostrar filtros (solo visible en pantallas pequeñas) -->
+<button id="btn-filtros" class="btn-mostrar-filtros">
+    <span class="material-symbols-outlined">tune</span> Mostrar filtros
+</button>
+
 <main class="main-content">
 
-    <!-- Sidebar fija tipo PcComponentes -->
     <aside class="sidebar">
         <h2>Filtrar Productos</h2>
 
-        <!-- Sección Categorías -->
+        <!-- Categorías dinámicas -->
         <div class="filter-section">
             <div class="filter-header">
                 <h3>Categoría</h3>
                 <span class="toggle">+</span>
             </div>
-            <div class="filter-options">
-                <label><input type="checkbox" value="Sofá"> Sofá</label>
-                <label><input type="checkbox" value="Mesa"> Mesa</label>
-                <label><input type="checkbox" value="Silla"> Silla</label>
+            <div class="filter-options" id="filtro-categorias" style="display:none">
+                <!-- JS cargará las categorías aquí -->
             </div>
         </div>
 
-        <!-- Sección Precio -->
+        <!-- Colores estáticos -->
+        <div class="filter-section">
+            <div class="filter-header">
+                <h3>Color</h3>
+                <span class="toggle">+</span>
+            </div>
+            <div class="filter-options" id="filtro-colores" style="display:none">
+                <label><input type="checkbox" value="Rojo"> Rojo</label>
+                <label><input type="checkbox" value="Azul"> Azul</label>
+                <label><input type="checkbox" value="Verde"> Verde</label>
+                <label><input type="checkbox" value="Negro"> Negro</label>
+                <label><input type="checkbox" value="Blanco"> Blanco</label>
+                <label><input type="checkbox" value="Beige"> Beige</label>
+                <label><input type="checkbox" value="Gris"> Gris</label>
+                <label><input type="checkbox" value="Amarillo"> Amarillo</label>
+                <label><input type="checkbox" value="Rosa"> Rosa</label>
+                <label><input type="checkbox" value="Morado"> Morado</label>
+            </div>
+        </div>
+
+        <!-- Precio -->
         <div class="filter-section">
             <div class="filter-header">
                 <h3>Precio</h3>
                 <span class="toggle">+</span>
             </div>
-            <div class="filter-options">
-                <label>Min: <input type="number" min="0" placeholder="0"></label>
-                <label>Max: <input type="number" min="0" placeholder="1000"></label>
+            <div class="filter-options" style="display:none">
+                <label>Min: <input id="precio-min" type="number" min="0" placeholder="0"></label>
+                <label>Max: <input id="precio-max" type="number" min="0" placeholder="1000"></label>
             </div>
         </div>
 
-        <!-- Sección Ordenar -->
+        <!-- Ordenar -->
         <div class="filter-section">
             <h3>Ordenar por</h3>
             <select id="ordenar">

@@ -6,6 +6,7 @@ public record ProductoResumenImagen(
 	float precio,
 	int stock,
 	String categoria,
+    String color,
 	String imagen
 	
 ) {}

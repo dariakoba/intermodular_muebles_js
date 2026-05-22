@@ -67,7 +67,7 @@ public class ProductoRepository extends SoftDeleteRepository<Producto> {
 	// cliente
 	public List<ProductoResumenImagen> findResumen() {
 		String sql = """
-				SELECT p.id_producto, p.nombre, p.precio, p.stock, p.categoria_id,
+				SELECT p.id_producto, p.nombre, p.precio, p.stock, p.categoria_id, p.color
 				(
 					SELECT url
 					FROM producto_imagenes pi
@@ -81,7 +81,7 @@ public class ProductoRepository extends SoftDeleteRepository<Producto> {
 		try {
 			return DB.queryMany(con, sql,
 					rs -> new ProductoResumenImagen(rs.getInt("id_producto"), rs.getString("nombre"),
-							rs.getFloat("precio"), rs.getInt("stock"), rs.getString("categoria_id"),
+							rs.getFloat("precio"), rs.getInt("stock"), rs.getString("categoria_id"), rs.getString("color"),
 							rs.getString("imagen")));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -172,7 +172,7 @@ public class ProductoRepository extends SoftDeleteRepository<Producto> {
 			return DB.queryOne(con, sql, rs ->
 
 			new ProductoResumenImagen(rs.getInt("id_producto"), rs.getString("nombre"), rs.getFloat("precio"),
-					rs.getInt("stock"), rs.getString("categoria_id"), rs.getString("imagen"))
+					rs.getInt("stock"), rs.getString("categoria_id"), rs.getString("color"), rs.getString("imagen"))
 
 					, id);
 
@@ -186,7 +186,7 @@ public class ProductoRepository extends SoftDeleteRepository<Producto> {
 	public List<ProductoResumenImagen> findAllResumen() {
 
 		String sql = """
-				SELECT p.id_producto, p.nombre, p.precio, p.stock, p.categoria_id,
+				SELECT p.id_producto, p.nombre, p.precio, p.stock, p.categoria_id, p.color, c.nombre as categoria_nombre,
 				(
 					SELECT url
 					FROM producto_imagenes pi
@@ -195,13 +195,15 @@ public class ProductoRepository extends SoftDeleteRepository<Producto> {
 					LIMIT 1
 				) AS imagen
 				FROM productos p
-
+				left join categoria c on c.id_categoria = p.categoria_id
+				where p.deleted_at is null
 				""";
 
 		try {
 			return DB.queryMany(con, sql,
 					rs -> new ProductoResumenImagen(rs.getInt("id_producto"), rs.getString("nombre"),
-							rs.getFloat("precio"), rs.getInt("stock"), rs.getString("categoria_id"),
+							rs.getFloat("precio"), rs.getInt("stock"), rs.getString("categoria_nombre"),
+							rs.getString("color"),
 							rs.getString("imagen")));
 		} catch (SQLException e) {
 			throw new DataAccessException("Error obteniendo el resumen de directores");

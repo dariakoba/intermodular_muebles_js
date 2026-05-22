@@ -44,7 +44,6 @@ public class ProductoController {
 				p.getColor(),
 				p.getDescripcion(),
 				p.getPrecio(),
-				p.getCategoriaId(),
 				imagenes
 			);
 
@@ -55,42 +54,48 @@ public class ProductoController {
    
     
     //pruebas
-    @GetMapping
-    public List<ProductoResumenImagen> index(
-        @RequestParam(required = false) String categoria,
-        @RequestParam(required = false) Float precioMin,
-        @RequestParam(required = false) Float precioMax,
-        @RequestParam(required = false, defaultValue = "nombre-asc") String orden
-    ) {
-        try (Connection con = ds.getConnection()) {
-            ProductoRepository repo = new ProductoRepository(con);
-            Stream<ProductoResumenImagen> stream = repo.findAllResumen().stream();
+	@GetMapping
+	public List<ProductoResumenImagen> index(
+	    @RequestParam(required = false) List<String> categoria,
+	    @RequestParam(required = false) List<String> color,
+	    @RequestParam(required = false) Float precioMin,
+	    @RequestParam(required = false) Float precioMax,
+	    @RequestParam(required = false, defaultValue = "nombre-asc") String orden
+	) {
+	    try (Connection con = ds.getConnection()) {
+	        ProductoRepository repo = new ProductoRepository(con);
+	        Stream<ProductoResumenImagen> stream = repo.findAllResumen().stream();
 
-            // Filtro categoría
-            if (categoria != null && !categoria.isBlank()) {
-                stream = stream.filter(p ->
-                    p.nombre().toLowerCase().contains(categoria.toLowerCase())
-                );
-            }
-            if (precioMin != null) {
-                stream = stream.filter(p -> p.precio() >= precioMin);
-            }
-            if (precioMax != null) {
-                stream = stream.filter(p -> p.precio() <= precioMax);
-            }
+	        // Filtro categorías — si hay varias, muestra productos de cualquiera
+	        if (categoria != null && !categoria.isEmpty()) {
+	            stream = stream.filter(p ->
+	                p.categoria() != null &&
+	                categoria.stream().anyMatch(c -> c.equalsIgnoreCase(p.categoria()))
+	            );
+	        }
 
-            Comparator<ProductoResumenImagen> comparator = switch (orden) {
-            case "nombre-desc" -> Comparator.comparing(ProductoResumenImagen::nombre).reversed();
-            case "precio-asc"  -> Comparator.comparing(ProductoResumenImagen::precio);
-            case "precio-desc" -> Comparator.comparing(ProductoResumenImagen::precio).reversed();
-            default            -> Comparator.comparing(ProductoResumenImagen::nombre);
-            };
+	        // Filtro colores — igual
+	        if (color != null && !color.isEmpty()) {
+	            stream = stream.filter(p ->
+	                p.color() != null &&
+	                color.stream().anyMatch(c -> c.equalsIgnoreCase(p.color()))
+	            );
+	        }
 
-            return stream.sorted(comparator).collect(Collectors.toList());
+	        if (precioMin != null) stream = stream.filter(p -> p.precio() >= precioMin);
+	        if (precioMax != null) stream = stream.filter(p -> p.precio() <= precioMax);
 
-        } catch (SQLException e) {
-            throw new DataAccessException(e);
-        }
-    }
-    
+	        Comparator<ProductoResumenImagen> comparator = switch (orden) {
+	            case "nombre-desc" -> Comparator.comparing(ProductoResumenImagen::nombre).reversed();
+	            case "precio-asc"  -> Comparator.comparing(ProductoResumenImagen::precio);
+	            case "precio-desc" -> Comparator.comparing(ProductoResumenImagen::precio).reversed();
+	            default            -> Comparator.comparing(ProductoResumenImagen::nombre);
+	        };
+
+	        return stream.sorted(comparator).collect(Collectors.toList());
+
+	    } catch (SQLException e) {
+	        throw new DataAccessException(e);
+	    }
+	}
 }

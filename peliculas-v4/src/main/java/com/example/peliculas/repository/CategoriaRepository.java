@@ -83,6 +83,23 @@ public class CategoriaRepository extends SoftDeleteRepository<Categoria> {
 	    return DB.queryOne(con, sql, rs -> rs.getInt(1) > 0, idCategoria);
 	}
 
-	
+	public List<CategoriaDetalle> findAllCategoriasActivas() {
+	    String sql = """
+	        SELECT id_categoria, nombre
+	        FROM categoria
+	        WHERE deleted_at IS NULL
+	        """;
+
+	    try {
+	        return DB.queryMany(con, sql,
+	            rs -> new CategoriaDetalle(
+	                rs.getInt("id_categoria"),
+	                rs.getString("nombre"),
+	                "activo"
+	            ));
+	    } catch (SQLException e) {
+	        throw new DataAccessException("Error obteniendo categorías activas");
+	    }
+	}
 
 }

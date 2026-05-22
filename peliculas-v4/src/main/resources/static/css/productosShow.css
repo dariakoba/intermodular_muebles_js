@@ -693,21 +693,7 @@ body {
     font-weight:500;
 }
 
-/* COLOR */
 
-.color-info{
-    display:flex;
-    align-items:center;
-    gap:10px;
-}
-
-.color-circle{
-    width:18px;
-    height:18px;
-    border-radius:50%;
-    border:1px solid #d6d6d6;
-    box-shadow:0 2px 4px rgba(0,0,0,0.08);
-}
 /*prueba*/
 
 

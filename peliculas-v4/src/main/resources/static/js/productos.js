@@ -1,45 +1,62 @@
-async function cargarProductos() {
-    const response = await fetch("/api/productos");
-    const productos = await response.json();
-    console.log(productos);
-    const contenedor = document.getElementById("productos-container");
+// ── INIT ──────────────────────────────────────────────
+document.addEventListener("DOMContentLoaded", async () => {
+    await cargarCategorias();
+    await cargarProductos();
 
-    productos.forEach(p => {
-        const card = document.createElement("div");
-        card.classList.add("card");
+    document.getElementById("aplicar-filtros").addEventListener("click", aplicarFiltros);
+    document.getElementById("ordenar").addEventListener("change", aplicarFiltros);
 
-        card.innerHTML = `
-            <img src="images/productos/${p.id}.jpg" alt="${p.nombre}">
+    // Toggle sidebar en móvil
+	document.getElementById("btn-filtros").addEventListener("click", () => {
+	    const sidebar = document.querySelector(".sidebar");
+	    const btn = document.getElementById("btn-filtros");
+	    const abierto = sidebar.classList.toggle("sidebar-open");
+	    btn.innerHTML = abierto
+	        ? '<span class="material-symbols-outlined">close</span> Ocultar filtros'
+	        : '<span class="material-symbols-outlined">tune</span> Mostrar filtros';
+	});
+	
+    // Toggle secciones del sidebar
+	document.querySelectorAll(".filter-header").forEach(header => {
+	    header.addEventListener("click", () => {
+	        const options = header.nextElementSibling;
+	        const toggle = header.querySelector(".toggle");
+	        const abierto = options.style.display === "block";  // ← cambio aquí
+	        options.style.display = abierto ? "none" : "block";
+	        toggle.textContent = abierto ? "+" : "−";
+	    });
+	});
+});
 
-            <div class="card-body">
-                <h3>${p.nombre}</h3>
-                <p class="descripcion">${p.descripcion}</p>
+// ── CARGAR CATEGORÍAS DINÁMICAS ───────────────────────
+async function cargarCategorias() {
+    try {
+        const response = await fetch("/api/categorias");
+        const categorias = await response.json();
 
-                <p class="precio">${p.precio}€</p>
+        const contenedor = document.getElementById("filtro-categorias");
+        contenedor.innerHTML = "";
 
-                <a href="productosShow.html?id=${p.id}">
-                    <button>Ver producto</button>
-                </a>
-            </div>
-        `;
+        categorias.forEach(c => {
+            const label = document.createElement("label");
+            label.innerHTML = `<input type="checkbox" value="${c.nombre}"> ${c.nombre}`;
+            contenedor.appendChild(label);
+        });
 
-        contenedor.appendChild(card);
-    });
+    } catch (error) {
+        console.error("Error cargando categorías:", error);
+    }
 }
 
-cargarProductos();
-
-
-//pruebas
+// ── CARGAR PRODUCTOS ──────────────────────────────────
 async function cargarProductos() {
     try {
-        const response = await fetch('/api/productos');
+        const response = await fetch("/api/productos");
         const data = await response.json();
 
-        // Si el servidor mandó un error, 'data' será un objeto, no un array
         if (!response.ok || !Array.isArray(data)) {
-            console.error("El servidor devolvió un error:", data.message);
-            return; // Nos salimos para que no falle el forEach
+            console.error("Error del servidor:", data.message);
+            return;
         }
 
         renderProductos(data);
@@ -48,6 +65,7 @@ async function cargarProductos() {
     }
 }
 
+// ── RENDER PRODUCTOS ──────────────────────────────────
 function renderProductos(productos) {
     const contenedor = document.getElementById("productos-container");
     contenedor.innerHTML = "";
@@ -61,10 +79,9 @@ function renderProductos(productos) {
         const card = document.createElement("div");
         card.classList.add("card");
         card.innerHTML = `
-            <img src="/images/productos/${p.id_producto}.jpg" alt="${p.nombre}">
+            <img src="${p.imagen ?? '/images/productos/productoSinImagen.jpg'}" alt="${p.nombre}">
             <div class="card-body">
                 <h3>${p.nombre}</h3>
-                <p class="descripcion">${p.descripcion}</p>
                 <p class="precio">${p.precio}€</p>
                 <a href="productosShow.html?id=${p.id_producto}">
                     <button>Ver producto</button>
@@ -75,41 +92,34 @@ function renderProductos(productos) {
     });
 }
 
+// ── APLICAR FILTROS ───────────────────────────────────
 async function aplicarFiltros() {
     const params = new URLSearchParams();
 
-    const categorias = [...document.querySelectorAll(".filter-options input[type='checkbox']:checked")]
+    // Categorías — todas las seleccionadas
+    const categoriasChecked = [...document.querySelectorAll("#filtro-categorias input:checked")]
         .map(cb => cb.value);
-    if (categorias.length > 0) {
-        params.append("categoria", categorias[0]);
-    }
+    categoriasChecked.forEach(c => params.append("categoria", c));
 
-    const inputs = document.querySelectorAll(".filter-options input[type='number']");
-    const precioMin = inputs[0].value;
-    const precioMax = inputs[1].value;
+    // Colores — todos los seleccionados
+    const coloresChecked = [...document.querySelectorAll("#filtro-colores input:checked")]
+        .map(cb => cb.value);
+    coloresChecked.forEach(c => params.append("color", c));
+
+    // Precio
+    const precioMin = document.getElementById("precio-min").value;
+    const precioMax = document.getElementById("precio-max").value;
     if (precioMin) params.append("precioMin", precioMin);
     if (precioMax) params.append("precioMax", precioMax);
 
-    const orden = document.getElementById("ordenar").value;
-    params.append("orden", orden);
+    // Orden
+    params.append("orden", document.getElementById("ordenar").value);
 
-    const response = await fetch(`/api/productos?${params.toString()}`);
-    const productos = await response.json();
-    renderProductos(productos);
+    try {
+        const response = await fetch(`/api/productos?${params.toString()}`);
+        const productos = await response.json();
+        renderProductos(productos);
+    } catch (error) {
+        console.error("Error aplicando filtros:", error);
+    }
 }
-
-document.getElementById("aplicar-filtros").addEventListener("click", aplicarFiltros);
-
-document.getElementById("ordenar").addEventListener("change", aplicarFiltros);
-
-document.querySelectorAll(".filter-header").forEach(header => {
-    header.addEventListener("click", () => {
-        const options = header.nextElementSibling;
-        const toggle = header.querySelector(".toggle");
-        const abierto = options.style.display !== "none";
-        options.style.display = abierto ? "none" : "block";
-        toggle.textContent = abierto ? "+" : "−";
-    });
-});
-
-cargarProductos();

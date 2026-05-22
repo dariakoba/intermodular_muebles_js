@@ -7,7 +7,6 @@ public record ProductoShowCliente(
 	String color,
 	String descripcion,
 	float precio,
-	int categoria,
 	List<ImagenResponse> imagenes
 
 	

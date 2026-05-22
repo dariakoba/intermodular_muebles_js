@@ -1,12 +1,10 @@
-
-
 /* Reset box-sizing */
 * {
     box-sizing: border-box;
 }
 
 /* ESTILOS GENERALES */
-body{
+body {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
     background: #d9ccbc;
@@ -18,7 +16,7 @@ body{
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 200; /* encima de todo */
+    z-index: 200;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -80,7 +78,7 @@ body{
     background: white;
     border: 1px solid #ccc;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     display: none;
     min-width: 150px;
     flex-direction: column;
@@ -103,11 +101,37 @@ body{
 }
 
 /* =================== */
-/* SIDEBAR FIJA         */
+/* BOTÓN MÓVIL FILTROS */
 /* =================== */
-.sidebar{
+.btn-mostrar-filtros {
+    display: none; /* oculto en desktop */
     position: fixed;
-    top: 65px; /* debajo del header */
+    top: 75px;
+    left: 15px;
+    z-index: 150;
+    background: #ae4010;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transition: background 0.2s;
+}
+.btn-mostrar-filtros:hover {
+    background: #5c4432;
+}
+
+/* =================== */
+/* SIDEBAR FIJA        */
+/* =================== */
+.sidebar {
+    position: fixed;
+    top: 65px;
     left: 0;
     width: 280px;
     height: calc(100vh - 65px);
@@ -116,41 +140,43 @@ body{
     border-right: 1px solid #ddd;
     box-shadow: 2px 0 12px rgba(0,0,0,0.08);
     overflow-y: auto;
+    z-index: 100;
+    transition: transform 0.3s ease;
 }
 
 /* Secciones de filtros */
-.sidebar h2{
+.sidebar h2 {
     font-size: 22px;
     margin-bottom: 20px;
     color: #333;
     border-bottom: 1px solid #ccc;
     padding-bottom: 8px;
 }
-.filter-section{
+.filter-section {
     margin-bottom: 25px;
     border-bottom: 1px solid #e0e0e0;
     padding-bottom: 10px;
 }
-.filter-header{
+.filter-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
 }
-.filter-header h3{
+.filter-header h3 {
     font-size: 16px;
     color: #ae4010;
     margin: 0;
 }
-.filter-header .toggle{
+.filter-header .toggle {
     font-weight: bold;
     font-size: 18px;
     color: #ae4010;
 }
-.filter-options{
+.filter-options {
     margin-top: 10px;
 }
-.filter-options label{
+.filter-options label {
     display: block;
     margin-bottom: 8px;
     font-size: 14px;
@@ -158,10 +184,10 @@ body{
     cursor: pointer;
     transition: 0.2s;
 }
-.filter-options label:hover{
+.filter-options label:hover {
     color: #ae4010;
 }
-.filter-options input[type="number"], .filter-options select{
+.filter-options input[type="number"] {
     width: 100%;
     padding: 5px 8px;
     border-radius: 5px;
@@ -170,7 +196,7 @@ body{
 }
 
 /* Botón aplicar filtros */
-#aplicar-filtros{
+#aplicar-filtros {
     margin-top: 10px;
     background: #2a9aa6;
     color: white;
@@ -182,30 +208,35 @@ body{
     cursor: pointer;
     transition: 0.2s;
 }
-#aplicar-filtros:hover{
+#aplicar-filtros:hover {
     background: #ae4010;
 }
 
 /* =================== */
-/* CONTENIDO PRINCIPAL  */
+/* CONTENIDO PRINCIPAL */
 /* =================== */
+.main-content {
+    display: flex;
+    margin-top: 65px;
+}
+
 .productos-wrapper {
-    margin-left: 280px; /* ancho sidebar fijo */
-    padding: 100px 40px 40px 20px;
+    margin-left: 280px;
+    padding: 40px 40px 40px 20px;
     flex: 1;
 }
 
-/* GRID DE PRODUCTOS con flex y última fila alineada a la izquierda */
+/* GRID DE PRODUCTOS */
 .productos-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-start; /* fuerza la última fila a la izquierda */
-    gap: 15px; /* espacio entre tarjetas */
+    justify-content: flex-start;
+    gap: 15px;
 }
 
 /* Cada card */
 .card {
-    flex: 1 1 calc(25% - 15px); /* 4 cards por fila en pantallas grandes */
+    flex: 1 1 calc(25% - 15px);
     max-width: calc(25% - 15px);
     background: white;
     border-radius: 5px;
@@ -214,12 +245,10 @@ body{
     display: flex;
     flex-direction: column;
     transition: transform 0.2s;
-    margin-bottom: 15px; /* espacio vertical */
+    margin-bottom: 15px;
 }
-
 .card:hover {
     transform: scale(1.03);
-    border-color: #ae4010;
 }
 .card img {
     width: 100%;
@@ -234,32 +263,26 @@ body{
     flex-direction: column;
     flex: 1;
 }
-
 .card-body h3 {
     font-size: 16px;
     color: #333;
     margin: 0 0 8px 0;
 }
-
 .card-body .descripcion {
     font-size: 13px;
     color: #777;
     flex: 1;
     margin-bottom: 10px;
 }
-
 .card-body .precio {
     font-size: 18px;
     font-weight: bold;
     color: #5c4432;
     margin-bottom: 12px;
 }
-
-/* BOTÓN VER PRODUCTO */
 .card-body a {
     text-decoration: none;
 }
-
 .card-body button {
     width: 100%;
     padding: 10px 0;
@@ -273,18 +296,20 @@ body{
     cursor: pointer;
     transition: background 0.2s, transform 0.15s;
 }
-
 .card-body button:hover {
     background: #5c4432;
     transform: translateY(-2px);
 }
-
 .card-body button:active {
     transform: translateY(0);
     background: #8c3208;
 }
 
-/* Responsive: 3 por fila */
+/* =================== */
+/* RESPONSIVE          */
+/* =================== */
+
+/* 3 por fila */
 @media (max-width: 1200px) {
     .card {
         flex: 1 1 calc(33.33% - 15px);
@@ -292,18 +317,64 @@ body{
     }
 }
 
-/* Responsive: 2 por fila */
-@media (max-width: 800px) {
+/* Tablet: sidebar se oculta */
+@media (max-width: 900px) {
+
+    .btn-mostrar-filtros {
+        display: flex;
+    }
+
+    .sidebar {
+        transform: translateX(-100%);
+        z-index: 150;
+        top: 65px;
+    }
+
+    .sidebar.sidebar-open {
+        transform: translateX(0);
+    }
+
+    .productos-wrapper {
+        margin-left: 0;
+        padding: 60px 15px 20px 15px;
+    }
+
     .card {
-        flex: 1 1 calc(50% - 15px);
-        max-width: calc(50% - 15px);
+        flex: 1 1 calc(50% - 10px);  /* ← 2 columnas */
+        max-width: calc(50% - 10px);
+    }
+
+    .card img {
+        height: 130px;  /* ← imagen más pequeña */
+    }
+
+    .card-body {
+        padding: 8px;  /* ← menos padding */
+    }
+
+    .card-body h3 {
+        font-size: 13px;
+    }
+
+    .card-body .precio {
+        font-size: 14px;
+        margin-bottom: 6px;
+    }
+
+    .card-body button {
+        font-size: 12px;
+        padding: 7px 0;
     }
 }
 
-/* Responsive: 1 por fila */
+/* Móvil pequeño: sigue en 2 columnas pero más compacto */
 @media (max-width: 500px) {
     .card {
-        flex: 1 1 100%;
-        max-width: 100%;
+        flex: 1 1 calc(50% - 8px);
+        max-width: calc(50% - 8px);
+    }
+
+    .productos-container {
+        gap: 8px;
     }
 }
