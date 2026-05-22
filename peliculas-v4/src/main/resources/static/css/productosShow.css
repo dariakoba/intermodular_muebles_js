@@ -661,6 +661,53 @@ body {
 #cantidad-container input[type="number"] {
     -moz-appearance: textfield;
 }
+
+.producto-meta{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    margin:28px 0;
+    padding:20px 0;
+    border-top:1px solid #e9e9e9;
+    border-bottom:1px solid #e9e9e9;
+}
+
+.meta-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+}
+
+.meta-label{
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    color:#888;
+    font-weight:700;
+}
+
+.meta-value{
+    font-size:15px;
+    color:#222;
+    font-weight:500;
+}
+
+/* COLOR */
+
+.color-info{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.color-circle{
+    width:18px;
+    height:18px;
+    border-radius:50%;
+    border:1px solid #d6d6d6;
+    box-shadow:0 2px 4px rgba(0,0,0,0.08);
+}
 /*prueba*/
 
 

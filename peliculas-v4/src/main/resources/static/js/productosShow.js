@@ -26,9 +26,7 @@ function agregarAlCarrito(producto, cantidad) {
     localStorage.setItem("carrito", JSON.stringify(carrito));
 }
 
-// ======================
-// APP (MISMO ESTILO QUE TU ADMIN)
-// ======================
+
 document.addEventListener("DOMContentLoaded", async () => {
 
     const id = obtenerId();
@@ -49,9 +47,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("producto-descripcion").textContent = p.descripcion;
         document.getElementById("producto-precio").textContent = `${p.precio} €`;
 
-        // ======================
-        // IMÁGENES (IGUAL QUE TU ADMIN)
-        // ======================
+        
         const imagenes = p.imagenes;
 
         const imgPrincipal = document.getElementById("producto-img");
@@ -97,31 +93,42 @@ document.addEventListener("DOMContentLoaded", async () => {
         // ======================
         // CARRITO
         // ======================
-        document.getElementById("btn-carrito").onclick = () => {
+		document.getElementById("btn-carrito").onclick = () => {
 
-            const cantidad = parseInt(document.getElementById("cantidad").value);
+		    const cantidad = parseInt(document.getElementById("cantidad").value);
 
-            agregarAlCarrito(p, cantidad);
+		    // VALIDACIÓN
+		    if (isNaN(cantidad) || cantidad < 1) {
+		        alert("No se puede poner una cantidad negativa o menor que 1");
+		        return;
+		    }
 
-            const btn = document.getElementById("btn-carrito");
-            btn.textContent = "✓ Añadido";
+		    agregarAlCarrito(p, cantidad);
 
-            setTimeout(() => {
-                btn.textContent = "🛒 Añadir al carrito";
-            }, 1200);
-        };
+		    const btn = document.getElementById("btn-carrito");
+		    btn.textContent = "✓ Añadido";
 
+		    setTimeout(() => {
+		        btn.textContent = "🛒 Añadir al carrito";
+		    }, 1200);
+		};
         // ======================
         // COMPRAR
         // ======================
-        document.getElementById("btn-comprar").onclick = () => {
+		document.getElementById("btn-comprar").onclick = () => {
 
-            const cantidad = parseInt(document.getElementById("cantidad").value);
+		    const cantidad = parseInt(document.getElementById("cantidad").value);
 
-            agregarAlCarrito(p, cantidad);
+		    // VALIDACIÓN
+		    if (isNaN(cantidad) || cantidad < 1) {
+		        alert("No se puede poner una cantidad negativa o menor que 1");
+		        return;
+		    }
 
-            window.location.href = "carrito.html";
-        };
+		    agregarAlCarrito(p, cantidad);
+
+		    window.location.href = "carrito.html";
+		};
 
     } catch (error) {
         console.error("Error:", error);

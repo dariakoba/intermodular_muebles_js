@@ -12,8 +12,8 @@ public record ProductoDetalle(
         int stock,
         String descripcion,
         int categoriaId,
-        LocalDateTime deletedAt,
-
+        String categoria,
+        String estado,
     	List<ImagenResponse> imagenes
 ) {}
 

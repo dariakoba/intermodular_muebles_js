@@ -12,8 +12,10 @@ import javax.sql.DataSource;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.peliculas.dto.ImagenResponse;
+import com.example.peliculas.dto.ProductoDetalle;
 import com.example.peliculas.dto.ProductoResumenImagen;
 import com.example.peliculas.dto.ProductoShowCliente;
+import com.example.peliculas.entity.Producto;
 import com.example.peliculas.exception.DataAccessException;
 import com.example.peliculas.repository.ProductoImagenRepository;
 import com.example.peliculas.repository.ProductoRepository;
@@ -26,42 +28,31 @@ public class ProductoController {
         this.ds = ds;
     }
     
-    /*
-    @GetMapping
-    public List<ProductoResumen> index() {
-        try (Connection con = ds.getConnection()) {
-        	ProductoRepository repo = new ProductoRepository(con);
-            return repo.findResumen();
-        } catch (SQLException e) {
-            throw new DataAccessException(e);
-        }
-    }
-    */
-    
-    @GetMapping("/{id}")
-    public ProductoShowCliente show(@PathVariable int id) {
-        try (Connection con = ds.getConnection()) {
-            ProductoRepository repo = new ProductoRepository(con);
+	// SHOW
+	@GetMapping("/{id}")
+	public ProductoShowCliente show(@PathVariable int id) {
+
+		try (Connection con = ds.getConnection();) {
+			ProductoRepository repo = new ProductoRepository(con);
 			ProductoImagenRepository imgRepo = new ProductoImagenRepository(con);
 
+			Producto p = repo.findOrThrow(id);
 			List<ImagenResponse> imagenes = imgRepo.findByProductoId(id);
+			
+			return new ProductoShowCliente(
+				p.getNombre(), 
+				p.getColor(),
+				p.getDescripcion(),
+				p.getPrecio(),
+				p.getCategoriaId(),
+				imagenes
+			);
 
-            return repo.findShowCliente(id);
-        } catch (SQLException e) {
-            throw new DataAccessException(e);
-        }
-    }
-    /* anterior show
-	@GetMapping("/{id}")
-    public Producto show(@PathVariable int id) {
-        try (Connection con = ds.getConnection()) {
-        	ProductoRepository repo = new ProductoRepository(con);
-            return repo.find(id);
-        } catch (SQLException e) {
-            throw new DataAccessException(e);
-        }
-    } 
-     */
+		} catch (SQLException e) {
+			throw new DataAccessException(e);
+		}
+	}
+   
     
     //pruebas
     @GetMapping

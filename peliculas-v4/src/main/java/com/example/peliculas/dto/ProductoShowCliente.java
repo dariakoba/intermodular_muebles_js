@@ -1,11 +1,14 @@
 package com.example.peliculas.dto;
 
+import java.util.List;
+
 public record ProductoShowCliente(
-	Integer idProducto,
 	String nombre,
+	String color,
 	String descripcion,
 	float precio,
-	String categoria,
-	String imagen
+	int categoria,
+	List<ImagenResponse> imagenes
+
 	
 ) {}

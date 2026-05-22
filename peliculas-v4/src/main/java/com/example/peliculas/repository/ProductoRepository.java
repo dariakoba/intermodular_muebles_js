@@ -2,6 +2,7 @@ package com.example.peliculas.repository;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.example.peliculas.db.DB;
@@ -10,13 +11,13 @@ import com.example.peliculas.exception.DataAccessException;
 import com.example.peliculas.mapper.RowMapper;
 import com.example.peliculas.mapper.ProductoMapper;
 import com.example.peliculas.dto.ProductoCatNomDetalle;
+import com.example.peliculas.dto.ProductoDetalle;
 import com.example.peliculas.dto.ProductoResumen;
 import com.example.peliculas.dto.ProductoResumenImagen;
 import com.example.peliculas.dto.ProductoShowCliente;
 
 public class ProductoRepository extends SoftDeleteRepository<Producto> {
 
-	
 	public ProductoRepository(Connection con) {
 		super(con, new ProductoMapper());
 	}
@@ -24,12 +25,11 @@ public class ProductoRepository extends SoftDeleteRepository<Producto> {
 	public ProductoRepository(Connection con, RowMapper<Producto> mapper) {
 		super(con, mapper);
 	}
-	
-	
+
 	public String getPrimaryKeyName() {
 		return "id_producto";
 	}
-	
+
 	@Override
 	public String getTable() {
 		return "productos";
@@ -37,15 +37,16 @@ public class ProductoRepository extends SoftDeleteRepository<Producto> {
 
 	@Override
 	public String[] getColumnNames() {
-		return new String[] { "id_producto", "nombre", "color","precio","stock","descripcion","categoria_id", "deleted_at" };
+		return new String[] { "id_producto", "nombre", "color", "precio", "stock", "descripcion", "categoria_id",
+				"deleted_at" };
 	}
-	
+
 	@Override
 	public Integer getPrimaryKey(Producto p) {
 		// TODO Auto-generated method stub
 		return p.getIdProducto();
 	}
-	
+
 	@Override
 	public void setPrimaryKey(Producto p, int id) {
 		p.setIdProducto(id);
@@ -53,17 +54,18 @@ public class ProductoRepository extends SoftDeleteRepository<Producto> {
 
 	@Override
 	public Object[] getInsertValues(Producto p) {
-		return new Object[] { p.getNombre(), p.getColor(), p.getPrecio(), p.getStock(), p.getDescripcion(), p.getCategoriaId() , p.getDeletedAt() };
+		return new Object[] { p.getNombre(), p.getColor(), p.getPrecio(), p.getStock(), p.getDescripcion(),
+				p.getCategoriaId(), p.getDeletedAt() };
 	}
 
 	@Override
 	public Object[] getUpdateValues(Producto p) {
-		return new Object[] { p.getNombre(), p.getColor(), p.getPrecio(), p.getStock(), p.getDescripcion() ,p.getCategoriaId(),p.getDeletedAt(),
-				p.getIdProducto() };
+		return new Object[] { p.getNombre(), p.getColor(), p.getPrecio(), p.getStock(), p.getDescripcion(),
+				p.getCategoriaId(), p.getDeletedAt(), p.getIdProducto() };
 	}
-	
-	//cliente
-	public List<ProductoResumenImagen> findResumen(){
+
+	// cliente
+	public List<ProductoResumenImagen> findResumen() {
 		String sql = """
 				SELECT p.id_producto, p.nombre, p.precio, p.stock, p.categoria_id,
 				(
@@ -75,94 +77,80 @@ public class ProductoRepository extends SoftDeleteRepository<Producto> {
 				) AS imagen
 				FROM productos p
 				ORDER BY p.nombre
-				""";		
+				""";
 		try {
-			return DB.queryMany(con, sql, rs -> 
-				new ProductoResumenImagen(rs.getInt("id_producto"), rs.getString("nombre"), 
-						rs.getFloat("precio"), rs.getInt("stock"), rs.getString("categoria_id"), rs.getString("imagen"))
-			);
+			return DB.queryMany(con, sql,
+					rs -> new ProductoResumenImagen(rs.getInt("id_producto"), rs.getString("nombre"),
+							rs.getFloat("precio"), rs.getInt("stock"), rs.getString("categoria_id"),
+							rs.getString("imagen")));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			throw new DataAccessException("Error al buscar el listado resumido de productos", e);
 		}
 	}
-	
-	//admin index
+
+	// admin index
 	public List<ProductoResumen> findAllResumenNoImagen() {
 
 		String sql = """
-				SELECT p.id_producto, p.nombre, p.precio, p.stock, 
-				case 
+				SELECT p.id_producto, p.nombre, p.precio, p.stock,
+				case
 				        when p.deleted_at is null then 'activo'
 				        else 'inactivo'
 				    end as estado,
 				c.nombre as categoria_nombre
 				FROM productos p
-				left join categoria c 
+				left join categoria c
 				on c.id_categoria = p.categoria_id
-				
+
 				""";
 
 		try {
-			return DB.queryMany(con, sql, 
-				rs -> new ProductoResumen(rs.getInt("id_producto"), rs.getString("nombre"), rs.getFloat("precio"), rs.getInt("stock"), rs.getString("estado"),
-						rs.getString("categoria_nombre"))
-			);
+			return DB.queryMany(con, sql,
+					rs -> new ProductoResumen(rs.getInt("id_producto"), rs.getString("nombre"), rs.getFloat("precio"),
+							rs.getInt("stock"), rs.getString("estado"), rs.getString("categoria_nombre")));
 		} catch (SQLException e) {
 			throw new DataAccessException("Error obteniendo el resumen de productos");
 		}
 	}
+
 	
-	
-	//clinete
-	public ProductoShowCliente findShowCliente(int id) {
+	//admin show con imagen
+	public ProductoDetalle findDetalle(int id) {
 
 	    String sql = """
-	        SELECT
-	            p.id_producto,
-	            p.nombre,
-	            p.descripcion,
-	            p.precio,
-	            c.nombre AS categoria,
-	            (
-	                SELECT url
-	                FROM producto_imagenes pi
-	                WHERE pi.producto_id = p.id_producto
-	                ORDER BY pi.id ASC
-	                LIMIT 1
-	            ) AS imagen
+	        SELECT p.id_producto, p.nombre, p.color, p.precio, p.stock, p.descripcion, c.id_categoria as categoria_id,
+	               c.nombre as categoria_nombre,
+	               CASE
+	                   WHEN p.deleted_at IS NULL THEN 'activo'
+	                   ELSE 'inactivo'
+	               END as estado
 	        FROM productos p
-	        LEFT JOIN categoria c
-	            ON c.id_categoria = p.categoria_id
+	        LEFT JOIN categoria c ON c.id_categoria = p.categoria_id
 	        WHERE p.id_producto = ?
-	    """;
+	        """;
 
 	    try {
-
-	        return DB.queryOne(con, sql, rs ->
-	            new ProductoShowCliente(
-	                rs.getInt("id_producto"),
-	                rs.getString("nombre"),
-	                rs.getString("descripcion"),
-	                rs.getFloat("precio"),
-	                rs.getString("categoria"),
-	                rs.getString("imagen")
-	            )
-	        , id);
-
+	    	return DB.queryOne(con, sql, rs -> new ProductoDetalle(
+	    		    rs.getInt("id_producto"),
+	    		    rs.getString("nombre"),
+	    		    rs.getString("color"),
+	    		    rs.getFloat("precio"),
+	    		    rs.getInt("stock"),
+	    		    rs.getString("descripcion"),
+	    		    rs.getInt("categoria_id"),
+	    		    rs.getString("categoria_nombre"),
+	    		    rs.getString("estado"),
+	    		    new ArrayList<>()
+	    		), id); // ← el id va al final como varargs
 	    } catch (SQLException e) {
-
-	        throw new DataAccessException(
-	            "Error al obtener detalle del producto cliente con id=" + id, e
-	        );
+	        throw new DataAccessException("Error obteniendo detalle del producto");
 	    }
 	}
 	
-	//
-	
-	
 
-	
+	//
+
 	public ProductoResumenImagen findByDetalleId(int id) {
 
 		String sql = """
@@ -176,32 +164,29 @@ public class ProductoRepository extends SoftDeleteRepository<Producto> {
 				) AS imagen
 				FROM productos p
 				where id_producto = ?
-				
+
 				""";
 
 		try {
 
 			return DB.queryOne(con, sql, rs ->
 
-			new ProductoResumenImagen(rs.getInt("id_producto"), rs.getString("nombre"), 
-					rs.getFloat("precio"), rs.getInt("stock"), rs.getString("categoria_id"), rs.getString("imagen"))
+			new ProductoResumenImagen(rs.getInt("id_producto"), rs.getString("nombre"), rs.getFloat("precio"),
+					rs.getInt("stock"), rs.getString("categoria_id"), rs.getString("imagen"))
 
-			, id);
+					, id);
 
 		} catch (SQLException e) {
 
-			throw new DataAccessException(
-				"Error al buscar el listado detallado de productos", e
-			);
+			throw new DataAccessException("Error al buscar el listado detallado de productos", e);
 		}
 	}
-	
-	
-	//cliente productos
+
+	// cliente productos
 	public List<ProductoResumenImagen> findAllResumen() {
 
 		String sql = """
-				SELECT p.id_producto, p.nombre, p.precio, p.stock, p.categoria_id, 
+				SELECT p.id_producto, p.nombre, p.precio, p.stock, p.categoria_id,
 				(
 					SELECT url
 					FROM producto_imagenes pi
@@ -210,54 +195,46 @@ public class ProductoRepository extends SoftDeleteRepository<Producto> {
 					LIMIT 1
 				) AS imagen
 				FROM productos p
-				
+
 				""";
 
 		try {
-			return DB.queryMany(con, sql, 
-				rs -> new ProductoResumenImagen(
-						rs.getInt("id_producto"),
-						rs.getString("nombre"),
-						rs.getFloat("precio"),
-						rs.getInt("stock"),
-						rs.getString("categoria_id"),
-						rs.getString("imagen")
-				)
-			);
+			return DB.queryMany(con, sql,
+					rs -> new ProductoResumenImagen(rs.getInt("id_producto"), rs.getString("nombre"),
+							rs.getFloat("precio"), rs.getInt("stock"), rs.getString("categoria_id"),
+							rs.getString("imagen")));
 		} catch (SQLException e) {
 			throw new DataAccessException("Error obteniendo el resumen de directores");
 		}
 	}
-	
-	public List<ProductoCatNomDetalle> findDetalleCategoria(){
-		String sql="""
-				select 
+
+	public List<ProductoCatNomDetalle> findDetalleCategoria() {
+		String sql = """
+				select
 				    p.id_producto,
 				    p.nombre,
 				    p.color,
 				    p.precio,
 				    p.stock,
-				    case 
+				    case
 				        when p.deleted_at is null then 'activo'
 				        else 'inactivo'
 				    end as estado,
 				    c.nombre as categoria_nombre
 				from productos p
-				left join categoria c 
-		    on c.id_categoria = p.categoria_id;
+				left join categoria c
+				  on c.id_categoria = p.categoria_id;
 				""";
-				
+
 		try {
-			return DB.queryMany(con, sql, rs -> 
-				new ProductoCatNomDetalle(rs.getInt("id_producto"), rs.getString("nombre"), rs.getString("color"), rs.getFloat("precio"),
-						rs.getInt("stock"), rs.getString("categoria_nombre"), rs.getString("estado") )
-			);
+			return DB.queryMany(con, sql,
+					rs -> new ProductoCatNomDetalle(rs.getInt("id_producto"), rs.getString("nombre"),
+							rs.getString("color"), rs.getFloat("precio"), rs.getInt("stock"),
+							rs.getString("categoria_nombre"), rs.getString("estado")));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			throw new DataAccessException("Error al buscar el listado detallado CATNOM de productos", e);
 		}
 	}
-	
-	
 
 }

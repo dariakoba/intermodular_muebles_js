@@ -60,32 +60,60 @@ public class ProductoAdminController {
   
     
 	// SHOW
-	@GetMapping("/{id}")
-	public ProductoDetalle show(@PathVariable int id) {
+    @GetMapping("/{id}")
+    public ProductoDetalle show(@PathVariable int id) {
 
-		try (Connection con = ds.getConnection();) {
-			ProductoRepository repo = new ProductoRepository(con);
-			ProductoImagenRepository imgRepo = new ProductoImagenRepository(con);
+        try (Connection con = ds.getConnection()) {
+            ProductoRepository repo = new ProductoRepository(con);
+            ProductoImagenRepository imgRepo = new ProductoImagenRepository(con);
 
-			Producto p = repo.findOrThrow(id);
-			List<ImagenResponse> imagenes = imgRepo.findByProductoId(id);
-			
-			return new ProductoDetalle(
-				p.getIdProducto(), 
-				p.getNombre(), 
-				p.getColor(),
-				p.getPrecio(),
-				p.getStock(),
-				p.getDescripcion(),
-				p.getCategoriaId(),
-				p.getDeletedAt(),
-				imagenes
-			);
+            ProductoDetalle detalle = repo.findDetalle(id);
+            List<ImagenResponse> imagenes = imgRepo.findByProductoId(id);
 
-		} catch (SQLException e) {
-			throw new DataAccessException(e);
-		}
-	}
+            return new ProductoDetalle(
+                detalle.idProducto(),
+                detalle.nombre(),
+                detalle.color(),
+                detalle.precio(),
+                detalle.stock(),
+                detalle.descripcion(),
+                detalle.categoriaId(),
+                detalle.categoria(),
+                detalle.estado(),
+                imagenes  // ← aquí las inyectas
+            );
+
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+    }
+    
+//	@GetMapping("/{id}")
+//	public ProductoDetalle show(@PathVariable int id) {
+//
+//		try (Connection con = ds.getConnection();) {
+//			ProductoRepository repo = new ProductoRepository(con);
+//			ProductoImagenRepository imgRepo = new ProductoImagenRepository(con);
+//
+//			Producto p = repo.findOrThrow(id);
+//			List<ImagenResponse> imagenes = imgRepo.findByProductoId(id);
+//			
+//			return new ProductoDetalle(
+//				p.getIdProducto(), 
+//				p.getNombre(), 
+//				p.getColor(),
+//				p.getPrecio(),
+//				p.getStock(),
+//				p.getDescripcion(),
+//				p.getCategoriaId(),
+//				p.getDeletedAt(),
+//				imagenes
+//			);
+//
+//		} catch (SQLException e) {
+//			throw new DataAccessException(e);
+//		}
+//	}
 
 
 	//crear producto 

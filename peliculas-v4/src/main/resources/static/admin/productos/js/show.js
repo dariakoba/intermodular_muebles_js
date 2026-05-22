@@ -16,7 +16,7 @@ app.run(async () => {
 
     document.getElementById("id").textContent = p.id_producto;
 
-    document.getElementById("categoria").textContent = p.categoria_id;
+	document.getElementById("categoria").textContent = p.categoria ?? "No tiene categoría";
 
     document.getElementById("color").textContent = p.color;
 	
