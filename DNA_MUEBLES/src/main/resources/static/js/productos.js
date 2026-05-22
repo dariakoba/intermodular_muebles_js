@@ -2,6 +2,8 @@
 document.addEventListener("DOMContentLoaded", async () => {
     await cargarCategorias();
     await cargarProductos();
+	
+	aplicarCategoriaURL();
 
     document.getElementById("aplicar-filtros").addEventListener("click", aplicarFiltros);
     document.getElementById("ordenar").addEventListener("change", aplicarFiltros);
@@ -122,4 +124,23 @@ async function aplicarFiltros() {
     } catch (error) {
         console.error("Error aplicando filtros:", error);
     }
+}
+
+//HREFCATEGORIAS
+function aplicarCategoriaURL() {
+    const params = new URLSearchParams(window.location.search);
+    const categoria = params.get("categoria");
+
+    if (!categoria) return;
+
+    // esperar a que carguen los checkboxes
+    setTimeout(() => {
+        const checkbox = [...document.querySelectorAll("#filtro-categorias input")]
+            .find(cb => cb.value.toLowerCase() === categoria.toLowerCase());
+
+        if (checkbox) {
+            checkbox.checked = true;
+            aplicarFiltros(); // 👈 reutiliza tu sistema actual
+        }
+    }, 300);
 }

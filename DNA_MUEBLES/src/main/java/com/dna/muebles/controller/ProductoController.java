@@ -12,7 +12,6 @@ import javax.sql.DataSource;
 import org.springframework.web.bind.annotation.*;
 
 import com.dna.muebles.dto.ImagenResponse;
-import com.dna.muebles.dto.ProductoDetalle;
 import com.dna.muebles.dto.ProductoResumenImagen;
 import com.dna.muebles.dto.ProductoShowCliente;
 import com.dna.muebles.entity.Producto;

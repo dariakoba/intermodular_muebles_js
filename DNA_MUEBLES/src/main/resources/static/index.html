@@ -81,41 +81,46 @@
         <div class="slider-wrapper">
 			           
             <div class="categories-grid" id="sliderGrid">
-                <div class="category-card" style="background-image: url(images/home/unnamed.jpg);">
+                <div class="category-card" onclick="goToCategory('camas')" style="background-image: url(images/home/unnamed.jpg);">
                     <div class="card-overlay">
-                        <h2 class="card-title">Dormitorio</h2>
+                        <h2 class="card-title">Camas</h2>
                     </div>
                 </div>
-                <div class="category-card" style="background-image: url(images/home/Gemini_Generated_Image_kkfc2pkkfc2pkkfc\ \(3\).png);">
+                <div class="category-card" onclick="goToCategory('sofás')" style="background-image: url(images/home/Gemini_Generated_Image_kkfc2pkkfc2pkkfc\ \(3\).png);">
                     <div class="card-overlay">
-                        <h2 class="card-title">Baño</h2>
+                        <h2 class="card-title">Sofás</h2>
                     </div>
                 </div>
-                <div class="category-card" style="background-image: url(images/home/Gemini_Generated_Image_kkfc2pkkfc2pkkfc\ \(2\).png);">
+                <div class="category-card" onclick="goToCategory('escritorios')" style="background-image: url(images/home/Gemini_Generated_Image_kkfc2pkkfc2pkkfc\ \(2\).png);">
                     <div class="card-overlay">
-                        <h2 class="card-title">Oficina</h2>
+                        <h2 class="card-title">Escritorios</h2>
                     </div>
                 </div>
-                <div class="category-card" style="background-image: url(images/home/descarga\ \(3\).jpg);">
+                <div class="category-card" onclick="goToCategory('muebles tv')" style="background-image: url(images/home/descarga\ \(3\).jpg);">
                     <div class="card-overlay">
-                        <h2 class="card-title">Salón</h2>
+                        <h2 class="card-title">Muebles TV</h2>
                     </div>
                 </div>
-                <div class="category-card" style="background-image: url(images/home/descarga\ \(2\).jpg);">
+                <div class="category-card" onclick="goToCategory('estanterías')" style="background-image: url(images/home/descarga\ \(2\).jpg);">
                     <div class="card-overlay">
-                        <h2 class="card-title">Cocina</h2>
+                        <h2 class="card-title">Estanterías</h2>
                     </div>
                 </div>
-                <div class="category-card" style="background-image: url(images/home/luminárias\ artesanais\ lindas.jpg);">
+                <div class="category-card" onclick="goToCategory('mesas')" style="background-image: url(images/home/luminárias\ artesanais\ lindas.jpg);">
                     <div class="card-overlay">
-                        <h2 class="card-title">Iluminación</h2>
+                        <h2 class="card-title">Mesas</h2>
                     </div>
                 </div>
-                <div class="category-card" style="background-image: url(images/home/descarga\ \(4\).jpg);">
+                <div class="category-card" onclick="goToCategory('armarios')" style="background-image: url(images/home/descarga\ \(4\).jpg);">
                     <div class="card-overlay">
-                        <h2 class="card-title">Decoración</h2>
+                        <h2 class="card-title">Armarios</h2>
                     </div>
                 </div>
+				<div class="category-card" onclick="goToCategory('sillas')" style="background-image: url(images/home/descarga\ \(4\).jpg);">
+                    <div class="card-overlay">
+                        <h2 class="card-title">Sillas</h2>
+                    </div>
+				</div>
             </div>
         </div>
 
@@ -166,7 +171,7 @@
 
 <script src="/js/menuUser.js"></script>
 <script src="/js/resenya.js"></script>
-
+<script src="/js/hrefCategorias.js"></script>
 <script src="/js/scroll.js"></script>
 
 <script src="/js/logout.js"></script>
