@@ -51,37 +51,49 @@ document.addEventListener("DOMContentLoaded", async () => {
         const imagenes = p.imagenes;
 
         const imgPrincipal = document.getElementById("producto-img");
-        const galeria = document.getElementById("galeria");
+        
+		if (imagenes && imagenes.length > 0) {
 
-        if (imagenes && imagenes.length > 0) {
+		    imgPrincipal.src = imagenes[0].url;
+		    imgPrincipal.onclick = () => abrirModal(imagenes[0].url);
 
-            imgPrincipal.src = imagenes[0].url;
+		    galeria.innerHTML = "";
 
-            imgPrincipal.onclick = () => abrirModal(imagenes[0].url);
+		    let indexActual = 0;
 
-            galeria.innerHTML = "";
+		    function cambiarImagen(index) {
+		        indexActual = index;
+		        imgPrincipal.src = imagenes[index].url;
+		        imgPrincipal.onclick = () => abrirModal(imagenes[index].url);
+		        // quitar clase activa de todas
+		        galeria.querySelectorAll("img").forEach(i => i.classList.remove("activa"));
+		        // añadir a la seleccionada
+		        galeria.querySelectorAll("img")[index].classList.add("activa");
+		    }
 
-            imagenes.slice(1).forEach(img => {
+		    imagenes.forEach((img, index) => {
+		        const el = document.createElement("img");
+		        el.src = img.url;
+		        if (index === 0) el.classList.add("activa");
+		        el.onclick = () => cambiarImagen(index);
+		        galeria.appendChild(el);
+		    });
 
-                const el = document.createElement("img");
+		    // Flechas
+		    document.getElementById("flecha-izq").onclick = () => {
+		        const nuevo = (indexActual - 1 + imagenes.length) % imagenes.length;
+		        cambiarImagen(nuevo);
+		    };
+		    document.getElementById("flecha-der").onclick = () => {
+		        const nuevo = (indexActual + 1) % imagenes.length;
+		        cambiarImagen(nuevo);
+		    };
 
-                el.src = img.url;
-                el.style.width = "80px";
-                el.style.cursor = "pointer";
-                el.style.borderRadius = "8px";
-
-                el.onclick = () => {
-                    imgPrincipal.src = img.url;
-                };
-
-                galeria.appendChild(el);
-            });
-
-        } else {
-            // fallback si no hay imágenes
-            imgPrincipal.src = `/uploads/productos/${p.id_producto}.jpg`;
-        }
-
+		} else {
+		    imgPrincipal.src = `/images/productos/productoSinImagen.jpg`;
+		    document.getElementById("flecha-izq").style.display = "none";
+		    document.getElementById("flecha-der").style.display = "none";
+		}
         // ======================
         // CANTIDAD
         // ======================
