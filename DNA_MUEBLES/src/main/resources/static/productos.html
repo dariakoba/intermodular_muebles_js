@@ -13,35 +13,31 @@
 
 <body>
 
-<header class="topbar">
+	<header class="topbar">
 
-    <div class="logo">
-        <img src="images/login/logo.png" alt="logo">
-        <span>DNA</span>
-    </div>
+	<div class="logo">
+		<img src="images/login/logo.png" alt="logo">
+		<span>DNA</span>
+	</div>
 
-    <nav class="menu">
-        <a href="index.html">Home</a>
-        <a href="productos.html">Catálogo</a>
-        <a href="contacto.html">Contacto</a>
-    </nav>
+	<nav class="menu">
+		<a href="index.html">Home</a>
+		<a href="productos.html">Catálogo</a>
+		<a href="contacto.html">Contacto</a>
+	</nav>
 
-    <div class="icons">
-        <a href="carrito.html" style="text-decoration: none; color: inherit;">
-            <span class="material-symbols-outlined">shopping_cart</span>
-        </a>
-        <div class="person-menu-wrapper">
-            <a href="perfil.html" style="text-decoration: none; color: inherit;">
-                <span id="person-icon" class="material-symbols-outlined">person</span>
-            </a>
-            <div class="person-menu">
-                <a href="perfil.html">Ver cuenta</a>
-                <a href="logout.html">Cerrar sesión</a>
-            </div>
-        </div>
-    </div>
+	<div class="icons">
+		<a href="carrito.html" style="text-decoration: none; color: inherit;">
+			<span class="material-symbols-outlined">shopping_cart</span>
+		</a>
 
-</header>
+		<div class="person-menu-wrapper">
+			<span id="person-icon" class="material-symbols-outlined">person</span>
+			<div class="person-menu" id="person-menu"></div>
+		</div>
+	</div>
+
+	</header>   
 
 <!-- Botón móvil para mostrar filtros (solo visible en pantallas pequeñas) -->
 <button id="btn-filtros" class="btn-mostrar-filtros">
@@ -119,8 +115,8 @@
 
 </main>
 
-<script src="js/productos.js"></script>
-<script src="js/menuUser.js"></script>
+<script src="/js/productos.js"></script>
+<script src="/js/menuUser.js"></script>
 
 </body>
 </html>

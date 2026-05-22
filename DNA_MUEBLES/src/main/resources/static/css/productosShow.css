@@ -1,6 +1,4 @@
-/* ════════════════════════════
-   VARIABLES
-   ════════════════════════════ */
+
 :root {
     --marron-oscuro: #5c4432;
     --naranja: #ae4010;
@@ -14,9 +12,7 @@
     --sombra-suave: 0 8px 20px rgba(0,0,0,0.06);
 }
 
-/* ════════════════════════════
-   RESET Y BASE
-   ════════════════════════════ */
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
@@ -26,7 +22,7 @@ body {
 }
 
 /* ════════════════════════════
-   HEADER / TOPBAR
+   HEADER 
    ════════════════════════════ */
 .topbar {
     position: fixed;

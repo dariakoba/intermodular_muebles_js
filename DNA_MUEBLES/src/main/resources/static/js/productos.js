@@ -1,4 +1,3 @@
-// ── INIT ──────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", async () => {
     await cargarCategorias();
     await cargarProductos();
@@ -8,7 +7,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("aplicar-filtros").addEventListener("click", aplicarFiltros);
     document.getElementById("ordenar").addEventListener("change", aplicarFiltros);
 
-    // Toggle sidebar en móvil
 	document.getElementById("btn-filtros").addEventListener("click", () => {
 	    const sidebar = document.querySelector(".sidebar");
 	    const btn = document.getElementById("btn-filtros");
@@ -18,19 +16,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 	        : '<span class="material-symbols-outlined">tune</span> Mostrar filtros';
 	});
 	
-    // Toggle secciones del sidebar
 	document.querySelectorAll(".filter-header").forEach(header => {
 	    header.addEventListener("click", () => {
 	        const options = header.nextElementSibling;
 	        const toggle = header.querySelector(".toggle");
-	        const abierto = options.style.display === "block";  // ← cambio aquí
+	        const abierto = options.style.display === "block";
 	        options.style.display = abierto ? "none" : "block";
 	        toggle.textContent = abierto ? "+" : "−";
 	    });
 	});
 });
 
-// ── CARGAR CATEGORÍAS DINÁMICAS ───────────────────────
 async function cargarCategorias() {
     try {
         const response = await fetch("/api/categorias");
@@ -50,7 +46,6 @@ async function cargarCategorias() {
     }
 }
 
-// ── CARGAR PRODUCTOS ──────────────────────────────────
 async function cargarProductos() {
     try {
         const response = await fetch("/api/productos");
@@ -67,7 +62,6 @@ async function cargarProductos() {
     }
 }
 
-// ── RENDER PRODUCTOS ──────────────────────────────────
 function renderProductos(productos) {
     const contenedor = document.getElementById("productos-container");
     contenedor.innerHTML = "";
@@ -94,16 +88,13 @@ function renderProductos(productos) {
     });
 }
 
-// ── APLICAR FILTROS ───────────────────────────────────
 async function aplicarFiltros() {
     const params = new URLSearchParams();
 
-    // Categorías — todas las seleccionadas
     const categoriasChecked = [...document.querySelectorAll("#filtro-categorias input:checked")]
         .map(cb => cb.value);
     categoriasChecked.forEach(c => params.append("categoria", c));
 
-    // Colores — todos los seleccionados
     const coloresChecked = [...document.querySelectorAll("#filtro-colores input:checked")]
         .map(cb => cb.value);
     coloresChecked.forEach(c => params.append("color", c));
@@ -133,14 +124,13 @@ function aplicarCategoriaURL() {
 
     if (!categoria) return;
 
-    // esperar a que carguen los checkboxes
     setTimeout(() => {
         const checkbox = [...document.querySelectorAll("#filtro-categorias input")]
             .find(cb => cb.value.toLowerCase() === categoria.toLowerCase());
 
         if (checkbox) {
             checkbox.checked = true;
-            aplicarFiltros(); // 👈 reutiliza tu sistema actual
+            aplicarFiltros(); 
         }
     }, 300);
 }
