@@ -386,6 +386,87 @@ body {
     }
 }
 
+/* FOOTER ESTILOS */
+.main-footer {
+    background-color: #e9e6e3; /* Mismo color que el navbar */
+    color: #4a3728;
+    padding: 60px 0 20px 0;
+    margin-top: 80px;
+    border-top: 2px solid #d9ccbc;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas iguales */
+    gap: 40px;
+    padding: 0 40px;
+}
+
+.footer-section h3 {
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+    color: #ae4010; /* Color naranja/tierra acento */
+}
+
+.footer-section p {
+    line-height: 1.6;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+}
+
+.footer-description {
+    margin-top: 15px;
+    font-style: italic;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 10px;
+}
+
+.footer-section ul li a {
+    text-decoration: none;
+    color: #4a3728;
+    transition: 0.3s;
+}
+
+.footer-section ul li a:hover {
+    color: #ae4010;
+    padding-left: 5px;
+}
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.social-icons a {
+    font-size: 1.5rem;
+    color: #4a3728;
+    transition: 0.3s;
+}
+
+.social-icons a:hover {
+    color: #ae4010;
+    transform: translateY(-5px);
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 1px solid #d9ccbc;
+    font-size: 0.8rem;
+    color: #6e5a4a;
+}
+
 /* Móvil pequeño: sigue en 2 columnas pero más compacto */
 @media (max-width: 500px) {
     .card {

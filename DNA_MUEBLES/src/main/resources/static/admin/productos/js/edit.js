@@ -88,7 +88,7 @@ function renderImagenes(imagenes) {
 		wrapper.innerHTML = `
 		    <img src="${img.url}" class="mini-img">
 
-		    <button class="btn-eliminar" data-action="eliminar" data-id="${img.id}">
+		    <button type="button" class="btn-eliminar" data-action="eliminar" data-id="${img.id}">
 		        Eliminar
 		    </button>
 		`;
@@ -253,7 +253,6 @@ async function handleUpload() {
     render(producto, categorias);
 }
 
-/* ---------------- ELIMINAR IMAGEN ---------------- */
 
 async function onEliminar(e) {
 
@@ -267,8 +266,10 @@ async function onEliminar(e) {
 
     await api.delete(`/api/admin/productos/${productoId}/imagenes/${idImagen}`);
 
-    const producto = await api.get(`/api/admin/productos/${productoId}`);
-    const categorias = await api.get("/api/admin/categorias");
+    //const producto = await api.get(`/api/admin/productos/${productoId}`);
+    //const categorias = await api.get("/api/admin/categorias");
 
-    render(producto, categorias);
+    //render(producto, categorias);
+	btn.parentElement.remove();
+
 }
