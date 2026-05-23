@@ -19,18 +19,13 @@ form.addEventListener("submit", async (e) => {
       successDiv.style.display = "none";
       return;
     }
-	if (data.telefono.length !== 9) {
-	    errorDiv.textContent = "El teléfono debe tener 9 números";
-	    errorDiv.style.display = "block";
-	    successDiv.style.display = "none";
-	    return;
-	  }
-	  if (!/^\d{9}$/.test(data.telefono)) {
-	    errorDiv.textContent = "El teléfono debe tener exactamente 9 números";
-	    errorDiv.style.display = "block";
-	    successDiv.style.display = "none";
-	    return;
-	  }
+	
+	if (data.telefono && !/^\+?\d{9,15}$/.test(data.telefono)) {
+	  errorDiv.textContent = "Teléfono inválido (puede incluir + y entre 9-15 números)";
+	  errorDiv.style.display = "block";
+	  successDiv.style.display = "none";
+	  return;
+	}
 	  if (data.nombre.length < 2) {
 	    errorDiv.textContent = "El nombre debe tener al menos 2 caracteres";
 	    errorDiv.style.display = "block";
@@ -53,25 +48,28 @@ form.addEventListener("submit", async (e) => {
       body: JSON.stringify(data)
     });
 
-    if (res.ok) { // 200 o 201
-      errorDiv.style.display = "none";
-      successDiv.style.display = "block";
+    if (res.ok) {
+      alert("Registro completado correctamente ");
+
       form.reset();
-    } else if (res.status === 409) {
-      errorDiv.textContent = "El email ya está registrado";
-      errorDiv.style.display = "block";
-      successDiv.style.display = "none";
-    } else {
-      const errorText = await res.text();
-      errorDiv.textContent = "Error al registrar: " + errorText;
-      errorDiv.style.display = "block";
-      successDiv.style.display = "none";
+
+      // redirección a login
+      window.location.href = "login.html";
+      return;
     }
+
+    if (res.status === 409) {
+      alert("El email ya está registrado");
+      return;
+    }
+
+    const errorText = await res.text();
+    alert("Error al registrar: " + errorText);
 
   } catch (err) {
     console.error(err);
-    errorDiv.textContent = "Error de conexión";
-    errorDiv.style.display = "block";
-    successDiv.style.display = "none";
+    alert("Error de conexión");
   }
+
+  
 });

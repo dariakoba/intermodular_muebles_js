@@ -122,10 +122,10 @@ public class ResenyaController {
         """;
 
         String puntosSql = """
-            UPDATE usuarios
-            SET puntos = puntos - 20
-            WHERE id = ?
-        """;
+        	    UPDATE usuarios
+        	    SET puntos = GREATEST(puntos - 20, 0)
+        	    WHERE id = ?
+        	""";
 
         try (Connection con = ds.getConnection()) {
 
@@ -222,13 +222,16 @@ public class ResenyaController {
         String sql = """
             SELECT 1
             FROM pedidos p
-            JOIN detalles_pedidos dp ON dp.id_pedido = p.id_pedido
+            JOIN detalles_pedidos dp 
+                ON dp.id_pedido = p.id_pedido
             WHERE p.id_usuario = ?
             AND dp.id_producto = ?
+            AND p.estado_pago = 'Recibido'
             LIMIT 1
         """;
 
         try (PreparedStatement ps = con.prepareStatement(sql)) {
+
             ps.setInt(1, userId);
             ps.setInt(2, productoId);
 
@@ -255,7 +258,7 @@ public class ResenyaController {
 
             if (!comprado) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                        .body("Solo puedes reseñar productos que hayas comprado.");
+                        .body("Solo puedes reseñar productos que hayas recibido.");
             }
 
             // OPCIONAL:

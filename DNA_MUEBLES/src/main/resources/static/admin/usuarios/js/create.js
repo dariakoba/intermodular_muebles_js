@@ -31,11 +31,10 @@ document.getElementById("form-usuario").addEventListener("submit", async (e) => 
     return;
   }
 
-  // Teléfono español (9 números)
-  const telefonoRegex = /^[0-9]{9}$/;
-
-  if (telefonoValue && !telefonoRegex.test(telefonoValue)) {
-    alert("El teléfono debe tener 9 números");
+  
+  // Teléfono internacional (9-15 dígitos, opcional +)
+  if (telefonoValue && !/^\+?\d{9,15}$/.test(telefonoValue)) {
+    alert("El teléfono debe tener entre 9 y 15 números y puede incluir '+'");
     return;
   }
 

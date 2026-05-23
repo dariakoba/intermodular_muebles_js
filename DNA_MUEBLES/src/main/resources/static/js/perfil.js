@@ -28,7 +28,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
 
-    // 2. CARGAR PEDIDOS (CON NUEVO DISEÑO Y PRECIOS SEPARADOS ALINEADOS A LA DERECHA)
     try {
         const res = await fetch("/api/carrito/mis");
         const tbody = document.getElementById("pedidos-body");
@@ -46,11 +45,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                     const estadoClase = p.estadoPago ? p.estadoPago.toLowerCase() : "pendiente";
                     const fechaLimpia = p.fecha ? p.fecha.split('T')[0] : "---";
                     
-                    // Formateamos los productos para el mini-ticket separando nombre y precio
                     let productosLista = "";
                     if (p.nombreProducto && p.nombreProducto.trim() !== "") {
                         productosLista = p.nombreProducto.split('|').map(item => {
-                            // Aquí separamos el texto usando los " : " que nos manda Java
                             let partes = item.split(' : ');
                             let nombreMueble = partes[0];
                             let precioMueble = partes.length > 1 ? partes[1] : '';
@@ -170,19 +167,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 	            return;
 	        }
 
-	        const telefonoRegex = /^[0-9]{9}$/;
+			const telefonoRegex = /^\+?\d{9,15}$/;
 
-	        if (!telefonoRegex.test(updatedUser.telefono)) {
-	            alert("El teléfono debe tener 9 números.");
-	            return;
-	        }
+			if (updatedUser.telefono && !telefonoRegex.test(updatedUser.telefono)) {
+			    alert("Teléfono inválido (puede incluir + y entre 9-15 números).");
+			    return;
+			}
 
 	        if (!updatedUser.direccion || updatedUser.direccion.length < 5) {
 	            alert("Introduce una dirección válida.");
 	            return;
 	        }
 
-	        // CONFIRMACIÓN
+	        
 	        const confirmar = confirm(
 	            "¿Estás segura de que quieres guardar los cambios?"
 	        );
@@ -229,17 +226,16 @@ function closeModal() {
     document.getElementById("imageModal").style.display = "none";
 }
 
-// NUEVA FUNCIÓN: Abre el ticket y gira la flecha
 window.toggleDetalles = function(idPedido) {
     const filaDetalles = document.getElementById(`detalles-${idPedido}`);
     const icono = document.getElementById(`icon-${idPedido}`);
 
     if (filaDetalles.style.display === "none") {
         filaDetalles.style.display = "table-row";
-        icono.style.transform = "rotate(180deg)"; // Anima la flecha girándola
+        icono.style.transform = "rotate(180deg)"; 
     } else {
         filaDetalles.style.display = "none";
-        icono.style.transform = "rotate(0deg)"; // Vuelve la flecha a su sitio
+        icono.style.transform = "rotate(0deg)"; 
     }
 };
 

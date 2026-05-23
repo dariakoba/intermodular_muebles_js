@@ -16,6 +16,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const puntos = document.getElementById("puntos");
   const salario = document.getElementById("salario");
+  
+  const grupoPuntos = document.getElementById("grupo-puntos");
+  const grupoSalario = document.getElementById("grupo-salario");
 
   let usuarioOriginal = {};
   let isMe = false;
@@ -61,12 +64,18 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function toggleCampos() {
-    if (rol.value === "cliente") {
-      if (puntos) puntos.style.display = "block";
-      if (salario) salario.style.display = "none";
+
+    const rolActual = normalizar(rol.value);
+
+    if (rolActual === "cliente") {
+
+      grupoPuntos.style.display = "block";
+      grupoSalario.style.display = "none";
+
     } else {
-      if (puntos) puntos.style.display = "none";
-      if (salario) salario.style.display = "block";
+
+      grupoPuntos.style.display = "none";
+      grupoSalario.style.display = "block";
     }
   }
 
@@ -83,6 +92,14 @@ document.addEventListener("DOMContentLoaded", () => {
 	    alert("No puedes cambiar tu propio rol o estado");
 	    return;
 	  }
+	}
+	
+	// VALIDACIÓN TELÉFONO (internacional)
+	const telefonoValue = telefono.value.trim();
+
+	if (telefonoValue && !/^\+?\d{9,15}$/.test(telefonoValue)) {
+	  alert("Teléfono inválido (puede incluir + y entre 9-15 números)");
+	  return;
 	}
 
     const usuario = {
