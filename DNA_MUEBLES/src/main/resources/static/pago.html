@@ -26,6 +26,11 @@
         .row { display: flex; gap: 15px; }
         .row > div { flex: 1; }
 
+        /* GRID PARA LA DIRECCIÓN PROFESIONAL */
+        .direccion-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
+        .direccion-grid .full-width { grid-column: span 2; }
+        .direccion-grid input { margin-bottom: 0 !important; } /* Quitamos margen para usar el gap del grid */
+
         /* Lista de productos en resumen */
         .resumen-lista { max-height: 250px; overflow-y: auto; margin-bottom: 20px; padding-right: 5px; }
         .resumen-item { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.95rem; border-bottom: 1px dashed #cbbdaf; padding-bottom: 8px; }
@@ -42,7 +47,7 @@
         .descuento-linea { color: #d94536; font-weight: bold; display: none; }
         .total-final { display: flex; justify-content: space-between; font-size: 1.4rem; font-weight: bold; color: rgb(159, 80, 0); margin-top: 15px; padding-top: 15px; border-top: 2px solid #cbbdaf; }
         
-        /* NUEVO: Cajita de previsión de puntos a ganar */
+        /* Cajita de previsión de puntos a ganar */
         .caja-prevision-puntos { background: #fdfaf6; border: 1px dashed #d6caba; padding: 12px; border-radius: 6px; margin-top: 15px; text-align: center; color: #6b5a4d; font-size: 0.95rem; }
         .caja-prevision-puntos span { color: rgb(159, 80, 0); font-weight: bold; font-size: 1.1rem; }
 
@@ -71,8 +76,14 @@
                     <label for="nombre-titular">Nombre Completo</label>
                     <input type="text" id="nombre-titular" placeholder="Ej. Andrea Gómez" required>
                     
-                    <label for="direccion-envio">Dirección de Envío</label>
-                    <input type="text" id="direccion-envio" placeholder="Calle, Número, Piso, Ciudad, Código Postal" required>
+                    <label>Dirección de Envío</label>
+                    <div class="direccion-grid">
+                        <input type="text" id="dir-calle" class="full-width" placeholder="Calle, Avenida, Plaza..." required>
+                        <input type="text" id="dir-numero" placeholder="Número" required>
+                        <input type="text" id="dir-piso" placeholder="Piso / Puerta (Opcional)">
+                        <input type="text" id="dir-cp" placeholder="Código Postal" pattern="[0-9]{5}" title="El código postal debe tener exactamente 5 números" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 5)">
+                        <input type="text" id="dir-ciudad" placeholder="Ciudad / Localidad" required>
+                    </div>
                 </div>
 
                 <div class="form-section">
@@ -250,8 +261,9 @@
                 if (userObj) {
                     const usuario = JSON.parse(userObj);
 
+                    // Si tenía guardada una dirección antigua (formato libre), la metemos en "Calle"
                     if (usuario.direccion && usuario.direccion.trim() !== "") {
-                        document.getElementById('direccion-envio').value = usuario.direccion;
+                        document.getElementById('dir-calle').value = usuario.direccion;
                     }
                     if (usuario.nombre) {
                         const apellidos = usuario.apellidos ? " " + usuario.apellidos : "";
@@ -283,11 +295,23 @@
                 btn.innerText = "PROCESANDO PAGO...";
                 btn.disabled = true;
 
+                // --- CONSTRUIMOS LA DIRECCIÓN PERFECTA PARA JAVA ---
+                const calle = document.getElementById('dir-calle').value.trim();
+                const numero = document.getElementById('dir-numero').value.trim();
+                const piso = document.getElementById('dir-piso').value.trim();
+                const cp = document.getElementById('dir-cp').value.trim();
+                const ciudad = document.getElementById('dir-ciudad').value.trim();
+                
+                let direccionPerfecta = `${calle}, Nº ${numero}`;
+                if (piso !== "") { direccionPerfecta += `, ${piso}`; }
+                direccionPerfecta += ` - ${cp} ${ciudad}`;
+                // ---------------------------------------------------
+
                 const metodoElegido = document.getElementById('metodo-pago').value;
                 const estadoSimulado = metodoElegido === 'Tarjeta' ? 'Pagado' : 'Pendiente de pago';
 
                 const payload = {
-                    direccion: document.getElementById('direccion-envio').value.trim(),
+                    direccion: direccionPerfecta,
                     puntosUsados: puntosAUsar,
                     pedido: {
                         clienteNombre: document.getElementById('nombre-titular').value.trim(),
@@ -315,7 +339,7 @@
                         
                         if(memoriaUsuario) {
                             let u = JSON.parse(memoriaUsuario);
-                            u.direccion = document.getElementById('direccion-envio').value.trim();
+                            u.direccion = direccionPerfecta; // Actualizamos también en su memoria local
                             u.puntos = (parseInt(u.puntos || 0) - puntosAUsar) + puntosGanados;
                             localStorage.setItem('user', JSON.stringify(u));
                         }
@@ -341,5 +365,3 @@
     </script>
 </body>
 </html>
-
-```

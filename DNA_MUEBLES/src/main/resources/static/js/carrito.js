@@ -1,116 +1,153 @@
-const contenedorCarrito = document.getElementById('carrito-contenido');
-const totalHTML = document.getElementById('precio-total');
+document.addEventListener("DOMContentLoaded", function() {
+    // 1. Cargamos los productos al abrir la página
+    cargarCarrito();
 
-function obtenerCarrito() {
-    return JSON.parse(localStorage.getItem('carrito')) || [];
-}
+    // 2. Asignamos los eventos a los botones
+    const btnVaciar = document.getElementById("btn-vaciar-control");
+    if (btnVaciar) {
+        btnVaciar.addEventListener("click", vaciarCarrito);
+    }
 
-function renderizarCarrito() {
-    if (!contenedorCarrito) return;
-    const carrito = obtenerCarrito();
-    
-    // Capturamos los dos botones
-    const btnVaciar = document.getElementById('btn-vaciar-control');
-    const btnFinalizar = document.getElementById('btn-finalizar-compra');
-    
-    // Si el carrito está vacío
+    const btnFinalizar = document.getElementById("btn-finalizar-compra");
+    if (btnFinalizar) {
+        btnFinalizar.addEventListener("click", finalizarCompra);
+    }
+});
+
+// ======================
+// DIBUJAR EL CARRITO
+// ======================
+function cargarCarrito() {
+    const carrito = JSON.parse(localStorage.getItem("carrito") || "[]");
+    const contenedor = document.getElementById("carrito-contenido");
+    const precioTotal = document.getElementById("precio-total");
+
+    // Limpiamos lo que haya
+    contenedor.innerHTML = "";
+    let total = 0;
+
+    // Si está vacío
     if (carrito.length === 0) {
-        contenedorCarrito.innerHTML = `<div class="vacio-msg">Tu carrito está vacío.</div>`;
-        if (totalHTML) totalHTML.innerText = "0.00€";
-        
-        // APAGAMOS LOS BOTONES
-        if (btnVaciar) btnVaciar.disabled = true;
-        if (btnFinalizar) btnFinalizar.disabled = true; 
-        
+        contenedor.innerHTML = "<p style='text-align:center; padding: 20px; color: #887a69;'>Tu carrito está vacío. </p>";
+        precioTotal.textContent = "0.00€";
         return;
     }
 
-    // Si hay productos, ENCENDEMOS LOS BOTONES
-    if (btnVaciar) btnVaciar.disabled = false;
-    if (btnFinalizar) btnFinalizar.disabled = false;
-
-    let total = 0;
-
-    contenedorCarrito.innerHTML = carrito.map((prod, index) => {
-        const cantidad = prod.cantidad || 1;
-        const subtotal = prod.precio * cantidad;
+    // Si hay productos, los dibujamos
+    carrito.forEach(function(p, index) {
+        const subtotal = p.precio * p.cantidad;
         total += subtotal;
+
+        const div = document.createElement("div");
+        div.className = "carrito-item"; 
+
+        // Todo el texto usando concatenación clásica
+        div.innerHTML = 
+            '<div style="flex: 2;">' +
+                '<h3 style="margin: 0; color: #5c4432; font-size: 16px;">' + p.nombre + '</h3>' +
+                '<p style="margin: 5px 0 0 0; color: #887a69; font-size: 14px;">Precio unitario: ' + p.precio.toFixed(2) + '€</p>' +
+            '</div>' +
+            '<div style="flex: 1; text-align: center;">' +
+                '<input type="number" min="1" value="' + p.cantidad + '" onchange="cambiarCantidad(' + index + ', this.value)" style="width: 40px; text-align: center; border: none; background: transparent; padding: 5px; color: #5c4432; font-weight: bold; font-family: inherit; font-size: 16px; outline: none;">' +
+            '</div>' +
+            '<div style="flex: 1; text-align: right;">' +
+                '<strong style="color: #ae4010; font-size: 16px;">' + subtotal.toFixed(2) + '€</strong>' +
+            '</div>';
+
+        // Creamos el botón eliminar como elemento independiente
+        const divBoton = document.createElement("div");
+        divBoton.style.marginLeft = "15px";
+
+        const btnEliminar = document.createElement("button");
+        btnEliminar.className = "btn-eliminar-item";
+        btnEliminar.title = "Eliminar del carrito";
+        btnEliminar.innerHTML = '<i class="fa-solid fa-trash"></i>';
         
-        return `
-            <div class="carrito-item">
-                <div class="producto-info">
-                    <h3 style="margin: 0; color: #333;">${prod.nombre}</h3>
-                    <p style="color: #666; margin: 5px 0;">${parseFloat(prod.precio).toFixed(2)}€ c/u</p>
-                </div>
-                
-                <div style="display: flex; align-items: center; gap: 20px;">
-                    <div class="cantidad-control">
-                        <label style="font-size: 12px; display: block; text-align: center;">Cant.</label>
-                        <input type="number" value="${cantidad}" min="1" 
-                               style="width: 50px; padding: 5px; text-align: center; border: 1px solid #ddd; border-radius: 4px;"
-                               onchange="actualizarCantidad(${index}, this.value)">
-                    </div>
-                    
-                    <p style="min-width: 70px; text-align: right; font-weight: bold; font-size: 18px; color: #ae4010;">${subtotal.toFixed(2)}€</p>
-                    
-                    <button class="btn-eliminar-item" onclick="eliminarDelCarrito(${index})" title="Eliminar">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </div>
-            </div>
-        `;
-    }).join('');
+        // Le asignamos la función directamente
+        btnEliminar.onclick = function() {
+            eliminarProducto(index);
+        };
 
-    if (totalHTML) totalHTML.innerText = total.toFixed(2) + "€";
+        divBoton.appendChild(btnEliminar);
+        div.appendChild(divBoton);
+        contenedor.appendChild(div);
+    });
+
+    // Actualizamos el total a pagar
+    precioTotal.textContent = total.toFixed(2) + "€";
 }
 
-// --- LAS FUNCIONES PERDIDAS (¡Vitales para que funcionen los clics!) ---
-
-function actualizarCantidad(index, nuevaCant) {
-    let carrito = obtenerCarrito();
-    let cant = parseInt(nuevaCant);
-    if (isNaN(cant) || cant < 1) cant = 1; 
+// ======================
+// CAMBIAR CANTIDAD DE UN PRODUCTO
+// ======================
+window.cambiarCantidad = function(index, nuevoValor) {
+    let cantidad = parseInt(nuevoValor);
     
-    carrito[index].cantidad = cant;
-    localStorage.setItem('carrito', JSON.stringify(carrito));
-    renderizarCarrito(); 
-}
+    // Si meten un número raro o menor a 1, lo forzamos a 1
+    if (isNaN(cantidad) || cantidad < 1) {
+        cantidad = 1;
+    }
 
-function eliminarDelCarrito(index) {
-    let carrito = obtenerCarrito();
-    carrito.splice(index, 1);
-    localStorage.setItem('carrito', JSON.stringify(carrito));
-    renderizarCarrito();
-}
+    let carrito = JSON.parse(localStorage.getItem("carrito") || "[]");
+    carrito[index].cantidad = cantidad; // Actualizamos la cantidad
+    localStorage.setItem("carrito", JSON.stringify(carrito)); // Guardamos en memoria
+    
+    cargarCarrito(); // Recargamos la interfaz para que recalcule precios
+};
 
+// ======================
+// ELIMINAR UN PRODUCTO SUELTO
+// ======================
+window.eliminarProducto = function(index) {
+    if (confirm("¿Estás seguro de que quieres eliminar este producto del carrito?")) {
+        let carrito = JSON.parse(localStorage.getItem("carrito") || "[]");
+        carrito.splice(index, 1);
+        localStorage.setItem("carrito", JSON.stringify(carrito));
+        cargarCarrito(); // Recargamos para que desaparezca
+    }
+};
+
+// ======================
+// VACIAR TODO EL CARRITO
+// ======================
 function vaciarCarrito() {
-    if (confirm("¿Seguro que quieres vaciar todo el carrito?")) {
-        localStorage.removeItem('carrito');
-        renderizarCarrito();
+    const carrito = JSON.parse(localStorage.getItem("carrito") || "[]");
+    if (carrito.length === 0) return;
+
+    if (confirm("¿Estás seguro de que quieres vaciar todo el carrito?")) {
+        localStorage.removeItem("carrito");
+        cargarCarrito();
     }
 }
 
-// --- EL BOTÓN DE FINALIZAR COMPRA ---
-function finalizarCompra() {
-    // 1. Buscamos al usuario en la memoria
-    const usuarioLogueado = localStorage.getItem('user') || sessionStorage.getItem('user');
+// ======================
+// FINALIZAR COMPRA (TE LLEVA A LA PASARELA)
+// ======================
+async function finalizarCompra() {
+    const carrito = JSON.parse(localStorage.getItem("carrito") || "[]");
 
-    // 2. Comprobación antibalas: Si no hay usuario, o quedó un rastro de texto inválido
-    if (!usuarioLogueado || usuarioLogueado === "null" || usuarioLogueado === "undefined" || usuarioLogueado === "") {
-        // LE MANDAMOS DIRECTO A INICIAR SESIÓN
-        window.location.href = 'login.html'; 
-        return; // Cortamos aquí para que no siga ejecutando nada más
-    }
-
-    // 3. Si SÍ hay usuario, comprobamos que el carrito no esté vacío
-    const carrito = obtenerCarrito();
+    // Validamos que haya algo que comprar
     if (carrito.length === 0) {
-        return; 
+        alert("Tu carrito está vacío. Añade algún producto primero.");
+        return;
     }
-    
-    // 4. Si hay usuario y hay muebles, ¡a la pasarela de pago!
-    window.location.href = "pago.html";
-}
 
-// Inicializamos la vista del carrito con normalidad para todo el mundo
-document.addEventListener('DOMContentLoaded', renderizarCarrito);
+    try {
+        // Hacemos una llamada rápida a Java solo para ver si hay sesión
+        const response = await fetch("/api/me");
+        
+        if (!response.ok) {
+            // Si Java dice que no estamos logueados, al login
+            window.location.href = "login.html";
+            return;
+        }
+
+        // 🚀 SI TODO ESTÁ BIEN, VAMOS A LA PASARELA 🚀
+        // Cambia "pago.html" por el nombre real de tu archivo si es diferente
+        window.location.href = "pago.html"; 
+
+    } catch (error) {
+        console.error("Error comprobando la sesión:", error);
+        window.location.href = "login.html";
+    }
+}

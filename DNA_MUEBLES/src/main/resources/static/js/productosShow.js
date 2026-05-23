@@ -4,35 +4,38 @@ function obtenerId() {
 }
 
 // ======================
-// CARRITO
+// CARRITO 
 // ======================
 function agregarAlCarrito(producto, cantidad) {
 
     const carrito = JSON.parse(localStorage.getItem("carrito") || "[]");
+    
+    
+    const idReal = obtenerId() || producto.id_producto || producto.id;
 
-    const existe = carrito.find(item => item.id === producto.id_producto);
+  
+    const existe = carrito.find(item => item.id_producto == idReal || item.id == idReal);
 
     if (existe) {
-        existe.cantidad += cantidad;
+        existe.cantidad += parseInt(cantidad);
     } else {
         carrito.push({
-            id: producto.id_producto,
+            id_producto: parseInt(idReal), 
+            id: parseInt(idReal),          
             nombre: producto.nombre,
-            precio: producto.precio,
-            cantidad: cantidad
+            precio: parseFloat(producto.precio),
+            cantidad: parseInt(cantidad)
         });
     }
 
     localStorage.setItem("carrito", JSON.stringify(carrito));
 }
 
-
 document.addEventListener("DOMContentLoaded", async () => {
 
     const id = obtenerId();
 
     try {
-
         const response = await fetch(`/api/productos/${id}`);
         const p = await response.json();
 
@@ -46,28 +49,21 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("producto-nombre").textContent = p.nombre;
         document.getElementById("producto-descripcion").textContent = p.descripcion;
         document.getElementById("producto-precio").textContent = `${p.precio} €`;
-
         
         const imagenes = p.imagenes;
-
         const imgPrincipal = document.getElementById("producto-img");
         
 		if (imagenes && imagenes.length > 0) {
-
 		    imgPrincipal.src = imagenes[0].url;
 		    imgPrincipal.onclick = () => abrirModal(imagenes[0].url);
-
 		    galeria.innerHTML = "";
-
 		    let indexActual = 0;
 
 		    function cambiarImagen(index) {
 		        indexActual = index;
 		        imgPrincipal.src = imagenes[index].url;
 		        imgPrincipal.onclick = () => abrirModal(imagenes[index].url);
-		        // quitar clase activa de todas
 		        galeria.querySelectorAll("img").forEach(i => i.classList.remove("activa"));
-		        // añadir a la seleccionada
 		        galeria.querySelectorAll("img")[index].classList.add("activa");
 		    }
 
@@ -84,6 +80,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		    document.getElementById("flecha-izq").style.display = "none";
 		    document.getElementById("flecha-der").style.display = "none";
 		}
+        
         // ======================
         // CANTIDAD
         // ======================
@@ -96,10 +93,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         // CARRITO
         // ======================
 		document.getElementById("btn-carrito").onclick = () => {
-
 		    const cantidad = parseInt(document.getElementById("cantidad").value);
 
-		    // VALIDACIÓN
 		    if (isNaN(cantidad) || cantidad < 1) {
 		        alert("No se puede poner una cantidad negativa o menor que 1");
 		        return;
@@ -114,21 +109,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 		        btn.textContent = "🛒 Añadir al carrito";
 		    }, 1200);
 		};
+        
         // ======================
         // COMPRAR
         // ======================
 		document.getElementById("btn-comprar").onclick = () => {
-
 		    const cantidad = parseInt(document.getElementById("cantidad").value);
 
-		    // VALIDACIÓN
 		    if (isNaN(cantidad) || cantidad < 1) {
 		        alert("No se puede poner una cantidad negativa o menor que 1");
 		        return;
 		    }
 
 		    agregarAlCarrito(p, cantidad);
-
 		    window.location.href = "carrito.html";
 		};
 
@@ -141,7 +134,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 // MODAL
 // ======================
 function abrirModal(url) {
-
     const modal = document.getElementById("imageModal");
     const img = document.getElementById("modalImg");
 
