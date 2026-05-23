@@ -2,10 +2,11 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
-CREATE TABLE `categoria` (
-  `id_categoria` int(11) NOT NULL,
-  `nombre` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE categoria (
+    id_categoria INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) DEFAULT NULL,
+    deleted_at DATETIME DEFAULT NULL
+);
 
 CREATE TABLE `linea_pedido` (
   `id` int(11) NOT NULL,
@@ -24,15 +25,22 @@ CREATE TABLE `pedidos` (
   `id_usuario` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE `productos` (
-  `id_producto` int(11) NOT NULL,
-  `nombre` varchar(100) DEFAULT NULL,
-  `color` varchar(50) DEFAULT NULL,
-  `precio` decimal(10,2) DEFAULT NULL,
-  `stock` int(11) DEFAULT NULL,
-  `descripcion` text DEFAULT NULL,
-  `categoria_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE productos (
+    id_producto INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) DEFAULT NULL,
+    color VARCHAR(50) DEFAULT NULL,
+    precio DECIMAL(10,2) DEFAULT NULL,
+    stock INT(11) DEFAULT NULL,
+    descripcion TEXT DEFAULT NULL,
+    categoria_id INT(11) DEFAULT NULL REFERENCES categoria(id_categoria),
+    deleted_at DATETIME DEFAULT NULL
+);
+
+CREATE TABLE producto_imagenes (
+    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    producto_id INT(11) NOT NULL REFERENCES productos(id_producto) ON DELETE CASCADE,
+    url VARCHAR(255) NOT NULL
+);
 
 CREATE TABLE `usuarios` (
   `id` int(11) NOT NULL,
@@ -49,14 +57,6 @@ CREATE TABLE `usuarios` (
   `salario` decimal(10,2) DEFAULT NULL,
   `fecha_alta` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-CREATE TABLE producto_imagenes (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    producto_id INT NOT NULL,
-    url VARCHAR(255) NOT NULL,
-
-    FOREIGN KEY (producto_id) REFERENCES productos(id_producto) ON DELETE CASCADE
-);
 
 -- PRIMARY KEYS
 ALTER TABLE `categoria` ADD PRIMARY KEY (`id_categoria`);

@@ -1,14 +1,14 @@
 START TRANSACTION;
 
-INSERT INTO `categoria` (`id_categoria`, `nombre`) VALUES
-(1, 'Sofás'),
-(2, 'Mesas'),
-(3, 'Sillas'),
-(4, 'Camas'),
-(5, 'Armarios'),
-(6, 'Estanterías'),
-(7, 'Muebles TV'),
-(8, 'Escritorios');
+INSERT INTO categoria (id_categoria, nombre, deleted_at) VALUES
+(1, 'Sofás', NULL),
+(2, 'Mesas', NULL),
+(3, 'Sillas', NULL),
+(4, 'Camas', NULL),
+(5, 'Armarios', NULL),
+(6, 'Estanterías', NULL),
+(7, 'Muebles TV', NULL),
+(8, 'Escritorios', NULL);
 
 INSERT INTO `linea_pedido` (`id`, `id_pedido`, `id_ejemplar`) VALUES
 (1, 1, 1),
@@ -24,17 +24,30 @@ INSERT INTO `pedidos` (`id`, `fecha_pedido`, `fecha_devolucion`, `precio`, `meto
 (4, '2024-03-04', NULL, 450.00, 'Tarjeta', 'F004', 'DHL', 5),
 (5, '2024-03-05', NULL, 200.00, 'PayPal', 'F005', 'MRW', 2);
 
-INSERT INTO `productos` (`id_producto`, `nombre`, `color`, `precio`, `stock`, `descripcion`, `categoria_id`) VALUES
-(1, 'Sofá 3 plazas', 'Gris', 550.00, 5, 'Sofá cómodo de 3 plazas', 1),
-(2, 'Sofá chaise longue', 'Beige', 899.00, 2, 'Sofá grande con chaise longue', 1),
-(3, 'Mesa comedor', 'Madera', 300.00, 10, 'Mesa de comedor para 6 personas', 2),
-(4, 'Mesa centro', 'Blanco', 120.00, 8, 'Mesa de centro moderna', 2),
-(5, 'Silla comedor', 'Negro', 60.00, 20, 'Silla acolchada', 3),
-(6, 'Cama matrimonio', 'Blanco', 450.00, 4, 'Cama de 135cm', 4),
-(7, 'Armario grande', 'Roble', 700.00, 3, 'Armario 3 puertas', 5),
-(8, 'Estantería', 'Blanco', 150.00, 6, 'Estantería moderna', 6),
-(9, 'Mueble TV', 'Marrón', 200.00, 7, 'Mueble para televisión', 7),
-(10, 'Escritorio', 'Roble', 250.00, 5, 'Escritorio oficina', 8);
+INSERT INTO productos (id_producto, nombre, color, precio, stock, descripcion, categoria_id, deleted_at) VALUES
+(1, 'Sofá 4 plazas', 'Gris', 5503.00, 55332, 'Sofá cómodo de 3 plazas.update', 1, NULL),
+(2, 'Sofá chaise longue', 'Gris', 899.00, 2, 'Sofá grande con chaise longue', 1, NULL),
+(3, 'Mesa comedor', 'Negro', 300.00, 10, 'Mesa de comedor para 6 personas', 2, NULL),
+(4, 'Mesa centro', 'Blanco', 120.00, 8, 'Mesa de centro moderna', 2, NULL),
+(5, 'Silla comedor', 'Negro', 60.00, 20, 'Silla acolchada', 3, NULL),
+(6, 'Cama matrimonio', 'Beige', 450.00, 4, 'Cama de 135cm', 4, NULL),
+(7, 'Armario grande', 'Blanco', 700.00, 3, 'Armario 3 puertas', 5, NULL),
+(8, 'Estantería', 'Blanco', 150.00, 6, 'Estantería moderna', 6, NULL),
+(9, 'Mueble TV', 'Beige', 200.00, 7, 'Mueble para televisión', 7, NULL),
+(10, 'Escritorio', 'Blanco', 250.00, 5, 'Escritorio oficina', 8, NULL);
+
+INSERT INTO producto_imagenes (id, producto_id, url) VALUES
+(3, 1, '/uploads/productos/bc926914-b85e-45ee-a347-ffda78d23c9b.jpg'),
+(9, 1, '/uploads/productos/7e038924-045c-45ad-ac70-03b776632dce.png'),
+(10, 2, '/uploads/productos/37323ab5-73ad-40ea-a565-ea3aa1ca20af.webp'),
+(11, 3, '/uploads/productos/600f2f01-d142-4b77-8472-47c508d1f12d.jpg'),
+(12, 4, '/uploads/productos/aace31ab-064d-4b16-a33c-4d4f9c6ffb9a.jpg'),
+(14, 6, '/uploads/productos/cf61ea58-785c-4af0-b065-4811702a1428.jpg'),
+(15, 7, '/uploads/productos/582646df-5d6d-4b78-8a5c-51d3f7b0ff9b.jpg'),
+(16, 8, '/uploads/productos/5b6a365f-9bca-4485-8357-7912688bfd50.jpg'),
+(17, 5, '/uploads/productos/918e3991-d30b-4e8f-bc5a-ead4d46bce81.jpg'),
+(18, 9, '/uploads/productos/7f37961c-46b1-493b-9486-ac4199fe11bd.jpg'),
+(19, 10, '/uploads/productos/e0564942-46e8-4e7d-806e-725b7cb0805c.jpg');
 
 INSERT INTO `usuarios` (`id`, `password_hash`, `rol`, `telefono`, `estado`, `nombre`, `apellidos`, `direccion`, `email`, `nivel_acceso`, `puntos`, `salario`, `fecha_alta`) VALUES
 (1, 'hash1', 'admin', '600111111', 'activo', 'Admin', 'Principal', 'Calle Admin 1', 'admin@dna.com', NULL, NULL, NULL, '2024-01-01'),
