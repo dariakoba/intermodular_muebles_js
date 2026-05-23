@@ -126,6 +126,25 @@ body {
     background: #5c4432;
 }
 
+#aplicar-filtros:hover {
+    background: #ae4010;
+}
+#quitar-filtros {
+    margin-top: 10px;
+    background: #999;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px;
+    width: 100%;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#quitar-filtros:hover {
+    background: #666;
+}
 /* =================== */
 /* SIDEBAR FIJA        */
 /* =================== */
