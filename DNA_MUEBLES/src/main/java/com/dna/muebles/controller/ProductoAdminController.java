@@ -89,32 +89,7 @@ public class ProductoAdminController {
         }
     }
     
-//	@GetMapping("/{id}")
-//	public ProductoDetalle show(@PathVariable int id) {
-//
-//		try (Connection con = ds.getConnection();) {
-//			ProductoRepository repo = new ProductoRepository(con);
-//			ProductoImagenRepository imgRepo = new ProductoImagenRepository(con);
-//
-//			Producto p = repo.findOrThrow(id);
-//			List<ImagenResponse> imagenes = imgRepo.findByProductoId(id);
-//			
-//			return new ProductoDetalle(
-//				p.getIdProducto(), 
-//				p.getNombre(), 
-//				p.getColor(),
-//				p.getPrecio(),
-//				p.getStock(),
-//				p.getDescripcion(),
-//				p.getCategoriaId(),
-//				p.getDeletedAt(),
-//				imagenes
-//			);
-//
-//		} catch (SQLException e) {
-//			throw new DataAccessException(e);
-//		}
-//	}
+
 
 
 	//crear producto 
