@@ -4,22 +4,27 @@ function obtenerId() {
 }
 
 // ======================
-// CARRITO
+// CARRITO 
 // ======================
 function agregarAlCarrito(producto, cantidad) {
 
     const carrito = JSON.parse(localStorage.getItem("carrito") || "[]");
+    
+    // Capturamos el ID de forma 100% segura (de la URL o del objeto)
+    const idReal = obtenerId() || producto.id_producto || producto.id;
 
-    const existe = carrito.find(item => item.id === producto.id_producto);
+    // Buscamos si ya existe comprobando ambos posibles nombres
+    const existe = carrito.find(item => item.id_producto == idReal || item.id == idReal);
 
     if (existe) {
-        existe.cantidad += cantidad;
+        existe.cantidad += parseInt(cantidad);
     } else {
         carrito.push({
-            id: producto.id_producto,
+            id_producto: parseInt(idReal), 
+            id: parseInt(idReal),          
             nombre: producto.nombre,
-            precio: producto.precio,
-            cantidad: cantidad
+            precio: parseFloat(producto.precio),
+            cantidad: parseInt(cantidad)
         });
     }
 

@@ -19,8 +19,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("direccion").textContent = user.direccion ?? "No definida";
         document.getElementById("puntos").textContent = (user.puntos ?? 0) + " puntos";
 
-        
-
     } catch (err) {
         console.error("Error usuario:", err);
         window.location.href = "/login.html";
@@ -28,7 +26,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
 
-    // 2. CARGAR PEDIDOS (CON NUEVO DISEÑO Y PRECIOS SEPARADOS ALINEADOS A LA DERECHA)
+    // 2. CARGAR PEDIDOS (CON ENLACES CLICKABLES EN LOS PRODUCTOS)
     try {
         const res = await fetch("/api/carrito/mis");
         const tbody = document.getElementById("pedidos-body");
@@ -46,19 +44,30 @@ document.addEventListener("DOMContentLoaded", async () => {
                     const estadoClase = p.estadoPago ? p.estadoPago.toLowerCase() : "pendiente";
                     const fechaLimpia = p.fecha ? p.fecha.split('T')[0] : "---";
                     
-                    // Formateamos los productos para el mini-ticket separando nombre y precio
+                    // Formateamos los productos para el mini-ticket separando ID, nombre y precio
                     let productosLista = "";
                     if (p.nombreProducto && p.nombreProducto.trim() !== "") {
                         productosLista = p.nombreProducto.split('|').map(item => {
-                            // Aquí separamos el texto usando los " : " que nos manda Java
-                            let partes = item.split(' : ');
-                            let nombreMueble = partes[0];
-                            let precioMueble = partes.length > 1 ? partes[1] : '';
+                            
+                            // 1. Separamos el ID del producto (lo que viene antes del #)
+                            let partesHash = item.split('#');
+                            let idMueble = partesHash.length > 1 ? partesHash[0] : null;
+                            let textoRestante = partesHash.length > 1 ? partesHash[1] : partesHash[0];
 
-                            // Dibujamos la fila, empujando el precio a la derecha
+                            // 2. Separamos el nombre del mueble y su precio usando el " : "
+                            let partesPrecio = textoRestante.split(' : ');
+                            let nombreMueble = partesPrecio[0];
+                            let precioMueble = partesPrecio.length > 1 ? partesPrecio[1] : '';
+
+                            // 3. Creamos el enlace interactivo si el ID es correcto
+                            let nombreClickable = idMueble 
+                                ? `<a href="productosShow.html?id=${idMueble}" style="color: inherit; text-decoration: none; transition: 0.2s; font-weight: 600;" onmouseover="this.style.color='#ae4010'" onmouseout="this.style.color='inherit'">${nombreMueble}</a>`
+                                : nombreMueble;
+
+                            // Dibujamos la fila empujando el precio a la derecha
                             return `
                             <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0eae1; font-size: 14.5px; color: #5c4432;">
-                                <span><i class="fa-solid fa-box-open" style="color: #c5a992; margin-right: 8px;"></i> ${nombreMueble}</span>
+                                <span><i class="fa-solid fa-box-open" style="color: #c5a992; margin-right: 8px;"></i> ${nombreClickable}</span>
                                 <span style="font-weight: bold; color: #887a69;">${precioMueble}</span>
                             </div>
                             `;
@@ -229,17 +238,16 @@ function closeModal() {
     document.getElementById("imageModal").style.display = "none";
 }
 
-// NUEVA FUNCIÓN: Abre el ticket y gira la flecha
+// Abre el ticket y gira la flecha
 window.toggleDetalles = function(idPedido) {
     const filaDetalles = document.getElementById(`detalles-${idPedido}`);
     const icono = document.getElementById(`icon-${idPedido}`);
 
     if (filaDetalles.style.display === "none") {
         filaDetalles.style.display = "table-row";
-        icono.style.transform = "rotate(180deg)"; // Anima la flecha girándola
+        icono.style.transform = "rotate(180deg)"; 
     } else {
         filaDetalles.style.display = "none";
-        icono.style.transform = "rotate(0deg)"; // Vuelve la flecha a su sitio
+        icono.style.transform = "rotate(0deg)"; 
     }
 };
-

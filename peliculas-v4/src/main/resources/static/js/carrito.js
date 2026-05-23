@@ -64,7 +64,7 @@ function renderizarCarrito() {
     if (totalHTML) totalHTML.innerText = total.toFixed(2) + "€";
 }
 
-// --- LAS FUNCIONES PERDIDAS (¡Vitales para que funcionen los clics!) ---
+// --- LAS FUNCIONES PERDIDAS ---
 
 function actualizarCantidad(index, nuevaCant) {
     let carrito = obtenerCarrito();
@@ -108,9 +108,24 @@ function finalizarCompra() {
         return; 
     }
     
-    // 4. Si hay usuario y hay muebles, ¡a la pasarela de pago!
+    // 4. Si todo está correcto, vamos al pago
     window.location.href = "pago.html";
 }
 
-// Inicializamos la vista del carrito con normalidad para todo el mundo
-document.addEventListener('DOMContentLoaded', renderizarCarrito);
+// --- LA CONEXIÓN DE LOS BOTONES (Lo que faltaba) ---
+document.addEventListener('DOMContentLoaded', () => {
+    // Pintamos el carrito al cargar la página
+    renderizarCarrito();
+
+    // Enlazamos el clic del botón finalizar con su función
+    const btnFinalizar = document.getElementById('btn-finalizar-compra');
+    if (btnFinalizar) {
+        btnFinalizar.addEventListener('click', finalizarCompra);
+    }
+
+    // Enlazamos el clic del botón vaciar con su función
+    const btnVaciar = document.getElementById('btn-vaciar-control');
+    if (btnVaciar) {
+        btnVaciar.addEventListener('click', vaciarCarrito);
+    }
+});

@@ -40,8 +40,12 @@ public class PedidoController {
 
         float totalOriginal = 0f;
         for (Map<String, Object> item : request.getProductos()) {
-            float precio = Float.parseFloat(item.get("precio").toString());
-            int cant = Integer.parseInt(item.get("cantidad").toString());
+            // Protección contra nulos al calcular el total
+            Object precioObj = item.get("precio");
+            Object cantObj = item.get("cantidad");
+            
+            float precio = (precioObj != null) ? Float.parseFloat(precioObj.toString()) : 0f;
+            int cant = (cantObj != null) ? Integer.parseInt(cantObj.toString()) : 1;
             totalOriginal += (precio * cant);
         }
 
@@ -73,10 +77,24 @@ public class PedidoController {
             Pedido nuevoPedido = pedidoRepo.insert(p);
             int idGenerado = nuevoPedido.getIdPedido();
 
+            // Guardamos los detalles del pedido con seguridad
             for (Map<String, Object> item : request.getProductos()) {
-                int idProd = Integer.parseInt(item.get("id_producto").toString());
-                int cant = Integer.parseInt(item.get("cantidad").toString());
-                float precio = Float.parseFloat(item.get("precio").toString());
+                Object idProdObj = item.get("id_producto");
+                if (idProdObj == null) {
+                    idProdObj = item.get("id"); // Por si acaso desde JS se envía como 'id'
+                }
+                
+                // Si seguimos sin tener ID, saltamos el producto para no romper el servidor
+                if (idProdObj == null) {
+                    continue; 
+                }
+
+                int idProd = Integer.parseInt(idProdObj.toString());
+                
+                Object cantObj = item.get("cantidad");
+                Object precioObj = item.get("precio");
+                int cant = (cantObj != null) ? Integer.parseInt(cantObj.toString()) : 1;
+                float precio = (precioObj != null) ? Float.parseFloat(precioObj.toString()) : 0f;
                 
                 pedidoRepo.guardarDetalle(idGenerado, idProd, cant, precio);
             }
@@ -122,7 +140,6 @@ public class PedidoController {
         }
     }
 
-    // --- AQUÍ ESTÁ EL NUEVO MÉTODO PARA GUARDAR LA EDICIÓN COMPLETA DEL MODAL ---
     @PutMapping("/admin/editar/{id}")
     public ResponseEntity<?> editarPedidoCompleto(@PathVariable int id, @RequestBody Map<String, String> payload) {
         try (Connection con = ds.getConnection()) {
