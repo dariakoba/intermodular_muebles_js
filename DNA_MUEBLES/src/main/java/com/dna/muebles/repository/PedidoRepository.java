@@ -3,7 +3,6 @@ package com.dna.muebles.repository;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-
 import com.dna.muebles.db.DB;
 import com.dna.muebles.entity.Pedido;
 import com.dna.muebles.exception.DataAccessException;
@@ -69,7 +68,6 @@ public class PedidoRepository extends BaseRepository<Pedido> {
         };
     }
 
-    // Método para guardar los detalles (las cantidades)
     public void guardarDetalle(int idPedido, int idProducto, int cantidad, float precio) throws SQLException {
         String sql = "INSERT INTO detalles_pedidos (id_pedido, id_producto, cantidad, precio_unitario) VALUES (?, ?, ?, ?)";
         DB.update(con, sql, idPedido, idProducto, cantidad, precio);
@@ -96,7 +94,7 @@ public class PedidoRepository extends BaseRepository<Pedido> {
     public List<Pedido> findByUsuarioId(Integer userId) {
         String sql = 
             "SELECT p.*, " +
-            "GROUP_CONCAT(CONCAT(d.cantidad, 'x ', m.nombre, ' : ', (d.cantidad * d.precio_unitario), '€') SEPARATOR '|') as nombre_producto " +
+            "GROUP_CONCAT(CONCAT(m.id_producto, '#', d.cantidad, 'x ', m.nombre, ' : ', (d.cantidad * d.precio_unitario), '€') SEPARATOR '|') as nombre_producto " +
             "FROM pedidos p " +
             "LEFT JOIN detalles_pedidos d ON p.id_pedido = d.id_pedido " +
             "LEFT JOIN productos m ON d.id_producto = m.id_producto " +
@@ -121,39 +119,21 @@ public class PedidoRepository extends BaseRepository<Pedido> {
         }
     }
 
-    // --- AQUÍ ESTÁ EL NUEVO MÉTODO QUE GUARDA TODOS LOS DATOS EDITADOS ---
+    // --- MÉTODO NUEVO PARA LA EDICIÓN COMPLETA DEL MODAL DE ADMIN ---
     public void actualizarPedidoCompleto(int idPedido, String estado, String clienteNombre, String fecha, String email, String telefono, String direccion) throws SQLException {
-        // 1. Actualizamos los datos propios del pedido
+        
         String sqlPedido = "UPDATE pedidos SET estado_pago = ?, cliente_nombre = ?, fecha = ? WHERE id_pedido = ?";
-        try (java.sql.PreparedStatement ps = con.prepareStatement(sqlPedido)) {
-            ps.setString(1, estado);
-            ps.setString(2, clienteNombre);
-            ps.setDate(3, java.sql.Date.valueOf(fecha)); 
-            ps.setInt(4, idPedido);
-            ps.executeUpdate();
-        }
+        DB.update(con, sqlPedido, estado, clienteNombre, fecha, idPedido);
 
-        // 2. Averiguamos de qué usuario es este pedido (CON EL FALLITO CORREGIDO AQUÍ)
-        String sqlGetUserId = "SELECT id_usuario FROM pedidos WHERE id_pedido = ?";
-        int idUsuario = -1;
-        try (java.sql.PreparedStatement ps = con.prepareStatement(sqlGetUserId)) {
-            ps.setInt(1, idPedido); // Le decimos a SQL de qué pedido buscar
+        String sqlBusqueda = "SELECT id_usuario FROM pedidos WHERE id_pedido = ?";
+        try (java.sql.PreparedStatement ps = con.prepareStatement(sqlBusqueda)) {
+            ps.setInt(1, idPedido);
             try (java.sql.ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    idUsuario = rs.getInt(1);
+                    int idUsuario = rs.getInt("id_usuario");
+                    String sqlUsuario = "UPDATE usuarios SET email = ?, telefono = ?, direccion = ? WHERE id = ?";
+                    DB.update(con, sqlUsuario, email, telefono, direccion, idUsuario);
                 }
-            }
-        }
-
-        // 3. Actualizamos los datos del usuario asociado al pedido
-        if (idUsuario != -1) {
-            String sqlUser = "UPDATE usuarios SET direccion = ?, telefono = ?, email = ? WHERE id = ?";
-            try (java.sql.PreparedStatement ps = con.prepareStatement(sqlUser)) {
-                ps.setString(1, direccion);
-                ps.setString(2, telefono);
-                ps.setString(3, email);
-                ps.setInt(4, idUsuario);
-                ps.executeUpdate();
             }
         }
     }

@@ -19,15 +19,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("direccion").textContent = user.direccion ?? "No definida";
         document.getElementById("puntos").textContent = (user.puntos ?? 0) + " puntos";
 
-        
-
     } catch (err) {
         console.error("Error usuario:", err);
         window.location.href = "/login.html";
         return;
     }
 
-
+    // 2. CARGAR PEDIDOS (CON ENLACES CLICKABLES EN LOS PRODUCTOS)
     try {
         const res = await fetch("/api/carrito/mis");
         const tbody = document.getElementById("pedidos-body");
@@ -48,14 +46,22 @@ document.addEventListener("DOMContentLoaded", async () => {
                     let productosLista = "";
                     if (p.nombreProducto && p.nombreProducto.trim() !== "") {
                         productosLista = p.nombreProducto.split('|').map(item => {
-                            let partes = item.split(' : ');
-                            let nombreMueble = partes[0];
-                            let precioMueble = partes.length > 1 ? partes[1] : '';
+                            
+                            let partesHash = item.split('#');
+                            let idMueble = partesHash.length > 1 ? partesHash[0] : null;
+                            let textoRestante = partesHash.length > 1 ? partesHash[1] : partesHash[0];
 
-                            // Dibujamos la fila, empujando el precio a la derecha
+                            let partesPrecio = textoRestante.split(' : ');
+                            let nombreMueble = partesPrecio[0];
+                            let precioMueble = partesPrecio.length > 1 ? partesPrecio[1] : '';
+
+                            let nombreClickable = idMueble 
+                                ? `<a href="productosShow.html?id=${idMueble}" style="color: inherit; text-decoration: none; transition: 0.2s; font-weight: 600;" onmouseover="this.style.color='#ae4010'" onmouseout="this.style.color='inherit'">${nombreMueble}</a>`
+                                : nombreMueble;
+
                             return `
                             <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0eae1; font-size: 14.5px; color: #5c4432;">
-                                <span><i class="fa-solid fa-box-open" style="color: #c5a992; margin-right: 8px;"></i> ${nombreMueble}</span>
+                                <span><i class="fa-solid fa-box-open" style="color: #c5a992; margin-right: 8px;"></i> ${nombreClickable}</span>
                                 <span style="font-weight: bold; color: #887a69;">${precioMueble}</span>
                             </div>
                             `;
@@ -107,7 +113,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         const tbody = document.getElementById("pedidos-body");
         if(tbody) tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Error de conexión.</td></tr>`;
     }
-
 
     // 3. LÓGICA DE EDICIÓN DE PERFIL 
     const btnEdit = document.getElementById("btn-edit");
@@ -167,19 +172,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 	            return;
 	        }
 
-			const telefonoRegex = /^\+?\d{9,15}$/;
+	        const telefonoRegex = /^[0-9]{9}$/;
 
-			if (updatedUser.telefono && !telefonoRegex.test(updatedUser.telefono)) {
-			    alert("Teléfono inválido (puede incluir + y entre 9-15 números).");
-			    return;
-			}
+	        if (!telefonoRegex.test(updatedUser.telefono)) {
+	            alert("El teléfono debe tener 9 números.");
+	            return;
+	        }
 
 	        if (!updatedUser.direccion || updatedUser.direccion.length < 5) {
 	            alert("Introduce una dirección válida.");
 	            return;
 	        }
 
-	        
+	        // CONFIRMACIÓN
 	        const confirmar = confirm(
 	            "¿Estás segura de que quieres guardar los cambios?"
 	        );
@@ -187,7 +192,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 	        if (!confirmar) return;
 
 	        try {
-
 	            const res = await fetch("/api/users/update-me", {
 	                method: "PUT",
 	                headers: {
@@ -209,9 +213,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 	        }
 	    });
 	}
-
 });
-
 
 // --- FUNCIONES GLOBALES ---
 function openModal(url) {
@@ -226,6 +228,7 @@ function closeModal() {
     document.getElementById("imageModal").style.display = "none";
 }
 
+// Abre el ticket y gira la flecha
 window.toggleDetalles = function(idPedido) {
     const filaDetalles = document.getElementById(`detalles-${idPedido}`);
     const icono = document.getElementById(`icon-${idPedido}`);
@@ -238,4 +241,3 @@ window.toggleDetalles = function(idPedido) {
         icono.style.transform = "rotate(0deg)"; 
     }
 };
-
