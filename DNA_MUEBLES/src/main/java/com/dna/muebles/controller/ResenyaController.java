@@ -94,16 +94,80 @@ public class ResenyaController {
         }
     }
 
-    @DeleteMapping("/admin/resenyas/{id}")
-    public ResponseEntity<?> deleteAdmin(@PathVariable int id) {
-        String sql = "DELETE FROM resenas WHERE id_resena = ?";
-        try (Connection con = ds.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, id);
-            int rows = ps.executeUpdate();
-            return rows > 0 ? ResponseEntity.ok("{\"success\": true}") : ResponseEntity.notFound().build();
+    @DeleteMapping("/resenyas/{id}")
+    public ResponseEntity<?> deleteResenya(
+            @PathVariable int id,
+            HttpSession session
+    ) {
+
+        Integer usuarioId =
+            (Integer) session.getAttribute("userId");
+
+        if (usuarioId == null) {
+            return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body("No autorizado");
+        }
+
+        String getSql = """
+            SELECT id_usuario
+            FROM resenas
+            WHERE id_resena = ?
+        """;
+
+        String deleteSql = """
+            DELETE FROM resenas
+            WHERE id_resena = ?
+            AND id_usuario = ?
+        """;
+
+        String puntosSql = """
+            UPDATE usuarios
+            SET puntos = puntos - 20
+            WHERE id = ?
+        """;
+
+        try (Connection con = ds.getConnection()) {
+
+            int ownerId;
+
+            // 1. obtener dueño de la reseña
+            try (PreparedStatement ps = con.prepareStatement(getSql)) {
+                ps.setInt(1, id);
+                ResultSet rs = ps.executeQuery();
+
+                if (!rs.next()) {
+                    return ResponseEntity.notFound().build();
+                }
+
+                ownerId = rs.getInt("id_usuario");
+            }
+
+            // 2. seguridad: solo el dueño puede borrar
+            if (ownerId != usuarioId) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body("No puedes eliminar esta reseña");
+            }
+
+            // 3. restar puntos
+            try (PreparedStatement ps = con.prepareStatement(puntosSql)) {
+                ps.setInt(1, usuarioId);
+                ps.executeUpdate();
+            }
+
+            // 4. borrar reseña
+            try (PreparedStatement ps = con.prepareStatement(deleteSql)) {
+                ps.setInt(1, id);
+                ps.setInt(2, usuarioId);
+
+                ps.executeUpdate();
+            }
+
+            return ResponseEntity.ok().build();
+
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            return ResponseEntity.internalServerError()
+                    .body(e.getMessage());
         }
     }
     
@@ -285,55 +349,7 @@ public class ResenyaController {
         }
     }
     
-    @DeleteMapping("/resenyas/{id}")
-    public ResponseEntity<?> deleteResenya(
-            @PathVariable int id,
-            HttpSession session
-    ) {
-
-        Integer usuarioId =
-            (Integer) session.getAttribute("userId");
-
-        if (usuarioId == null) {
-
-            return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED)
-                .body("No autorizado");
-        }
-
-        String sql = """
-            DELETE FROM resenas
-            WHERE id_resena = ?
-            AND id_usuario = ?
-        """;
-
-        try (
-            Connection con = ds.getConnection();
-            PreparedStatement ps =
-                con.prepareStatement(sql)
-        ) {
-
-            ps.setInt(1, id);
-            ps.setInt(2, usuarioId);
-
-            int rows = ps.executeUpdate();
-
-            if (rows == 0) {
-
-                return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body("No puedes eliminar esta reseña");
-            }
-
-            return ResponseEntity.ok().build();
-
-        } catch (SQLException e) {
-
-            return ResponseEntity
-                .internalServerError()
-                .body(e.getMessage());
-        }
-    }
+    
     
     @PostMapping("/{folder}")
     public ResponseEntity<?> upload(

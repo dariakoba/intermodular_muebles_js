@@ -12,7 +12,38 @@ form.addEventListener("submit", async (e) => {
     telefono: document.getElementById("telefono").value.trim(),
     password_hash: document.getElementById("password").value
   };
+	
+  if (data.password_hash.length < 6) {
+      errorDiv.textContent = "La contraseña debe tener mínimo 6 caracteres";
+      errorDiv.style.display = "block";
+      successDiv.style.display = "none";
+      return;
+    }
+	if (data.telefono.length !== 9) {
+	    errorDiv.textContent = "El teléfono debe tener 9 números";
+	    errorDiv.style.display = "block";
+	    successDiv.style.display = "none";
+	    return;
+	  }
+	  if (!/^\d{9}$/.test(data.telefono)) {
+	    errorDiv.textContent = "El teléfono debe tener exactamente 9 números";
+	    errorDiv.style.display = "block";
+	    successDiv.style.display = "none";
+	    return;
+	  }
+	  if (data.nombre.length < 2) {
+	    errorDiv.textContent = "El nombre debe tener al menos 2 caracteres";
+	    errorDiv.style.display = "block";
+	    successDiv.style.display = "none";
+	    return;
+	  }
 
+	  if (data.apellidos.length < 2) {
+	    errorDiv.textContent = "Los apellidos deben tener al menos 2 caracteres";
+	    errorDiv.style.display = "block";
+	    successDiv.style.display = "none";
+	    return;
+	  }
   console.log("Datos a enviar:", data); 
 
   try {

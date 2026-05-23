@@ -60,17 +60,21 @@ async function cargarResenyas(id) {
                 const imgResponse = await fetch(`/api/resenyas/${idResenya}/imagenes`);
                 if (imgResponse.ok) {
                     const imagenes = await imgResponse.json();
-                    if (imagenes && imagenes.length > 0) {
-                        imagenesHTML = `
-                            <div class="resenya-imagenes" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px;">
-                                ${imagenes.map(img => `
-                                    <img src="${img.url}" 
-                                         alt="Foto de reseña" 
-                                         style="width: 120px; height: 90px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; cursor: pointer;"
-                                         onclick="mostrarImagen('${img.url}')">
-                                `).join("")}
-                            </div>`;
-                    }
+					if (imagenes && imagenes.length > 0) {
+
+					    const urls = imagenes.map(i => i.url);
+
+					    imagenesHTML = `
+					        <div class="resenya-imagenes" style="display:flex; gap:10px; flex-wrap:wrap; margin-top:15px;">
+					            ${imagenes.map((img, index) => `
+					                <img src="${img.url}"
+					                     alt="Foto de reseña"
+					                     style="width:120px; height:90px; object-fit:cover; border-radius:8px; border:1px solid #ddd; cursor:pointer;"
+					                     onclick='mostrarSlider(${JSON.stringify(urls)}, ${index})'>
+					            `).join("")}
+					        </div>
+					    `;
+					}
                 }
             } catch (err) {
                 console.warn(`No se pudieron cargar imágenes para reseña ${idResenya}`);
@@ -376,9 +380,38 @@ function cerrarImagen() {
     document.getElementById("imageModal").style.display = "none";
 }
 
+let imagenesSlider = [];
+let indiceSlider = 0;
+
+function mostrarSlider(imagenes, index) {
+    imagenesSlider = imagenes;
+    indiceSlider = index;
+
+    const modal = document.getElementById("imageModal");
+    const img = document.getElementById("modalImg");
+
+    img.src = imagenesSlider[indiceSlider];
+    modal.style.display = "flex";
+}
+
+function cambiarImagen(direccion) {
+    indiceSlider += direccion;
+
+    if (indiceSlider < 0) {
+        indiceSlider = imagenesSlider.length - 1;
+    }
+
+    if (indiceSlider >= imagenesSlider.length) {
+        indiceSlider = 0;
+    }
+
+    document.getElementById("modalImg").src =
+        imagenesSlider[indiceSlider];
+}
+
 // IMPORTANTE
-window.mostrarImagen = mostrarImagen;
-window.cerrarImagen = cerrarImagen;
+window.mostrarSlider = mostrarSlider;
+window.cambiarImagen = cambiarImagen;
 // EXPOSICIÓN GLOBAL (CRÍTICO PARA onclick)
 // Esto asegura que aunque el script sea de tipo módulo, el HTML pueda llamar a la función.
 window.eliminarResenya = eliminarResenya;

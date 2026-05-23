@@ -398,50 +398,6 @@ tbody td {
 	</main>
 
 <script type="module" src="js/index.js"></script>
-<script>
-	document.addEventListener("DOMContentLoaded", () => {
-	    const icon = document.getElementById("person-icon");
-	    const menu = document.querySelector(".person-menu");
-	    const logoutBtn = document.getElementById("logoutBtn");
-
-	    if (icon && menu) {
-	        icon.addEventListener("click", (e) => {
-	            e.stopPropagation();
-	            menu.classList.toggle("show");
-	        });
-
-	        document.addEventListener("click", () => {
-	            menu.classList.remove("show");
-	        });
-	    }
-
-	    if (logoutBtn) {
-	        logoutBtn.addEventListener("click", async (e) => {
-	            e.preventDefault();
-
-	            if (!confirm("¿Estás seguro de que quieres cerrar sesión?")) return;
-
-	            try {
-	                const res = await fetch("/logout", {   
-	                    method: "POST",
-	                    credentials: "include"
-	                });
-
-	                localStorage.clear();
-	                sessionStorage.clear();
-
-	                window.location.href = "/../../login.html";
-
-	            } catch (err) {
-	                console.error("Error al cerrar sesión:", err);
-	                // En caso de error de red, forzamos la salida al login
-	                window.location.href = "/../../login.html";
-	            }
-	        });
-	    }
-	});
-	
-
-</script>
+<script src="/js/logout.js"></script>
 </body>
 </html>

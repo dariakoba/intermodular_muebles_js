@@ -103,7 +103,16 @@ async function cargarUsuarios() {
 }
 
 async function toggleUsuario(id, estadoActual) {
+
     const nuevoEstado = estadoActual === "activo" ? "inactivo" : "activo";
+
+    // 🔥 ALERTA DE CONFIRMACIÓN
+    const mensaje =
+        nuevoEstado === "inactivo"
+            ? "⚠️ ¿Seguro que quieres DESACTIVAR este usuario?"
+            : "¿Seguro que quieres ACTIVAR este usuario?";
+
+    if (!confirm(mensaje)) return;
 
     try {
         const res = await fetch(`/api/admin/usuarios/${id}/estado`, {
@@ -119,8 +128,10 @@ async function toggleUsuario(id, estadoActual) {
         } else {
             alert("Error al cambiar estado");
         }
+
     } catch (err) {
         console.error("Error:", err);
+        alert("Error de conexión");
     }
 }
 
