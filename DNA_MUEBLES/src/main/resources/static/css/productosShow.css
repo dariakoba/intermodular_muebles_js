@@ -158,15 +158,12 @@ body {
 .detalle-imagen img {
     width: 100%;
     height: 680px;
-    object-fit: cover;
+    object-fit: contain;
     display: block;
     transition: transform 0.6s ease, filter 0.4s ease;
     filter: contrast(1.02) saturate(1.05);
 }
-.detalle-imagen:hover img {
-    transform: scale(1.05);
-    filter: contrast(1.1) saturate(1.1);
-}
+
 
 /* INFO PRODUCTO */
 .detalle-info {
@@ -175,15 +172,7 @@ body {
     gap: 24px;
     animation: fadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both;
 }
-/*
-.detalle-info h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 36px;
-    font-weight: 700;
-    color: var(--marron-oscuro);
-    line-height: 1.2;
-}
-*/
+
 .detalle-card {
     background: var(--blanco);
     border-radius: 6px;

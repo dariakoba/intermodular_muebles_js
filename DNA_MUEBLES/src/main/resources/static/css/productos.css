@@ -234,6 +234,20 @@ body {
 /* =================== */
 /* CONTENIDO PRINCIPAL */
 /* =================== */
+.productos-lista {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 15px;
+    width: 100%;
+}
+.productos-container li {
+    list-style: none;
+	text-decoration: none;
+}
 .main-content {
     display: flex;
     margin-top: 65px;
@@ -258,22 +272,26 @@ body {
     flex: 1 1 calc(25% - 15px);
     max-width: calc(25% - 15px);
     background: white;
-    border-radius: 5px;
+    border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
-    transition: transform 0.2s;
-    margin-bottom: 15px;
+    transition: 0.25s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    /* Resetear estilos de <li> */
+    list-style: none;
+    margin: 0;
 }
+
 .card:hover {
-    transform: scale(1.03);
+    transform: translateY(-5px) scale(1.01);
 }
 .card img {
     width: 100%;
     height: 200px;
-    object-fit: cover;
+    object-fit: contain;
 }
+
 
 /* CARD - cuerpo */
 .card-body {
@@ -322,6 +340,35 @@ body {
 .card-body button:active {
     transform: translateY(0);
     background: #8c3208;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.sidebar-header h2 {
+    font-size: 22px;
+    color: #333;
+    margin: 0;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+#btn-cerrar-sidebar {
+    display: none;
+    font-size: 28px;
+    color: #ae4010;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#btn-cerrar-sidebar:hover {
+    color: #5c4432;
+    transform: scale(1.15);
 }
 
 /* =================== */
@@ -474,7 +521,28 @@ body {
         max-width: calc(50% - 8px);
     }
 
-    .productos-container {
+   
+}
+@media (max-width: 1200px) {
+    .card {
+        flex: 1 1 calc(33.33% - 15px);
+        max-width: calc(33.33% - 15px);
+    }
+}
+
+@media (max-width: 900px) {
+    .card {
+        flex: 1 1 calc(50% - 10px);
+        max-width: calc(50% - 10px);
+    }
+}
+
+@media (max-width: 500px) {
+    .card {
+        flex: 1 1 calc(50% - 8px);
+        max-width: calc(50% - 8px);
+    }
+    .productos-lista {
         gap: 8px;
     }
 }
