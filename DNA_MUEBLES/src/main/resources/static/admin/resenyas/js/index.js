@@ -118,7 +118,6 @@ async function borrarResenya(id) {
     }
 }
 
-// TODO EN UN SOLO DOMContentLoaded
 document.addEventListener("DOMContentLoaded", () => {
     cargarResenyas();
 
@@ -127,5 +126,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const selectPuntos = document.getElementById("filterPuntos");
     if (selectPuntos) selectPuntos.addEventListener("change", aplicarFiltros);
-});
 
+    const checkAll = document.getElementById("checkAll");
+    if (checkAll) {
+        checkAll.addEventListener("change", function () {
+            // Se buscan los checkboxes EN EL MOMENTO del click (ya existen en el DOM)
+            const checkboxes = document.querySelectorAll("#tablaResenyas tbody input[type='checkbox']");
+            checkboxes.forEach(cb => cb.checked = this.checked);
+        });
+    }
+});

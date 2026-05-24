@@ -38,6 +38,49 @@ public class ResenyaController {
     }
 
     // --- ENDPOINTS ADMIN ---
+    @DeleteMapping("/admin/resenyas/{id}")
+    public ResponseEntity<?> deleteResenyaAdmin(@PathVariable int id) {
+
+        // Primero restamos puntos al usuario dueño de la reseña
+        String puntosSql = """
+            UPDATE usuarios
+            SET puntos = GREATEST(puntos - 20, 0)
+            WHERE id = (SELECT id_usuario FROM resenas WHERE id_resena = ?)
+        """;
+
+        String deleteSql = "DELETE FROM resenas WHERE id_resena = ?";
+
+        try (Connection con = ds.getConnection()) {
+
+            // 1. Comprobar que existe
+            String checkSql = "SELECT id_resena FROM resenas WHERE id_resena = ?";
+            try (PreparedStatement ps = con.prepareStatement(checkSql)) {
+                ps.setInt(1, id);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (!rs.next()) {
+                        return ResponseEntity.notFound().build();
+                    }
+                }
+            }
+
+            // 2. Restar puntos al usuario
+            try (PreparedStatement ps = con.prepareStatement(puntosSql)) {
+                ps.setInt(1, id);
+                ps.executeUpdate();
+            }
+
+            // 3. Borrar la reseña
+            try (PreparedStatement ps = con.prepareStatement(deleteSql)) {
+                ps.setInt(1, id);
+                ps.executeUpdate();
+            }
+
+            return ResponseEntity.ok().build();
+
+        } catch (SQLException e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
 
     @GetMapping("/admin/resenyas")
     public ResponseEntity<?> getAllAdmin() {
