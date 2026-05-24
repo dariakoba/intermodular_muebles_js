@@ -41,7 +41,6 @@ public class ResenyaController {
 
     @GetMapping("/admin/resenyas")
     public ResponseEntity<?> getAllAdmin() {
-        // IMPORTANTE: fíjate en u.email AS email_usuario
         String sql = "SELECT r.*, " +
                      "u.nombre AS nombre_usuario, " +
                      "u.email AS email_usuario, " +
@@ -69,7 +68,6 @@ public class ResenyaController {
 
     @GetMapping("/admin/resenyas/{id}")
     public ResponseEntity<?> getByIdAdmin(@PathVariable int id) {
-        // CORRECCIÓN: Añadimos u.email AS email_usuario a la consulta
         String sql = "SELECT r.*, " +
                      "u.nombre AS nombre_usuario, " +
                      "u.email AS email_usuario, " +
@@ -84,7 +82,6 @@ public class ResenyaController {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    // El Mapper ya sabe leer "email_usuario" si lo incluimos en el SQL
                     return ResponseEntity.ok(new ResenyaMapper().mapRow(rs));
                 }
                 return ResponseEntity.notFound().build();
@@ -261,8 +258,7 @@ public class ResenyaController {
                         .body("Solo puedes reseñar productos que hayas recibido.");
             }
 
-            // OPCIONAL:
-            // evitar varias reseñas del mismo producto
+            
             String checkSql = """
                 SELECT 1
                 FROM resenas
@@ -286,7 +282,6 @@ public class ResenyaController {
                 }
             }
 
-            // GUARDAR RESEÑA
             resenya.setUsuarioId(userId);
 
             ResenyaRepository repo =
@@ -294,9 +289,7 @@ public class ResenyaController {
 
             Resenya guardada = repo.insert(resenya);
 
-            // ==========================
-            // DAR PUNTOS
-            // ==========================
+            
 
             int puntosGanados = 20;
 
@@ -374,14 +367,11 @@ public class ResenyaController {
             String extension = original.substring(original.lastIndexOf("."));
             String filename = UUID.randomUUID() + extension;
 
-            // 🔥 CAMBIO IMPORTANTE: ruta estable dentro del proyecto
             Path uploadDir = Paths.get("uploads", folder);
             Path path = uploadDir.resolve(filename);
 
-            // crear carpeta SIEMPRE
             Files.createDirectories(uploadDir);
 
-            // guardar archivo
             Files.write(path, file.getBytes());
 
             String url = "/uploads/" + folder + "/" + filename;
@@ -389,7 +379,7 @@ public class ResenyaController {
             return ResponseEntity.ok(Map.of("url", url));
 
         } catch (Exception e) {
-            e.printStackTrace(); // MUY IMPORTANTE
+            e.printStackTrace();
             return ResponseEntity.internalServerError()
                     .body("Error subiendo archivo: " + e.getMessage());
         }

@@ -44,7 +44,6 @@ async function cargarResenyas(id) {
             return;
         }
 
-        // --- CAMBIO CLAVE: Promise.all para esperar las imágenes de cada reseña ---
         const tarjetasHTML = await Promise.all(resenyas.map(async (r) => {
 			console.log("RESEÑA:", r);
             const idResenya = r.idResenya || r.id_resena || r.id_resenya || r.id;
@@ -54,7 +53,6 @@ async function cargarResenyas(id) {
             const puntuacion = r.puntuacion || 0;
             const comentario = r.comentario || "";
 
-            // 1. Obtener imágenes de esta reseña específica
             let imagenesHTML = "";
             try {
                 const imgResponse = await fetch(`/api/resenyas/${idResenya}/imagenes`);
@@ -80,9 +78,7 @@ async function cargarResenyas(id) {
                 console.warn(`No se pudieron cargar imágenes para reseña ${idResenya}`);
             }
 
-            // 2. Formatear fecha
-			// 2. Formatear fecha REAL
-			// 2. Formatear fecha REAL
+            
 			let fechaTexto = "Fecha no disponible";
 
 			if (fechaOriginal) {
@@ -101,7 +97,6 @@ async function cargarResenyas(id) {
 			    }
 			}
 
-            // 3. Botón eliminar
             let botonEliminar = "";
             if (userIdLogueado && idUsuarioResenya && idUsuarioResenya == userIdLogueado) {
                 botonEliminar = `
@@ -137,7 +132,6 @@ async function cargarResenyas(id) {
         }));
 
         contenedor.innerHTML = tarjetasHTML.join("");
-		// CALCULAR MEDIA
 		let suma = 0;
 		let count = resenyas.length;
 
@@ -147,7 +141,6 @@ async function cargarResenyas(id) {
 
 		const media = count > 0 ? (suma / count) : 0;
 
-		// MOSTRAR EN HTML
 		const avgElement = document.getElementById("avg-puntuacion");
 
 		if (avgElement) {
@@ -223,8 +216,7 @@ function configurarFormulario(idProducto) {
         if (botonEnvio) botonEnvio.disabled = true;
 
         try {
-            // 1. DATOS - Usamos los nombres exactos que espera tu Entity/DTO
-			// En resenya.js, dentro de configurarFormulario:
+            
 			const comentario = form.comentario.value.trim();
 
 			if (!comentario) {
@@ -409,9 +401,7 @@ function cambiarImagen(direccion) {
         imagenesSlider[indiceSlider];
 }
 
-// IMPORTANTE
 window.mostrarSlider = mostrarSlider;
 window.cambiarImagen = cambiarImagen;
-// EXPOSICIÓN GLOBAL (CRÍTICO PARA onclick)
-// Esto asegura que aunque el script sea de tipo módulo, el HTML pueda llamar a la función.
+
 window.eliminarResenya = eliminarResenya;
