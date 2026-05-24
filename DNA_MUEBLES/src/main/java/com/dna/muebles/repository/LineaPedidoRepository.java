@@ -22,7 +22,7 @@ public class LineaPedidoRepository extends BaseRepository<LineaPedido> {
 
     @Override
     public String getPrimaryKeyName() {
-        // Usamos id_pedido como referencia, aunque sea compuesta
+        
         return "id_pedido";
     }
 
