@@ -25,6 +25,35 @@ document.addEventListener("DOMContentLoaded", async () => {
 	            '<span class="material-symbols-outlined">tune</span> Mostrar filtros';
 	    }
 	});
+	
+	//responsive hamburguesa
+    document.getElementById("btn-hamburguesa").addEventListener("click", () => {
+        document.getElementById("nav-menu").classList.toggle("abierto");
+    });
+
+    window.addEventListener("resize", () => {
+        if (window.innerWidth > 900) {
+            document.getElementById("nav-menu").classList.remove("abierto");
+        }
+    });
+	//
+	// sidebar no toca el footer
+	    function ajustarSidebar() {
+	        const sidebar = document.querySelector(".sidebar");
+	        const footer = document.querySelector(".main-footer");
+	        const footerTop = footer.getBoundingClientRect().top + window.scrollY;
+	        const scrollY = window.scrollY;
+	        const topbarHeight = 65;
+
+	        const alturaMaxima = footerTop - scrollY - topbarHeight;
+	        const alturaViewport = window.innerHeight - topbarHeight;
+
+	        sidebar.style.height = Math.min(alturaMaxima, alturaViewport) + "px";
+	    }
+
+	    ajustarSidebar();
+	    window.addEventListener("scroll", ajustarSidebar);
+	    window.addEventListener("resize", ajustarSidebar);
 
 	//fullscrean filtros
 	document.addEventListener("fullscreenchange", () => {

@@ -18,7 +18,7 @@
 		<span>DNA</span>
 	</div>
 
-	<nav class="menu">
+	<nav class="menu" id="nav-menu">
 		<a href="index.html">Home</a>
 		<a href="productos.html">Catálogo</a>
 		<a href="contacto.html">Contacto</a>
@@ -34,7 +34,9 @@
 			<div class="person-menu" id="person-menu"></div>
 		</div>
 	</div>
-
+	<button class="hamburguesa" id="btn-hamburguesa">
+		    <span class="material-symbols-outlined">menu</span>
+	</button>
 	</header>   
 
 <main class="home-container">
@@ -78,7 +80,7 @@
                         <h2 class="card-title">Camas</h2>
                     </div>
                 </div>
-                <div class="category-card" onclick="goToCategory('sofás')" style="background-image: url(images/home/Gemini_Generated_Image_kkfc2pkkfc2pkkfc\ \(3\).png);">
+                <div class="category-card" onclick="goToCategory('sofás')" style="background-image: url(images/home/sofa.jpg);">
                     <div class="card-overlay">
                         <h2 class="card-title">Sofás</h2>
                     </div>
@@ -98,17 +100,17 @@
                         <h2 class="card-title">Estanterías</h2>
                     </div>
                 </div>
-                <div class="category-card" onclick="goToCategory('mesas')" style="background-image: url(images/home/luminárias\ artesanais\ lindas.jpg);">
+                <div class="category-card" onclick="goToCategory('mesas')" style="background-image: url(images/home/mesa.jpg);">
                     <div class="card-overlay">
                         <h2 class="card-title">Mesas</h2>
                     </div>
                 </div>
-                <div class="category-card" onclick="goToCategory('armarios')" style="background-image: url(images/home/descarga\ \(4\).jpg);">
+                <div class="category-card" onclick="goToCategory('armarios')" style="background-image: url(images/home/armarios.jpg);">
                     <div class="card-overlay">
                         <h2 class="card-title">Armarios</h2>
                     </div>
                 </div>
-				<div class="category-card" onclick="goToCategory('sillas')" style="background-image: url(images/home/descarga\ \(4\).jpg);">
+				<div class="category-card" onclick="goToCategory('sillas')" style="background-image: url(images/home/silla.jpg);">
                     <div class="card-overlay">
                         <h2 class="card-title">Sillas</h2>
                     </div>
@@ -165,6 +167,7 @@
 <script src="/js/resenya.js"></script>
 <script src="/js/hrefCategorias.js"></script>
 <script src="/js/scroll.js"></script>
+<script src="/js/hamburguesa.js"></script>
 
 <script src="/js/logout.js"></script>
 </body>
