@@ -8,7 +8,71 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Quitar filtros
     document.getElementById("quitar-filtros")
         .addEventListener("click", quitarFiltros);
+		
+	// ocultar filtros
+	document.getElementById("btn-cerrar-sidebar").addEventListener("click", () => {
+	    document.querySelector(".sidebar").classList.remove("sidebar-open");
+	    document.getElementById("btn-cerrar-sidebar").style.display = "none";
+	    document.getElementById("btn-filtros").innerHTML =
+	        '<span class="material-symbols-outlined">tune</span> Mostrar filtros';
+	});
+	
+	window.addEventListener("resize", () => {
+	    if (window.innerWidth > 900) {
+	        document.getElementById("btn-cerrar-sidebar").style.display = "none";
+	        document.querySelector(".sidebar").classList.remove("sidebar-open");
+	        document.getElementById("btn-filtros").innerHTML =
+	            '<span class="material-symbols-outlined">tune</span> Mostrar filtros';
+	    }
+	});
+	
+	//responsive hamburguesa
+    document.getElementById("btn-hamburguesa").addEventListener("click", () => {
+        document.getElementById("nav-menu").classList.toggle("abierto");
+    });
 
+    window.addEventListener("resize", () => {
+        if (window.innerWidth > 900) {
+            document.getElementById("nav-menu").classList.remove("abierto");
+        }
+    });
+	//
+	// sidebar no toca el footer
+	    function ajustarSidebar() {
+	        const sidebar = document.querySelector(".sidebar");
+	        const footer = document.querySelector(".main-footer");
+	        const footerTop = footer.getBoundingClientRect().top + window.scrollY;
+	        const scrollY = window.scrollY;
+	        const topbarHeight = 65;
+
+	        const alturaMaxima = footerTop - scrollY - topbarHeight;
+	        const alturaViewport = window.innerHeight - topbarHeight;
+
+	        sidebar.style.height = Math.min(alturaMaxima, alturaViewport) + "px";
+	    }
+
+	    ajustarSidebar();
+	    window.addEventListener("scroll", ajustarSidebar);
+	    window.addEventListener("resize", ajustarSidebar);
+
+	//fullscrean filtros
+	document.addEventListener("fullscreenchange", () => {
+	    const sidebar = document.querySelector(".sidebar");
+	    const btnFiltros = document.getElementById("btn-filtros");
+	    const cerrar = document.getElementById("btn-cerrar-sidebar");
+
+	    if (!document.fullscreenElement) {
+	        sidebar.classList.remove("sidebar-open");
+	        sidebar.style.transform = "TranslateX(-100%)";
+	        btnFiltros.style.display = "flex";
+	        cerrar.style.display = "none";
+	    } else {
+	        sidebar.style.transform = "translateX(0)";
+	        btnFiltros.style.display = "none";
+	        cerrar.style.display = "none";
+	    }
+	});
+	
     // Ordenar
     document.getElementById("ordenar")
         .addEventListener("change", aplicarFiltros);
@@ -28,7 +92,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Sidebar móvil
     document.getElementById("btn-filtros").addEventListener("click", () => {
-
+		
+		
         const sidebar = document.querySelector(".sidebar");
         const btn = document.getElementById("btn-filtros");
 
@@ -37,9 +102,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         btn.innerHTML = abierto
             ? '<span class="material-symbols-outlined">close</span> Ocultar filtros'
             : '<span class="material-symbols-outlined">tune</span> Mostrar filtros';
+		const cerrar = document.getElementById("btn-cerrar-sidebar");
+		cerrar.style.display = abierto ? "block" : "none";
     });
 
-    // Toggle secciones filtros
     document.querySelectorAll(".filter-header").forEach(header => {
 
         header.addEventListener("click", () => {
@@ -56,9 +122,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 
-// ─────────────────────────────────────────────
-// CARGAR CATEGORÍAS
-// ─────────────────────────────────────────────
+
 async function cargarCategorias() {
 
     try {
@@ -101,9 +165,7 @@ async function cargarCategorias() {
 }
 
 
-// ─────────────────────────────────────────────
-// CARGAR PRODUCTOS
-// ─────────────────────────────────────────────
+
 async function cargarProductos() {
 
     try {
@@ -126,9 +188,6 @@ async function cargarProductos() {
 }
 
 
-// ─────────────────────────────────────────────
-// RENDER PRODUCTOS
-// ─────────────────────────────────────────────
 function renderProductos(productos) {
 
     const contenedor = document.getElementById("productos-container");
@@ -146,13 +205,16 @@ function renderProductos(productos) {
         return;
     }
 
+    const lista = document.createElement("ul");
+    lista.classList.add("productos-lista");
+
     productos.forEach(p => {
 
-        const card = document.createElement("div");
+        const item = document.createElement("li");
 
-        card.classList.add("card");
+        item.classList.add("card");
 
-        card.innerHTML = `
+        item.innerHTML = `
             <img src="${p.imagen ?? '/images/productos/productoSinImagen.jpg'}" alt="${p.nombre}">
 
             <div class="card-body">
@@ -168,14 +230,12 @@ function renderProductos(productos) {
             </div>
         `;
 
-        contenedor.appendChild(card);
+        lista.appendChild(item);
     });
+
+    contenedor.appendChild(lista);
 }
 
-
-// ─────────────────────────────────────────────
-// APLICAR FILTROS
-// ─────────────────────────────────────────────
 async function aplicarFiltros() {
 
     const params = new URLSearchParams();
@@ -235,9 +295,7 @@ async function aplicarFiltros() {
 }
 
 
-// ─────────────────────────────────────────────
-// CATEGORÍA DESDE URL
-// ─────────────────────────────────────────────
+
 function aplicarCategoriaURL() {
 
     const params = new URLSearchParams(window.location.search);
@@ -267,9 +325,6 @@ function aplicarCategoriaURL() {
 }
 
 
-// ─────────────────────────────────────────────
-// QUITAR FILTROS
-// ─────────────────────────────────────────────
 function quitarFiltros() {
 
     // Categorías
@@ -293,9 +348,7 @@ function quitarFiltros() {
 }
 
 
-// ─────────────────────────────────────────────
-// MOSTRAR / OCULTAR BOTÓN
-// ─────────────────────────────────────────────
+
 function actualizarBotonQuitarFiltros() {
 
     const hayCategorias =

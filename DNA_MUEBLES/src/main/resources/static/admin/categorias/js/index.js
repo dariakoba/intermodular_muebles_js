@@ -63,23 +63,7 @@ function render(categorias) {
         </tr>
     `).join("");
 }
-/*
-async function desactivarCategoria(id) {
-   // if (!confirm("¿Seguro que quieres eliminar esta categoria?")) return;
 
-    try {
-        await api.put(`/api/admin/categorias/${id}/desactivar`);
-
-        // Recargar lista completa
-        const categorias = await api.get("/api/admin/categorias");
-        render(categorias);
-
-    } catch (err) {
-        console.error(err);
-        alert("Error al desactivarr producto");
-    }
-}
-*/
 async function desactivarCategoria(id) {
     try {
         await api.put(`/api/admin/categorias/${id}/desactivar`);
@@ -95,7 +79,6 @@ async function desactivarCategoria(id) {
 
 
 async function activarCategoria(id) {
-   // if (!confirm("¿Seguro que quieres eliminar esta categoria?")) return;
 
     try {
         await api.put(`/api/admin/categorias/${id}/activar`);

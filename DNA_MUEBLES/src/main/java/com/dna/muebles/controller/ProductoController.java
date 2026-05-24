@@ -65,7 +65,7 @@ public class ProductoController {
 	        ProductoRepository repo = new ProductoRepository(con);
 	        Stream<ProductoResumenImagen> stream = repo.findAllResumen().stream();
 
-	        // Filtro categorías — si hay varias, muestra productos de cualquiera
+	        
 	        if (categoria != null && !categoria.isEmpty()) {
 	            stream = stream.filter(p ->
 	                p.categoria() != null &&

@@ -96,7 +96,6 @@ async function activarProducto(id) {
 
 function bindEvents() {
     const tabla = document.getElementById("tabla-productos");
-    //bind(tabla, "click", onAction);
 
     // Seleccionar todo
     document.getElementById("check-all").addEventListener("change", (ev) => {
