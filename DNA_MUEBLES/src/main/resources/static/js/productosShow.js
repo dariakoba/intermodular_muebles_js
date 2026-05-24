@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		        agregarAlCarrito(p, cantidad);
 		        const btn = document.getElementById("btn-carrito");
 		        btn.textContent = "✓ Añadido";
-		        setTimeout(() => { btn.textContent = "🛒 Añadir al carrito"; }, 1200);
+		        setTimeout(() => { btn.textContent = "Añadir al carrito"; }, 1200);
 		    };
 
 		    // Comprar
