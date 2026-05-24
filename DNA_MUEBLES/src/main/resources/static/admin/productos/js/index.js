@@ -8,11 +8,10 @@ app.run(async () => {
     await guard.requireRole("admin");
 
     const productos = await api.get("/api/admin/productos");
-
+	todosLosProductos = productos;
     render(productos);
     bindEvents();
 });
-
 function render(productos) {
 	console.log(productos);
     const tbody = document.querySelector("#tabla-productos tbody");
@@ -65,6 +64,27 @@ function render(productos) {
         </tr>
     `).join("");
 }
+let todosLosProductos = []; // Almacén local para filtrado rápido
+
+// FILTRADO 
+function filtrarProducto() {
+    const query = document.getElementById("inputBuscar").value.toLowerCase();
+    const filtroEstado = document.getElementById("filterEstado").value.toLowerCase();
+
+    const productosFiltrados = todosLosProductos.filter(u => {
+        const nombre = `${u.nombre}`.toLowerCase();        
+        // Nombre
+        const coincideTexto = nombre.includes(query);
+        
+        // Coincidencia por Selects
+        const coincideEstado = filtroEstado === "" || (u.estado ?? "").toLowerCase() === filtroEstado;
+
+        return coincideTexto && coincideEstado;
+    });
+
+    render(productosFiltrados);
+}
+
 
 async function desactivarProducto(id) {
 
@@ -73,8 +93,9 @@ async function desactivarProducto(id) {
 
         // Recargar lista completa
         const productos = await api.get("/api/admin/productos");
+		todosLosProductos = productos;
         render(productos);
-
+		
     } catch (err) {
         console.error(err);
         alert("Error al desactivar producto");
@@ -86,6 +107,7 @@ async function activarProducto(id) {
         await api.put(`/api/admin/productos/${id}/activar`);
 
         const productos = await api.get("/api/admin/productos");
+		todosLosProductos = productos;
         render(productos);
 
     } catch (err) {
@@ -129,6 +151,9 @@ function bindEvents() {
         // Resetear check-all
         document.getElementById("check-all").checked = false;
     });
+	document.getElementById("inputBuscar").addEventListener("input", filtrarProducto);
+	document.getElementById("filterEstado").addEventListener("change", filtrarProducto);
+
 }
 
 

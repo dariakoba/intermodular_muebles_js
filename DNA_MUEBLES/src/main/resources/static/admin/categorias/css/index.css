@@ -158,7 +158,44 @@
 	  font-weight: 700;
 	  color: #333;
 	}
+	
+	.admin-filters {
+	  display: flex;
+	  align-items: center;
+	  gap: 12px;
+	  flex: 1;
+	  justify-content: center;
+	}
 
+	.search-box {
+	  display: flex;
+	  align-items: center;
+	  background: #fff;
+	  border: 1px solid #e0e0e0;
+	  border-radius: 8px;
+	  padding: 2px 12px;
+	  max-width: 320px;
+	  flex: 1;
+	  height: 42px;
+	  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+	}
+
+	.search-box input {
+	  border: none !important;
+	  outline: none !important;
+	  width: 100%;
+	  font-size: 14px;
+	  background: transparent;
+	}
+
+	.select-filters select {
+	  padding: 0 10px;
+	  height: 42px;
+	  border-radius: 8px;
+	  border: 1px solid #e0e0e0;
+	  background: #fff;
+	  cursor: pointer;
+	}
 	/* --- BOTONES SUPERIORES --- */
 	.admin-actions {
 	  display: flex;

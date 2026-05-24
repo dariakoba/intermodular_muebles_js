@@ -8,7 +8,7 @@ app.run(async () => {
     await guard.requireRole("admin");
 
     const categorias = await api.get("/api/admin/categorias");
-
+	todasLasCategorias = categorias;
     render(categorias);
     bindEvents();
 });
@@ -63,12 +63,34 @@ function render(categorias) {
         </tr>
     `).join("");
 }
+let todasLasCategorias = []; // Almacén local para filtrado rápido
+// FILTRADO 
+function filtrarProducto() {
+    const query = document.getElementById("inputBuscar").value.toLowerCase();
+    const filtroEstado = document.getElementById("filterEstado").value.toLowerCase();
+
+    const categoriasFiltrados = todasLasCategorias.filter(u => {
+        const nombre = `${u.nombre}`.toLowerCase();        
+        // Nombre
+        const coincideTexto = nombre.includes(query);
+        
+        // Coincidencia por Selects
+        const coincideEstado = filtroEstado === "" || (u.estado ?? "").toLowerCase() === filtroEstado;
+
+        return coincideTexto && coincideEstado;
+    });
+
+    render(categoriasFiltrados);
+}
+
 
 async function desactivarCategoria(id) {
     try {
         await api.put(`/api/admin/categorias/${id}/desactivar`);
 
         const categorias = await api.get("/api/admin/categorias");
+		todasLasCategorias = categorias;
+
         render(categorias);
 
     } catch (err) {
@@ -85,6 +107,7 @@ async function activarCategoria(id) {
 
         // Recargar lista completa
         const categorias = await api.get("/api/admin/categorias");
+		todasLasCategorias = categorias;
         render(categorias);
 
     } catch (err) {
@@ -141,6 +164,8 @@ function bindEvents() {
         // Resetear check-all
         document.getElementById("check-all").checked = false;
     });
+	document.getElementById("inputBuscar").addEventListener("input", filtrarProducto);
+	document.getElementById("filterEstado").addEventListener("change", filtrarProducto);
 }
 
 

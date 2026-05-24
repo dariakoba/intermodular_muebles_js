@@ -52,6 +52,20 @@
 <main class="admin-wrapper">
   <div class="admin-header">
     <h1>Categorías</h1>
+	<div class="admin-filters">
+		    <div class="search-box">
+		        <span class="material-symbols-outlined">search</span>
+		        <input type="text" id="inputBuscar" placeholder="Buscar nombre o email...">
+		    </div>
+		    
+		    <div class="select-filters">
+		        <select id="filterEstado">
+		            <option value="">Estados</option>
+		            <option value="activo">Activo</option>
+		            <option value="inactivo">Inactivo</option>
+		        </select>
+		    </div>
+	</div>
     <div class="admin-actions">
       <button id="btn-eliminar-seleccionados">Eliminar seleccionados</button>
       <a href="/admin/categorias/create.html" class="btn-nuevo">Nueva Categoria</a>
