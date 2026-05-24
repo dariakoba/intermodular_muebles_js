@@ -8,21 +8,26 @@ CREATE TABLE categoria (
     deleted_at DATETIME DEFAULT NULL
 );
 
-CREATE TABLE `linea_pedido` (
-  `id` int(11) NOT NULL,
-  `id_pedido` int(11) DEFAULT NULL,
-  `id_ejemplar` int(11) DEFAULT NULL
+CREATE TABLE pedidos (
+    id_pedido INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT(11) DEFAULT NULL,
+    fecha DATE DEFAULT NULL,
+    total DECIMAL(10,2) DEFAULT NULL,
+    metodo_pago VARCHAR(50) DEFAULT NULL,
+    estado_pago VARCHAR(50) DEFAULT 'Pendiente de pago', 
+    puntos_usados INT(11) DEFAULT 0,                     
+    direccion_envio VARCHAR(255) DEFAULT NULL,           
+    CONSTRAINT pedidos_ibfk_1 FOREIGN KEY (id_usuario) REFERENCES usuarios (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE `pedidos` (
-  `id` int(11) NOT NULL,
-  `fecha_pedido` date DEFAULT NULL,
-  `fecha_devolucion` date DEFAULT NULL,
-  `precio` decimal(10,2) DEFAULT NULL,
-  `metodo_pago` varchar(50) DEFAULT NULL,
-  `factura` varchar(50) DEFAULT NULL,
-  `envio` varchar(50) DEFAULT NULL,
-  `id_usuario` int(11) DEFAULT NULL
+CREATE TABLE detalles_pedidos (
+    id_detalle INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id_pedido INT(11) DEFAULT NULL,
+    id_producto INT(11) DEFAULT NULL,
+    cantidad INT(11) DEFAULT 1,                          
+    precio_unitario DECIMAL(10,2) DEFAULT NULL,          
+    CONSTRAINT det_ped_fk1 FOREIGN KEY (id_pedido) REFERENCES pedidos (id_pedido) ON DELETE CASCADE,
+    CONSTRAINT det_ped_fk2 FOREIGN KEY (id_producto) REFERENCES productos (id_producto)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE productos (

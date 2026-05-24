@@ -10,19 +10,29 @@ INSERT INTO categoria (id_categoria, nombre, deleted_at) VALUES
 (7, 'Muebles TV', NULL),
 (8, 'Escritorios', NULL);
 
-INSERT INTO `linea_pedido` (`id`, `id_pedido`, `id_ejemplar`) VALUES
-(1, 1, 1),
-(2, 2, 3),
-(3, 3, 5),
-(4, 4, 6),
-(5, 5, 9);
+INSERT INTO pedidos (id_pedido, id_usuario, fecha, total, metodo_pago, estado_pago, puntos_usados, direccion_envio) VALUES
+(4, 5, '2024-03-10', 1200.00, 'Transferencia', 'Pendiente de pago', 0, 'Av Mueble 22, Madrid'),
+(5, 2, '2024-03-12', 899.00, 'Tarjeta', 'Pagado', 0, 'Calle Sofa 12, Valencia'),
+(6, 7, '2024-03-15', 235.00, 'Tarjeta', 'Pagado', 500, 'Calle Falsa 123, Barcelona'),
+(7, 8, '2024-03-18', 1400.00, 'Transferencia', 'Pendiente de pago', 0, 'Plaza Mayor 1, Sevilla'),
+(8, 3, '2024-03-20', 750.00, 'Tarjeta', 'Pagado', 0, 'Av Mesa 45, Valencia'),
+(9, 9, '2024-03-22', 318.00, 'Tarjeta', 'Pagado', 1200, 'Calle Sol 4, Bilbao'),
+(10, 4, '2024-03-25', 150.00, 'Tarjeta', 'Pagado', 0, 'Calle Silla 7, Valencia');
 
-INSERT INTO `pedidos` (`id`, `fecha_pedido`, `fecha_devolucion`, `precio`, `metodo_pago`, `factura`, `envio`, `id_usuario`) VALUES
-(1, '2024-03-01', NULL, 550.00, 'Tarjeta', 'F001', 'DHL', 2),
-(2, '2024-03-02', NULL, 300.00, 'PayPal', 'F002', 'MRW', 3),
-(3, '2024-03-03', NULL, 60.00, 'Tarjeta', 'F003', 'SEUR', 4),
-(4, '2024-03-04', NULL, 450.00, 'Tarjeta', 'F004', 'DHL', 5),
-(5, '2024-03-05', NULL, 200.00, 'PayPal', 'F005', 'MRW', 2);
+INSERT INTO detalles_pedidos (id_detalle, id_pedido, id_producto, cantidad, precio_unitario) VALUES
+(4, 7, 1, 700.00),
+(4, 10, 2, 250.00),
+(5, 2, 1, 899.00),
+(6, 5, 4, 60.00),
+(7, 6, 1, 450.00),
+(7, 7, 1, 700.00),
+(7, 10, 1, 250.00),
+(8, 3, 1, 300.00),
+(8, 6, 1, 450.00),
+(9, 4, 1, 120.00),
+(9, 8, 1, 150.00),
+(9, 5, 1, 60.00),
+(10, 8, 1, 150.00);
 
 INSERT INTO productos (id_producto, nombre, color, precio, stock, descripcion, categoria_id, deleted_at) VALUES
 (1, 'Sofá 4 plazas', 'Gris', 5503.00, 55332, 'Sofá cómodo de 3 plazas.update', 1, NULL),
