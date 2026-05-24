@@ -84,46 +84,85 @@ document.addEventListener("DOMContentLoaded", async () => {
         // ======================
         // CANTIDAD
         // ======================
-        document.getElementById("cantidad-container").innerHTML = `
-            <label>Cantidad:</label>
-            <input type="number" id="cantidad" value="1" min="1" max="${p.stock}">
-        `;
+		if (p.stock === 0) {
+		    document.getElementById("cantidad-container").style.display = "none";
+		    document.getElementById("btn-carrito").style.display = "none";
+		    document.getElementById("btn-comprar").style.display = "none";
+		} else {
+		    // Cantidad
+		    document.getElementById("cantidad-container").innerHTML = `
+		        <label>Cantidad:</label>
+		        <input type="number" id="cantidad" value="1" min="1" max="${p.stock}">
+		    `;
 
-        // ======================
-        // CARRITO
-        // ======================
-		document.getElementById("btn-carrito").onclick = () => {
-		    const cantidad = parseInt(document.getElementById("cantidad").value);
+		    // Carrito
+		    document.getElementById("btn-carrito").onclick = () => {
+		        const cantidad = parseInt(document.getElementById("cantidad").value);
+		        if (isNaN(cantidad) || cantidad < 1) {
+		            alert("No se puede poner una cantidad negativa o menor que 1");
+		            return;
+		        }
+				if (cantidad > p.stock) {
+				    alert(`Solo quedan ${p.stock} unidades disponibles. Por favor, ajuste la cantidad.`);
+				    return;
+				}
+		        agregarAlCarrito(p, cantidad);
+		        const btn = document.getElementById("btn-carrito");
+		        btn.textContent = "✓ Añadido";
+		        setTimeout(() => { btn.textContent = "🛒 Añadir al carrito"; }, 1200);
+		    };
 
-		    if (isNaN(cantidad) || cantidad < 1) {
-		        alert("No se puede poner una cantidad negativa o menor que 1");
-		        return;
-		    }
+		    // Comprar
+		    document.getElementById("btn-comprar").onclick = () => {
+		        const cantidad = parseInt(document.getElementById("cantidad").value);
+		        if (isNaN(cantidad) || cantidad < 1) {
+		            alert("No se puede poner una cantidad negativa o menor que 1");
+		            return;
+		        }
+				if (cantidad > p.stock) {
+				    alert(`Solo quedan ${p.stock} unidades disponibles. Por favor, ajuste la cantidad.`);
+				    return;
+				}
+		        agregarAlCarrito(p, cantidad);
+		        window.location.href = "carrito.html";
+		    };
+		}
+		
+		// Stock
+		const stockDiv = document.createElement("div");
 
-		    agregarAlCarrito(p, cantidad);
+		if (p.stock === 0) {
+		    stockDiv.innerHTML = `<span style="
+		        background: #fde8e8;
+		        color: #c0392b;
+		        padding: 6px 14px;
+		        border-radius: 6px;
+		        font-size: 14px;
+		        font-weight: bold;
+		    ">● No hay stock</span>`;
+		} else if (p.stock < 10) {
+		    stockDiv.innerHTML = `<span style="
+		        background: #eafaf1;
+		        color: #1e8449;
+		        padding: 6px 14px;
+		        border-radius: 6px;
+		        font-size: 14px;
+		        font-weight: bold;
+		    ">● En stock — Quedan ${p.stock} productos</span>`;
+		} else {
+		    stockDiv.innerHTML = `<span style="
+		        background: #eafaf1;
+		        color: #1e8449;
+		        padding: 6px 14px;
+		        border-radius: 6px;
+		        font-size: 14px;
+		        font-weight: bold;
+		    ">● En stock</span>`;
+		}
 
-		    const btn = document.getElementById("btn-carrito");
-		    btn.textContent = "✓ Añadido";
+		document.getElementById("cantidad-container").before(stockDiv);
 
-		    setTimeout(() => {
-		        btn.textContent = "🛒 Añadir al carrito";
-		    }, 1200);
-		};
-        
-        // ======================
-        // COMPRAR
-        // ======================
-		document.getElementById("btn-comprar").onclick = () => {
-		    const cantidad = parseInt(document.getElementById("cantidad").value);
-
-		    if (isNaN(cantidad) || cantidad < 1) {
-		        alert("No se puede poner una cantidad negativa o menor que 1");
-		        return;
-		    }
-
-		    agregarAlCarrito(p, cantidad);
-		    window.location.href = "carrito.html";
-		};
+       
 
     } catch (error) {
         console.error("Error:", error);

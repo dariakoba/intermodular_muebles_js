@@ -147,42 +147,10 @@ public class ProductoRepository extends SoftDeleteRepository<Producto> {
 	        throw new DataAccessException("Error obteniendo detalle del producto");
 	    }
 	}
-	
 
-	//
 
-	public ProductoResumenImagen findByDetalleId(int id) {
 
-		String sql = """
-				SELECT p.id_producto, p.nombre, p.precio, p.stock, p.categoria_id,
-				(
-					SELECT url
-					FROM producto_imagenes pi
-					WHERE pi.producto_id = p.id_producto
-					ORDER BY pi.id ASC
-					LIMIT 1
-				) AS imagen
-				FROM productos p
-				where id_producto = ?
-
-				""";
-
-		try {
-
-			return DB.queryOne(con, sql, rs ->
-
-			new ProductoResumenImagen(rs.getInt("id_producto"), rs.getString("nombre"), rs.getFloat("precio"),
-					rs.getInt("stock"), rs.getString("categoria_id"), rs.getString("color"), rs.getString("imagen"))
-
-					, id);
-
-		} catch (SQLException e) {
-
-			throw new DataAccessException("Error al buscar el listado detallado de productos", e);
-		}
-	}
-
-	// cliente productos
+	// cliente productos (todos)
 	public List<ProductoResumenImagen> findAllResumen() {
 
 		String sql = """
@@ -206,7 +174,7 @@ public class ProductoRepository extends SoftDeleteRepository<Producto> {
 							rs.getString("color"),
 							rs.getString("imagen")));
 		} catch (SQLException e) {
-			throw new DataAccessException("Error obteniendo el resumen de directores");
+			throw new DataAccessException("Error obteniendo el resumen de productos");
 		}
 	}
 

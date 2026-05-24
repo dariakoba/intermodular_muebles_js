@@ -43,6 +43,7 @@ public class ProductoController {
 				p.getColor(),
 				p.getDescripcion(),
 				p.getPrecio(),
+				p.getStock(),
 				imagenes
 			);
 
