@@ -11,7 +11,7 @@ body {
   background: #fdfbf6;
   color: #222;
   min-height: 100vh;
-  padding-top: 64px; /* espacio para navbar fija */
+  padding-top: 64px;
 }
 
 /* --- NAVBAR --- */
@@ -78,7 +78,6 @@ body {
   font-size: 0.9rem;
   letter-spacing: 1px;
   text-transform: uppercase;
-  transition: 0.2s ease;
 }
 
 .nav-links a:hover {
@@ -119,7 +118,6 @@ body {
   border-radius: 8px;
   min-width: 160px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-  overflow: hidden;
 }
 
 .person-menu-wrapper:hover .person-menu {
@@ -128,15 +126,15 @@ body {
 
 .person-menu a {
   display: block;
-  padding: 12px;
+  padding: 10px 12px;
   color: #333;
   text-decoration: none;
-  transition: 0.2s;
 }
 
 .person-menu a:hover {
   background: #f2f2f2;
 }
+
 
 
 /* --- MAIN ADMIN CONTAINER --- */
@@ -233,82 +231,18 @@ body {
     margin-top: 8px;
   }
 }
-.icons {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-}
 
-/* ICONOS GENERALES */
-.icons .material-symbols-outlined {
-  color: #fff;
-  font-size: 24px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.icons .material-symbols-outlined:hover {
-  color: #1abc9c;
-  transform: scale(1.15);
-}
-.material-symbols-outlined {
-    cursor: pointer;
-    color: #fff;
-    font-size: 26px;
-    transition: 0.2s;
-}
-
-.material-symbols-outlined:hover {
-    color: #1abc9c;
-    transform: scale(1.1);
-}
-
-/* 🔥 WRAPPER CLAVE */
-.person-menu-wrapper {
-    position: relative;
-    display: inline-block;
-}
-
-/* 🔥 MENÚ */
-.person-menu {
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 100%; /* IMPORTANTE: justo debajo del icono */
-    background: white;
-    border-radius: 8px;
-    padding: 8px 0;
-    min-width: 160px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    z-index: 999;
-}
-
-/* 🔥 MANTENER HOVER EN TODO EL BLOQUE */
-.person-menu-wrapper:hover .person-menu {
-    display: block;
-}
-
-/* links */
-.logout-link {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: #333;
-    text-decoration: none;
-    padding: 10px 12px;
-    white-space: nowrap;
-}
-
-.logout-link:hover {
-    background: #f2f2f2;
-}
 
 .admin-footer {
   text-align: center;
   padding: 20px;
-  margin-top: 200px;
+  margin-top: 0;
   color: #777;
   font-size: 0.9rem;
   border-top: 1px solid #e5e5e5;
   background: #fff;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
 }
