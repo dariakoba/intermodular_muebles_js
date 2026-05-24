@@ -7,47 +7,37 @@
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; background: #f5efe6; color: #333; }
         
-        /* Contenedor principal a dos columnas */
         .checkout-wrapper { display: flex; flex-wrap: wrap; gap: 30px; max-width: 1100px; margin: 20px auto; align-items: flex-start; }
-        
-        /* Columna Izquierda (Formulario) */
         .checkout-form { flex: 1 1 600px; background: #faf6f0; padding: 35px; border-radius: 10px; box-shadow: 0 4px 20px rgba(139, 90, 43, 0.08); border: 1px solid #eaddcd; }
         .checkout-form h2 { margin-top: 0; color: #4a3b32; font-size: 1.4rem; border-bottom: 2px solid #eaddcd; padding-bottom: 10px; margin-bottom: 20px; }
         .form-section { margin-bottom: 35px; }
         
-        /* Columna Derecha (Resumen) */
         .checkout-summary { flex: 1 1 350px; background: #f3eae1; padding: 30px; border-radius: 10px; border: 1px solid #dfd3c3; box-shadow: 0 4px 20px rgba(139, 90, 43, 0.08); position: sticky; top: 20px; }
         .checkout-summary h2 { margin-top: 0; color: #4a3b32; font-size: 1.3rem; margin-bottom: 20px; }
         
-        /* Estilos de inputs */
         label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; color: #5c4d42; }
         input[type="text"], select { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #cbd2d6; background-color: #fffdfb; border-radius: 6px; box-sizing: border-box; font-size: 15px; transition: 0.3s; }
         input[type="text"]:focus, select:focus { border-color: rgb(159, 80, 0); outline: none; box-shadow: 0 0 5px rgba(159, 80, 0, 0.2); }
         .row { display: flex; gap: 15px; }
         .row > div { flex: 1; }
 
-        /* GRID PARA LA DIRECCIÓN PROFESIONAL */
         .direccion-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
         .direccion-grid .full-width { grid-column: span 2; }
-        .direccion-grid input { margin-bottom: 0 !important; } /* Quitamos margen para usar el gap del grid */
+        .direccion-grid input { margin-bottom: 0 !important; } 
 
-        /* Lista de productos en resumen */
         .resumen-lista { max-height: 250px; overflow-y: auto; margin-bottom: 20px; padding-right: 5px; }
         .resumen-item { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.95rem; border-bottom: 1px dashed #cbbdaf; padding-bottom: 8px; }
         .resumen-item .item-nombre { color: #5c4d42; }
         .resumen-item .item-precio { font-weight: bold; color: #333; }
 
-        /* Cajita de usar puntos */
         #caja-puntos { display: none; background: #edf5ee; padding: 15px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #cce2cf; }
         .pts-text { margin: 0 0 10px 0; color: #2e7d32; font-size: 0.95rem;}
         .pts-checkbox { cursor: pointer; font-size: 14px; font-weight: bold; color: #1b5e20; display: flex; align-items: center; gap: 8px;}
         
-        /* Totales */
         .desglose-linea { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 1rem; color: #5c4d42; }
         .descuento-linea { color: #d94536; font-weight: bold; display: none; }
         .total-final { display: flex; justify-content: space-between; font-size: 1.4rem; font-weight: bold; color: rgb(159, 80, 0); margin-top: 15px; padding-top: 15px; border-top: 2px solid #cbbdaf; }
         
-        /* Cajita de previsión de puntos a ganar */
         .caja-prevision-puntos { background: #fdfaf6; border: 1px dashed #d6caba; padding: 12px; border-radius: 6px; margin-top: 15px; text-align: center; color: #6b5a4d; font-size: 0.95rem; }
         .caja-prevision-puntos span { color: rgb(159, 80, 0); font-weight: bold; font-size: 1.1rem; }
 
@@ -55,10 +45,8 @@
         button:hover { background: #3c2f24; }
         button:disabled { background: #ccc; cursor: not-allowed; }
 
-        /* Tarjeta interna */
         #datos-tarjeta { background: #fbf9f5; padding: 20px; border-radius: 6px; border: 1px solid #eaddcd; margin-top: 15px; }
 
-        /* Mensaje de Éxito */
         #mensaje-exito { display: none; background: #faf6f0; padding: 40px; border-radius: 10px; text-align: center; max-width: 500px; margin: 40px auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid #eaddcd; }
         .check-icon { font-size: 70px; color: #27ae60; margin-bottom: 15px; }
         .btn-volver { display: inline-block; margin-top: 20px; padding: 12px 25px; background: #27ae60; color: white; text-decoration: none; border-radius: 6px; font-weight: bold; }
@@ -163,221 +151,241 @@
         <h2 style="color: #4a3b32;">¡Pedido Registrado con Éxito!</h2>
         <p id="texto-exito" style="color: #5c4d42; font-size: 1.1rem;">Tu pago ha sido procesado correctamente.</p>
         <div style="background: #edf5ee; border: 1px solid #cce2cf; padding: 15px; border-radius: 6px; margin: 20px 0;">
-            <p style="color: #2e7d32; font-weight: bold; font-size: 1.1rem; margin: 0;">🎉 ¡Has ganado <span id="pts-ganados-exito"></span> puntos DNA con esta compra!</p>
+            <p style="color: #2e7d32; font-weight: bold; font-size: 1.1rem; margin: 0;" id="contenedor-puntos-exito">🎉 ¡Has ganado <span id="pts-ganados-exito"></span> puntos DNA con esta compra!</p>
         </div>
         <a href="index.html" class="btn-volver">Volver a la tienda</a>
     </div>
 
-	<script>
-	        function formatearTarjeta(input) { input.value = input.value.replace(/\D/g, '').substring(0, 16); }
-	        function formatearCVV(input) { input.value = input.value.replace(/\D/g, '').substring(0, 3); }
-	        function formatearFecha(input) {
-	            let valor = input.value.replace(/\D/g, '');
-	            valor = valor.substring(0, 4);
-	            if (valor.length > 2) { input.value = valor.substring(0, 2) + '/' + valor.substring(2, 4); } 
-	            else { input.value = valor; }
-	        }
+    <script>
+        function formatearTarjeta(input) { input.value = input.value.replace(/\D/g, '').substring(0, 16); }
+        function formatearCVV(input) { input.value = input.value.replace(/\D/g, '').substring(0, 3); }
+        function formatearFecha(input) {
+            let valor = input.value.replace(/\D/g, '');
+            valor = valor.substring(0, 4);
+            if (valor.length > 2) { input.value = valor.substring(0, 2) + '/' + valor.substring(2, 4); } 
+            else { input.value = valor; }
+        }
 
-	        function cambiarMetodoPago() {
-	            const metodo = document.getElementById('metodo-pago').value;
-	            const divTarjeta = document.getElementById('datos-tarjeta');
-	            const divTransfer = document.getElementById('datos-transferencia');
-	            
-	            if (metodo === 'Transferencia') {
-	                divTarjeta.style.display = 'none'; divTransfer.style.display = 'block';
-	                document.getElementById('input-tarjeta').removeAttribute('required');
-	                document.getElementById('input-fecha').removeAttribute('required');
-	                document.getElementById('input-cvv').removeAttribute('required');
-	            } else {
-	                divTarjeta.style.display = 'block'; divTransfer.style.display = 'none';
-	                document.getElementById('input-tarjeta').setAttribute('required', 'true');
-	                document.getElementById('input-fecha').setAttribute('required', 'true');
-	                document.getElementById('input-cvv').setAttribute('required', 'true');
-	            }
-	        }
+        function cambiarMetodoPago() {
+            const metodo = document.getElementById('metodo-pago').value;
+            const divTarjeta = document.getElementById('datos-tarjeta');
+            const divTransfer = document.getElementById('datos-transferencia');
+            
+            if (metodo === 'Transferencia') {
+                divTarjeta.style.display = 'none'; divTransfer.style.display = 'block';
+                document.getElementById('input-tarjeta').removeAttribute('required');
+                document.getElementById('input-fecha').removeAttribute('required');
+                document.getElementById('input-cvv').removeAttribute('required');
+            } else {
+                divTarjeta.style.display = 'block'; divTransfer.style.display = 'none';
+                document.getElementById('input-tarjeta').setAttribute('required', 'true');
+                document.getElementById('input-fecha').setAttribute('required', 'true');
+                document.getElementById('input-cvv').setAttribute('required', 'true');
+            }
+        }
 
-	        let totalOriginal = 0;
-	        let totalFinal = 0;
-	        let puntosDisponibles = 0;
-	        let descuentoEuros = 0;
-	        let puntosAUsar = 0;
+        let totalOriginal = 0;
+        let totalFinal = 0;
+        let puntosDisponibles = 0;
+        let descuentoEuros = 0;
+        let puntosAUsar = 0;
 
-	        function actualizarPrevisionPuntos() {
-	            let puntosAGanar = Math.floor(totalFinal * 5);
-	            document.getElementById('prevision-puntos').innerText = puntosAGanar;
-	        }
+        function actualizarPrevisionPuntos() {
+            let puntosAGanar = Math.floor(totalFinal * 5);
+            document.getElementById('prevision-puntos').innerText = puntosAGanar;
+        }
 
-	        function aplicarPuntos(checkbox) {
-	            const lineaDescuento = document.getElementById('linea-descuento');
-	            if (checkbox.checked) {
-	                totalFinal = totalOriginal - descuentoEuros;
-	                puntosAUsar = puntosDisponibles;
-	                lineaDescuento.style.display = 'flex';
-	                document.getElementById('monto-descuento').innerText = `-${descuentoEuros.toFixed(2)}€`;
-	            } else {
-	                totalFinal = totalOriginal;
-	                puntosAUsar = 0;
-	                lineaDescuento.style.display = 'none';
-	            }
-	            document.getElementById('monto-total').innerText = totalFinal.toFixed(2) + "€";
-	            actualizarPrevisionPuntos();
-	        }
+        function aplicarPuntos(checkbox) {
+            const lineaDescuento = document.getElementById('linea-descuento');
+            if (checkbox.checked) {
+                totalFinal = totalOriginal - descuentoEuros;
+                puntosAUsar = puntosDisponibles;
+                lineaDescuento.style.display = 'flex';
+                document.getElementById('monto-descuento').innerText = `-${descuentoEuros.toFixed(2)}€`;
+            } else {
+                totalFinal = totalOriginal;
+                puntosAUsar = 0;
+                lineaDescuento.style.display = 'none';
+            }
+            document.getElementById('monto-total').innerText = totalFinal.toFixed(2) + "€";
+            actualizarPrevisionPuntos();
+        }
 
-	        document.addEventListener('DOMContentLoaded', () => {
-	            const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+        document.addEventListener('DOMContentLoaded', () => {
+            const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
 
-	            if (carrito.length === 0) {
-	                window.location.href = "carrito.html";
-	                return;
-	            }
+            if (carrito.length === 0) {
+                window.location.href = "carrito.html";
+                return;
+            }
 
-	            const listaHtml = document.getElementById('lista-productos-html');
-	            listaHtml.innerHTML = '';
-	            
-	            carrito.forEach(prod => {
-	                const precioTotalObj = (parseFloat(prod.precio) || 0) * (parseInt(prod.cantidad) || 1);
-	                totalOriginal += precioTotalObj;
-	                
-	                listaHtml.innerHTML += `
-	                    <div class="resumen-item">
-	                        <span class="item-nombre">${prod.cantidad}x ${prod.nombre}</span>
-	                        <span class="item-precio">${precioTotalObj.toFixed(2)}€</span>
-	                    </div>
-	                `;
-	            });
+            const listaHtml = document.getElementById('lista-productos-html');
+            listaHtml.innerHTML = '';
+            
+            carrito.forEach(prod => {
+                const precioTotalObj = (parseFloat(prod.precio) || 0) * (parseInt(prod.cantidad) || 1);
+                totalOriginal += precioTotalObj;
+                
+                listaHtml.innerHTML += `
+                    <div class="resumen-item">
+                        <span class="item-nombre">${prod.cantidad}x ${prod.nombre}</span>
+                        <span class="item-precio">${precioTotalObj.toFixed(2)}€</span>
+                    </div>
+                `;
+            });
 
-	            totalFinal = totalOriginal;
-	            document.getElementById('monto-subtotal').innerText = totalOriginal.toFixed(2) + "€";
-	            document.getElementById('monto-total').innerText = totalFinal.toFixed(2) + "€";
-	            actualizarPrevisionPuntos();
+            totalFinal = totalOriginal;
+            document.getElementById('monto-subtotal').innerText = totalOriginal.toFixed(2) + "€";
+            document.getElementById('monto-total').innerText = totalFinal.toFixed(2) + "€";
+            actualizarPrevisionPuntos();
 
-	            // ==========================================
-	            // AUTOCOMPLETAR DATOS Y DIRECCIÓN GUARDADA
-	            // ==========================================
-	            try {
-	                const userObj = localStorage.getItem('user') || sessionStorage.getItem('user');
-	                if (userObj) {
-	                    const usuario = JSON.parse(userObj);
+            // ==========================================
+            // AUTOCOMPLETAR DATOS Y DIRECCIÓN GUARDADA
+            // ==========================================
+            try {
+                const userObj = localStorage.getItem('user') || sessionStorage.getItem('user');
+                if (userObj) {
+                    const usuario = JSON.parse(userObj);
 
-	                    // 1. Rellenamos el Nombre
-	                    if (usuario.nombre) {
-	                        const apellidos = usuario.apellidos ? " " + usuario.apellidos : "";
-	                        document.getElementById('nombre-titular').value = usuario.nombre + apellidos;
-	                    }
+                    if (usuario.nombre) {
+                        const apellidos = usuario.apellidos ? " " + usuario.apellidos : "";
+                        document.getElementById('nombre-titular').value = usuario.nombre + apellidos;
+                    }
 
-	                    // 2. 🚀 MAGIA DE LA DIRECCIÓN: Miramos si hay una dirección separada guardada
-	                    const dirSeparada = localStorage.getItem('direccionSeparada');
-	                    if (dirSeparada) {
-	                        // Si ya compró antes, sacamos las 5 casillas de la memoria
-	                        const d = JSON.parse(dirSeparada);
-	                        document.getElementById('dir-calle').value = d.calle || '';
-	                        document.getElementById('dir-numero').value = d.numero || '';
-	                        document.getElementById('dir-piso').value = d.piso || '';
-	                        document.getElementById('dir-cp').value = d.cp || '';
-	                        document.getElementById('dir-ciudad').value = d.ciudad || '';
-	                    } else if (usuario.direccion && usuario.direccion.trim() !== "") {
-	                        // Si es la primera vez, pero tiene dirección en Java, lo ponemos en la calle para que no se pierda
-	                        document.getElementById('dir-calle').value = usuario.direccion;
-	                    }
+                    const dirSeparada = localStorage.getItem('direccionSeparada');
+                    
+                    if (dirSeparada) {
+                        const d = JSON.parse(dirSeparada);
+                        document.getElementById('dir-calle').value = d.calle || '';
+                        document.getElementById('dir-numero').value = d.numero || '';
+                        document.getElementById('dir-piso').value = d.piso || '';
+                        document.getElementById('dir-cp').value = d.cp || '';
+                        document.getElementById('dir-ciudad').value = d.ciudad || '';
+                    } 
+                    else if (usuario.direccion && usuario.direccion.trim() !== "") {
+                        let dirString = usuario.direccion;
+                        
+                        let matchCP = dirString.match(/-?\s*([0-9]{5})\s*/);
+                        if(matchCP) {
+                            document.getElementById('dir-cp').value = matchCP[1];
+                            let parteDespuesCP = dirString.substring(matchCP.index + matchCP[0].length).trim();
+                            if(parteDespuesCP) document.getElementById('dir-ciudad').value = parteDespuesCP;
+                            dirString = dirString.substring(0, matchCP.index).trim();
+                        }
 
-	                    // 3. Lógica de Puntos
-	                    if (usuario.puntos && parseInt(usuario.puntos) > 0) {
-	                        puntosDisponibles = parseInt(usuario.puntos);
-	                        descuentoEuros = puntosDisponibles / 100;
-	                        if (descuentoEuros > totalOriginal) {
-	                            descuentoEuros = totalOriginal;
-	                            puntosDisponibles = totalOriginal * 100;
-	                        }
-	                        document.getElementById('caja-puntos').style.display = 'block';
-	                        document.getElementById('pts-disponibles').innerText = puntosDisponibles;
-	                        document.getElementById('pts-euros').innerText = descuentoEuros.toFixed(2);
-	                    }
-	                }
-	            } catch (e) {
-	                console.log("No se pudo autocompletar");
-	            }
+                        let partes = dirString.split(',');
+                        if (partes.length > 0) document.getElementById('dir-calle').value = partes[0].trim();
+                        if (partes.length > 1) document.getElementById('dir-numero').value = partes[1].replace('Nº', '').trim();
+                        if (partes.length > 2) document.getElementById('dir-piso').value = partes[2].trim();
+                    }
 
-	            // ==========================================
-	            // ENVIAR EL PEDIDO
-	            // ==========================================
-	            document.getElementById('form-compra').addEventListener('submit', async (e) => {
-	                e.preventDefault(); 
+                    if (usuario.puntos && parseInt(usuario.puntos) > 0) {
+                        puntosDisponibles = parseInt(usuario.puntos);
+                        descuentoEuros = puntosDisponibles / 100;
+                        if (descuentoEuros > totalOriginal) {
+                            descuentoEuros = totalOriginal;
+                            puntosDisponibles = totalOriginal * 100;
+                        }
+                        document.getElementById('caja-puntos').style.display = 'block';
+                        document.getElementById('pts-disponibles').innerText = puntosDisponibles;
+                        document.getElementById('pts-euros').innerText = descuentoEuros.toFixed(2);
+                    }
+                }
+            } catch (e) {
+                console.log("No se pudo autocompletar");
+            }
 
-	                const btn = document.getElementById('btn-pagar');
-	                btn.innerText = "PROCESANDO PAGO...";
-	                btn.disabled = true;
+            // ==========================================
+            // ENVIAR EL PEDIDO
+            // ==========================================
+            document.getElementById('form-compra').addEventListener('submit', async (e) => {
+                e.preventDefault(); 
 
-	                // Cogemos los datos de las 5 casillas
-	                const calle = document.getElementById('dir-calle').value.trim();
-	                const numero = document.getElementById('dir-numero').value.trim();
-	                const piso = document.getElementById('dir-piso').value.trim();
-	                const cp = document.getElementById('dir-cp').value.trim();
-	                const ciudad = document.getElementById('dir-ciudad').value.trim();
-	                
-	                // 🚀 GUARDAMOS LAS CASILLAS PARA LA PRÓXIMA COMPRA 🚀
-	                const objDireccion = { calle, numero, piso, cp, ciudad };
-	                localStorage.setItem('direccionSeparada', JSON.stringify(objDireccion));
+                const btn = document.getElementById('btn-pagar');
+                btn.innerText = "PROCESANDO PAGO...";
+                btn.disabled = true;
 
-	                // Juntamos el texto para Java
-	                let direccionPerfecta = `${calle}, Nº ${numero}`;
-	                if (piso !== "") { direccionPerfecta += `, ${piso}`; }
-	                direccionPerfecta += ` - ${cp} ${ciudad}`;
+                const calle = document.getElementById('dir-calle').value.trim();
+                const numero = document.getElementById('dir-numero').value.trim();
+                const piso = document.getElementById('dir-piso').value.trim();
+                const cp = document.getElementById('dir-cp').value.trim();
+                const ciudad = document.getElementById('dir-ciudad').value.trim();
+                
+                const objDireccion = { calle, numero, piso, cp, ciudad };
+                localStorage.setItem('direccionSeparada', JSON.stringify(objDireccion));
 
-	                const metodoElegido = document.getElementById('metodo-pago').value;
-	                const estadoSimulado = metodoElegido === 'Tarjeta' ? 'Pagado' : 'Pendiente de pago';
+                let direccionPerfecta = `${calle}, Nº ${numero}`;
+                if (piso !== "") { direccionPerfecta += `, ${piso}`; }
+                direccionPerfecta += ` - ${cp} ${ciudad}`;
 
-	                const payload = {
-	                    direccion: direccionPerfecta,
-	                    puntosUsados: puntosAUsar,
-	                    pedido: {
-	                        clienteNombre: document.getElementById('nombre-titular').value.trim(),
-	                        total: totalFinal, 
-	                        metodoPago: metodoElegido, 
-	                        estadoPago: estadoSimulado, 
-	                        activo: 1,
-	                        puntosUsados: puntosAUsar 
-	                    },
-	                    productos: carrito.map(i => ({ id_producto: i.id_producto || i.id, cantidad: i.cantidad || 1, precio: i.precio || 0 }))
-	                };
+                const metodoElegido = document.getElementById('metodo-pago').value;
+                const estadoSimulado = metodoElegido === 'Tarjeta' ? 'Pagado' : 'Pendiente de pago';
 
-	                try {
-	                    const respuesta = await fetch('/api/carrito/comprar', {
-	                        method: 'POST',
-	                        headers: { 'Content-Type': 'application/json' },
-	                        body: JSON.stringify(payload) 
-	                    });
+                const payload = {
+                    direccion: direccionPerfecta,
+                    puntosUsados: puntosAUsar,
+                    pedido: {
+                        clienteNombre: document.getElementById('nombre-titular').value.trim(),
+                        total: totalFinal, 
+                        metodoPago: metodoElegido, 
+                        estadoPago: estadoSimulado, 
+                        activo: 1,
+                        puntosUsados: puntosAUsar 
+                    },
+                    productos: carrito.map(i => ({ id_producto: i.id_producto || i.id, cantidad: i.cantidad || 1, precio: i.precio || 0 }))
+                };
 
-	                    if (respuesta.ok) {
-	                        localStorage.removeItem('carrito');
-	                        
-	                        let memoriaUsuario = localStorage.getItem('user');
-	                        let puntosGanados = Math.floor(totalFinal * 5);
-	                        
-	                        if(memoriaUsuario) {
-	                            let u = JSON.parse(memoriaUsuario);
-	                            u.direccion = direccionPerfecta; 
-	                            u.puntos = (parseInt(u.puntos || 0) - puntosAUsar) + puntosGanados;
-	                            localStorage.setItem('user', JSON.stringify(u));
-	                        }
+                try {
+                    const respuesta = await fetch('/api/carrito/comprar', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload) 
+                    });
 
-	                        document.getElementById('contenido-pago').style.display = 'none';
-	                        if(metodoElegido === 'Transferencia') {
-	                            document.getElementById('texto-exito').innerText = "Tu pedido está pendiente. Realiza la transferencia bancaria para que lo procesemos lo antes posible.";
-	                        }
-	                        document.getElementById('pts-ganados-exito').innerText = puntosGanados;
-	                        document.getElementById('mensaje-exito').style.display = 'block';
+                    if (respuesta.ok) {
+                        localStorage.removeItem('carrito');
+                        
+                        let memoriaUsuario = localStorage.getItem('user');
+                        let puntosGanadosCalculados = Math.floor(totalFinal * 5);
+                        
+                        if(memoriaUsuario) {
+                            let u = JSON.parse(memoriaUsuario);
+                            u.direccion = direccionPerfecta; 
+                            
+                            // 🚀 Lógica de Puntos Diferidos en LocalStorage
+                            let puntosRestados = parseInt(u.puntos || 0) - puntosAUsar;
+                            if (metodoElegido === 'Tarjeta') {
+                                u.puntos = puntosRestados + puntosGanadosCalculados;
+                            } else {
+                                u.puntos = puntosRestados;
+                            }
+                            
+                            localStorage.setItem('user', JSON.stringify(u));
+                        }
 
-	                    } else {
-	                        if (respuesta.status === 401) alert("Por favor, inicia sesión para poder comprar.");
-	                        else alert("Error en el servidor al procesar la compra.");
-	                        btn.innerText = "FINALIZAR COMPRA"; btn.disabled = false;
-	                    }
-	                } catch (error) {
-	                    alert("Fallo de conexión con el servidor.");
-	                    btn.innerText = "FINALIZAR COMPRA"; btn.disabled = false;
-	                }
-	            });
-	        });
-	    </script>
+                        document.getElementById('contenido-pago').style.display = 'none';
+                        
+                        // 🚀 Mensajes condicionales en el Frontend
+                        if(metodoElegido === 'Transferencia') {
+                            document.getElementById('texto-exito').innerText = "Tu pedido está pendiente. Realiza la transferencia bancaria para que lo procesemos lo antes posible.";
+                            document.getElementById('contenedor-puntos-exito').innerHTML = `🎉 ¡Ganarás <strong>${puntosGanadosCalculados} puntos DNA</strong> en cuanto recibamos la transferencia!`;
+                        } else {
+                            document.getElementById('pts-ganados-exito').innerText = puntosGanadosCalculados;
+                        }
+                        
+                        document.getElementById('mensaje-exito').style.display = 'block';
+
+                    } else {
+                        if (respuesta.status === 401) alert("Por favor, inicia sesión para poder comprar.");
+                        else alert("Error en el servidor al procesar la compra.");
+                        btn.innerText = "FINALIZAR COMPRA"; btn.disabled = false;
+                    }
+                } catch (error) {
+                    alert("Fallo de conexión con el servidor.");
+                    btn.innerText = "FINALIZAR COMPRA"; btn.disabled = false;
+                }
+            });
+        });
+    </script>
 </body>
 </html>

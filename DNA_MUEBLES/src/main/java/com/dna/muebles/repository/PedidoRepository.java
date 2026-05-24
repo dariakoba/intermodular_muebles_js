@@ -76,7 +76,7 @@ public class PedidoRepository extends BaseRepository<Pedido> {
     @Override
     public List<Pedido> findAll() {
         String sql = "SELECT p.*, u.email, u.telefono, u.direccion, " +
-                     "GROUP_CONCAT(CONCAT(d.cantidad, 'x ', m.nombre, ' : ', (d.cantidad * d.precio_unitario), '€') SEPARATOR '|') as nombre_producto " +
+                     "GROUP_CONCAT(CONCAT(d.cantidad, 'x ', m.nombre, ' (Stock: ', m.stock, ') : ', (d.cantidad * d.precio_unitario), '€') SEPARATOR '|') as nombre_producto " +
                      "FROM pedidos p " +
                      "LEFT JOIN usuarios u ON p.id_usuario = u.id " +
                      "LEFT JOIN detalles_pedidos d ON p.id_pedido = d.id_pedido " +
@@ -137,4 +137,5 @@ public class PedidoRepository extends BaseRepository<Pedido> {
             }
         }
     }
+    
 }

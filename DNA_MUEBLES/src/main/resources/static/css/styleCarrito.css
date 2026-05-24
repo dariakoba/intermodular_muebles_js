@@ -257,12 +257,67 @@ hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
     color: #ae4010; 
 }
 
-/* Estilo mágico para botones desactivados */
-button:disabled {
-    background-color: #d1d5db !important; /* Gris claro */
-    color: #9ca3af !important; /* Letra gris oscuro */
-    border-color: #d1d5db !important;
-    cursor: not-allowed !important; /* El ratón muestra el símbolo de prohibido */
-    box-shadow: none !important;
+
+/* Esto hará que el botón se vea gris y no responda al ratón */
+button:disabled, a.btn-disabled {
+    background-color: #ccc !important;
+    cursor: not-allowed !important;
+    opacity: 0.6;
+    pointer-events: none; /* Esto evita que se pueda hacer clic */
+}
+/* HAMBURGUESA */
+.hamburguesa {
+display: none;
+background: none;
+border: none;
+cursor: pointer;
+color: #5c4432;
+font-size: 32px;
+padding: 0;
 }
 
+.hamburguesa:hover {
+color: #ae4010;
+}
+
+@media (max-width: 900px) {
+
+.hamburguesa {
+display: flex;
+align-items: center;
+}
+
+.menu {
+display: none;
+position: fixed;
+top: 65px;
+left: 0;
+width: 100%;
+background: #e9e6e3;
+flex-direction: column;
+padding: 20px 0;
+z-index: 190;
+border-bottom: 1px solid #ccc;
+}
+
+.menu.abierto {
+display: flex;
+}
+
+.menu a {
+margin: 10px 30px;
+font-size: 18px;
+}
+}
+button:disabled, 
+button:disabled:focus, 
+button:disabled:active {
+    outline: none !important;      /* Quita el borde de enfoque */
+    border: 1px solid #ccc !important; /* Un borde gris neutro en lugar del naranja */
+    box-shadow: none !important;    /* Quita cualquier brillo o sombra */
+}
+
+/* Opcional: Si quieres que el borde rojo desaparezca completamente cuando está deshabilitado */
+button:disabled {
+    border: none !important; 
+}

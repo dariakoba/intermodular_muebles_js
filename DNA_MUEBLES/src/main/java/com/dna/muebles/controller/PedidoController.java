@@ -1,7 +1,6 @@
 package com.dna.muebles.controller;
 
 import java.sql.Connection;
-
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -10,6 +9,10 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+
+import jakarta.servlet.http.HttpSession;
 
 import com.dna.muebles.db.DB;
 import com.dna.muebles.dto.CarritoRequest;
@@ -17,11 +20,7 @@ import com.dna.muebles.entity.Pedido;
 import com.dna.muebles.exception.DataAccessException;
 import com.dna.muebles.repository.PedidoRepository;
 import com.dna.muebles.repository.UserRepository;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
-
-import jakarta.servlet.http.HttpSession;
+import com.dna.muebles.service.PedidoService;
 
 @RestController
 @RequestMapping("/api/carrito")
@@ -40,6 +39,7 @@ public class PedidoController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\": \"Inicia sesión para comprar\"}");
         }
 
+        // Cálculos de importes y puntos
         float totalOriginal = 0f;
         for (Map<String, Object> item : request.getProductos()) {
             float precio = Float.parseFloat(item.get("precio").toString());
@@ -53,41 +53,23 @@ public class PedidoController {
             float descuento = totalOriginal - totalPagado;
             puntosAUsar = Math.round(descuento * 100);
         }
+        
+        // 🚀 SOLO DAMOS PUNTOS INICIALES SI ESTÁ PAGADO CON TARJETA
+        int puntosGanados = 0;
+        if ("Pagado".equalsIgnoreCase(request.getPedido().getEstadoPago())) {
+            puntosGanados = (int) (totalPagado * 5);
+        }
 
-        try (Connection con = ds.getConnection()) {
-            
-            UserRepository userRepo = new UserRepository(con);
-            
-            if (request.getDireccion() != null && !request.getDireccion().isEmpty()) {
-                userRepo.actualizarDireccion(userId, request.getDireccion());
-            }
-
-            int puntosGanados = (int) (totalPagado * 5);
-            userRepo.actualizarPuntos(userId, puntosAUsar, puntosGanados);
-            
-            PedidoRepository pedidoRepo = new PedidoRepository(con);
-            
-            Pedido p = request.getPedido();
-            p.setIdUsuario(userId);
-            p.setFecha(LocalDate.now());
-            p.setPuntosUsados(puntosAUsar);
-
-            Pedido nuevoPedido = pedidoRepo.insert(p);
-            int idGenerado = nuevoPedido.getIdPedido();
-
-            for (Map<String, Object> item : request.getProductos()) {
-                int idProd = Integer.parseInt(item.get("id_producto").toString());
-                int cant = Integer.parseInt(item.get("cantidad").toString());
-                float precio = Float.parseFloat(item.get("precio").toString());
-                
-                pedidoRepo.guardarDetalle(idGenerado, idProd, cant, precio);
-            }
-
+        try {
+            PedidoService pedidoService = new PedidoService(this.ds);
+            pedidoService.realizarCompra(userId, request, puntosAUsar, puntosGanados);
             return ResponseEntity.ok("{\"message\": \"Compra realizada con éxito\"}");
-
+        } catch (RuntimeException e) {
+            System.err.println("Compra denegada: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"message\": \"" + e.getMessage() + "\"}");
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(500).body("{\"message\": \"Error al procesar: " + e.getMessage() + "\"}");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Error inesperado al procesar el pedido.\"}");
         }
     }
 
@@ -117,6 +99,15 @@ public class PedidoController {
         try (Connection con = ds.getConnection()) {
             PedidoRepository repo = new PedidoRepository(con);
             String nuevoEstado = body.get("estado");
+            
+            // 🚀 Lógica de puntos diferidos
+            Pedido pedidoAnterior = repo.find(id);
+            if (!"Pagado".equalsIgnoreCase(pedidoAnterior.getEstadoPago()) && "Pagado".equalsIgnoreCase(nuevoEstado)) {
+                int puntosGanados = (int) (pedidoAnterior.getTotal() * 5);
+                UserRepository userRepo = new UserRepository(con);
+                userRepo.actualizarPuntos(pedidoAnterior.getIdUsuario(), 0, puntosGanados);
+            }
+
             repo.actualizarEstado(id, nuevoEstado);
             return ResponseEntity.ok("{\"message\": \"Estado actualizado\"}");
         } catch (SQLException e) {
@@ -124,20 +115,27 @@ public class PedidoController {
         }
     }
 
-    // --- AQUÍ ESTÁ EL NUEVO MÉTODO PARA GUARDAR LA EDICIÓN COMPLETA DEL MODAL ---
     @PutMapping("/admin/editar/{id}")
     public ResponseEntity<?> editarPedidoCompleto(@PathVariable int id, @RequestBody Map<String, String> payload) {
         try (Connection con = ds.getConnection()) {
             PedidoRepository repo = new PedidoRepository(con);
             
-            String estado = payload.get("estado");
+            String estadoNuevo = payload.get("estado");
             String clienteNombre = payload.get("clienteNombre");
             String fecha = payload.get("fecha");
             String email = payload.get("email");
             String telefono = payload.get("telefono");
             String direccion = payload.get("direccion");
             
-            repo.actualizarPedidoCompleto(id, estado, clienteNombre, fecha, email, telefono, direccion);
+            // 🚀 Lógica de puntos diferidos en Modal Edición
+            Pedido pedidoAnterior = repo.find(id);
+            if (!"Pagado".equalsIgnoreCase(pedidoAnterior.getEstadoPago()) && "Pagado".equalsIgnoreCase(estadoNuevo)) {
+                int puntosGanados = (int) (pedidoAnterior.getTotal() * 5);
+                UserRepository userRepo = new UserRepository(con);
+                userRepo.actualizarPuntos(pedidoAnterior.getIdUsuario(), 0, puntosGanados);
+            }
+            
+            repo.actualizarPedidoCompleto(id, estadoNuevo, clienteNombre, fecha, email, telefono, direccion);
             
             return ResponseEntity.ok("{\"message\": \"Pedido actualizado completamente\"}");
         } catch (Exception e) {

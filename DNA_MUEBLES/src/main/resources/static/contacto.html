@@ -8,34 +8,51 @@
     <link rel="stylesheet" href="css/contacto.css"> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    
+    <style>
+        
+        .hamburguesa { display: none; background: none; border: none; cursor: pointer; color: #5c4432; font-size: 32px; padding: 0 10px; }
+        .hamburguesa:hover { color: #ae4010; }
+
+        @media (max-width: 900px) {
+            .hamburguesa { display: flex; align-items: center; }
+            .menu { 
+                display: none; position: fixed; top: 65px; left: 0; width: 100%; 
+                background: #e9e6e3; flex-direction: column; padding: 20px 0; 
+                z-index: 190; border-bottom: 1px solid #ccc; 
+            }
+            .menu.abierto { display: flex; }
+            .menu a { margin: 10px 30px; font-size: 18px; }
+        }
+    </style>
 </head>
 <body>
 
-	<header class="topbar">
+    <header class="topbar">
+        <div class="logo">
+            <img src="images/login/logo.png" alt="logo">
+            <span>DNA</span>
+        </div>
 
-	<div class="logo">
-		<img src="images/login/logo.png" alt="logo">
-		<span>DNA</span>
-	</div>
+        <nav class="menu" id="nav-menu">
+            <a href="index.html">Home</a>
+            <a href="productos.html">Catálogo</a>
+            <a href="contacto.html">Contacto</a>
+        </nav>
 
-	<nav class="menu">
-		<a href="index.html">Home</a>
-		<a href="productos.html">Catálogo</a>
-		<a href="contacto.html">Contacto</a>
-	</nav>
-
-	<div class="icons">
-		<a href="carrito.html" style="text-decoration: none; color: inherit;">
-			<span class="material-symbols-outlined">shopping_cart</span>
-		</a>
-
-		<div class="person-menu-wrapper">
-			<span id="person-icon" class="material-symbols-outlined">person</span>
-			<div class="person-menu" id="person-menu"></div>
-		</div>
-	</div>
-
-	</header>
+        <div class="icons">
+            <a href="carrito.html" style="text-decoration: none; color: inherit;">
+                <span class="material-symbols-outlined">shopping_cart</span>
+            </a>
+            <div class="person-menu-wrapper">
+                <span id="person-icon" class="material-symbols-outlined">person</span>
+                <div class="person-menu" id="person-menu"></div>
+            </div>
+            <button class="hamburguesa" id="btn-hamburguesa">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+        </div>
+    </header>
 
     <main class="contacto-container">
         <section class="contacto-header">
@@ -81,46 +98,9 @@
                 </div>
             </div>
         </section>
-
-        <section class="contacto-map">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3079.8277334759715!2d-0.3787766!3d39.47351!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd604f4cf8022d8d%3A0x6451000000000000!2sValencia!5e0!3m2!1ses!2ses!4v1700000000000" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-        </section>
     </main>
 
     <footer class="main-footer" id="contacto">
-        <div class="footer-container">
-            <div class="footer-section">
-                <div class="logo">
-                    <img src="images/login/logo.png" alt="logo">
-                    <span>DNA</span>
-                </div>
-                <p class="footer-description">
-                    Diseños exclusivos para transformar cada rincón de tu hogar. Calidad, estilo y confort en un solo lugar.
-                </p>
-            </div>
-
-            <div class="footer-section">
-                <h3>Explorar</h3>
-                <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="productos.html">Catálogo</a></li>
-                    <li><a href="contacto.html">Atención al cliente</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-section">
-                <h3>Contacto</h3>
-                <p><i class="fa-solid fa-location-dot"></i> Calle Random 12, Valencia</p>
-                <p><i class="fa-solid fa-phone"></i> +34 676 676 767</p>
-                <p><i class="fa-solid fa-envelope"></i> info@dna-mobiliario.com</p>
-                <div class="social-icons">
-                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
-                    <a href="#"><i class="fa-brands fa-pinterest"></i></a>
-                </div>
-            </div>
-        </div>
-
         <div class="footer-bottom">
             <p>© 2026 DNA Mobiliario - Todos los derechos reservados.</p>
         </div>
@@ -128,6 +108,16 @@
 
     <script src="/js/menuUser.js"></script>
     <script src="/js/logout.js"></script>
+    <script>
+        document.getElementById("btn-hamburguesa").addEventListener("click", () => {
+            document.getElementById("nav-menu").classList.toggle("abierto");
+        });
 
+        window.addEventListener("resize", () => {
+            if (window.innerWidth > 900) {
+                document.getElementById("nav-menu").classList.remove("abierto");
+            }
+        });
+    </script>
 </body>
 </html>

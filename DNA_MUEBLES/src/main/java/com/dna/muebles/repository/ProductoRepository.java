@@ -239,4 +239,16 @@ public class ProductoRepository extends SoftDeleteRepository<Producto> {
 		}
 	}
 
+	// Método para descontar stock de forma segura
+    public int decrementStock(int idProducto, int cantidad) throws java.sql.SQLException {
+        String sql = "UPDATE productos SET stock = stock - ? WHERE id_producto = ? AND stock >= ?";
+        
+        try (java.sql.PreparedStatement stmt = this.con.prepareStatement(sql)) {
+            stmt.setInt(1, cantidad);
+            stmt.setInt(2, idProducto);
+            stmt.setInt(3, cantidad);
+            
+            return stmt.executeUpdate();
+        }
+    }
 }
