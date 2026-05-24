@@ -1,6 +1,4 @@
-/* ══════════════════════════════════════════════
-   1. RESET Y CONFIGURACIÓN BASE
-   ══════════════════════════════════════════════ */
+
 * {
     margin: 0;
     padding: 0;
@@ -13,9 +11,7 @@ body {
     padding-top: 85px; /* Espacio para el navbar fixed */
 }
 
-/* ══════════════════════════════════════════════
-   2. NAVBAR UNIFICADO (TOPBAR)
-   ══════════════════════════════════════════════ */
+
 .topbar {
     position: fixed;
     top: 0; 
@@ -27,7 +23,7 @@ body {
     justify-content: space-between;
     background: #e9e6e3;
     padding: 10px 60px;
-    height: 65px; /* Altura idéntica a detalle producto */
+    height: 65px; 
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
@@ -49,7 +45,7 @@ body {
 /* MENÚ: Espaciado corregido para que no estén juntos */
 .menu { 
     display: flex; 
-    gap: 30px; /* Espacio amplio idéntico a productosShow */
+    gap: 30px; 
 }
 
 .menu a {
@@ -86,9 +82,7 @@ body {
 }
 
 
-/* ══════════════════════════════════════════════
-   3. LAYOUT DEL CARRITO (2 COLUMNAS)
-   ══════════════════════════════════════════════ */
+
 .carrito-container {
     display: flex;
     gap: 30px;
@@ -153,9 +147,7 @@ h1 {
     color: white; 
 }
 
-/* ══════════════════════════════════════════════
-   4. SIDEBAR RESUMEN (DERECHA)
-   ══════════════════════════════════════════════ */
+
 .resumen-lateral {
     flex: 1;
     background: #ffffff;
@@ -223,9 +215,7 @@ hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
     transition: 0.2s;
 }
 
-/* ══════════════════════════════════════════════
-   5. DROPDOWN USUARIO
-   ══════════════════════════════════════════════ */
+
 .person-menu-wrapper { position: relative; }
 
 .person-menu {
@@ -312,12 +302,11 @@ font-size: 18px;
 button:disabled, 
 button:disabled:focus, 
 button:disabled:active {
-    outline: none !important;      /* Quita el borde de enfoque */
-    border: 1px solid #ccc !important; /* Un borde gris neutro en lugar del naranja */
-    box-shadow: none !important;    /* Quita cualquier brillo o sombra */
+    outline: none !important;      
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;    
 }
 
-/* Opcional: Si quieres que el borde rojo desaparezca completamente cuando está deshabilitado */
 button:disabled {
     border: none !important; 
 }

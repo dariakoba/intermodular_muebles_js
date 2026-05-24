@@ -33,7 +33,6 @@ public class Pedido {
     private String telefono;
     private String direccion; 
     
-    // ---> NUEVO: AÑADIMOS LOS PUNTOS USADOS <---
     @JsonProperty("puntosUsados")
     private Integer puntosUsados = 0; 
     
@@ -51,7 +50,6 @@ public class Pedido {
     
     public String getDireccion() { return direccion; } 
     public void setDireccion(String direccion) { this.direccion = direccion; } 
-    // ----------------------------------------
 
     public Integer getIdUsuario() { return idUsuario; }
     public void setIdUsuario(Integer idUsuario) { this.idUsuario = idUsuario; }

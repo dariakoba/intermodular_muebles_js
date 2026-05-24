@@ -22,7 +22,7 @@ app.run(async () => {
         };
 
         try {
-            await api.post(`/api/carrito/comprar`, payload); // Reutilizamos el endpoint de compra
+            await api.post(`/api/carrito/comprar`, payload); 
             alert("Pedido creado correctamente");
             location.href = "index.html";
         } catch (err) {

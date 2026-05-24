@@ -35,13 +35,13 @@ app.run(async () => {
 async function cargarYRenderizar() {
     try {
         pedidosGlobal = await api.get("/api/carrito/admin/lista");
-        aplicarFiltros(); // En vez de renderizar todo de golpe, pasamos por el filtro
+        aplicarFiltros(); 
     } catch (err) {
         console.error("Error cargando pedidos", err);
     }
 }
 
-// 🚀 NUEVA FUNCIÓN: Filtra por fecha Y por estado simultáneamente
+
 function aplicarFiltros() {
     const fechaSelect = document.getElementById("filtro-fecha").value;
     const estadoSelect = document.getElementById("filtro-estado").value.toLowerCase();
@@ -112,7 +112,6 @@ function bindEvents() {
         document.querySelectorAll(".check-fila").forEach(cb => cb.checked = ev.target.checked);
     });
 
-    // Eventos para que se filtren solos al cambiar cualquier desplegable
     bind(document.getElementById("filtro-fecha"), "change", aplicarFiltros);
     bind(document.getElementById("filtro-estado"), "change", aplicarFiltros);
 
@@ -165,7 +164,6 @@ function bindEvents() {
     });
 
     bind(document.getElementById("btn-actualizar"), "click", async () => {
-        // Limpiamos AMBOS filtros antes de recargar
         document.getElementById("filtro-fecha").value = ""; 
         document.getElementById("filtro-estado").value = ""; 
         await cargarYRenderizar();
