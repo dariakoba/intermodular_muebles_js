@@ -67,7 +67,6 @@ function validar() {
     const nombre = document.getElementById("nombre").value.trim();
     const color = document.getElementById("color").value;
     const precioRaw = document.getElementById("precio").value;
-    //const stockRaw = document.getElementById("stock").value;
 
 
 
@@ -135,7 +134,7 @@ function validar() {
 
     return ok;
 }
-//
+
 
 
 

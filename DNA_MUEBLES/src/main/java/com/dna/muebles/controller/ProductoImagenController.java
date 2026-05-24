@@ -75,7 +75,7 @@ public class ProductoImagenController {
 
 				ProductoImagenRepository repo = new ProductoImagenRepository(con);
 
-				// opcional: obtener url antes de borrar(porsiacaso)
+				
 				ProductoImagen img = repo.find(id);
 
 				repo.delete(id);

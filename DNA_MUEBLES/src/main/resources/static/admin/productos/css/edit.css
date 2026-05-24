@@ -249,9 +249,9 @@ input, select, textarea {
   cursor:pointer;
 }
 .error {
-    color: #e53935;        /* rojo fuerte */
+    color: #e53935;       
     font-size: 12px;
     margin-top: 4px;
-    display: block;        /* importante para que ocupe línea */
+    display: block;       
     line-height: 1.2;
 }

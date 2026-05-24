@@ -42,7 +42,6 @@ function obtenerId() {
     return params.get("id");
 }
 
-/* ---------------- RENDER ---------------- */
 
 function render(producto, categorias) {
 
@@ -72,7 +71,6 @@ function render(producto, categorias) {
     renderImagenes(producto.imagenes);
 }
 
-/* ---------------- IMÁGENES ---------------- */
 
 function renderImagenes(imagenes) {
 
@@ -126,7 +124,6 @@ function validar() {
     const nombre = document.getElementById("nombre").value.trim();
     const color = document.getElementById("color").value;
     const precioRaw = document.getElementById("precio").value;
-    //const stockRaw = document.getElementById("stock").value;
 
 
 
@@ -144,9 +141,7 @@ function validar() {
         ok = false;
     }
 
-
-
-    // PRECIO
+	    // PRECIO
     const precio = parseFloat(precioRaw);
 
     if (precioRaw === "") {
@@ -198,7 +193,6 @@ function validar() {
 
 
 
-/* ---------------- SUBMIT UPDATE ---------------- */
 
 async function guardar(e) {
 
@@ -225,11 +219,9 @@ async function guardar(e) {
         deleted_at:   deleted_at
     });
 
-    // opcional: recargar datos como tu profe
     const producto   = await api.get(`/api/admin/productos/${id}`);
     const categorias = await api.get("/api/admin/categorias");
 
-    //render(producto, categorias);
 	alert("Producto actualizado correctamente");
 	window.location.href = "index.html";
 
@@ -266,10 +258,7 @@ async function onEliminar(e) {
 
     await api.delete(`/api/admin/productos/${productoId}/imagenes/${idImagen}`);
 
-    //const producto = await api.get(`/api/admin/productos/${productoId}`);
-    //const categorias = await api.get("/api/admin/categorias");
 
-    //render(producto, categorias);
 	btn.parentElement.remove();
 
 }

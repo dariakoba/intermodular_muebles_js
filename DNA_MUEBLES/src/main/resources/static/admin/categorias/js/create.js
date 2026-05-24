@@ -48,7 +48,7 @@ function validar() {
 	return ok;
 
 }
-//
+
 
 async function guardar(e) {
     e.preventDefault();
