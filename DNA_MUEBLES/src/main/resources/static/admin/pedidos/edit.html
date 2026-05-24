@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Editar Pedido</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+<link rel="stylesheet" href="css/edit.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <a href="/adminhome.html" class="logo-link">
+            <div class="logo-container">
+                <div class="logo-circle"><img src="/images/logo.png" alt="DNA" class="logo-image"></div>
+                <span class="brand-name">DNA</span>
+            </div>
+        </a>
+        <nav class="nav-links">
+            <a href="/adminhome.html">Home</a>
+            <a href="/admin/usuarios/index.html">Usuarios</a>
+            <a href="/admin/productos/index.html">Productos</a>
+            <a href="index.html">Pedidos</a>
+            <a href="/admin/categorias/index.html">Categorías</a>
+            <a href="/admin/resenyas/index.html">Reseñas</a>
+        </nav>
+        <div class="icons">
+            <div class="person-menu-wrapper">
+                <span id="person-icon" class="material-symbols-outlined">person</span>
+                <div class="person-menu"><a href="#" id="logoutBtn">Cerrar sesión</a></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="edit-container">
+      <h1 class="title" id="titulo">Editar Pedido</h1>
+      <form id="form-pedido" class="edit-form">
+        <label>Nombre del Cliente</label>
+        <input id="cliente" required>
+        <label>Email</label>
+        <input type="email" id="email" required>
+        <label>Teléfono</label>
+        <input id="telefono" required>
+        <label>Dirección</label>
+        <input id="direccion" required>
+        <label>Fecha del Pedido</label>
+        <input type="date" id="fecha" required>
+        <label>Estado del Pedido</label>
+        <select id="estado">
+            <option value="Pendiente de pago">Pendiente de pago</option>
+            <option value="Pagado">Pagado</option>
+            <option value="En proceso">En proceso</option>
+            <option value="Enviando">Enviando</option>
+            <option value="Recibido">Recibido</option>
+            <option value="Devuelto">Devuelto</option>
+            <option value="Cancelado">Cancelado</option>
+        </select>
+        <div class="buttons">
+          <button type="submit" class="btn-main">Actualizar</button>
+          <a href="index.html" class="btn-cancel">Cancelar</a>
+        </div>
+      </form>
+    </main>
+
+<script type="module" src="js/edit.js"></script>
+<script src="/js/logout.js"></script>
+</body>
+</html>
