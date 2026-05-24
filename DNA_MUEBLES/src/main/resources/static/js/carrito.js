@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     cargarCarrito();
 
-    // Eventos (asegúrate de que los IDs en tu HTML coincidan exactamente con estos)
+    // Eventos 
     const btnVaciar = document.getElementById("btn-vaciar-control"); 
     if (btnVaciar) {
         btnVaciar.addEventListener("click", vaciarCarrito);
@@ -22,7 +22,7 @@ function cargarCarrito() {
     const btnVaciar = document.getElementById("btn-vaciar-control");
     const btnFinalizar = document.getElementById("btn-finalizar-compra");
 
-    // Limpiamos
+    // Limpiar
     contenedor.innerHTML = "";
     let total = 0;
 
@@ -35,12 +35,12 @@ function cargarCarrito() {
         precioTotal.textContent = "0.00€";
         return;
     } else {
-        // Si hay productos, los activamos
+        // Si hay productos
         if (btnVaciar) { btnVaciar.disabled = false; btnVaciar.style.opacity = "1"; btnVaciar.style.cursor = "pointer"; }
         if (btnFinalizar) { btnFinalizar.disabled = false; btnFinalizar.style.opacity = "1"; btnFinalizar.style.cursor = "pointer"; }
     }
 
-    // Dibujamos productos
+  
     carrito.forEach(function(p, index) {
         const subtotal = p.precio * p.cantidad;
         total += subtotal;
@@ -54,7 +54,7 @@ function cargarCarrito() {
                 '<p style="margin: 5px 0 0 0; color: #887a69; font-size: 14px;">Precio unitario: ' + p.precio.toFixed(2) + '€</p>' +
             '</div>' +
             '<div style="flex: 1; text-align: center;">' +
-                '<input type="number" min="1" value="' + p.cantidad + '" onchange="cambiarCantidad(' + index + ', this.value)" style="width: 40px; text-align: center; border: none; background: transparent; padding: 5px; color: #5c4432; font-weight: bold; font-family: inherit; font-size: 16px; outline: none;">' +
+                '<input type="number" min="1" value="' + p.cantidad + '" onchange="cambiarCantidad(' + index + ', this.value)" style="width: 70px; text-align: center; border: none; background: transparent; padding: 5px; color: #5c4432; font-weight: bold; font-family: inherit; font-size: 16px; outline: none;">' +
             '</div>' +
             '<div style="flex: 1; text-align: right;">' +
                 '<strong style="color: #ae4010; font-size: 16px;">' + subtotal.toFixed(2) + '€</strong>' +
@@ -114,11 +114,11 @@ async function finalizarCompra() {
             return;
         }
 
-        // ==========================================
-        // NUEVO: COMPROBACIÓN DE STOCK ANTES DE IR A PAGO
-        // ==========================================
+       
+        //COMPROBACIÓN DE STOCK ANTES DE IR A PAGO
+        
         try {
-            // Suponemos que en /api/productos está tu catálogo. Si tu ruta es diferente, cámbiala aquí.
+            
             const resProductos = await fetch("/api/productos"); 
             if (resProductos.ok) {
                 const catalogoBD = await resProductos.json();
@@ -131,11 +131,11 @@ async function finalizarCompra() {
                     if (productoBD) {
                         if (productoBD.stock <= 0) {
                             alert(`Lo sentimos, el producto "${item.nombre}" está agotado. Elimínalo del carrito para continuar.`);
-                            return; // Frena en seco, no va a pago.html
+                            return; 
                         }
                         if (item.cantidad > productoBD.stock) {
                             alert(`Solo nos quedan ${productoBD.stock} unidades de "${item.nombre}". Por favor, ajusta la cantidad.`);
-                            return; // Frena en seco
+                            return; 
                         }
                     }
                 }
@@ -144,9 +144,9 @@ async function finalizarCompra() {
             console.warn("No se pudo pre-validar el stock", errorStock);
             // Si falla esta comprobación por red, dejamos que pase y el backend de Java lo bloqueará de forma segura.
         }
-        // ==========================================
+       
 
-        // Si hay sesión y todo tiene stock, avanzamos
+        // Si hay sesión y todo tiene stock
         window.location.href = "pago.html";
         
     } catch (error) {

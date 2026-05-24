@@ -54,7 +54,7 @@ public class PedidoController {
             puntosAUsar = Math.round(descuento * 100);
         }
         
-        // 🚀 SOLO DAMOS PUNTOS INICIALES SI ESTÁ PAGADO CON TARJETA
+        // SOLO DAMOS PUNTOS INICIALES SI ESTÁ PAGADO CON TARJETA
         int puntosGanados = 0;
         if ("Pagado".equalsIgnoreCase(request.getPedido().getEstadoPago())) {
             puntosGanados = (int) (totalPagado * 5);
@@ -100,7 +100,7 @@ public class PedidoController {
             PedidoRepository repo = new PedidoRepository(con);
             String nuevoEstado = body.get("estado");
             
-            // 🚀 Lógica de puntos diferidos
+            // Lógica de puntos 
             Pedido pedidoAnterior = repo.find(id);
             if (!"Pagado".equalsIgnoreCase(pedidoAnterior.getEstadoPago()) && "Pagado".equalsIgnoreCase(nuevoEstado)) {
                 int puntosGanados = (int) (pedidoAnterior.getTotal() * 5);
@@ -127,7 +127,7 @@ public class PedidoController {
             String telefono = payload.get("telefono");
             String direccion = payload.get("direccion");
             
-            // 🚀 Lógica de puntos diferidos en Modal Edición
+            // Lógica de puntos diferidos en Modal Edición
             Pedido pedidoAnterior = repo.find(id);
             if (!"Pagado".equalsIgnoreCase(pedidoAnterior.getEstadoPago()) && "Pagado".equalsIgnoreCase(estadoNuevo)) {
                 int puntosGanados = (int) (pedidoAnterior.getTotal() * 5);
@@ -145,7 +145,7 @@ public class PedidoController {
     }
 
     @GetMapping("/admin/usuarios")
-    public List<Map<String, Object>> listarUsuariosCompañera() {
+    public List<Map<String, Object>> listarUsuarios() {
         String sql = "SELECT id, nombre, apellidos, email, rol, estado FROM usuarios";
         try (Connection con = ds.getConnection()) {
             return DB.queryMany(con, sql, (rs) -> {

@@ -21,7 +21,7 @@ public class PedidoAdminController {
         this.ds = ds;
     }
 
-    // LISTAR: Devuelve todos los pedidos activos
+    // Devuelve todos los pedidos activos
     @GetMapping
     public List<Pedido> index() {
         try (Connection con = ds.getConnection()) {
@@ -32,7 +32,7 @@ public class PedidoAdminController {
         }
     }
 
-    // ELIMINAR: Borrado lógico (Soft Delete)
+    // (Soft Delete)
     @DeleteMapping("/{id}")
     public void destroy(@PathVariable int id) {
         try (Connection con = ds.getConnection()) {

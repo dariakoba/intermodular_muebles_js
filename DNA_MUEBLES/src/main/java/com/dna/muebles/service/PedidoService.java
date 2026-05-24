@@ -16,7 +16,7 @@ import com.dna.muebles.repository.UserRepository;
 
 public class PedidoService {
     
-    // Le pasamos el DataSource por aquí
+  
     private final DataSource ds;
 
     public PedidoService(DataSource ds) {
@@ -25,13 +25,13 @@ public class PedidoService {
 
     public void realizarCompra(Integer userId, CarritoRequest request, int puntosAUsar, int puntosGanados) {
         
-        // ¡OJO AQUÍ! Le pasamos 'ds' (el DataSource) como primer parámetro a Tx.run
+        
         Tx.run(ds, new Function<Connection, Boolean>() {
             
             @Override
             public Boolean apply(Connection c) {
                 try {
-                    // 1. Instanciamos los repositorios
+                    // 1. Instanciar los repositorios
                     UserRepository userRepo = new UserRepository(c);
                     PedidoRepository pedidoRepo = new PedidoRepository(c);
                     ProductoRepository productoRepo = new ProductoRepository(c); 
@@ -56,7 +56,7 @@ public class PedidoService {
                         int cant = Integer.parseInt(item.get("cantidad").toString());
                         float precio = Float.parseFloat(item.get("precio").toString());
                         
-                        // Intentamos descontar el stock
+                        //  descontar el stock
                         int filasActualizadas = productoRepo.decrementStock(idProd, cant);
                         
                         if (filasActualizadas == 0) {

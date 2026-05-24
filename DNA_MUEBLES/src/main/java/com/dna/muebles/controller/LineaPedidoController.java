@@ -30,7 +30,7 @@ public class LineaPedidoController {
         }
     }
     
-    // Ejemplo para insertar una nueva línea
+    // insertar una nueva línea
     @PostMapping
     public void create(@RequestBody LineaPedido lp) {
         try (Connection con = ds.getConnection()) {

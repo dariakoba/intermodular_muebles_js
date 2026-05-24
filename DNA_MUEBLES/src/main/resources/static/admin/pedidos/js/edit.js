@@ -3,7 +3,6 @@ import { app }   from "/js/core/app.js";
 import { api }   from "/js/core/api.js";
 import { bind }  from "/js/core/events.js";
 
-// 🚀 TU LÓGICA ORIGINAL INTACTA 🚀
 const flujoEstados = {
     'pendiente de pago': ['Pendiente de pago', 'Pagado'],
     'pagado': ['Pagado', 'En proceso'],
@@ -30,7 +29,6 @@ app.run(async () => {
     
     const inputFecha = document.getElementById("fecha");
     
-    // 🚀 MAGIA PARA BLOQUEAR FECHAS FUTURAS 🚀
     const hoy = new Date().toISOString().split('T')[0];
     inputFecha.setAttribute('max', hoy);
     
@@ -38,7 +36,6 @@ app.run(async () => {
         inputFecha.value = new Date(p.fecha).toISOString().split('T')[0];
     }
 
-    // --- RESTRINGIR EL DESPLEGABLE DE ESTADOS ---
     const estadoActual = p.estadoPago || 'Pendiente de pago';
     const selectEstado = document.getElementById("estado");
     
@@ -55,11 +52,10 @@ app.run(async () => {
         selectEstado.appendChild(option);
     });
 
-    // --- GUARDAR CAMBIOS ---
+   
     bind(document.getElementById("form-pedido"), "submit", async (e) => {
         e.preventDefault();
         
-        // Segunda barrera de seguridad por si el usuario hace trampas
         if (document.getElementById("fecha").value > hoy) {
             alert("Error: No puedes poner una fecha en el futuro.");
             return;

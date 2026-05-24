@@ -43,7 +43,7 @@ tbody td { padding: 14px 10px; text-align: center; color: #333; vertical-align: 
 tbody tr { transition: 0.2s ease; }
 tbody tr:hover { background: #fafafa; }
 
-/* --- BADGES (ESTADOS DE PEDIDO) --- */
+/* --- ESTADOS DE PEDIDO --- */
 .badge { padding: 6px 12px; border-radius: 15px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; display: inline-block; letter-spacing: 0.5px; }
 
 /* Naranja para Pendiente */
@@ -58,7 +58,7 @@ tbody tr:hover { background: #fafafa; }
 /* Morado para Enviando */
 .bg-enviando { background: #f5eef8; color: #9b59b6; }
 
-/* Verde oscuro/Teal para Recibido */
+/* Verde oscuro para Recibido */
 .bg-recibido { background: #e8f8f5; color: #1abc9c; }
 
 /* Gris oscuro para Devuelto */

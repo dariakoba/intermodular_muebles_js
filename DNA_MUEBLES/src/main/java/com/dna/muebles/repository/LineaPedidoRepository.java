@@ -48,13 +48,10 @@ public class LineaPedidoRepository extends BaseRepository<LineaPedido> {
 
     @Override
     public Object[] getUpdateValues(LineaPedido lp) {
-        // En una tabla de muchos a muchos, el update suele afectar a la segunda clave
         return new Object[] { lp.getCantidad(), lp.getIdLineaPedido() };
     }
 
-    /**
-     * Método para insertar manualmente saltando la lógica de IDs del BaseRepository
-     */
+  
     public void create(LineaPedido lp) {
         String sql = "INSERT INTO linea_pedido (id_pedido, id_ejemplar) VALUES (?, ?)";
         try {
@@ -64,9 +61,9 @@ public class LineaPedidoRepository extends BaseRepository<LineaPedido> {
         }
     }
 
-    /**
-     * Obtener todas las líneas de un pedido específico
-     */
+    
+     //Obtener todas las líneas de un pedido específico
+    
     public List<LineaPedido> findByPedidoId(int idPedido) {
         String sql = "SELECT * FROM linea_pedido WHERE id_pedido = ?";
         try {
